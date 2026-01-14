@@ -7,18 +7,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     
     <style>
-        /* --- 韓系簡約風格設定 --- */
+        /* --- 2.0版：圓潤韓系簡約風格 --- */
         :root {
-            --bg-color: #f9f9f9; /* 柔和背景 */
+            --bg-color: #f7f7f7;       /* 整體背景更柔和 */
             --card-bg: #ffffff;
-            --text-main: #333333;
-            --text-sub: #777777;
-            --accent: #5a5a5a; /* 韓系深灰 */
-            --border: #e0e0e0;
+            --text-main: #4a4a4a;      /* 深灰取代純黑 */
+            --text-sub: #888888;
+            --accent: #d4a373;         /* 可選的點綴色，目前用深灰為主 */
+            --border-radius: 20px;     /* 全局圓角設定 */
+            --btn-radius: 50px;        /* 按鈕變成膠囊狀 */
         }
 
         body {
-            font-family: 'Helvetica Neue', Arial, 'PingFang TC', 'Heiti TC', 'Microsoft JhengHei', sans-serif;
+            font-family: 'Helvetica Neue', Arial, 'PingFang TC', 'Microsoft JhengHei', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             margin: 0;
@@ -34,52 +35,48 @@
 
         h1 {
             text-align: center;
-            font-weight: 300;
+            font-weight: 400;
             margin-bottom: 50px;
-            letter-spacing: 2px;
-            font-size: 1.5rem;
+            letter-spacing: 1px;
+            font-size: 1.6rem;
+            color: #333;
         }
 
-        /* --- 格狀排版 (Grid System) --- */
+        /* --- 格狀排版 --- */
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr); /* 一排三欄 */
-            gap: 30px; /* 卡片間距 */
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
         }
 
-        /* --- 手機版響應式設計 --- */
         @media (max-width: 768px) {
-            .product-grid {
-                grid-template-columns: repeat(2, 1fr); /* 平板兩欄 */
-                gap: 15px;
-            }
+            .product-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
         }
         @media (max-width: 480px) {
-            .product-grid {
-                grid-template-columns: 1fr; /* 手機單欄 */
-            }
+            .product-grid { grid-template-columns: 1fr; }
         }
 
-        /* --- 商品卡片設計 --- */
+        /* --- 商品卡片 (圓潤化核心) --- */
         .product-card {
             background: var(--card-bg);
-            border: 1px solid transparent;
-            transition: all 0.3s ease;
-            padding-bottom: 20px;
+            border-radius: var(--border-radius); /* 卡片圓角 */
+            overflow: hidden; /* 關鍵：把超出圓角的圖片切掉 */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03); /* 非常柔和的陰影 */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.02);
         }
 
         .product-card:hover {
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
             transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
         }
 
-        /* 圖片容器 (強制正方形) */
+        /* 圖片容器 */
         .image-container {
             width: 100%;
-            padding-top: 100%; /* Aspect Ratio 1:1 */
+            padding-top: 100%; /* 1:1 正方形 */
             position: relative;
-            overflow: hidden;
-            background-color: #eee;
+            background-color: #f0f0f0;
         }
 
         .image-container img {
@@ -88,102 +85,109 @@
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover; /* 滿版裁切 */
-            transition: transform 0.5s ease;
+            object-fit: cover;
+            transition: transform 0.6s ease;
         }
         
         .product-card:hover .image-container img {
-            transform: scale(1.05); /* 滑鼠懸停微放大 */
+            transform: scale(1.08); /* 圖片緩慢放大 */
         }
 
-        /* 商品資訊區域 */
+        /* 資訊區塊 */
         .info-area {
-            padding: 15px;
-            text-align: left;
+            padding: 20px;
+            text-align: center; /* 文字置中更顯優雅 */
         }
 
         .product-name {
             font-size: 1rem;
-            margin: 10px 0 5px 0;
-            font-weight: 400;
-            line-height: 1.4;
+            margin: 5px 0;
+            font-weight: 500;
+            color: #333;
         }
 
         .product-price {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-main);
+            font-size: 1rem;
+            color: var(--text-sub);
             margin-bottom: 15px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
         }
 
-        /* 控制項區域 (規格與數量) */
+        /* 控制項 (選單與數量) */
         .controls {
             display: flex;
             gap: 10px;
             margin-bottom: 15px;
+            justify-content: center;
         }
 
         select, input[type="number"] {
-            padding: 8px;
-            border: 1px solid var(--border);
-            background: #fff;
-            color: var(--text-main);
+            padding: 10px 15px;
+            border: 1px solid #eee;
+            background: #f9f9f9;
+            color: #555;
             font-size: 0.9rem;
             outline: none;
-            border-radius: 0; /* 直角風格 */
+            border-radius: 12px; /* 輸入框圓角 */
+            transition: border 0.3s;
+        }
+        
+        select:focus, input:focus {
+            border-color: #ccc;
         }
 
         select {
-            flex-grow: 1; /* 佔滿剩餘空間 */
+            flex-grow: 1;
+            cursor: pointer;
         }
 
         input[type="number"] {
-            width: 60px;
+            width: 50px;
             text-align: center;
         }
 
-        /* 購買按鈕 */
+        /* 購買按鈕 (膠囊狀) */
         .btn-buy {
             width: 100%;
             padding: 12px;
-            background-color: #222;
+            background-color: #333;
             color: #fff;
             border: none;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
+            font-size: 0.95rem;
+            border-radius: var(--btn-radius); /* 膠囊圓角 */
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s;
+            font-weight: 500;
         }
 
         .btn-buy:hover {
             background-color: #555;
+            transform: scale(1.02);
         }
 
-        /* 載入中動畫 */
         .loading {
             text-align: center;
             width: 100%;
             color: var(--text-sub);
             grid-column: 1 / -1;
+            padding: 50px;
         }
-
     </style>
 </head>
 <body>
 
     <div class="container">
         <h1>SEOUL SELECTION</h1>
-        
         <div id="product-grid" class="product-grid">
-            <div class="loading">正在載入商品資料...</div>
+            <div class="loading">正在載入選物...</div>
         </div>
     </div>
 
     <script>
-        // 您的 Google Sheet CSV 連結
+        /* --- 這裡的邏輯跟原本一樣，不用動 --- */
         const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS_Cy5OSihu86kbG6c2iGLRUFSSVNnYuG_yanPRNuIF65KtJ_K9r-kXuz1IdWAbxnwfmvAWvWDjlywe/pub?output=csv';
 
-        // 初始化
         document.addEventListener('DOMContentLoaded', () => {
             fetchData();
         });
@@ -191,26 +195,24 @@
         function fetchData() {
             Papa.parse(sheetUrl, {
                 download: true,
-                header: true, // 將第一列視為標題
+                header: true,
                 complete: function(results) {
                     renderProducts(results.data);
                 },
                 error: function(err) {
                     console.error('Error:', err);
-                    document.getElementById('product-grid').innerHTML = '<p style="text-align:center">無法載入資料，請檢查連結設定。</p>';
+                    document.getElementById('product-grid').innerHTML = '<p style="text-align:center">無法載入資料。</p>';
                 }
             });
         }
 
         function renderProducts(products) {
             const grid = document.getElementById('product-grid');
-            grid.innerHTML = ''; // 清空載入文字
+            grid.innerHTML = ''; 
 
             products.forEach(product => {
-                // 過濾掉空行 (Google Sheet 底部常有空行)
                 if (!product.name) return;
 
-                // 處理規格：將字串 "S,M,L" 轉為選項 HTML
                 let optionsHtml = '';
                 if (product.specs) {
                     const specsArray = product.specs.split(',');
@@ -221,11 +223,8 @@
                     optionsHtml = `<option value="default">單一規格</option>`;
                 }
 
-                // 建立卡片 HTML
                 const card = document.createElement('div');
                 card.className = 'product-card';
-                
-                // 處理價格 (加上千分位)
                 const priceFormatted = Number(product.price).toLocaleString();
 
                 card.innerHTML = `
@@ -238,7 +237,7 @@
                         
                         <div class="controls">
                             <select class="spec-selector">
-                                <option value="" disabled selected>選擇規格</option>
+                                <option value="" disabled selected>規格</option>
                                 ${optionsHtml}
                             </select>
                             <input type="number" value="1" min="1" max="99" class="qty-input">
@@ -252,20 +251,17 @@
             });
         }
 
-        // 模擬加入購物車功能
         function addToCart(btn) {
             const card = btn.closest('.product-card');
             const name = card.querySelector('.product-name').innerText;
             const spec = card.querySelector('.spec-selector').value;
             const qty = card.querySelector('.qty-input').value;
 
-            if (spec === "" || spec === "選擇規格") {
+            if (spec === "" || spec === "規格") {
                 alert("請先選擇規格！");
                 return;
             }
-
             alert(`已加入購物車：\n${name}\n規格: ${spec}\n數量: ${qty}`);
-            // 在此處可串接後續的購物車邏輯或跳轉
         }
     </script>
 
