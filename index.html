@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>韓系簡約選物店</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    
+    <style>
+        /* --- 韓系簡約風格設定 --- */
+        :root {
+            --bg-color: #f9f9f9; /* 柔和背景 */
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-sub: #777777;
+            --accent: #5a5a5a; /* 韓系深灰 */
+            --border: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, 'PingFang TC', 'Heiti TC', 'Microsoft JhengHei', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            font-weight: 300;
+            margin-bottom: 50px;
+            letter-spacing: 2px;
+            font-size: 1.5rem;
+        }
+
+        /* --- 格狀排版 (Grid System) --- */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 一排三欄 */
+            gap: 30px; /* 卡片間距 */
+        }
+
+        /* --- 手機版響應式設計 --- */
+        @media (max-width: 768px) {
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr); /* 平板兩欄 */
+                gap: 15px;
+            }
+        }
+        @media (max-width: 480px) {
+            .product-grid {
+                grid-template-columns: 1fr; /* 手機單欄 */
+            }
+        }
+
+        /* --- 商品卡片設計 --- */
+        .product-card {
+            background: var(--card-bg);
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+            padding-bottom: 20px;
+        }
+
+        .product-card:hover {
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            transform: translateY(-5px);
+        }
+
+        /* 圖片容器 (強制正方形) */
+        .image-container {
+            width: 100%;
+            padding-top: 100%; /* Aspect Ratio 1:1 */
+            position: relative;
+            overflow: hidden;
+            background-color: #eee;
+        }
+
+        .image-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 滿版裁切 */
+            transition: transform 0.5s ease;
+        }
+        
+        .product-card:hover .image-container img {
+            transform: scale(1.05); /* 滑鼠懸停微放大 */
+        }
+
+        /* 商品資訊區域 */
+        .info-area {
+            padding: 15px;
+            text-align: left;
+        }
+
+        .product-name {
+            font-size: 1rem;
+            margin: 10px 0 5px 0;
+            font-weight: 400;
+            line-height: 1.4;
+        }
+
+        .product-price {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 15px;
+        }
+
+        /* 控制項區域 (規格與數量) */
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        select, input[type="number"] {
+            padding: 8px;
+            border: 1px solid var(--border);
+            background: #fff;
+            color: var(--text-main);
+            font-size: 0.9rem;
+            outline: none;
+            border-radius: 0; /* 直角風格 */
+        }
+
+        select {
+            flex-grow: 1; /* 佔滿剩餘空間 */
+        }
+
+        input[type="number"] {
+            width: 60px;
+            text-align: center;
+        }
+
+        /* 購買按鈕 */
+        .btn-buy {
+            width: 100%;
+            padding: 12px;
+            background-color: #222;
+            color: #fff;
+            border: none;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-buy:hover {
+            background-color: #555;
+        }
+
+        /* 載入中動畫 */
+        .loading {
+            text-align: center;
+            width: 100%;
+            color: var(--text-sub);
+            grid-column: 1 / -1;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>SEOUL SELECTION</h1>
+        
+        <div id="product-grid" class="product-grid">
+            <div class="loading">正在載入商品資料...</div>
+        </div>
+    </div>
+
+    <script>
+        // 您的 Google Sheet CSV 連結
+        const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS_Cy5OSihu86kbG6c2iGLRUFSSVNnYuG_yanPRNuIF65KtJ_K9r-kXuz1IdWAbxnwfmvAWvWDjlywe/pub?output=csv';
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchData();
+        });
+
+        function fetchData() {
+            Papa.parse(sheetUrl, {
+                download: true,
+                header: true, // 將第一列視為標題
+                complete: function(results) {
+                    renderProducts(results.data);
+                },
+                error: function(err) {
+                    console.error('Error:', err);
+                    document.getElementById('product-grid').innerHTML = '<p style="text-align:center">無法載入資料，請檢查連結設定。</p>';
+                }
+            });
+        }
+
+        function renderProducts(products) {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = ''; // 清空載入文字
+
+            products.forEach(product => {
+                // 過濾掉空行 (Google Sheet 底部常有空行)
+                if (!product.name) return;
+
+                // 處理規格：將字串 "S,M,L" 轉為選項 HTML
+                let optionsHtml = '';
+                if (product.specs) {
+                    const specsArray = product.specs.split(',');
+                    specsArray.forEach(spec => {
+                        optionsHtml += `<option value="${spec.trim()}">${spec.trim()}</option>`;
+                    });
+                } else {
+                    optionsHtml = `<option value="default">單一規格</option>`;
+                }
+
+                // 建立卡片 HTML
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                
+                // 處理價格 (加上千分位)
+                const priceFormatted = Number(product.price).toLocaleString();
+
+                card.innerHTML = `
+                    <div class="image-container">
+                        <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/300x300?text=No+Image'">
+                    </div>
+                    <div class="info-area">
+                        <h3 class="product-name">${product.name}</h3>
+                        <div class="product-price">NT$ ${priceFormatted}</div>
+                        
+                        <div class="controls">
+                            <select class="spec-selector">
+                                <option value="" disabled selected>選擇規格</option>
+                                ${optionsHtml}
+                            </select>
+                            <input type="number" value="1" min="1" max="99" class="qty-input">
+                        </div>
+
+                        <button class="btn-buy" onclick="addToCart(this)">加入購物車</button>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        // 模擬加入購物車功能
+        function addToCart(btn) {
+            const card = btn.closest('.product-card');
+            const name = card.querySelector('.product-name').innerText;
+            const spec = card.querySelector('.spec-selector').value;
+            const qty = card.querySelector('.qty-input').value;
+
+            if (spec === "" || spec === "選擇規格") {
+                alert("請先選擇規格！");
+                return;
+            }
+
+            alert(`已加入購物車：\n${name}\n規格: ${spec}\n數量: ${qty}`);
+            // 在此處可串接後續的購物車邏輯或跳轉
+        }
+    </script>
+
+</body>
+</html>
