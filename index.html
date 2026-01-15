@@ -7,14 +7,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     
     <style>
-        /* --- V3.5: 現代極簡風格 (修正版) --- */
+        /* --- V4.0: 韓系畫廊風格 (Gallery Mode) --- */
         :root {
-            --bg-color: #fcfcfc;       /* 極淺灰白，比純白不刺眼 */
-            --text-main: #333333;      /* 標準深灰 */
-            --text-light: #777777;
-            --btn-bg: #222222;         /* 接近黑色的按鈕 */
-            /* 使用系統內建最乾淨的無襯線字體，不再載入怪怪的字體 */
-            --main-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+            --bg-color: #fdfdfd;       /* 極致純淨白 */
+            --text-main: #2a2a2a;      /* 深灰黑 */
+            --text-light: #666666;
+            --btn-bg: #333333;
+            --frame-color: #e0e0e0;    /* 畫框顏色 */
+            --main-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
         }
 
         body {
@@ -24,74 +24,74 @@
             margin: 0;
             padding: 0;
             line-height: 1.5;
-            -webkit-font-smoothing: antialiased; /* 讓字體邊緣更平滑 */
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* --- Header 導覽列 --- */
+        /* --- Header --- */
         header {
-            padding: 30px 20px;
+            padding: 40px 20px;
             text-align: center;
-            background: #fff;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 1px 0 rgba(0,0,0,0.05); /* 極細的底線 */
+            background: #ffffff;
+            border-bottom: 1px solid #f0f0f0;
+            margin-bottom: 50px;
         }
 
         .brand-name {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: 700;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             margin: 0;
-            text-transform: uppercase;
             color: #000;
+            text-transform: uppercase;
         }
 
         .subtitle {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             color: var(--text-light);
-            letter-spacing: 1px;
-            margin-top: 5px;
+            letter-spacing: 1.5px;
+            margin-top: 8px;
+            text-transform: uppercase;
         }
 
         /* --- 容器 --- */
         .container {
-            max-width: 1000px; /* 稍微縮窄一點，視覺更集中 */
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 50px 20px;
+            padding: 0 20px 60px 20px;
         }
 
         /* --- 商品網格 --- */
         .product-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 40px 25px; /* 卡片間距 */
+            gap: 60px 30px; /* 垂直間距拉大，適應常駐的選單 */
         }
 
         @media (max-width: 768px) {
-            .product-grid { grid-template-columns: repeat(2, 1fr); gap: 20px 15px; }
+            .product-grid { grid-template-columns: repeat(2, 1fr); gap: 40px 15px; }
         }
 
         /* --- 商品卡片 --- */
         .product-card {
-            position: relative;
             background: transparent;
-            transition: transform 0.3s ease;
+            /* 這裡不需要邊框，邊框做在圖片上 */
         }
 
-        .product-card:hover {
-            transform: translateY(-5px); /* 輕微浮起 */
-        }
-
-        /* 圖片區域 - 改回正方形 1:1 */
+        /* --- 圖片區域：韓系畫框設計 --- */
         .image-wrapper {
             position: relative;
             width: 100%;
             padding-top: 100%; /* 1:1 正方形 */
-            overflow: hidden;
-            background-color: #f4f4f4;
-            border-radius: 12px; /* 圖片圓角 (您喜歡的圓潤感) */
-            margin-bottom: 12px;
+            margin-bottom: 15px;
+            background-color: #fafafa;
+            
+            /* 畫框魔法：利用 box-shadow 創造外框，不壓縮圖片 */
+            box-shadow: 
+                0 0 0 5px #ffffff,      /* 第一層：白邊 (留白) */
+                0 0 0 6px var(--frame-color); /* 第二層：細灰線 (畫框) */
+            
+            border-radius: 2px; /* 極輕微的圓角，避免太銳利 */
+            transition: transform 0.3s ease;
         }
 
         .image-wrapper img {
@@ -100,52 +100,48 @@
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover; /* 滿版裁切 */
-            transition: transform 0.6s ease;
+            object-fit: cover;
+            display: block;
         }
 
-        /* Hover: 圖片放大效果 */
-        .product-card:hover .image-wrapper img {
-            transform: scale(1.05);
+        /* Hover 時，畫框微微浮起 */
+        .product-card:hover .image-wrapper {
+            transform: translateY(-5px);
+            box-shadow: 
+                0 5px 15px rgba(0,0,0,0.05), /* 陰影 */
+                0 0 0 5px #ffffff,
+                0 0 0 6px #bbbbbb; /* Hover 時邊框變深一點點 */
         }
 
-        /* 資訊區域 */
+        /* --- 資訊區域 --- */
         .info-area {
             text-align: left;
-            padding: 0 5px;
+            padding-top: 10px; /* 因為有外框，留點距離 */
         }
 
         .product-name {
-            font-size: 0.95rem;
-            font-weight: 500; /* 中等粗細，看起來比較清爽 */
-            margin: 0 0 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            margin: 0 0 5px;
             color: #222;
+            line-height: 1.4;
         }
 
         .product-price {
-            font-size: 0.95rem;
-            color: #555;
-            font-weight: 600;
+            font-size: 1rem;
+            color: #444;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: inline-block;
+            border-bottom: 2px solid #f0f0f0; /* 價格下方的小裝飾線 */
+            padding-bottom: 2px;
         }
 
-        /* --- 控制區 (電腦版 Hover 出現，手機版常駐) --- */
+        /* --- 控制區 (改為常駐顯示) --- */
         .controls-overlay {
-            margin-top: 12px;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.3s ease;
-        }
-
-        .product-card:hover .controls-overlay {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        @media (max-width: 768px) {
-            .controls-overlay {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            margin-top: 0;
+            opacity: 1; /* 永遠顯示 */
+            transform: none; /* 移除位移 */
         }
 
         .ui-group {
@@ -154,61 +150,72 @@
             margin-bottom: 10px;
         }
 
-        /* 輸入框與選單樣式 */
+        /* 選單與輸入框樣式優化 */
         select, .qty-input {
-            border: 1px solid #e0e0e0;
+            border: 1px solid #ddd;
             background: #fff;
             padding: 8px 10px;
             font-size: 0.85rem;
-            color: #444;
+            color: #555;
             outline: none;
-            border-radius: 8px; /* 圓角 */
-            font-family: var(--main-font);
+            border-radius: 4px; /* 小圓角 */
+            transition: border-color 0.2s;
         }
 
         select:focus, .qty-input:focus {
-            border-color: #999;
+            border-color: #555;
         }
 
-        select { flex-grow: 1; cursor: pointer; }
-        .qty-input { width: 40px; text-align: center; }
+        select { 
+            flex-grow: 1; 
+            cursor: pointer;
+            background-image: linear-gradient(45deg, transparent 50%, gray 50%),
+                              linear-gradient(135deg, gray 50%, transparent 50%);
+            background-position: calc(100% - 15px) calc(1em + 2px),
+                                 calc(100% - 10px) calc(1em + 2px);
+            background-size: 5px 5px,
+                             5px 5px;
+            background-repeat: no-repeat;
+            /* 讓原生選單箭頭不明顯時，用上面的 CSS 畫一個簡單的 */
+        }
+        
+        .qty-input { width: 45px; text-align: center; }
 
         /* 購買按鈕 */
         .btn-buy {
             width: 100%;
             padding: 10px;
-            background-color: var(--btn-bg);
-            color: #fff;
-            border: none;
+            background-color: transparent; /* 空心風格 */
+            color: var(--text-main);
+            border: 1px solid #333;
             font-size: 0.85rem;
-            border-radius: 50px; /* 膠囊狀圓角 */
             cursor: pointer;
-            transition: background 0.3s, transform 0.2s;
+            transition: all 0.2s;
             font-weight: 500;
+            letter-spacing: 1px;
         }
 
         .btn-buy:hover {
-            background-color: #444;
-            transform: scale(1.02);
+            background-color: #333; /* Hover 變實心 */
+            color: #fff;
         }
 
-        /* 載入中 */
+        /* Loading */
         .loading {
             grid-column: 1 / -1;
             text-align: center;
             color: #999;
             padding: 60px;
-            font-size: 0.9rem;
         }
         
-        /* 底部 */
+        /* Footer */
         footer {
             text-align: center;
-            padding: 60px 20px;
-            border-top: 1px solid #eaeaea;
+            padding: 40px 20px;
+            border-top: 1px solid #eee;
             color: #aaa;
             font-size: 0.75rem;
-            margin-top: 40px;
+            margin-top: 60px;
         }
 
     </style>
@@ -216,18 +223,18 @@
 <body>
 
     <header>
-        <div class="brand-name">Olive Young三月大促</div>
+        <div class="brand-name">SEOUL SELECTION</div>
         <div class="subtitle">Daily Minimalist Collection</div>
     </header>
 
     <div class="container">
         <div id="product-grid" class="product-grid">
-            <div class="loading">商品載入中...</div>
+            <div class="loading">Loading...</div>
         </div>
     </div>
 
     <footer>
-        &copy; 2026 SEOUL SELECTION. All rights reserved.
+        &copy; 2026 SEOUL SELECTION.
     </footer>
 
     <script>
@@ -312,4 +319,3 @@
 
 </body>
 </html>
-
