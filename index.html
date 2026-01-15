@@ -7,13 +7,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     
     <style>
-        /* --- V5.0: Ins風有機自然風格 (Organic Nude) --- */
+        /* --- V5.1: Ins風有機自然風格 (邊框修正版) --- */
         :root {
             --bg-color: #F9F5F0;       /* 溫暖的奶油米色背景 */
-            --text-main: #5A4A42;      /* 柔和的深棕色文字，不使用純黑 */
+            --text-main: #5A4A42;      /* 柔和的深棕色文字 */
             --text-light: #9C8C84;
-            --card-border: #A68B7C;    /* 核心：參考圖中的暖棕色厚邊框 */
-            --btn-bg: #A68B7C;         /* 按鈕與邊框同色 */
+            --card-border: #A68B7C;    /* 暖棕色厚邊框顏色 */
+            --btn-bg: #A68B7C;
             --main-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
@@ -24,17 +24,14 @@
             margin: 0;
             padding: 0;
             line-height: 1.5;
-            /* 增加一個非常淡的柔焦背景裝飾，模擬氛圍感 */
             background-image: radial-gradient(circle at 10% 20%, rgba(232, 220, 202, 0.4) 0%, transparent 50%),
                               radial-gradient(circle at 90% 80%, rgba(212, 196, 180, 0.4) 0%, transparent 50%);
             background-attachment: fixed;
         }
 
-        /* --- Header --- */
         header {
             padding: 50px 20px;
             text-align: center;
-            /* 移除 header 背景色和線條，讓它融入整體背景 */
         }
 
         .brand-name {
@@ -54,47 +51,50 @@
             text-transform: uppercase;
         }
 
-        /* --- 容器 --- */
         .container {
             max-width: 1000px;
             margin: 0 auto;
             padding: 0 30px 80px 30px;
         }
 
-        /* --- 商品網格 --- */
         .product-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 70px 40px; /* 間距拉大，增加呼吸感 */
+            gap: 70px 45px; /* 稍微加大橫向間距，因為邊框變厚了 */
         }
 
         @media (max-width: 768px) {
-            .product-grid { grid-template-columns: repeat(2, 1fr); gap: 50px 20px; }
+            .product-grid { grid-template-columns: repeat(2, 1fr); gap: 50px 25px; }
         }
 
-        /* --- 商品卡片 --- */
         .product-card {
             background: transparent;
-            text-align: center; /* 讓文字置中，更符合這種風格 */
+            text-align: center;
         }
 
-        /* --- 核心設計：參考圖的厚實圓框 --- */
+        /* --- 核心修改區域 --- */
         .image-wrapper {
             position: relative;
             width: 100%;
             padding-top: 100%; /* 1:1 正方形 */
             margin-bottom: 25px;
-            background-color: #f0eae4; /* 圖片讀取前的底色 */
+            background-color: #f0eae4;
             
-            /* 關鍵樣式：厚實的暖棕色邊框 + 大圓角 */
-            border: 8px solid var(--card-border);
-            border-radius: 35px; /* 大圓角 */
+            /* 修正重點：移除原本的 border 屬性 */
+            /* border: 8px solid var(--card-border);  <-- 這一行刪除了 */
             
-            /* 柔和的暖色陰影，增加立體感 */
-            box-shadow: 0 15px 35px rgba(166, 139, 124, 0.15);
+            border-radius: 35px; /* 維持大圓角 */
+            
+            /* 修正重點：改用多重陰影來模擬邊框 */
+            box-shadow: 
+                0 0 0 8px var(--card-border), /* 第一層：向外擴展 8px 的實心陰影 (假邊框) */
+                0 15px 35px rgba(166, 139, 124, 0.15); /* 第二層：原本的柔和立體陰影 */
             
             overflow: hidden;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            /* 為了讓外擴的陰影不被隔壁卡片擋住，增加一點 margin */
+            margin: 8px 8px 25px 8px; 
+            width: calc(100% - 16px); /* 調整寬度以適應 margin */
         }
 
         .image-wrapper img {
@@ -104,15 +104,19 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            /* 圖片現在會完整顯示在圓角框內，不會被邊框蓋住 */
         }
 
-        /* Hover 效果：輕輕浮起 */
+        /* Hover 效果： */
         .product-card:hover .image-wrapper {
             transform: translateY(-8px);
-            box-shadow: 0 20px 45px rgba(166, 139, 124, 0.25);
+            /* Hover 時，要保留假邊框陰影，同時加深立體陰影 */
+            box-shadow: 
+                0 0 0 8px var(--card-border), 
+                0 20px 45px rgba(166, 139, 124, 0.25);
         }
+        /* ------------------ */
 
-        /* --- 資訊區域 --- */
         .info-area {
             padding: 0 10px;
         }
@@ -126,32 +130,26 @@
 
         .product-price {
             font-size: 1.05rem;
-            color: var(--card-border); /* 價格使用主題色 */
+            color: var(--card-border);
             font-weight: 700;
             margin-bottom: 20px;
-        }
-
-        /* --- 控制區 --- */
-        .controls-overlay {
-            margin-top: 0;
         }
 
         .ui-group {
             display: flex;
             gap: 10px;
             margin-bottom: 15px;
-            justify-content: center; /* 控制項置中 */
+            justify-content: center;
         }
 
-        /* 選單與輸入框樣式優化 */
         select, .qty-input {
-            border: 2px solid #E8DCCA; /* 淺暖色邊框 */
+            border: 2px solid #E8DCCA;
             background: #fff;
             padding: 10px 12px;
             font-size: 0.9rem;
             color: var(--text-main);
             outline: none;
-            border-radius: 15px; /* 圓潤風格 */
+            border-radius: 15px;
             font-weight: 500;
         }
 
@@ -162,21 +160,20 @@
         select { 
             flex-grow: 1; 
             cursor: pointer;
-            max-width: 180px; /* 限制選單寬度，比較好看 */
+            max-width: 180px;
         }
         
         .qty-input { width: 50px; text-align: center; }
 
-        /* 購買按鈕 - 實心暖色 */
         .btn-buy {
             width: 100%;
-            max-width: 240px; /* 限制按鈕寬度 */
+            max-width: 240px;
             padding: 12px;
             background-color: var(--btn-bg);
             color: #fff;
             border: none;
             font-size: 1rem;
-            border-radius: 50px; /* 膠囊狀 */
+            border-radius: 50px;
             cursor: pointer;
             transition: all 0.2s;
             font-weight: 600;
@@ -185,11 +182,10 @@
         }
 
         .btn-buy:hover {
-            background-color: #8c7365; /* Hover 變深一點 */
+            background-color: #8c7365;
             transform: translateY(-2px);
         }
 
-        /* Loading */
         .loading {
             grid-column: 1 / -1;
             text-align: center;
@@ -198,7 +194,6 @@
             font-weight: 500;
         }
         
-        /* Footer */
         footer {
             text-align: center;
             padding: 40px 20px;
@@ -275,16 +270,14 @@
                         <h3 class="product-name">${product.name}</h3>
                         <div class="product-price">NT. ${priceFormatted}</div>
                         
-                        <div class="controls-overlay">
-                            <div class="ui-group">
-                                <select class="spec-selector">
-                                    <option value="" disabled selected>選擇規格</option>
-                                    ${optionsHtml}
-                                </select>
-                                <input type="number" value="1" min="1" max="10" class="qty-input">
-                            </div>
-                            <button class="btn-buy" onclick="addToCart(this)">加入購物車</button>
+                        <div class="ui-group">
+                            <select class="spec-selector">
+                                <option value="" disabled selected>選擇規格</option>
+                                ${optionsHtml}
+                            </select>
+                            <input type="number" value="1" min="1" max="10" class="qty-input">
                         </div>
+                        <button class="btn-buy" onclick="addToCart(this)">加入購物車</button>
                     </div>
                 `;
 
