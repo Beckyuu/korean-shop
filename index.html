@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Olive Young 3月大促 - 蠟筆塗鴉派對</title>
-    <link href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap" rel="stylesheet">
+    <title>Olive Young 3月大促 - 柔軟手繪風</title>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* 蠟筆配色盤 */
-            --crayon-red: #ff6b6b;
-            --crayon-yellow: #feca57;
-            --crayon-blue: #48dbfb;
-            --crayon-dark: #576574;
-            --paper-bg: #fffdf2; /* 米黃紙張色 */
+            /* 柔軟的色鉛筆配色 */
+            --crayon-red: #ff8e8e;
+            --crayon-yellow: #ffeaa7;
+            --crayon-blue: #74b9ff;
+            --pencil-gray: #555; /* 用深灰取代純黑，線條更柔和 */
+            --paper-bg: #fffbf0; /* 暖色調紙張 */
             --card-bg: #ffffff;
-            /* 模擬蠟筆粗糙邊框 */
-            --crayon-border: 4px solid var(--crayon-dark);
-            --crayon-shadow: 6px 6px 0px rgba(0,0,0,0.15);
+            
+            /* 線條變細，陰影變柔 */
+            --hand-border: 2px solid var(--pencil-gray);
+            --soft-shadow: 3px 3px 0px rgba(85, 85, 85, 0.15);
         }
 
         * {
@@ -26,227 +27,204 @@
         }
 
         body {
-            font-family: 'Kosugi Maru', sans-serif;
+            font-family: 'Zen Maru Gothic', sans-serif; /* 圓潤手寫體 */
             background-color: var(--paper-bg);
-            /* 模擬紙張紋理的細微噪點 */
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
-            color: var(--crayon-dark);
-            line-height: 1.6;
+            /* 輕微的紙張紋理 */
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+            color: var(--pencil-gray);
+            line-height: 1.4;
             padding-bottom: 50px;
         }
 
         header {
-            background: var(--crayon-yellow);
-            padding: 2.5rem 1rem;
+            background: #fff;
+            padding: 1.5rem 1rem;
             text-align: center;
-            border-bottom: var(--crayon-border);
-            margin-bottom: 3rem;
-            /* 讓 header 有點歪歪的塗鴉感 */
-            transform: rotate(-1deg);
-            box-shadow: var(--crayon-shadow);
-            margin-top: -10px;
+            border-bottom: 2px dashed #ddd; /* 改成虛線，比較清爽 */
+            margin-bottom: 2rem;
         }
 
         h1 {
-            font-weight: 900;
-            font-size: 2.2rem;
+            font-weight: 700;
+            font-size: 1.8rem;
             color: var(--crayon-red);
-            /* 蠟筆標題描邊效果 */
-            text-shadow: 3px 3px 0px var(--paper-bg), -3px -3px 0px var(--paper-bg), 3px -3px 0px var(--paper-bg), -3px 3px 0px var(--paper-bg), 5px 5px 0px var(--crayon-dark);
-            letter-spacing: 2px;
+            letter-spacing: 1px;
         }
 
         .subtitle {
-            background: var(--crayon-blue);
-            color: white;
-            font-size: 1rem;
-            margin-bottom: 15px;
-            display: inline-block;
-            padding: 8px 20px;
-            border-radius: 30px;
-            border: 3px solid var(--crayon-dark);
+            font-size: 0.9rem;
+            background: var(--crayon-yellow);
+            padding: 4px 12px;
+            border-radius: 15px;
+            color: #665c4a;
             font-weight: bold;
-            transform: rotate(2deg); /* 副標題反向歪一點 */
+            display: inline-block;
+            margin-bottom: 5px;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 15px;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 50px 30px;
+            /* 縮小最小寬度，讓手機版也能更緊湊 */
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+            gap: 20px; /* 【修改】間距縮小，節省空間 */
         }
 
-        /* === 卡片蠟筆化設計 === */
+        /* === 卡片設計 (不規則圓角 + 細線) === */
         .product-card {
             background: var(--card-bg);
-            border-radius: 15px;
-            border: var(--crayon-border);
+            /* 【修改】利用不規則圓角創造手剪紙的感覺，而不是粗線條 */
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            border: var(--hand-border);
             overflow: hidden;
-            transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
-            box-shadow: var(--crayon-shadow);
+            box-shadow: var(--soft-shadow);
             position: relative;
+            /* 【修改】移除了 transform transition，確保不會亂動 */
         }
 
-        /* hover 時卡片跳動 */
+        /* 只有陰影會變，位置不動 */
         .product-card:hover {
-            transform: translate(-4px, -4px) rotate(1deg);
-            box-shadow: 10px 10px 0px rgba(0,0,0,0.2);
+            box-shadow: 5px 5px 0px rgba(85, 85, 85, 0.25);
         }
 
         .img-wrapper {
             width: 100%;
             aspect-ratio: 1 / 1;
-            overflow: hidden;
             position: relative;
-            background-color: #eee;
-            border-bottom: var(--crayon-border);
+            background-color: #fafafa;
+            border-bottom: 1px solid #eee;
         }
 
         .img-wrapper img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.5s ease;
         }
 
-        .product-card:hover .img-wrapper img {
-            transform: scale(1.1);
+        /* === 【修改】右下角放大鏡按鈕 === */
+        .more-badge {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid var(--crayon-blue);
+            color: var(--crayon-blue);
+            padding: 4px 8px 4px 6px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+            transition: all 0.2s;
+            z-index: 10;
         }
 
+        .more-badge:hover {
+            background: var(--crayon-blue);
+            color: white;
+        }
+        
+        /* 放大鏡 ICON */
+        .icon-search {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+        }
+
+        /* === 內容區塊 (縮減留白) === */
         .info {
-            padding: 20px;
+            padding: 12px; /* 【修改】從 20px 縮小到 12px，節省空間 */
             flex-grow: 1;
             display: flex;
             flex-direction: column;
         }
 
-        /* 像用膠帶貼上去的標籤 */
-        .tag {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            font-size: 0.8rem;
-            color: white;
-            background: var(--crayon-red);
-            padding: 5px 12px;
-            font-weight: 900;
-            z-index: 2;
-            border: 2px solid var(--crayon-dark);
-            box-shadow: 3px 3px 0 rgba(0,0,0,0.2);
-            transform: rotate(-5deg);
-        }
-
         .name {
-            font-size: 1.3rem;
-            font-weight: 900;
-            margin-bottom: 10px;
-            line-height: 1.4;
+            font-size: 1.05rem; /* 字體稍微調小 */
+            font-weight: 700;
+            margin-bottom: 4px;
+            line-height: 1.3;
+            color: #333;
         }
 
         .spec {
-            font-size: 0.9rem;
-            color: #666;
-            background: #eee;
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 8px;
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 4px;
             width: fit-content;
-            border: 2px solid var(--crayon-dark);
-            font-weight: bold;
         }
 
         .price-row {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 3px dashed #ddd;
-            text-align: right;
+            margin-top: auto; /* 推到底部 */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 8px;
+            border-top: 1px dashed #eee;
         }
 
         .price {
-            font-size: 1.6rem;
-            font-weight: 900;
+            font-size: 1.1rem;
+            font-weight: 700;
             color: var(--crayon-red);
         }
 
-        /* === 新增：查看細節按鈕 (蠟筆風格) === */
-        .btn-details {
-            width: 100%;
-            margin-top: 15px;
-            padding: 10px;
-            background: var(--crayon-blue);
-            color: white;
-            border: 3px solid var(--crayon-dark);
-            border-radius: 12px;
-            font-family: 'Kosugi Maru', sans-serif;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 4px 4px 0 rgba(0,0,0,0.2);
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .btn-details:hover {
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0 rgba(0,0,0,0.2);
-            background: #3dc1e3;
-        }
-
-
-        /* === 操作區 === */
+        /* === 操作區 (緊湊版) === */
         .action-row {
-            margin-top: 20px;
             display: flex;
-            gap: 10px;
+            gap: 6px;
+            align-items: center;
         }
 
         select {
-            padding: 8px 15px;
-            border: 3px solid var(--crayon-dark);
-            border-radius: 12px;
+            padding: 4px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
             background: #fff;
-            font-weight: bold;
+            font-size: 0.9rem;
             cursor: pointer;
-            outline: none;
-            font-family: 'Kosugi Maru', sans-serif;
-             box-shadow: 4px 4px 0 rgba(0,0,0,0.1);
+            font-family: 'Zen Maru Gothic', sans-serif;
+            color: #555;
         }
 
         button.btn-add {
             flex-grow: 1;
             background-color: var(--crayon-yellow);
-            color: var(--crayon-dark);
-            border: 3px solid var(--crayon-dark);
-            padding: 12px;
-            border-radius: 15px;
-            font-weight: 900;
-            font-size: 1.1rem;
+            color: #5a5040;
+            border: 1px solid #e0d0a0;
+            padding: 6px; /* 按鈕變小一點 */
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 5px 5px 0 var(--crayon-dark); /* 蠟筆按鈕厚重陰影 */
-            font-family: 'Kosugi Maru', sans-serif;
+            transition: background 0.2s;
+            font-family: 'Zen Maru Gothic', sans-serif;
         }
 
         button.btn-add:hover {
-            transform: translate(3px, 3px);
-            box-shadow: 2px 2px 0 var(--crayon-dark); /* 按下效果 */
-            background-color: #ffd375;
+            background-color: #ffe082;
         }
 
-        /* === 彈跳視窗 (Modal) 設計 === */
+        /* === 彈跳視窗 (Modal) === */
         .modal-overlay {
-            display: none; /* 預設隱藏 */
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.7); /* 深色半透明背景 */
+            background: rgba(255, 255, 255, 0.8); /* 改用白色半透明，比較清爽 */
+            backdrop-filter: blur(2px);
             z-index: 1000;
             justify-content: center;
             align-items: center;
@@ -254,80 +232,76 @@
         }
 
         .modal-content {
-            background: var(--paper-bg);
+            background: #fff;
             width: 100%;
-            max-width: 600px; /* 最大寬度 */
-            max-height: 90vh; /* 最大高度為螢幕 90% */
-            overflow-y: auto; /* 內容太多時可捲動 */
+            max-width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
             border-radius: 20px;
-            border: 5px solid var(--crayon-dark);
-            box-shadow: 10px 10px 0 var(--crayon-red);
-            padding: 25px;
+            border: 2px solid var(--crayon-blue); /* 彈跳視窗用藍色邊框 */
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 20px;
             position: relative;
-            /* 塗鴉紙張背景 */
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
         }
 
         .modal-close-btn {
             position: absolute;
             top: 15px;
             right: 15px;
-            background: var(--crayon-red);
-            color: white;
-            border: 3px solid var(--crayon-dark);
-            width: 40px;
-            height: 40px;
+            background: #eee;
+            color: #555;
+            border: none;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
-            font-size: 1.5rem;
-            font-weight: bold;
+            font-size: 1.2rem;
             cursor: pointer;
-            box-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .modal-close-btn:hover { transform: scale(1.1); }
+        .modal-close-btn:hover { background: #ddd; }
 
         .modal-title {
-            font-size: 1.5rem;
-            font-weight: 900;
-            margin-bottom: 20px;
-            padding-right: 40px;
-            color: var(--crayon-dark);
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            padding-right: 30px;
+            color: #333;
+            border-bottom: 2px dashed #eee;
+            padding-bottom: 10px;
         }
 
         .modal-body img {
             width: 100%;
             height: auto;
-            border-radius: 10px;
-            border: 3px solid var(--crayon-dark);
-            margin-top: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
         }
         .modal-body p {
             white-space: pre-wrap;
-            font-size: 1.1rem;
-            font-weight: bold;
-            background: #fff;
-            padding: 15px;
-            border-radius: 10px;
-            border: 2px dashed var(--crayon-dark);
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 10px;
         }
 
         #loading {
             text-align: center;
             padding: 50px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--crayon-red);
-            text-shadow: 2px 2px 0 var(--crayon-dark);
+            font-size: 1rem;
+            color: #888;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="subtitle">🖍️ 蠟筆塗鴉風格限定</div>
-        <h1>Olive Young 3月大促派對</h1>
+        <div class="subtitle">🖍️ 3月限定優惠</div>
+        <h1>Olive Young 選物</h1>
     </header>
 
-    <div id="loading">正在用蠟筆繪製商品中...🎨</div>
+    <div id="loading">準備色鉛筆中...✏️</div>
     <div class="container" id="product-list">
         </div>
 
@@ -335,16 +309,14 @@
         <div class="modal-content">
             <button class="modal-close-btn" onclick="closeModal(event)">×</button>
             <h3 class="modal-title" id="modalTitle">商品名稱</h3>
-            <div class="modal-body" id="modalBody">
-                </div>
+            <div class="modal-body" id="modalBody"></div>
         </div>
     </div>
 
     <script>
-        // 【重要】請確認你的 Google 表格 CSV 連結
+        // 【重要】請確認你的 Google 表格 CSV 連結 (請保留你原本的連結)
         const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS_Cy5OSihu86kbG6c2iGLRUFSSVNnYuG_yanPRNuIF65KtJ_K9r-kXuz1IdWAbxnwfmvAWvWDjlywe/pub?output=csv'; 
 
-        // 用來儲存所有商品資料的陣列，方便彈跳視窗使用
         let allProductsData = [];
 
         async function fetchProducts() {
@@ -352,7 +324,7 @@
             const container = document.getElementById('product-list');
 
             if (!GOOGLE_SHEET_CSV_URL || GOOGLE_SHEET_CSV_URL.includes('請將此處替換')) {
-                loading.innerHTML = '⚠️ 請先在程式碼中填入正確的 Google 表格 CSV 連結';
+                loading.innerHTML = '⚠️ 請填入正確的 CSV 連結';
                 return;
             }
 
@@ -360,67 +332,58 @@
                 const response = await fetch(GOOGLE_SHEET_CSV_URL);
                 const data = await response.text();
                 const rows = data.split('\n').map(row => row.split(','));
-                rows.shift(); // 移除標題列
+                rows.shift();
 
                 loading.style.display = 'none';
-                
-                // 清空舊資料
                 allProductsData = [];
 
                 rows.forEach((row, index) => {
                     if (row.length < 4) return;
 
-                    // 解析資料
                     const product = {
                         id: index,
-                        name: row[0] ? row[0].trim() : '未命名商品',
+                        name: row[0] ? row[0].trim() : '未命名',
                         spec: row[1] ? row[1].trim() : '',
                         price: row[2] ? row[2].trim() : '0',
-                        imgUrl: row[3] ? row[3].trim() : 'https://placehold.co/600x600/feca57/576574?text=No+Image',
+                        imgUrl: row[3] ? row[3].trim() : '',
                         detailImgUrl: row[4] ? row[4].trim() : '',
                         detailText: row[5] ? row[5].trim() : '',
                     };
-                    // 判斷是否有細節
                     product.hasDetails = product.detailImgUrl !== '' || product.detailText !== '';
-                    
-                    // 存入全域陣列
                     allProductsData.push(product);
 
-                    // 建立 HTML
                     const card = document.createElement('div');
                     card.className = 'product-card';
                     
                     let options = '';
                     for(let i=1; i<=5; i++) { options += `<option value="${i}">${i}</option>`; }
 
-                    // 蠟筆風格的細節按鈕
-                    let detailsBtnHtml = '';
+                    // 【修改】改成右下角貼紙形式的更多按鈕
+                    let moreBadgeHtml = '';
                     if (product.hasDetails) {
-                        detailsBtnHtml = `
-                            <button class="btn-details" onclick="showDetails(${index})">
-                                🔍 查看色號/組合細節
-                            </button>
+                        moreBadgeHtml = `
+                            <div class="more-badge" onclick="showDetails(${index})">
+                                <svg class="icon-search" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                                更多...
+                            </div>
                         `;
                     }
 
                     card.innerHTML = `
-                        <span class="tag">人氣賞!</span>
                         <div class="img-wrapper">
                             <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
+                            ${moreBadgeHtml}
                         </div>
                         <div class="info">
                             <h3 class="name">${product.name}</h3>
                             ${product.spec ? `<span class="spec">${product.spec}</span>` : ''}
                             
                             <div class="price-row">
+                                <div class="action-row">
+                                    <select aria-label="數量">${options}</select>
+                                    <button class="btn-add" onclick="alert('加入購物車：${product.name}')">＋</button>
+                                </div>
                                 <span class="price">NT$ ${product.price}</span>
-                            </div>
-
-                            ${detailsBtnHtml}
-                            
-                            <div class="action-row">
-                                <select aria-label="數量">${options}</select>
-                                <button class="btn-add" onclick="alert('已將「${product.name}」丟進購物籃！🖍️')">加入購物籃</button>
                             </div>
                         </div>
                     `;
@@ -429,43 +392,27 @@
 
             } catch (error) {
                 console.error('Error:', error);
-                loading.innerHTML = '糟糕，蠟筆斷掉了 QQ (讀取失敗)<br>請檢查連結是否正確。';
+                loading.innerHTML = '讀取失敗，請重新整理頁面。';
             }
         }
 
-        // --- 彈跳視窗相關功能 ---
-
-        // 顯示彈跳視窗
         function showDetails(index) {
             const product = allProductsData[index];
             const modal = document.getElementById('detailModal');
-            const modalTitle = document.getElementById('modalTitle');
-            const modalBody = document.getElementById('modalBody');
-
-            // 設定視窗內容
-            modalTitle.innerText = product.name;
-            let bodyContent = '';
-            if (product.detailText) {
-                bodyContent += `<p>${product.detailText}</p>`;
-            }
-            if (product.detailImgUrl) {
-                bodyContent += `<img src="${product.detailImgUrl}" alt="${product.name} 細節圖">`;
-            }
-            modalBody.innerHTML = bodyContent;
-
-            // 顯示視窗 (使用 flex 讓它置中)
+            document.getElementById('modalTitle').innerText = product.name;
+            
+            let content = '';
+            if (product.detailText) content += `<p>${product.detailText}</p>`;
+            if (product.detailImgUrl) content += `<img src="${product.detailImgUrl}">`;
+            
+            document.getElementById('modalBody').innerHTML = content;
             modal.style.display = 'flex';
-            // 防止背景捲動
             document.body.style.overflow = 'hidden';
         }
 
-        // 關閉彈跳視窗
         function closeModal(event) {
-            // 判斷點擊的是背景遮罩還是關閉按鈕 (避免點擊內容時也關閉)
             if (event.target.classList.contains('modal-overlay') || event.target.classList.contains('modal-close-btn')) {
-                const modal = document.getElementById('detailModal');
-                modal.style.display = 'none';
-                // 恢復背景捲動
+                document.getElementById('detailModal').style.display = 'none';
                 document.body.style.overflow = 'auto';
             }
         }
