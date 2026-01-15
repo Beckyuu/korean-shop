@@ -7,13 +7,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #5a4a42; /* 溫暖的深棕色文字 */
-            --secondary-color: #8c7b70; /* 淺棕色次要文字 */
-            --accent-color: #ff8ba7; /* 可愛粉色強調 */
-            --bg-color: #fffdf7; /* 奶油色背景 */
+            --primary-color: #5a4a42;
+            --secondary-color: #8c7b70;
+            --accent-color: #ff8ba7;
+            --bg-color: #fffdf7;
             --card-bg: #ffffff;
-            --border-style: 2px dashed #f0d0d0; /* 手繪感虛線邊框 */
-            --shadow-style: 4px 4px 0px #ffe0e6; /* 可愛粉色硬陰影 */
+            --border-style: 2px dashed #f0d0d0;
+            --shadow-style: 4px 4px 0px #ffe0e6;
         }
 
         * {
@@ -23,9 +23,9 @@
         }
 
         body {
-            font-family: 'Kosugi Maru', sans-serif; /* 套用可愛字體 */
+            font-family: 'Kosugi Maru', sans-serif;
             background-color: var(--bg-color);
-            background-image: radial-gradient(#f5e6e8 5%, transparent 5%); /* 增加一點點可愛波點背景 */
+            background-image: radial-gradient(#f5e6e8 5%, transparent 5%);
             background-size: 30px 30px;
             color: var(--primary-color);
             line-height: 1.6;
@@ -44,7 +44,7 @@
             font-weight: 700;
             font-size: 2rem;
             color: var(--accent-color);
-            text-shadow: 2px 2px 0px #fff, 4px 4px 0px #f0d0d0; /* 可愛標題陰影 */
+            text-shadow: 2px 2px 0px #fff, 4px 4px 0px #f0d0d0;
         }
 
         .subtitle {
@@ -70,7 +70,7 @@
         /* === 卡片可愛化設計 === */
         .product-card {
             background: var(--card-bg);
-            border-radius: 20px; /* 更圓的角 */
+            border-radius: 20px;
             border: var(--border-style);
             overflow: hidden;
             transition: all 0.3s ease;
@@ -81,7 +81,7 @@
 
         .product-card:hover {
             transform: translate(-2px, -2px);
-            box-shadow: 6px 6px 0px #ffd1dc; /* hover時陰影變大 */
+            box-shadow: 6px 6px 0px #ffd1dc;
         }
 
         .img-wrapper {
@@ -101,7 +101,7 @@
         }
 
         .product-card:hover .img-wrapper img {
-            transform: scale(1.08) rotate(2deg); /* hover時稍微放大並可愛旋轉 */
+            transform: scale(1.08) rotate(2deg);
         }
 
         .info {
@@ -176,7 +176,7 @@
         }
 
         .details-section {
-            display: none; /* 預設隱藏 */
+            display: none;
             background: #fafafa;
             padding: 15px;
             border-radius: 12px;
@@ -185,7 +185,7 @@
         }
         
         .details-section.show {
-            display: block; /* 加上 show class 後顯示 */
+            display: block;
             animation: slideDown 0.3s ease-out;
         }
 
@@ -198,15 +198,14 @@
             font-size: 0.9rem;
             color: var(--secondary-color);
             margin-bottom: 10px;
-            white-space: pre-wrap; /* 保留換行 */
+            white-space: pre-wrap;
         }
         .detail-img-box img {
             width: 100%;
-            height: auto; /* 高度自動，完整顯示長圖 */
+            height: auto;
             border-radius: 8px;
             border: 1px solid #eee;
         }
-
 
         /* === 操作區 === */
         .action-row {
@@ -237,13 +236,13 @@
             font-size: 1rem;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 4px 0 #e07a93; /* 按鈕立體感 */
+            box-shadow: 0 4px 0 #e07a93;
             font-family: 'Kosugi Maru', sans-serif;
         }
 
         button.btn-add:hover {
             transform: translateY(2px);
-            box-shadow: 0 2px 0 #e07a93; /* 按下效果 */
+            box-shadow: 0 2px 0 #e07a93;
             background-color: #ff7a97;
         }
 
@@ -272,16 +271,16 @@
         </div>
 
     <script>
-        // 【重要】請記得先在 Google 表格新增 E欄(detail_img) 和 F欄(detail_text)
-        // 然後將你的 CSV 連結貼在下方
-        const GOOGLE_SHEET_CSV_URL = '請將此處替換為你的Google表格CSV連結'; 
+        // 【修正】我已經幫你把正確的網址填在這裡了
+        const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS_Cy5OSihu86kbG6c2iGLRUFSSVNnYuG_yanPRNuIF65KtJ_K9r-kXuz1IdWAbxnwfmvAWvWDjlywe/pub?output=csv'; 
 
         async function fetchProducts() {
             const loading = document.getElementById('loading');
             const container = document.getElementById('product-list');
 
-            if (GOOGLE_SHEET_CSV_URL.includes('請將此處替換')) {
-                loading.innerHTML = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS_Cy5OSihu86kbG6c2iGLRUFSSVNnYuG_yanPRNuIF65KtJ_K9r-kXuz1IdWAbxnwfmvAWvWDjlywe/pub?output=csv';
+            // 檢查網址是否為空
+            if (!GOOGLE_SHEET_CSV_URL || GOOGLE_SHEET_CSV_URL.includes('請將此處替換')) {
+                loading.innerHTML = '⚠️ 請先在程式碼中填入正確的 Google 表格 CSV 連結';
                 return;
             }
 
@@ -294,34 +293,28 @@
                 loading.style.display = 'none';
 
                 rows.forEach((row, index) => {
-                    // 確保至少有基本資料
                     if (row.length < 4) return;
 
-                    // 資料對應 (記得使用 trim 清除空白)
                     const name = row[0] ? row[0].trim() : '未命名商品';
                     const spec = row[1] ? row[1].trim() : '';
                     const price = row[2] ? row[2].trim() : '0';
                     const imgUrl = row[3] ? row[3].trim() : 'https://placehold.co/600x600/ffefef/ff8ba7?text=No+Image';
                     
-                    // 新增的細節欄位 (E欄 & F欄)
                     const detailImgUrl = row[4] ? row[4].trim() : '';
                     const detailText = row[5] ? row[5].trim() : '';
-                    // 判斷是否有細節資料
                     const hasDetails = detailImgUrl !== '' || detailText !== '';
 
-                    // 建立卡片
                     const card = document.createElement('div');
                     card.className = 'product-card';
                     
-                    // 數量選項
                     let options = '';
                     for(let i=1; i<=5; i++) { options += `<option value="${i}">${i}</option>`; }
 
-                    // 建構細節區塊的 HTML (如果沒有資料就不顯示按鈕)
                     let detailsHtml = '';
                     if (hasDetails) {
+                        // 【修正】這裡將 onclick 事件加上了 this 參數，以便切換按鈕文字
                         detailsHtml = `
-                            <button class="details-toggle-btn" onclick="toggleDetails('details-${index}')">
+                            <button class="details-toggle-btn" onclick="toggleDetails('details-${index}', this)">
                                 ✨ 看更多細節 (色號/組合)
                             </button>
                             <div id="details-${index}" class="details-section">
@@ -357,15 +350,21 @@
 
             } catch (error) {
                 console.error('Error:', error);
-                loading.innerHTML = '糟糕，讀取失敗了 QQ<br>請檢查連結是否正確，以及表格欄位是否這常。';
+                loading.innerHTML = '糟糕，讀取失敗了 QQ<br>請檢查連結是否正確。';
             }
         }
 
-        // 切換細節顯示的函式
-        function toggleDetails(id) {
+        // 【修正】優化了按鈕文字切換邏輯
+        function toggleDetails(id, btnElement) {
             const section = document.getElementById(id);
             section.classList.toggle('show');
-            // 這裡可以改成切換按鈕文字，例如變成 "收起細節"
+            
+            // 判斷狀態來修改按鈕文字
+            if (section.classList.contains('show')) {
+                btnElement.innerText = '👆 收起細節';
+            } else {
+                btnElement.innerText = '✨ 看更多細節 (色號/組合)';
+            }
         }
 
         fetchProducts();
