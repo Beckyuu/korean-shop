@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Olive Young 3月大促</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <title>Olive Young 3月大促 - 可愛選物</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #1a1a1a;
-            --accent-color: #ff6b00;
-            --bg-color: #f9f9f9;
+            --primary-color: #5a4a42; /* 溫暖的深棕色文字 */
+            --secondary-color: #8c7b70; /* 淺棕色次要文字 */
+            --accent-color: #ff8ba7; /* 可愛粉色強調 */
+            --bg-color: #fffdf7; /* 奶油色背景 */
             --card-bg: #ffffff;
-            --text-gray: #666;
+            --border-style: 2px dashed #f0d0d0; /* 手繪感虛線邊框 */
+            --shadow-style: 4px 4px 0px #ffe0e6; /* 可愛粉色硬陰影 */
         }
 
         * {
@@ -21,58 +23,65 @@
         }
 
         body {
-            font-family: 'Noto Sans TC', sans-serif;
+            font-family: 'Kosugi Maru', sans-serif; /* 套用可愛字體 */
             background-color: var(--bg-color);
+            background-image: radial-gradient(#f5e6e8 5%, transparent 5%); /* 增加一點點可愛波點背景 */
+            background-size: 30px 30px;
             color: var(--primary-color);
             line-height: 1.6;
+            padding-bottom: 50px;
         }
 
         header {
             background: var(--card-bg);
-            padding: 2rem 1rem;
+            padding: 2.5rem 1rem;
             text-align: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.03);
+            border-bottom: var(--border-style);
+            margin-bottom: 2rem;
         }
 
         h1 {
             font-weight: 700;
-            letter-spacing: 1px;
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
+            font-size: 2rem;
+            color: var(--accent-color);
+            text-shadow: 2px 2px 0px #fff, 4px 4px 0px #f0d0d0; /* 可愛標題陰影 */
         }
 
         .subtitle {
-            color: var(--accent-color);
-            font-size: 0.9rem;
-            font-weight: 500;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            color: var(--secondary-color);
+            font-size: 1rem;
+            margin-bottom: 10px;
+            display: inline-block;
+            background: #fff0f3;
+            padding: 5px 15px;
+            border-radius: 20px;
+            border: 2px solid var(--accent-color);
         }
 
         .container {
             max-width: 1200px;
-            margin: 3rem auto;
+            margin: 0 auto;
             padding: 0 20px;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 40px 24px;
         }
 
+        /* === 卡片可愛化設計 === */
         .product-card {
             background: var(--card-bg);
-            border-radius: 12px;
+            border-radius: 20px; /* 更圓的角 */
+            border: var(--border-style);
             overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
+            box-shadow: var(--shadow-style);
         }
 
         .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px #ffd1dc; /* hover時陰影變大 */
         }
 
         .img-wrapper {
@@ -80,19 +89,19 @@
             aspect-ratio: 1 / 1;
             overflow: hidden;
             position: relative;
-            background-color: #eee;
+            background-color: #fff0f3;
+            border-bottom: var(--border-style);
         }
 
         .img-wrapper img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            object-position: center;
             transition: transform 0.5s ease;
         }
 
         .product-card:hover .img-wrapper img {
-            transform: scale(1.05);
+            transform: scale(1.08) rotate(2deg); /* hover時稍微放大並可愛旋轉 */
         }
 
         .info {
@@ -103,145 +112,223 @@
         }
 
         .tag {
-            font-size: 0.75rem;
-            color: var(--accent-color);
+            font-size: 0.8rem;
+            color: white;
+            background: var(--accent-color);
+            padding: 2px 10px;
+            border-radius: 15px;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             display: inline-block;
+            width: fit-content;
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
         }
 
         .name {
-            font-size: 1.1rem;
-            font-weight: 500;
+            font-size: 1.2rem;
+            font-weight: 700;
             margin-bottom: 8px;
-            color: #333;
         }
 
         .spec {
-            font-size: 0.85rem;
-            color: var(--text-gray);
-            margin-bottom: 15px;
-            background: #f0f0f0;
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            background: #f7f2f0;
             display: inline-block;
-            padding: 2px 8px;
-            border-radius: 4px;
+            padding: 4px 10px;
+            border-radius: 10px;
             width: fit-content;
+            border: 1px dashed #dcc;
         }
 
         .price-row {
-            margin-top: auto;
+            margin-top: 15px;
+            margin-bottom: 15px;
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             align-items: center;
-            border-top: 1px solid #eee;
+            border-top: 2px dotted #eee;
             padding-top: 15px;
         }
 
         .price {
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             font-weight: 700;
+            color: var(--accent-color);
         }
 
+        /* === 新增：細節展開區 === */
+        .details-toggle-btn {
+            background: #fff;
+            color: var(--secondary-color);
+            border: 2px dashed var(--accent-color);
+            width: 100%;
+            padding: 8px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: 'Kosugi Maru', sans-serif;
+            margin-bottom: 15px;
+            transition: all 0.2s;
+        }
+        .details-toggle-btn:hover {
+            background: #fff0f3;
+            color: var(--accent-color);
+        }
+
+        .details-section {
+            display: none; /* 預設隱藏 */
+            background: #fafafa;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #eee;
+        }
+        
+        .details-section.show {
+            display: block; /* 加上 show class 後顯示 */
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .detail-text {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            white-space: pre-wrap; /* 保留換行 */
+        }
+        .detail-img-box img {
+            width: 100%;
+            height: auto; /* 高度自動，完整顯示長圖 */
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+
+
+        /* === 操作區 === */
         .action-row {
-            margin-top: 15px;
+            margin-top: auto;
             display: flex;
             gap: 10px;
         }
 
         select {
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
+            padding: 8px 15px;
+            border: 2px solid #eee;
+            border-radius: 12px;
             background: #fff;
-            color: #555;
+            color: var(--primary-color);
             cursor: pointer;
             outline: none;
+            font-family: 'Kosugi Maru', sans-serif;
         }
 
         button.btn-add {
             flex-grow: 1;
-            background-color: var(--primary-color);
+            background-color: var(--accent-color);
             color: white;
             border: none;
-            padding: 10px;
-            border-radius: 6px;
-            font-weight: 500;
+            padding: 12px;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 1rem;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.2s;
+            box-shadow: 0 4px 0 #e07a93; /* 按鈕立體感 */
+            font-family: 'Kosugi Maru', sans-serif;
         }
 
         button.btn-add:hover {
-            background-color: #333;
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #e07a93; /* 按下效果 */
+            background-color: #ff7a97;
+        }
+
+        button.btn-add:active {
+             transform: translateY(4px);
+             box-shadow: none;
         }
 
         #loading {
             text-align: center;
             padding: 50px;
-            color: var(--text-gray);
-            font-weight: 300;
+            font-size: 1.2rem;
+            color: var(--accent-color);
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="subtitle">K-BEAUTY SELECT SHOP</div>
+        <div class="subtitle">✨ 韓系萌物集散地 ✨</div>
         <h1>Olive Young 3月大促</h1>
     </header>
 
-    <div id="loading">正在同步最新優惠商品...</div>
+    <div id="loading">少女心加載中...💖</div>
     <div class="container" id="product-list">
         </div>
 
     <script>
-        // 【重要】請將這裡換成你的 Google 表格 CSV 連結
-        // 確保你的表格已經「發布到網路」並且格式選為 CSV
-        const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS_Cy5OSihu86kbG6c2iGLRUFSSVNnYuG_yanPRNuIF65KtJ_K9r-kXuz1IdWAbxnwfmvAWvWDjlywe/pub?output=csv'; 
+        // 【重要】請記得先在 Google 表格新增 E欄(detail_img) 和 F欄(detail_text)
+        // 然後將你的 CSV 連結貼在下方
+        const GOOGLE_SHEET_CSV_URL = '請將此處替換為你的Google表格CSV連結'; 
 
         async function fetchProducts() {
             const loading = document.getElementById('loading');
             const container = document.getElementById('product-list');
 
             if (GOOGLE_SHEET_CSV_URL.includes('請將此處替換')) {
-                loading.innerHTML = '⚠️ 請記得在程式碼最下方填入你的 Google 表格 CSV 連結';
+                loading.innerHTML = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS_Cy5OSihu86kbG6c2iGLRUFSSVNnYuG_yanPRNuIF65KtJ_K9r-kXuz1IdWAbxnwfmvAWvWDjlywe/pub?output=csv';
                 return;
             }
 
             try {
                 const response = await fetch(GOOGLE_SHEET_CSV_URL);
                 const data = await response.text();
-                
-                // 解析 CSV
                 const rows = data.split('\n').map(row => row.split(','));
-                
-                // 移除第一行標題 (name, specs, price, image)
-                rows.shift();
+                rows.shift(); // 移除標題列
 
                 loading.style.display = 'none';
 
-                rows.forEach(row => {
-                    // 確保這一行有足夠的資料
+                rows.forEach((row, index) => {
+                    // 確保至少有基本資料
                     if (row.length < 4) return;
 
-                    // 依照你的圖片順序對應欄位：
-                    // A欄 [0]: 品名 (name)
-                    // B欄 [1]: 規格 (specs)
-                    // C欄 [2]: 價格 (price)
-                    // D欄 [3]: 圖片網址 (image)
-                    
+                    // 資料對應 (記得使用 trim 清除空白)
                     const name = row[0] ? row[0].trim() : '未命名商品';
                     const spec = row[1] ? row[1].trim() : '';
                     const price = row[2] ? row[2].trim() : '0';
-                    const imgUrl = row[3] ? row[3].trim() : 'https://placehold.co/600x600?text=No+Image';
+                    const imgUrl = row[3] ? row[3].trim() : 'https://placehold.co/600x600/ffefef/ff8ba7?text=No+Image';
+                    
+                    // 新增的細節欄位 (E欄 & F欄)
+                    const detailImgUrl = row[4] ? row[4].trim() : '';
+                    const detailText = row[5] ? row[5].trim() : '';
+                    // 判斷是否有細節資料
+                    const hasDetails = detailImgUrl !== '' || detailText !== '';
 
-                    // 建立 HTML 結構
+                    // 建立卡片
                     const card = document.createElement('div');
                     card.className = 'product-card';
                     
-                    // 生成數量選項 (因為沒有庫存限制，預設讓客人最多選 5 個)
+                    // 數量選項
                     let options = '';
-                    for(let i=1; i<=5; i++) {
-                        options += `<option value="${i}">${i}</option>`;
+                    for(let i=1; i<=5; i++) { options += `<option value="${i}">${i}</option>`; }
+
+                    // 建構細節區塊的 HTML (如果沒有資料就不顯示按鈕)
+                    let detailsHtml = '';
+                    if (hasDetails) {
+                        detailsHtml = `
+                            <button class="details-toggle-btn" onclick="toggleDetails('details-${index}')">
+                                ✨ 看更多細節 (色號/組合)
+                            </button>
+                            <div id="details-${index}" class="details-section">
+                                ${detailText ? `<div class="detail-text">${detailText}</div>` : ''}
+                                ${detailImgUrl ? `<div class="detail-img-box"><img src="${detailImgUrl}" loading="lazy"></div>` : ''}
+                            </div>
+                        `;
                     }
 
                     card.innerHTML = `
@@ -249,19 +336,19 @@
                             <img src="${imgUrl}" alt="${name}" loading="lazy">
                         </div>
                         <div class="info">
-                            <span class="tag">HOT SALE</span>
+                            <span class="tag">HOT! 人氣賞</span>
                             <h3 class="name">${name}</h3>
-                            <span class="spec">${spec}</span>
+                            ${spec ? `<span class="spec">${spec}</span>` : ''}
                             
                             <div class="price-row">
                                 <span class="price">NT$ ${price}</span>
                             </div>
                             
+                            ${detailsHtml}
+                            
                             <div class="action-row">
-                                <select aria-label="數量">
-                                    ${options}
-                                </select>
-                                <button class="btn-add" onclick="alert('已加入購物車：${name}')">加入購物車</button>
+                                <select aria-label="數量">${options}</select>
+                                <button class="btn-add" onclick="alert('已將「${name}」加入購物袋囉！💖')">加入購物袋</button>
                             </div>
                         </div>
                     `;
@@ -270,12 +357,18 @@
 
             } catch (error) {
                 console.error('Error:', error);
-                loading.innerHTML = '無法讀取資料，請確認連結是否正確，並已發布為 CSV 格式。';
+                loading.innerHTML = '糟糕，讀取失敗了 QQ<br>請檢查連結是否正確，以及表格欄位是否這常。';
             }
+        }
+
+        // 切換細節顯示的函式
+        function toggleDetails(id) {
+            const section = document.getElementById(id);
+            section.classList.toggle('show');
+            // 這裡可以改成切換按鈕文字，例如變成 "收起細節"
         }
 
         fetchProducts();
     </script>
 </body>
 </html>
-
