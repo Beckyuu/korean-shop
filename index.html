@@ -7,8 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #1a1a1a; /* 極簡黑 */
-            --accent-color: #ff6b00; /* 類似 Olive Young 的促銷活力橘，或是你可以改成韓系柔粉 */
+            --primary-color: #1a1a1a;
+            --accent-color: #ff6b00;
             --bg-color: #f9f9f9;
             --card-bg: #ffffff;
             --text-gray: #666;
@@ -27,7 +27,6 @@
             line-height: 1.6;
         }
 
-        /* Header 設計 */
         header {
             background: var(--card-bg);
             padding: 2rem 1rem;
@@ -53,18 +52,15 @@
             text-transform: uppercase;
         }
 
-        /* 商品列表容器 */
         .container {
             max-width: 1200px;
             margin: 3rem auto;
             padding: 0 20px;
             display: grid;
-            /* RWD 設定：手機單欄，平板雙欄，電腦三欄或四欄 */
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 40px 24px;
         }
 
-        /* 商品卡片設計 */
         .product-card {
             background: var(--card-bg);
             border-radius: 12px;
@@ -79,10 +75,9 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.08);
         }
 
-        /* 圖片區域：正方形滿版 */
         .img-wrapper {
             width: 100%;
-            aspect-ratio: 1 / 1; /* 強制正方形 */
+            aspect-ratio: 1 / 1;
             overflow: hidden;
             position: relative;
             background-color: #eee;
@@ -91,16 +86,15 @@
         .img-wrapper img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* 滿版裁切 */
+            object-fit: cover;
             object-position: center;
             transition: transform 0.5s ease;
         }
 
         .product-card:hover .img-wrapper img {
-            transform: scale(1.05); /* 滑鼠移入微放大 */
+            transform: scale(1.05);
         }
 
-        /* 內容區域 */
         .info {
             padding: 20px;
             flex-grow: 1;
@@ -127,10 +121,15 @@
             font-size: 0.85rem;
             color: var(--text-gray);
             margin-bottom: 15px;
+            background: #f0f0f0;
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            width: fit-content;
         }
 
         .price-row {
-            margin-top: auto; /* 推到底部 */
+            margin-top: auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -143,7 +142,6 @@
             font-weight: 700;
         }
 
-        /* 數量選擇與按鈕 */
         .action-row {
             margin-top: 15px;
             display: flex;
@@ -176,14 +174,12 @@
             background-color: #333;
         }
 
-        /* Loading 狀態 */
         #loading {
             text-align: center;
             padding: 50px;
             color: var(--text-gray);
             font-weight: 300;
         }
-
     </style>
 </head>
 <body>
@@ -193,22 +189,21 @@
         <h1>Olive Young 3月大促</h1>
     </header>
 
-    <div id="loading">正在載入最新優惠商品...</div>
+    <div id="loading">正在同步最新優惠商品...</div>
     <div class="container" id="product-list">
         </div>
 
     <script>
-        // 【重要】請將下方的網址換成你 Google 表格發布後的 CSV 連結
-        // 範例：'https://docs.google.com/spreadsheets/d/e/2PACX-.../pub?output=csv'
-        // 注意：因為你在提示中沒有提供網址，請務必在此處填入
-        const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS_Cy5OSihu86kbG6c2iGLRUFSSVNnYuG_yanPRNuIF65KtJ_K9r-kXuz1IdWAbxnwfmvAWvWDjlywe/pub?output=csv'; 
+        // 【重要】請將這裡換成你的 Google 表格 CSV 連結
+        // 確保你的表格已經「發布到網路」並且格式選為 CSV
+        const GOOGLE_SHEET_CSV_URL = '請將此處替換為你的Google表格CSV連結'; 
 
         async function fetchProducts() {
             const loading = document.getElementById('loading');
             const container = document.getElementById('product-list');
 
             if (GOOGLE_SHEET_CSV_URL.includes('請將此處替換')) {
-                loading.innerHTML = '⚠️ 請先在程式碼中填入正確的 Google 表格 CSV 連結';
+                loading.innerHTML = '⚠️ 請記得在程式碼最下方填入你的 Google 表格 CSV 連結';
                 return;
             }
 
@@ -216,34 +211,36 @@
                 const response = await fetch(GOOGLE_SHEET_CSV_URL);
                 const data = await response.text();
                 
-                // 解析 CSV (簡單版，若內容包含逗號建議改用 PapaParse 庫)
+                // 解析 CSV
                 const rows = data.split('\n').map(row => row.split(','));
                 
-                // 移除標題列
+                // 移除第一行標題 (name, specs, price, image)
                 rows.shift();
 
                 loading.style.display = 'none';
 
                 rows.forEach(row => {
-                    // 確保這一行有資料
-                    if (row.length < 2) return;
+                    // 確保這一行有足夠的資料
+                    if (row.length < 4) return;
 
-                    // 對應表格欄位：[0]品名, [1]價格, [2]圖片, [3]規格, [4]庫存
-                    // 使用 trim() 去除可能的空白
+                    // 依照你的圖片順序對應欄位：
+                    // A欄 [0]: 品名 (name)
+                    // B欄 [1]: 規格 (specs)
+                    // C欄 [2]: 價格 (price)
+                    // D欄 [3]: 圖片網址 (image)
+                    
                     const name = row[0] ? row[0].trim() : '未命名商品';
-                    const price = row[1] ? row[1].trim() : '0';
-                    const imgUrl = row[2] ? row[2].trim() : 'https://placehold.co/600x600?text=No+Image';
-                    const spec = row[3] ? row[3].trim() : '標準規格';
-                    const stock = row[4] ? row[4].trim() : '10';
+                    const spec = row[1] ? row[1].trim() : '';
+                    const price = row[2] ? row[2].trim() : '0';
+                    const imgUrl = row[3] ? row[3].trim() : 'https://placehold.co/600x600?text=No+Image';
 
                     // 建立 HTML 結構
                     const card = document.createElement('div');
                     card.className = 'product-card';
                     
-                    // 生成數量選項 (最多選 5 個或庫存上限)
+                    // 生成數量選項 (因為沒有庫存限制，預設讓客人最多選 5 個)
                     let options = '';
-                    const maxQty = Math.min(5, parseInt(stock) || 1);
-                    for(let i=1; i<=maxQty; i++) {
+                    for(let i=1; i<=5; i++) {
                         options += `<option value="${i}">${i}</option>`;
                     }
 
@@ -254,7 +251,7 @@
                         <div class="info">
                             <span class="tag">HOT SALE</span>
                             <h3 class="name">${name}</h3>
-                            <p class="spec">${spec}</p>
+                            <span class="spec">${spec}</span>
                             
                             <div class="price-row">
                                 <span class="price">NT$ ${price}</span>
@@ -273,11 +270,10 @@
 
             } catch (error) {
                 console.error('Error:', error);
-                loading.innerHTML = '無法讀取資料，請檢查 Google 表格連結與權限設定。';
+                loading.innerHTML = '無法讀取資料，請確認連結是否正確，並已發布為 CSV 格式。';
             }
         }
 
-        // 執行載入
         fetchProducts();
     </script>
 </body>
