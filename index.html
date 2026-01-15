@@ -5,19 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>S E O U L · Mood</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
     
     <style>
-        /* --- V3: 高級韓系雜誌風格 --- */
+        /* --- V3.5: 現代極簡風格 (修正版) --- */
         :root {
-            --bg-color: #fdfbf7;       /* 溫潤的米紙色 */
-            --text-main: #2c2c2c;      /* 近乎黑的深灰，比純黑高級 */
-            --text-light: #888;
-            --btn-bg: #1a1a1a;
-            --accent-font: 'Cormorant Garamond', serif; /* 英文裝飾字體 */
-            --main-font: 'Noto Sans TC', sans-serif;    /* 中文內文 */
+            --bg-color: #fcfcfc;       /* 極淺灰白，比純白不刺眼 */
+            --text-main: #333333;      /* 標準深灰 */
+            --text-light: #777777;
+            --btn-bg: #222222;         /* 接近黑色的按鈕 */
+            /* 使用系統內建最乾淨的無襯線字體，不再載入怪怪的字體 */
+            --main-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
         }
 
         body {
@@ -26,71 +23,75 @@
             color: var(--text-main);
             margin: 0;
             padding: 0;
-            line-height: 1.6;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased; /* 讓字體邊緣更平滑 */
         }
 
         /* --- Header 導覽列 --- */
         header {
-            padding: 40px 20px;
+            padding: 30px 20px;
             text-align: center;
+            background: #fff;
             position: sticky;
             top: 0;
-            background: rgba(253, 251, 247, 0.95);
-            backdrop-filter: blur(5px);
             z-index: 100;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 1px 0 rgba(0,0,0,0.05); /* 極細的底線 */
         }
 
         .brand-name {
-            font-family: var(--accent-font);
-            font-size: 2.2rem;
-            letter-spacing: 3px;
-            font-weight: 600;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
             margin: 0;
             text-transform: uppercase;
+            color: #000;
         }
 
         .subtitle {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--text-light);
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             margin-top: 5px;
-            text-transform: uppercase;
         }
 
         /* --- 容器 --- */
         .container {
-            max-width: 1100px;
+            max-width: 1000px; /* 稍微縮窄一點，視覺更集中 */
             margin: 0 auto;
-            padding: 60px 20px;
+            padding: 50px 20px;
         }
 
         /* --- 商品網格 --- */
         .product-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 50px 30px; /* 上下間距加大，呼吸感 */
+            gap: 40px 25px; /* 卡片間距 */
         }
 
         @media (max-width: 768px) {
-            .product-grid { grid-template-columns: repeat(2, 1fr); gap: 30px 15px; }
+            .product-grid { grid-template-columns: repeat(2, 1fr); gap: 20px 15px; }
         }
 
-        /* --- 商品卡片 (極簡無邊框) --- */
+        /* --- 商品卡片 --- */
         .product-card {
             position: relative;
             background: transparent;
-            transition: all 0.4s ease;
+            transition: transform 0.3s ease;
         }
 
-        /* 圖片區域 */
+        .product-card:hover {
+            transform: translateY(-5px); /* 輕微浮起 */
+        }
+
+        /* 圖片區域 - 改回正方形 1:1 */
         .image-wrapper {
             position: relative;
             width: 100%;
-            padding-top: 120%; /* 更改為 1:1.2 長方形，更像服飾雜誌，若要正方形改 100% */
+            padding-top: 100%; /* 1:1 正方形 */
             overflow: hidden;
-            background-color: #f0f0f0;
-            margin-bottom: 15px;
+            background-color: #f4f4f4;
+            border-radius: 12px; /* 圖片圓角 (您喜歡的圓潤感) */
+            margin-bottom: 12px;
         }
 
         .image-wrapper img {
@@ -99,39 +100,38 @@
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            object-fit: cover; /* 滿版裁切 */
+            transition: transform 0.6s ease;
         }
 
-        /* Hover 效果：圖片微放大 */
+        /* Hover: 圖片放大效果 */
         .product-card:hover .image-wrapper img {
             transform: scale(1.05);
         }
 
         /* 資訊區域 */
         .info-area {
-            text-align: left; /* 韓系通常靠左或置中，這裡靠左顯得隨性 */
+            text-align: left;
+            padding: 0 5px;
         }
 
         .product-name {
             font-size: 0.95rem;
-            font-weight: 400;
-            margin: 0 0 5px;
-            letter-spacing: 0.5px;
-            color: #111;
+            font-weight: 500; /* 中等粗細，看起來比較清爽 */
+            margin: 0 0 6px;
+            color: #222;
         }
 
         .product-price {
-            font-family: var(--accent-font);
-            font-size: 1.1rem;
+            font-size: 0.95rem;
             color: #555;
             font-weight: 600;
         }
 
-        /* --- 隱藏式控制區 (Hover才出現，手機版常駐) --- */
+        /* --- 控制區 (電腦版 Hover 出現，手機版常駐) --- */
         .controls-overlay {
-            margin-top: 10px;
-            opacity: 0; /* 預設隱藏 */
+            margin-top: 12px;
+            opacity: 0;
             transform: translateY(10px);
             transition: all 0.3s ease;
         }
@@ -141,72 +141,74 @@
             transform: translateY(0);
         }
 
-        /* 手機版設定：不隱藏按鈕，但簡化 */
         @media (max-width: 768px) {
             .controls-overlay {
                 opacity: 1;
                 transform: translateY(0);
-                margin-top: 15px;
             }
         }
 
-        /* 優雅的選單 */
         .ui-group {
             display: flex;
             gap: 8px;
             margin-bottom: 10px;
         }
 
+        /* 輸入框與選單樣式 */
         select, .qty-input {
-            border: 1px solid #ddd;
+            border: 1px solid #e0e0e0;
             background: #fff;
-            padding: 8px;
+            padding: 8px 10px;
             font-size: 0.85rem;
-            color: #555;
+            color: #444;
             outline: none;
-            border-radius: 0; /* 韓系喜歡俐落直角 */
+            border-radius: 8px; /* 圓角 */
             font-family: var(--main-font);
         }
 
-        select { flex-grow: 1; }
+        select:focus, .qty-input:focus {
+            border-color: #999;
+        }
+
+        select { flex-grow: 1; cursor: pointer; }
         .qty-input { width: 40px; text-align: center; }
 
         /* 購買按鈕 */
         .btn-buy {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             background-color: var(--btn-bg);
             color: #fff;
             border: none;
-            font-size: 0.8rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            font-size: 0.85rem;
+            border-radius: 50px; /* 膠囊狀圓角 */
             cursor: pointer;
-            transition: background 0.3s;
+            transition: background 0.3s, transform 0.2s;
+            font-weight: 500;
         }
 
         .btn-buy:hover {
             background-color: #444;
+            transform: scale(1.02);
         }
 
-        /* 載入動畫 */
+        /* 載入中 */
         .loading {
             grid-column: 1 / -1;
             text-align: center;
-            font-family: var(--accent-font);
-            font-size: 1.2rem;
             color: #999;
-            padding: 50px;
+            padding: 60px;
+            font-size: 0.9rem;
         }
         
-        /* Footer */
+        /* 底部 */
         footer {
             text-align: center;
-            padding: 50px 20px;
-            border-top: 1px solid #eee;
-            color: #999;
-            font-size: 0.8rem;
-            font-family: var(--accent-font);
+            padding: 60px 20px;
+            border-top: 1px solid #eaeaea;
+            color: #aaa;
+            font-size: 0.75rem;
+            margin-top: 40px;
         }
 
     </style>
@@ -214,18 +216,18 @@
 <body>
 
     <header>
-        <div class="brand-name">Be.You Studio</div>
+        <div class="brand-name">SEOUL SELECTION</div>
         <div class="subtitle">Daily Minimalist Collection</div>
     </header>
 
     <div class="container">
         <div id="product-grid" class="product-grid">
-            <div class="loading">Loading Collection...</div>
+            <div class="loading">商品載入中...</div>
         </div>
     </div>
 
     <footer>
-        &copy; 2026 Be.You Studio. All rights reserved.
+        &copy; 2026 SEOUL SELECTION. All rights reserved.
     </footer>
 
     <script>
@@ -262,7 +264,7 @@
                         optionsHtml += `<option value="${spec.trim()}">${spec.trim()}</option>`;
                     });
                 } else {
-                    optionsHtml = `<option value="default">One Size</option>`;
+                    optionsHtml = `<option value="default">單一規格</option>`;
                 }
 
                 const card = document.createElement('div');
@@ -271,7 +273,7 @@
 
                 card.innerHTML = `
                     <div class="image-wrapper">
-                        <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/400x500/e0e0e0/999999?text=No+Image'">
+                        <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/400?text=No+Image'">
                     </div>
                     <div class="info-area">
                         <h3 class="product-name">${product.name}</h3>
@@ -280,12 +282,12 @@
                         <div class="controls-overlay">
                             <div class="ui-group">
                                 <select class="spec-selector">
-                                    <option value="" disabled selected>Select Option</option>
+                                    <option value="" disabled selected>選擇規格</option>
                                     ${optionsHtml}
                                 </select>
                                 <input type="number" value="1" min="1" max="10" class="qty-input">
                             </div>
-                            <button class="btn-buy" onclick="addToCart(this)">ADD TO BAG</button>
+                            <button class="btn-buy" onclick="addToCart(this)">加入購物車</button>
                         </div>
                     </div>
                 `;
@@ -300,11 +302,10 @@
             const spec = card.querySelector('.spec-selector').value;
             const qty = card.querySelector('.qty-input').value;
 
-            if (spec === "" || spec === "Select Option") {
-                alert("Please select an option");
+            if (spec === "" || spec === "選擇規格") {
+                alert("請先選擇規格！");
                 return;
             }
-            // 這裡可以換成 Line 通知連結
             alert(`已加入購物車：\n${name}\n規格: ${spec}\n數量: ${qty}`);
         }
     </script>
