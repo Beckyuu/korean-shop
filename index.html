@@ -3,203 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S E O U L · Mood</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    
+    <title>Olive Young 3月大促</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* --- V5.1: Ins風有機自然風格 (邊框修正版) --- */
         :root {
-            --bg-color: #F9F5F0;       /* 溫暖的奶油米色背景 */
-            --text-main: #5A4A42;      /* 柔和的深棕色文字 */
-            --text-light: #9C8C84;
-            --card-border: #A68B7C;    /* 暖棕色厚邊框顏色 */
-            --btn-bg: #A68B7C;
-            --main-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --primary-color: #1a1a1a; /* 極簡黑 */
+            --accent-color: #ff6b00; /* 類似 Olive Young 的促銷活力橘，或是你可以改成韓系柔粉 */
+            --bg-color: #f9f9f9;
+            --card-bg: #ffffff;
+            --text-gray: #666;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            font-family: var(--main-font);
+            font-family: 'Noto Sans TC', sans-serif;
             background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 0;
-            line-height: 1.5;
-            background-image: radial-gradient(circle at 10% 20%, rgba(232, 220, 202, 0.4) 0%, transparent 50%),
-                              radial-gradient(circle at 90% 80%, rgba(212, 196, 180, 0.4) 0%, transparent 50%);
-            background-attachment: fixed;
+            color: var(--primary-color);
+            line-height: 1.6;
         }
 
+        /* Header 設計 */
         header {
-            padding: 50px 20px;
+            background: var(--card-bg);
+            padding: 2rem 1rem;
             text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.03);
         }
 
-        .brand-name {
-            font-size: 1.8rem;
+        h1 {
             font-weight: 700;
-            letter-spacing: 3px;
-            margin: 0;
-            color: var(--text-main);
-            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
         }
 
         .subtitle {
+            color: var(--accent-color);
             font-size: 0.9rem;
-            color: var(--text-light);
+            font-weight: 500;
             letter-spacing: 2px;
-            margin-top: 10px;
             text-transform: uppercase;
         }
 
+        /* 商品列表容器 */
         .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 0 30px 80px 30px;
-        }
-
-        .product-grid {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 20px;
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 70px 45px; /* 稍微加大橫向間距，因為邊框變厚了 */
+            /* RWD 設定：手機單欄，平板雙欄，電腦三欄或四欄 */
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 40px 24px;
         }
 
-        @media (max-width: 768px) {
-            .product-grid { grid-template-columns: repeat(2, 1fr); gap: 50px 25px; }
-        }
-
+        /* 商品卡片設計 */
         .product-card {
-            background: transparent;
-            text-align: center;
-        }
-
-        /* --- 核心修改區域 --- */
-        .image-wrapper {
-            position: relative;
-            width: 100%;
-            padding-top: 100%; /* 1:1 正方形 */
-            margin-bottom: 25px;
-            background-color: #f0eae4;
-            
-            /* 修正重點：移除原本的 border 屬性 */
-            /* border: 8px solid var(--card-border);  <-- 這一行刪除了 */
-            
-            border-radius: 35px; /* 維持大圓角 */
-            
-            /* 修正重點：改用多重陰影來模擬邊框 */
-            box-shadow: 
-                0 0 0 8px var(--card-border), /* 第一層：向外擴展 8px 的實心陰影 (假邊框) */
-                0 15px 35px rgba(166, 139, 124, 0.15); /* 第二層：原本的柔和立體陰影 */
-            
+            background: var(--card-bg);
+            border-radius: 12px;
             overflow: hidden;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            /* 為了讓外擴的陰影不被隔壁卡片擋住，增加一點 margin */
-            margin: 8px 8px 25px 8px; 
-            width: calc(100% - 16px); /* 調整寬度以適應 margin */
+            display: flex;
+            flex-direction: column;
         }
 
-        .image-wrapper img {
-            position: absolute;
-            top: 0;
-            left: 0;
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        /* 圖片區域：正方形滿版 */
+        .img-wrapper {
+            width: 100%;
+            aspect-ratio: 1 / 1; /* 強制正方形 */
+            overflow: hidden;
+            position: relative;
+            background-color: #eee;
+        }
+
+        .img-wrapper img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            /* 圖片現在會完整顯示在圓角框內，不會被邊框蓋住 */
+            object-fit: cover; /* 滿版裁切 */
+            object-position: center;
+            transition: transform 0.5s ease;
         }
 
-        /* Hover 效果： */
-        .product-card:hover .image-wrapper {
-            transform: translateY(-8px);
-            /* Hover 時，要保留假邊框陰影，同時加深立體陰影 */
-            box-shadow: 
-                0 0 0 8px var(--card-border), 
-                0 20px 45px rgba(166, 139, 124, 0.25);
-        }
-        /* ------------------ */
-
-        .info-area {
-            padding: 0 10px;
+        .product-card:hover .img-wrapper img {
+            transform: scale(1.05); /* 滑鼠移入微放大 */
         }
 
-        .product-name {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin: 0 0 8px;
-            color: var(--text-main);
+        /* 內容區域 */
+        .info {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
 
-        .product-price {
-            font-size: 1.05rem;
-            color: var(--card-border);
+        .tag {
+            font-size: 0.75rem;
+            color: var(--accent-color);
             font-weight: 700;
-            margin-bottom: 20px;
+            margin-bottom: 8px;
+            display: inline-block;
         }
 
-        .ui-group {
+        .name {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .spec {
+            font-size: 0.85rem;
+            color: var(--text-gray);
+            margin-bottom: 15px;
+        }
+
+        .price-row {
+            margin-top: auto; /* 推到底部 */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        .price {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        /* 數量選擇與按鈕 */
+        .action-row {
+            margin-top: 15px;
             display: flex;
             gap: 10px;
-            margin-bottom: 15px;
-            justify-content: center;
         }
 
-        select, .qty-input {
-            border: 2px solid #E8DCCA;
+        select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
             background: #fff;
-            padding: 10px 12px;
-            font-size: 0.9rem;
-            color: var(--text-main);
+            color: #555;
+            cursor: pointer;
             outline: none;
-            border-radius: 15px;
-            font-weight: 500;
         }
 
-        select:focus, .qty-input:focus {
-            border-color: var(--card-border);
-        }
-
-        select { 
-            flex-grow: 1; 
-            cursor: pointer;
-            max-width: 180px;
-        }
-        
-        .qty-input { width: 50px; text-align: center; }
-
-        .btn-buy {
-            width: 100%;
-            max-width: 240px;
-            padding: 12px;
-            background-color: var(--btn-bg);
-            color: #fff;
+        button.btn-add {
+            flex-grow: 1;
+            background-color: var(--primary-color);
+            color: white;
             border: none;
-            font-size: 1rem;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-weight: 600;
-            letter-spacing: 1px;
-            box-shadow: 0 5px 15px rgba(166, 139, 124, 0.3);
-        }
-
-        .btn-buy:hover {
-            background-color: #8c7365;
-            transform: translateY(-2px);
-        }
-
-        .loading {
-            grid-column: 1 / -1;
-            text-align: center;
-            color: var(--text-light);
-            padding: 60px;
+            padding: 10px;
+            border-radius: 6px;
             font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
         }
-        
-        footer {
+
+        button.btn-add:hover {
+            background-color: #333;
+        }
+
+        /* Loading 狀態 */
+        #loading {
             text-align: center;
-            padding: 40px 20px;
-            color: var(--text-light);
-            font-size: 0.8rem;
-            opacity: 0.7;
+            padding: 50px;
+            color: var(--text-gray);
+            font-weight: 300;
         }
 
     </style>
@@ -207,97 +189,96 @@
 <body>
 
     <header>
-        <div class="brand-name">Be.You Select</div>
-        <div class="subtitle">Natural & Organic Mood</div>
+        <div class="subtitle">K-BEAUTY SELECT SHOP</div>
+        <h1>Olive Young 3月大促</h1>
     </header>
 
-    <div class="container">
-        <div id="product-grid" class="product-grid">
-            <div class="loading">Loading Collection...</div>
+    <div id="loading">正在載入最新優惠商品...</div>
+    <div class="container" id="product-list">
         </div>
-    </div>
-
-    <footer>
-        &copy; 2026 Be.You Select.
-    </footer>
 
     <script>
-        const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS_Cy5OSihu86kbG6c2iGLRUFSSVNnYuG_yanPRNuIF65KtJ_K9r-kXuz1IdWAbxnwfmvAWvWDjlywe/pub?output=csv';
+        // 【重要】請將下方的網址換成你 Google 表格發布後的 CSV 連結
+        // 範例：'https://docs.google.com/spreadsheets/d/e/2PACX-.../pub?output=csv'
+        // 注意：因為你在提示中沒有提供網址，請務必在此處填入
+        const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS_Cy5OSihu86kbG6c2iGLRUFSSVNnYuG_yanPRNuIF65KtJ_K9r-kXuz1IdWAbxnwfmvAWvWDjlywe/pub?output=csv'; 
 
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchData();
-        });
+        async function fetchProducts() {
+            const loading = document.getElementById('loading');
+            const container = document.getElementById('product-list');
 
-        function fetchData() {
-            Papa.parse(sheetUrl, {
-                download: true,
-                header: true,
-                complete: function(results) {
-                    renderProducts(results.data);
-                },
-                error: function(err) {
-                    console.error('Error:', err);
-                }
-            });
-        }
-
-        function renderProducts(products) {
-            const grid = document.getElementById('product-grid');
-            grid.innerHTML = ''; 
-
-            products.forEach(product => {
-                if (!product.name) return;
-
-                let optionsHtml = '';
-                if (product.specs) {
-                    const specsArray = product.specs.split(',');
-                    specsArray.forEach(spec => {
-                        optionsHtml += `<option value="${spec.trim()}">${spec.trim()}</option>`;
-                    });
-                } else {
-                    optionsHtml = `<option value="default">單一規格</option>`;
-                }
-
-                const card = document.createElement('div');
-                card.className = 'product-card';
-                const priceFormatted = Number(product.price).toLocaleString();
-
-                card.innerHTML = `
-                    <div class="image-wrapper">
-                        <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/400x400/e0eae4/A68B7C?text=No+Image'">
-                    </div>
-                    <div class="info-area">
-                        <h3 class="product-name">${product.name}</h3>
-                        <div class="product-price">NT. ${priceFormatted}</div>
-                        
-                        <div class="ui-group">
-                            <select class="spec-selector">
-                                <option value="" disabled selected>選擇規格</option>
-                                ${optionsHtml}
-                            </select>
-                            <input type="number" value="1" min="1" max="10" class="qty-input">
-                        </div>
-                        <button class="btn-buy" onclick="addToCart(this)">加入購物車</button>
-                    </div>
-                `;
-
-                grid.appendChild(card);
-            });
-        }
-
-        function addToCart(btn) {
-            const card = btn.closest('.product-card');
-            const name = card.querySelector('.product-name').innerText;
-            const spec = card.querySelector('.spec-selector').value;
-            const qty = card.querySelector('.qty-input').value;
-
-            if (spec === "" || spec === "選擇規格") {
-                alert("請先選擇規格！");
+            if (GOOGLE_SHEET_CSV_URL.includes('請將此處替換')) {
+                loading.innerHTML = '⚠️ 請先在程式碼中填入正確的 Google 表格 CSV 連結';
                 return;
             }
-            alert(`已加入購物車：\n${name}\n規格: ${spec}\n數量: ${qty}`);
-        }
-    </script>
 
+            try {
+                const response = await fetch(GOOGLE_SHEET_CSV_URL);
+                const data = await response.text();
+                
+                // 解析 CSV (簡單版，若內容包含逗號建議改用 PapaParse 庫)
+                const rows = data.split('\n').map(row => row.split(','));
+                
+                // 移除標題列
+                rows.shift();
+
+                loading.style.display = 'none';
+
+                rows.forEach(row => {
+                    // 確保這一行有資料
+                    if (row.length < 2) return;
+
+                    // 對應表格欄位：[0]品名, [1]價格, [2]圖片, [3]規格, [4]庫存
+                    // 使用 trim() 去除可能的空白
+                    const name = row[0] ? row[0].trim() : '未命名商品';
+                    const price = row[1] ? row[1].trim() : '0';
+                    const imgUrl = row[2] ? row[2].trim() : 'https://placehold.co/600x600?text=No+Image';
+                    const spec = row[3] ? row[3].trim() : '標準規格';
+                    const stock = row[4] ? row[4].trim() : '10';
+
+                    // 建立 HTML 結構
+                    const card = document.createElement('div');
+                    card.className = 'product-card';
+                    
+                    // 生成數量選項 (最多選 5 個或庫存上限)
+                    let options = '';
+                    const maxQty = Math.min(5, parseInt(stock) || 1);
+                    for(let i=1; i<=maxQty; i++) {
+                        options += `<option value="${i}">${i}</option>`;
+                    }
+
+                    card.innerHTML = `
+                        <div class="img-wrapper">
+                            <img src="${imgUrl}" alt="${name}" loading="lazy">
+                        </div>
+                        <div class="info">
+                            <span class="tag">HOT SALE</span>
+                            <h3 class="name">${name}</h3>
+                            <p class="spec">${spec}</p>
+                            
+                            <div class="price-row">
+                                <span class="price">NT$ ${price}</span>
+                            </div>
+                            
+                            <div class="action-row">
+                                <select aria-label="數量">
+                                    ${options}
+                                </select>
+                                <button class="btn-add" onclick="alert('已加入購物車：${name}')">加入購物車</button>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error('Error:', error);
+                loading.innerHTML = '無法讀取資料，請檢查 Google 表格連結與權限設定。';
+            }
+        }
+
+        // 執行載入
+        fetchProducts();
+    </script>
 </body>
 </html>
