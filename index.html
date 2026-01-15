@@ -49,7 +49,7 @@
             border: 8px solid #fff; /* 標題本身也有拍立得白邊 */
         }
 
-        /* 標題旁的裝飾：手繪愛心 (參考圖片元素) */
+        /* 標題旁的裝飾：手繪愛心 */
         header::after {
             content: '';
             position: absolute;
@@ -82,13 +82,14 @@
         }
 
         .container {
-            max-width: 1100px;
+            /* 【修改 2】放大容器寬度，讓商品卡片變大 */
+            max-width: 1280px; 
             margin: 0 auto;
             padding: 0 30px;
             display: grid;
             /* 電腦版三欄，手機版一欄 */
             grid-template-columns: repeat(1, 1fr);
-            gap: 50px; /* 增加間距，讓每張「照片」更有呼吸感 */
+            gap: 40px; /* 稍微縮小間距，讓卡片佔比更大 */
         }
         
         @media (min-width: 768px) {
@@ -108,7 +109,7 @@
             flex-direction: column;
             position: relative;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            /* 稍微隨機旋轉一點點，增加手作感 (這裡統用一個角度，避免太亂) */
+            /* 稍微隨機旋轉一點點，增加手作感 */
             transform: rotate(0.5deg);
         }
 
@@ -118,6 +119,7 @@
         }
 
         /* === 關鍵裝飾：紙膠帶 (Washi Tape) === */
+        /* 【修改 1】保留左上角的膠帶 (::before) */
         .product-card::before {
             content: '';
             position: absolute;
@@ -135,21 +137,7 @@
             pointer-events: none; /* 讓滑鼠可以穿透膠帶點到商品 */
         }
 
-        /* 第二條膠帶 (隨機出現在某些卡片，這裡先統一加在右下角增加豐富度) */
-        .product-card::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            right: -20px;
-            width: 60px;
-            height: 20px;
-            background-color: var(--tape-beige);
-            opacity: 0.6;
-            transform: rotate(20deg);
-            z-index: 10;
-            box-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-            pointer-events: none;
-        }
+        /* 【修改 1】刪除了右下角的膠帶 (::after) */
 
 
         .img-wrapper {
