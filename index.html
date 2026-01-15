@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Olive Young 3月大促 - 海灘手帳風</title>
+    <title>Olive Young 3月大促 - 海灘手帳風 (V2)</title>
     <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             /* 海灘手帳配色盤 */
-            --tape-beige: rgba(210, 180, 140, 0.85); /* 紙膠帶顏色 */
-            --sand-bg: #f8f5e6;      /* 米色沙灘紙張背景 */
-            --warm-text: #5c554a;    /* 暖棕色文字 */
-            --accent-orange: #e08e79; /* 夕陽橘 (價格強調) */
-            --ocean-blue: #8fbcd4;   /* 海洋藍 (按鈕) */
-            --ocean-dark: #6a9eb5;   /* 按鈕深色狀態 */
+            --tape-beige: rgba(210, 180, 140, 0.85);
+            --sand-bg: #f8f5e6;
+            --warm-text: #5c554a;
+            --accent-orange: #e08e79;
+            --ocean-blue: #8fbcd4;
+            --ocean-dark: #6a9eb5;
         }
 
         * {
@@ -26,7 +26,7 @@
             font-family: 'Zen Maru Gothic', sans-serif;
             background-color: var(--sand-bg);
             color: var(--warm-text);
-            /* 背景：模擬再生紙張紋理 + 手繪波浪線條裝飾 */
+            /* 背景裝飾 */
             background-image: 
                 url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E"),
                 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='40' viewBox='0 0 120 40' fill='none' stroke='%235c554a' stroke-width='2' opacity='0.1'%3E%3Cpath d='M0 20 C 30 0, 30 40, 60 20 C 90 0, 90 40, 120 20'/%3E%3Cpath d='M0 30 C 30 10, 30 50, 60 30 C 90 10, 90 50, 120 30'/%3E%3C/svg%3E");
@@ -37,7 +37,6 @@
         }
 
         header {
-            /* 標題區塊像一張貼在牆上的大卡片 */
             background: #fff;
             padding: 2.5rem 1rem;
             text-align: center;
@@ -45,11 +44,10 @@
             max-width: 600px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.08);
             position: relative;
-            transform: rotate(-1deg); /* 稍微歪斜一點 */
-            border: 8px solid #fff; /* 標題本身也有拍立得白邊 */
+            transform: rotate(-1deg);
+            border: 8px solid #fff;
         }
 
-        /* 標題旁的裝飾：手繪愛心 */
         header::after {
             content: '';
             position: absolute;
@@ -81,15 +79,14 @@
             border-bottom: 2px dashed #ccc;
         }
 
+        /* 【檢查點 1】這裡的 max-width 應該要是 1280px */
         .container {
-            /* 【修改 2】放大容器寬度，讓商品卡片變大 */
             max-width: 1280px; 
             margin: 0 auto;
             padding: 0 30px;
             display: grid;
-            /* 電腦版三欄，手機版一欄 */
             grid-template-columns: repeat(1, 1fr);
-            gap: 40px; /* 稍微縮小間距，讓卡片佔比更大 */
+            gap: 40px;
         }
         
         @media (min-width: 768px) {
@@ -98,28 +95,23 @@
             }
         }
 
-        /* === 卡片設計：拍立得相片風格 === */
         .product-card {
             background: #fff;
-            /* 關鍵：厚實的白色邊框，模擬拍立得相紙 */
-            border: 12px solid #fff;
-            /* 柔和且深的陰影，製造立體感 */
+            border: 12px solid #fff; /* 拍立得白邊 */
             box-shadow: 0 8px 15px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
             position: relative;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            /* 稍微隨機旋轉一點點，增加手作感 */
             transform: rotate(0.5deg);
         }
 
         .product-card:hover {
-            transform: translateY(-5px) rotate(0deg); /* 懸停時浮起並轉正 */
+            transform: translateY(-5px) rotate(0deg);
             box-shadow: 0 15px 25px rgba(0,0,0,0.15);
         }
 
-        /* === 關鍵裝飾：紙膠帶 (Washi Tape) === */
-        /* 【修改 1】保留左上角的膠帶 (::before) */
+        /* 【檢查點 2】只有 ::before (左上膠帶)，沒有 ::after 了 */
         .product-card::before {
             content: '';
             position: absolute;
@@ -130,22 +122,17 @@
             background-color: var(--tape-beige);
             opacity: 0.8;
             transform: rotate(-35deg);
-            z-index: 10; /* 蓋在照片上面 */
-            box-shadow: 1px 1px 3px rgba(0,0,0,0.1); /* 膠帶本身的厚度陰影 */
-            /* 模擬膠帶撕裂邊緣 */
+            z-index: 10;
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
             clip-path: polygon(2% 0%, 98% 0%, 100% 100%, 0% 100%);
-            pointer-events: none; /* 讓滑鼠可以穿透膠帶點到商品 */
+            pointer-events: none;
         }
-
-        /* 【修改 1】刪除了右下角的膠帶 (::after) */
-
 
         .img-wrapper {
             width: 100%;
             aspect-ratio: 1 / 1;
             position: relative;
             background-color: #f0f0f0;
-            /* 照片區域加上內陰影，增加層次 */
             box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
             overflow: hidden;
         }
@@ -154,14 +141,13 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: saturate(0.9); /* 照片色彩稍微調淡一點，更有復古感 */
+            filter: saturate(0.9);
             transition: filter 0.3s;
         }
         .product-card:hover .img-wrapper img {
-            filter: saturate(1.1); /* 懸停時色彩變鮮豔 */
+            filter: saturate(1.1);
         }
 
-        /* 細節按鈕 (改成圓形剪紙風格) */
         .more-sticker {
             position: absolute;
             bottom: 10px;
@@ -185,13 +171,12 @@
             transform: scale(1.1);
         }
 
-        /* === 內容區域 === */
         .info {
-            padding: 15px 5px 5px 5px; /* 上方留白多一點，像拍立得下方的空白處 */
+            padding: 15px 5px 5px 5px;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            text-align: center; /* 文字置中，像在照片下方寫字 */
+            text-align: center;
         }
 
         .name {
@@ -207,7 +192,7 @@
             color: #888;
             margin-bottom: 12px;
             display: inline-block;
-            background: #f4f1e8; /* 米色底標籤 */
+            background: #f4f1e8;
             padding: 3px 10px;
             border-radius: 20px;
         }
@@ -215,7 +200,7 @@
         .price-row {
             margin-top: auto;
             padding-top: 10px;
-            border-top: 1px dotted #ccc; /* 使用點狀線分隔 */
+            border-top: 1px dotted #ccc;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -224,10 +209,9 @@
         .price {
             font-size: 1.2rem;
             font-weight: 700;
-            color: var(--accent-orange); /* 夕陽橘色價格 */
+            color: var(--accent-orange);
         }
 
-        /* === 操作區 === */
         .action-row {
             display: flex;
             gap: 8px;
@@ -274,7 +258,6 @@
             box-shadow: none;
         }
 
-        /* === 彈跳視窗 (樣式微調以配合新主題) === */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -282,7 +265,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(90, 80, 70, 0.6); /* 深棕色半透明遮罩 */
+            background: rgba(90, 80, 70, 0.6);
             backdrop-filter: blur(3px);
             z-index: 1000;
             justify-content: center;
@@ -296,13 +279,12 @@
             max-width: 550px;
             max-height: 85vh;
             overflow-y: auto;
-            border-radius: 2px; /* 直角，像一張信紙 */
-            /* 彈跳窗也加上拍立得白邊效果 */
+            border-radius: 2px;
             border: 10px solid #fff;
             box-shadow: 0 20px 40px rgba(0,0,0,0.2);
             padding: 25px;
             position: relative;
-            background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h20v20H0z' fill='%23fff'/%3E%3Cpath d='M0 19h20v1H0z' fill='%23e0d0c0' opacity='0.5'/%3E%3C/svg%3E"); /* 橫線信紙背景 */
+            background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h20v20H0z' fill='%23fff'/%3E%3Cpath d='M0 19h20v1H0z' fill='%23e0d0c0' opacity='0.5'/%3E%3C/svg%3E");
             background-size: 100% 24px;
         }
 
@@ -426,7 +408,6 @@
                     let options = '';
                     for(let i=1; i<=5; i++) { options += `<option value="${i}">${i}</option>`; }
 
-                    // 右下角放大鏡貼紙
                     let stickerHtml = '';
                     if (product.hasDetails) {
                         stickerHtml = `
