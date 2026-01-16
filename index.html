@@ -189,69 +189,71 @@
         }
 
         /* === 修改後：簡短說明 (改用原本按鈕的圓潤風格) === */
+        /* === 1. 簡短說明：改成實心標籤風格 (像螢光筆畫過) === */
         .desc-text {
             font-size: 0.85rem;
-            color: #666;
-            /* 字體顏色加深一點 */
+            color: #5c554a;
+            /* 深色字比較清楚 */
             margin-bottom: 12px;
-            /* 這裡改成圓潤風格 */
             padding: 4px 12px;
-            border: 1px solid #e0d0c0;
-            /* 實線邊框 */
-            border-radius: 15px;
-            /* 圓角 */
-            background: #fff;
-            /* 白色背景 */
+            border-radius: 20px;
+            /* 圓潤的形狀 */
+            background: #e8e0d5;
+            /* 實心奶茶色背景 */
+            border: none;
+            /* 不要邊框 */
+            font-weight: bold;
+            /* 加粗強調 */
             display: inline-block;
             width: fit-content;
             margin-left: auto;
             margin-right: auto;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-            /* 加一點點陰影 */
         }
 
         .variant-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 8px;
             justify-content: center;
             margin-bottom: 12px;
         }
 
-        /* === 修改後：規格按鈕 (改用原本說明的方形風格) === */
+        /* === 2. 規格按鈕：改成方塊按鈕風格 === */
         .variant-btn {
             font-family: 'Zen Maru Gothic', sans-serif;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
+            /* 字稍微大一點 */
+            padding: 8px 12px;
+            /* 增加按鈕面積 */
+            border-radius: 6px;
+            /* 只有一點點圓角，看起來比較像按鍵 */
+            background: #fff;
+            /* 純白背景 */
+            border: 1px solid #ccc;
+            /* 實線邊框 */
+            color: #888;
             cursor: pointer;
             transition: all 0.2s;
-            /* 這裡改成方形虛線風格 */
-            padding: 6px 10px;
-            /* 稍微加大一點點比較好按 */
-            border-radius: 4px;
-            /* 小圓角(接近方形) */
-            background: #fafafa;
-            /* 淺灰背景 */
-            border: 1px dashed #ccc;
-            /* 虛線邊框 */
-            color: #888;
+            box-shadow: 0 2px 0 #ddd;
+            /* 增加一點點立體感 */
         }
 
-        /* 滑鼠移過去的效果 */
         .variant-btn:hover {
             border-color: var(--ocean-blue);
             color: var(--ocean-blue);
-            background: #fff;
-            border-style: solid;
-            /* 滑鼠移過去變實線，回饋感比較好 */
+            transform: translateY(-1px);
+            /* 滑鼠碰到會浮起來 */
         }
 
-        /* 被選中時的效果 (維持明顯的顏色) */
         .variant-btn.selected {
-            background-color: var(--selected-bg);
-            color: var(--selected-text);
-            border: 1px solid var(--selected-bg);
-            /* 選中變實線 */
-            box-shadow: 0 2px 5px rgba(224, 142, 121, 0.4);
+            background-color: var(--ocean-blue);
+            /* 選中變藍色 */
+            color: #fff;
+            /* 選中字變白 */
+            border-color: var(--ocean-blue);
+            box-shadow: none;
+            /* 按下去的感覺 */
+            transform: translateY(2px);
         }
 
         .price-row {
@@ -565,6 +567,43 @@
             font-size: 1.1rem;
             color: #887d6f;
         }
+
+        /* === 首頁便利貼公告 === */
+        .memo-board {
+            max-width: 600px;
+            margin: 0 auto 30px;
+            /* 放在 header 下方 */
+            background: #fff8e1;
+            /* 黃色便利貼顏色 */
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transform: rotate(1deg);
+            /* 稍微歪一點 */
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #5a5040;
+        }
+
+        /* 膠帶效果 */
+        .memo-board::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-2deg);
+            width: 120px;
+            height: 35px;
+            background-color: rgba(210, 180, 140, 0.6);
+            /* 半透明膠帶 */
+        }
+
+        .memo-title {
+            font-weight: bold;
+            color: #e17055;
+            margin-bottom: 8px;
+            display: block;
+        }
     </style>
 </head>
 
@@ -575,6 +614,12 @@
         <div class="subtitle">March Seaside Selection</div>
     </header>
 
+    <div class="memo-board">
+        <span class="memo-title">📌 店長碎碎念：</span>
+        1. 賣場沒有的商品，歡迎直接傳連結給我報價 🔎<br>
+        2. 韓國活動價格浮動大，下單前請以最新報價為主。<br>
+        3. 配合 Olive Young 3月大促，部分熱門品項可能缺貨，請見諒！
+    </div>
     <div id="loading">正在沖洗照片中...📷</div>
     <div class="container" id="product-list"></div>
 
@@ -599,11 +644,20 @@
 
             <div class="cart-footer">
                 <div class="cart-notice-box">
-                    <span class="notice-highlight">⚠️ 預購需等待 10-15 個工作天</span>
-                    請確認可以等待再下單！<br>
-                    送出訂單後，請於 LINE 告知您要在<b>「賣貨便」</b>還是<b>「iOPEN Mall」</b>下單，我們會提供專屬連結給您。
+                    ⚠️ 預購需等待 10-15 個工作天
                 </div>
 
+                <div
+                    style="text-align: left; background: #fafafa; padding: 10px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed #ccc;">
+                    <p style="font-weight: bold; margin-bottom: 8px; color: #5c554a;">請選擇下單平台：</p>
+                    <label style="display:flex; align-items:center; margin-bottom: 5px; cursor: pointer;">
+                        <input type="radio" name="shipping" value="賣貨便" style="margin-right: 8px;"> 7-11 賣貨便
+                    </label>
+                    <label style="display:flex; align-items:center; cursor: pointer;">
+                        <input type="radio" name="shipping" value="iOPEN Mall" style="margin-right: 8px;"> 7-11 iOPEN
+                        Mall
+                    </label>
+                </div>
                 <div class="cart-total" id="cartTotal">總金額: NT$ 0</div>
                 <button class="btn-checkout" onclick="checkoutViaLine()">確認清單並用 LINE 傳送 💬</button>
             </div>
@@ -763,14 +817,34 @@
 
         function checkoutViaLine() {
             if (cart.length === 0) return;
+
+            // 檢查有沒有選運送方式
+            const shippingRadios = document.getElementsByName('shipping');
+            let selectedShipping = null;
+            for (const radio of shippingRadios) {
+                if (radio.checked) {
+                    selectedShipping = radio.value;
+                    break;
+                }
+            }
+
+            if (!selectedShipping) {
+                alert('請先選擇要在「賣貨便」還是「iOPEN Mall」下單喔！🚚');
+                return; // 停止執行，不跳轉 LINE
+            }
+
             let message = "您好！我要訂購以下商品：\n";
-            message += "(已確認預購需等 10-15 個工作天)\n";
             message += "------------------\n";
             let total = 0;
-            cart.forEach(item => { total += item.price * item.qty; message += `${item.name} [${item.spec}] x${item.qty} \n`; });
+            cart.forEach(item => {
+                total += item.price * item.qty;
+                message += `${item.name} [${item.spec}] x${item.qty} \n`;
+            });
             message += "------------------\n";
-            message += `總金額：NT$ ${total}\n\n`;
-            message += "請問能在 [賣貨便 / iOPEN Mall] 下單嗎？請提供連結給我，謝謝！";
+            message += `總金額：NT$ ${total}\n`;
+            message += `💡 指定下單平台：${selectedShipping}\n\n`; // 把選擇加進去
+            message += "請確認有貨後提供連結給我，謝謝！";
+
             window.open(`https://line.me/R/msg/text/?${encodeURIComponent(message)}`, '_blank');
         }
 
