@@ -36,7 +36,8 @@
 
         body {
             font-family: 'Noto Sans TC', sans-serif;
-            background-color: var(--bg-color); /* 這是底色 */
+            background-color: var(--bg-color);
+            /* 這是底色 */
             color: var(--primary);
             line-height: 1.6;
             padding-bottom: 80px;
@@ -44,13 +45,14 @@
             /* === 這裡是被修改的背景 === */
             /* 1. 左上角：淡綠色光暈 (適合積雪草) */
             /* 2. 右下角：淡粉色光暈 (適合保濕/像女生的臉頰) */
-            background-image: 
+            background-image:
                 radial-gradient(circle at 0% 0%, rgba(124, 148, 115, 0.25) 0%, transparent 40%),
                 radial-gradient(circle at 100% 100%, rgba(230, 91, 91, 0.20) 0%, transparent 40%);
-            
-            background-attachment: fixed; /* 讓背景固定不動，很有質感 */
+
+            background-attachment: fixed;
+            /* 讓背景固定不動，很有質感 */
         }
-        
+
         /* === 極簡 Header === */
         header {
             text-align: center;
@@ -61,11 +63,42 @@
 
         h1 {
             font-weight: 300;
-            /* 細字體比較高級 */
             font-size: 2.5rem;
             letter-spacing: 4px;
             margin-bottom: 10px;
             color: #2c2c2c;
+            position: relative;
+            display: inline-block;
+            /* 為了定位星星 */
+        }
+
+        /* 標題右上角的小星星裝飾 */
+        h1::after {
+            content: '✦';
+            /* 星星符號 */
+            position: absolute;
+            top: -5px;
+            right: -25px;
+            font-size: 1.2rem;
+            color: #d4c4b0;
+            /* 奶茶色 */
+            animation: twinkle 3s infinite ease-in-out;
+            /* 讓它緩慢閃爍 */
+        }
+
+        /* 讓星星閃爍的動畫設定 (加在 CSS 最後面即可) */
+        @keyframes twinkle {
+
+            0%,
+            100% {
+                opacity: 0.4;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
         }
 
         .subtitle {
