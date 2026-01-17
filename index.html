@@ -36,20 +36,21 @@
 
         body {
             font-family: 'Noto Sans TC', sans-serif;
-            background-color: var(--bg-color);
+            background-color: var(--bg-color); /* 這是底色 */
             color: var(--primary);
             line-height: 1.6;
             padding-bottom: 80px;
 
-            /* === 新增：氛圍感光暈 === */
-            /* 左上角是淡淡的綠色 (呼應積雪草)，右下角是淡淡的暖粉色 */
-            background-image:
-                radial-gradient(circle at 0% 0%, rgba(124, 148, 115, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 100% 100%, rgba(230, 91, 91, 0.05) 0%, transparent 50%);
-            background-attachment: fixed;
-            /* 讓背景固定，滾動時光暈不會動，更有質感 */
+            /* === 這裡是被修改的背景 === */
+            /* 1. 左上角：淡綠色光暈 (適合積雪草) */
+            /* 2. 右下角：淡粉色光暈 (適合保濕/像女生的臉頰) */
+            background-image: 
+                radial-gradient(circle at 0% 0%, rgba(124, 148, 115, 0.25) 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, rgba(230, 91, 91, 0.20) 0%, transparent 40%);
+            
+            background-attachment: fixed; /* 讓背景固定不動，很有質感 */
         }
-
+        
         /* === 極簡 Header === */
         header {
             text-align: center;
