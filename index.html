@@ -118,63 +118,53 @@
             }
         }
 
-        /* === 商品卡片：改成懸掛拍立得風格 === */
+        /* === 修改後：懸掛拍立得 (增加頂部空間、取消懸停轉正) === */
         .product-card {
             background: #fff;
-            padding: 12px 12px 20px 12px;
-            /* 下方留白多一點，像拍立得 */
+            /* 修改這裡：padding-top 加大到 25px，拉開與繩子的距離 */
+            padding: 25px 12px 20px 12px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.05);
             display: flex;
             flex-direction: column;
             position: relative;
-            transition: transform 0.3s ease-out;
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+            /* 移除 scale 的過渡 */
             transform-origin: top center;
-            /* 設定旋轉軸心在頂部（像掛著一樣）*/
             margin-top: 20px;
         }
 
-        /* === 修改後：粗麻繩 (顏色變淺、變粗、加紋路) === */
+        /* === 粗麻繩 (配合 padding 往下移) === */
         .product-card::before {
             content: '';
             position: absolute;
-            /* 調整繩子高度，讓它看起來像從夾子中間穿過 */
-            top: -11px;
+            /* 修改這裡：調整繩子高度，往下移 */
+            top: 6px;
             width: calc(100% + 40px);
-            /* 連接到隔壁 */
             left: -20px;
             height: 5px;
-            /* 繩子加粗到 5px */
-
-            /* 麻繩材質：改用淺米色系，增加纖維感 */
             background: repeating-linear-gradient(45deg, #d0c0a0, #d0c0a0 3px, #c0b090 3px, #c0b090 6px);
             border-bottom: 1px solid #b0a080;
-            /* 加個陰影邊更有立體感 */
-
             z-index: -1;
-            /* 在夾子後面 */
         }
 
-        /* === 找回夾子：木頭夾子樣式 (之前不小心蓋掉了) === */
+        /* === 木頭夾子 (配合 padding 往下移) === */
         .product-card::after {
             content: '';
             position: absolute;
-            top: -14px;
-            /* 夾子位置 */
+            /* 修改這裡：調整夾子高度，往下移，剛好夾在邊緣 */
+            top: 0px;
             left: 50%;
             transform: translateX(-50%);
             width: 14px;
             height: 28px;
             background: #d4a373;
-            /* 木頭色 */
             border-radius: 3px;
             border: 1px solid #b08968;
             box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
             z-index: 0;
-            /* 在繩子前面 */
         }
 
-        /* === 繩子校正 (逆向旋轉，維持不變) === */
-        /* ... 這裡以下的 .product-card:nth-child 相關代碼都不用動 ... */
+        /* === 照片與繩子的歪斜設定 (維持不變) === */
         .product-card:nth-child(odd) {
             transform: rotate(1.5deg);
         }
@@ -199,43 +189,13 @@
             transform: rotate(-0.5deg);
         }
 
-        /* === 關鍵修正：繩子校正 (逆向旋轉) === */
-        /* 因為照片(父元素)歪了，繩子(子元素)要反方向歪回來，才會看起來是直的 */
-
-        /* 1. 照片設定 (維持原本的亂數感) */
-        .product-card:nth-child(odd) {
-            transform: rotate(1.5deg);
-        }
-
-        .product-card:nth-child(even) {
-            transform: rotate(-1deg);
-        }
-
-        .product-card:nth-child(3n) {
-            transform: rotate(0.5deg);
-        }
-
-        /* 2. 繩子校正 (數值剛好跟上面相反) */
-        .product-card:nth-child(odd)::before {
-            transform: rotate(-1.5deg);
-        }
-
-        .product-card:nth-child(even)::before {
-            transform: rotate(1deg);
-        }
-
-        .product-card:nth-child(3n)::before {
-            transform: rotate(-0.5deg);
-        }
-
-        /* 滑鼠移過去時，照片轉正，繩子也要跟著修正 */
+        /* === 修改後：滑鼠懸停效果 (取消轉正，只保留陰影和浮起) === */
         .product-card:hover {
-            transform: rotate(0deg) scale(1.02);
+            /* transform: rotate(0deg) scale(1.02); <--- 這行刪掉了 */
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
             z-index: 10;
-        }
-
-        .product-card:hover::before {
-            transform: rotate(0deg);
+            /* 可以選擇加一點點放大效果，不轉正 */
+            /* transform: scale(1.01); */
         }
 
         .img-wrapper {
