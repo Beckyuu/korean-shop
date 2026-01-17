@@ -133,28 +133,70 @@
             margin-top: 20px;
         }
 
-        /* === 修改後：麻繩改為「橫向」連接 === */
+        /* === 修改後：粗麻繩 (顏色變淺、變粗、加紋路) === */
         .product-card::before {
             content: '';
             position: absolute;
-            /* 位置：設定在夾子上方 (原本夾子是 -10px，這裡設 -12px 剛好穿過去) */
-            top: -12px;
-
-            /* 寬度關鍵：100% 卡片寬 + 40px 間距 (這樣才會連到隔壁張) */
+            /* 調整繩子高度，讓它看起來像從夾子中間穿過 */
+            top: -11px;
             width: calc(100% + 40px);
-
-            /* 讓繩子往左位移一半的間距，這樣才會剛好接起來 */
+            /* 連接到隔壁 */
             left: -20px;
+            height: 5px;
+            /* 繩子加粗到 5px */
 
-            height: 3px;
-            /* 繩子厚度 */
-
-            /* 麻繩質感：用條紋背景模擬編織感 */
-            background: repeating-linear-gradient(45deg, #a89f91, #a89f91 2px, #8c8376 2px, #8c8376 4px);
+            /* 麻繩材質：改用淺米色系，增加纖維感 */
+            background: repeating-linear-gradient(45deg, #d0c0a0, #d0c0a0 3px, #c0b090 3px, #c0b090 6px);
+            border-bottom: 1px solid #b0a080;
+            /* 加個陰影邊更有立體感 */
 
             z-index: -1;
-            /* 藏在夾子後面 */
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            /* 在夾子後面 */
+        }
+
+        /* === 找回夾子：木頭夾子樣式 (之前不小心蓋掉了) === */
+        .product-card::after {
+            content: '';
+            position: absolute;
+            top: -14px;
+            /* 夾子位置 */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 14px;
+            height: 28px;
+            background: #d4a373;
+            /* 木頭色 */
+            border-radius: 3px;
+            border: 1px solid #b08968;
+            box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            z-index: 0;
+            /* 在繩子前面 */
+        }
+
+        /* === 繩子校正 (逆向旋轉，維持不變) === */
+        /* ... 這裡以下的 .product-card:nth-child 相關代碼都不用動 ... */
+        .product-card:nth-child(odd) {
+            transform: rotate(1.5deg);
+        }
+
+        .product-card:nth-child(even) {
+            transform: rotate(-1deg);
+        }
+
+        .product-card:nth-child(3n) {
+            transform: rotate(0.5deg);
+        }
+
+        .product-card:nth-child(odd)::before {
+            transform: rotate(-1.5deg);
+        }
+
+        .product-card:nth-child(even)::before {
+            transform: rotate(1deg);
+        }
+
+        .product-card:nth-child(3n)::before {
+            transform: rotate(-0.5deg);
         }
 
         /* === 關鍵修正：繩子校正 (逆向旋轉) === */
