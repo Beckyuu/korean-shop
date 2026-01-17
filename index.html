@@ -133,39 +133,34 @@
             margin-top: 20px;
         }
 
-        /* 這是懸掛的繩子 */
+        /* === 修改後：麻繩改為「橫向」連接 === */
         .product-card::before {
             content: '';
             position: absolute;
-            top: -35px;
-            /* 往上畫繩子 */
-            left: 50%;
-            width: 2px;
-            height: 45px;
-            background: #a89f91;
-            /* 麻繩顏色 */
-            transform: translateX(-50%);
+            /* 位置：設定在夾子上方 (原本夾子是 -10px，這裡設 -12px 剛好穿過去) */
+            top: -12px;
+
+            /* 寬度關鍵：100% 卡片寬 + 40px 間距 (這樣才會連到隔壁張) */
+            width: calc(100% + 40px);
+
+            /* 讓繩子往左位移一半的間距，這樣才會剛好接起來 */
+            left: -20px;
+
+            height: 3px;
+            /* 繩子厚度 */
+
+            /* 麻繩質感：用條紋背景模擬編織感 */
+            background: repeating-linear-gradient(45deg, #a89f91, #a89f91 2px, #8c8376 2px, #8c8376 4px);
+
             z-index: -1;
+            /* 藏在夾子後面 */
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
 
-        /* 這是木頭夾子 */
-        .product-card::after {
-            content: '';
-            position: absolute;
-            top: -10px;
-            /* 夾在卡片邊緣 */
-            left: 50%;
-            transform: translateX(-50%);
-            width: 14px;
-            height: 28px;
-            background: #d4a373;
-            /* 木頭色 */
-            border-radius: 3px;
-            border: 1px solid #b08968;
-            box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-        }
+        /* === 關鍵修正：繩子校正 (逆向旋轉) === */
+        /* 因為照片(父元素)歪了，繩子(子元素)要反方向歪回來，才會看起來是直的 */
 
-        /* 讓卡片偶爾左右微風擺動的感覺 (隨機感) */
+        /* 1. 照片設定 (維持原本的亂數感) */
         .product-card:nth-child(odd) {
             transform: rotate(1.5deg);
         }
@@ -178,15 +173,28 @@
             transform: rotate(0.5deg);
         }
 
-        /* 滑鼠碰到時，像風吹過一樣晃動 */
+        /* 2. 繩子校正 (數值剛好跟上面相反) */
+        .product-card:nth-child(odd)::before {
+            transform: rotate(-1.5deg);
+        }
+
+        .product-card:nth-child(even)::before {
+            transform: rotate(1deg);
+        }
+
+        .product-card:nth-child(3n)::before {
+            transform: rotate(-0.5deg);
+        }
+
+        /* 滑鼠移過去時，照片轉正，繩子也要跟著修正 */
         .product-card:hover {
             transform: rotate(0deg) scale(1.02);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
             z-index: 10;
         }
 
-        /* 原本的膠帶裝飾可以拿掉了，因為有夾子了 */
-        /* .product-card::before { display: none; } */
+        .product-card:hover::before {
+            transform: rotate(0deg);
+        }
 
         .img-wrapper {
             width: 100%;
@@ -635,7 +643,7 @@
             /* 負值 margin 讓它往上嚕，產生重疊 */
             background: #fff9c4;
             /* 亮一點的黃色 */
-            padding: 60px 30px 20px 30px;
+            padding: 25px 30px 20px;
             position: relative;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
             transform: rotate(2deg);
@@ -931,4 +939,3 @@
 </body>
 
 </html>
-
