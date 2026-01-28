@@ -51,52 +51,31 @@
             background-repeat: no-repeat;
         }
 
-        /* === 極簡 Header === */
+        /* === 極簡 Header (上下排列版) === */
         header {
-            /* text-align: center;  <-- 這一行刪掉或註解掉，我們改用 flex */
-            display: flex;
-            /* 新增：變成並排模式 */
-            justify-content: center;
-            /* 新增：讓整組東西在畫面中間 */
-            align-items: baseline;
-            /* 新增：讓文字底部對齊比較好看 */
-            gap: 30px;
-            /* ★重要：這裡控制距離。數字越大，「妝日子」就離越遠 */
-
-            /* 以下保留原本的設定 */
+            text-align: center;
+            /* 改回置中對齊 */
             padding: 60px 20px 40px;
             background: transparent;
             margin-bottom: 20px;
+
+            /* 刪掉 display: flex; 以及後面的 gap, align-items 等設定 */
         }
 
         h1 {
-            /* === 新增這一行：套用可愛圓體 === */
             font-family: 'Zen Maru Gothic', sans-serif;
-
             font-weight: 700;
-            /* 變粗一點比較可愛，原本是 300 */
             font-size: 2.5rem;
             letter-spacing: 4px;
-            margin-bottom: 0;
-            /* 為了配合 flex 排版，這裡歸零比較好 */
+
+            margin-bottom: 15px;
+            /* 新增：讓它跟下面的妝日子留點距離，不要黏在一起 */
+
             color: #2c2c2c;
             position: relative;
             display: inline-block;
         }
 
-        /* 標題右上角的小星星裝飾 */
-        h1::after {
-            content: '✦';
-            /* 星星符號 */
-            position: absolute;
-            top: -5px;
-            right: -25px;
-            font-size: 1.2rem;
-            color: #d4c4b0;
-            /* 奶茶色 */
-            animation: twinkle 3s infinite ease-in-out;
-            /* 讓它緩慢閃爍 */
-        }
 
         /* 讓星星閃爍的動畫設定 (加在 CSS 最後面即可) */
         @keyframes twinkle {
@@ -616,9 +595,8 @@
             background-size: contain;
             background-repeat: no-repeat;
 
-    
-            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 1))
-                    drop-shadow(0 0 30px rgba(255, 255, 255, 0.4));
+
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 1)) drop-shadow(0 0 30px rgba(255, 255, 255, 0.4));
 
             opacity: 0;
             z-index: 99;
@@ -706,7 +684,11 @@
 
     <header>
         <h1>2月新品</h1>
-        <div class="subtitle">│Mina．妝日子│</div>
+        <div class="subtitle">
+            │Mina．妝日子│
+            <span
+                style="color: #d4c4b0; font-size: 1.2rem; margin-left: 5px; animation: twinkle 3s infinite ease-in-out;">✦</span>
+        </div>
     </header>
 
     <div class="memo-board">
