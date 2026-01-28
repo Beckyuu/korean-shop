@@ -34,22 +34,22 @@
             padding: 0;
         }
 
-body {
-    font-family: 'Noto Sans TC', sans-serif;
-    background-color: #fffaf4;
-    color: var(--primary);
-    line-height: 1.6;
-    padding-bottom: 80px;
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #fffaf4;
+            color: var(--primary);
+            line-height: 1.6;
+            padding-bottom: 80px;
 
-    /* === 背景設定 === */
-    /* 把你剛剛複製的網址貼在下面的單引號 ' ' 中間 */
-    background-image: url('https://i.ibb.co/b5Ff3vxd/Instagram.png');
+            /* === 背景設定 === */
+            /* 把你剛剛複製的網址貼在下面的單引號 ' ' 中間 */
+            background-image: url('https://i.ibb.co/b5Ff3vxd/Instagram.png');
 
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-}
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
 
         /* === 極簡 Header === */
         header {
@@ -602,54 +602,81 @@ body {
             letter-spacing: 1px;
         }
 
-        /* === 新增：背景裝飾光點 (模擬水彩暈染) === */
-        .deco-blob {
+        /* === 星星閃爍特效 === */
+        .star-blink {
             position: fixed;
+            /* 固定在螢幕上，不隨捲動跑掉 */
+            width: 3px;
+            /* 星星大小 */
+            height: 3px;
+            background: #fff;
+            /* 純白色 */
             border-radius: 50%;
-            filter: blur(60px);
-            /* 強力模糊，讓它變成一團霧氣 */
+            /* 變成圓形 */
+            box-shadow: 0 0 10px #fff, 0 0 20px #fff;
+            /* 加一點發光暈染 */
+            opacity: 0;
+            /* 一開始是透明的 */
             z-index: -1;
-            /* 放在最底層，不會擋到商品 */
-            opacity: 0.7;
-            animation: floatBlob 10s infinite alternate ease-in-out;
+            /* 放在背景圖上面，但不要擋到商品 */
+            animation: twinkle 3s infinite ease-in-out;
+            /* 套用閃爍動畫 */
         }
 
-        /* 左上角：加強薄荷綠 */
-        .blob-1 {
-            width: 300px;
-            height: 300px;
-            top: -50px;
-            left: -50px;
-            background: #cceeee;
-        }
-
-        /* 右下角：加強蜜桃粉 */
-        .blob-2 {
-            width: 400px;
-            height: 400px;
-            bottom: -100px;
-            right: -100px;
-            background: #ffe0e0;
-            animation-delay: -5s;
-            /* 讓兩個光點動的時間錯開 */
-        }
-
-        /* 讓光點緩慢呼吸移動的動畫 */
-        @keyframes floatBlob {
+        /* 讓星星忽明忽暗的動畫設定 */
+        @keyframes twinkle {
             0% {
-                transform: translate(0, 0) scale(1);
+                opacity: 0;
+                transform: scale(0.5);
             }
 
-            100% {
-                transform: translate(30px, 20px) scale(1.1);
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
             }
+
+            /* 最亮的時候變大一點 */
+            100% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+        }
+
+        /* 設定不同星星的「閃爍速度」，才不會大家一起亮一起暗 */
+        .s1 {
+            animation-delay: 0s;
+            animation-duration: 4s;
+        }
+
+        .s2 {
+            animation-delay: 1s;
+            animation-duration: 3s;
+        }
+
+        .s3 {
+            animation-delay: 2s;
+            animation-duration: 5s;
+        }
+
+        .s4 {
+            animation-delay: 0.5s;
+            animation-duration: 2.5s;
+        }
+
+        .s5 {
+            animation-delay: 1.5s;
+            animation-duration: 3.5s;
         }
     </style>
 </head>
 
 <body>
-    <div class="deco-blob blob-1"></div>
-    <div class="deco-blob blob-2"></div>
+    <div class="star-blink s1" style="top: 15%; left: 20%;"></div>
+    <div class="star-blink s2" style="top: 25%; left: 80%;"></div>
+    <div class="star-blink s3" style="top: 50%; left: 10%;"></div>
+    <div class="star-blink s4" style="top: 5%; left: 50%;"></div>
+    <div class="star-blink s5" style="top: 80%; left: 90%;"></div>
+    <div class="star-blink s2" style="top: 35%; left: 40%;"></div>
 
     <header>
         <h1>2月新品</h1>
