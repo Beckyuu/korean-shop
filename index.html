@@ -182,31 +182,41 @@
             gap: 40px;
         }
 
-        /* === 產品卡片：無邊框，懸浮效果 === */
+        /* === 修改後的商品卡片：拍立得照片風 === */
         .product-card {
-            background: var(--card-bg);
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            /* 讓圖片圓角不跑出去 */
+            background: #ffffff;
+            /* 加大內距 (padding)，這就是拍立得的那圈白邊 */
+            padding: 12px 12px 20px 12px;
+            border-radius: 4px;
+            /* 拍立得的角通常沒那麼圓，稍微方一點 */
+
+            /* 關鍵修改：原本是黑影，現在改成淡淡的「蜜桃粉色陰影」 */
+            box-shadow: 0 10px 20px rgba(251, 228, 228, 0.6), 0 2px 6px rgba(0, 0, 0, 0.02);
+
+            border: 1px solid rgba(255, 255, 255, 0.8);
             transition: all 0.3s ease;
             position: relative;
-            border: 1px solid transparent;
-            /* 預留邊框位置 */
         }
 
+        /* 滑鼠移過去的效果：浮起來 + 陰影變藍色 (呼應你的漸層) */
         .product-card:hover {
-            transform: translateY(-8px);
-            /* 垂直上浮 */
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
-            /* 柔和陰影 */
+            transform: translateY(-8px) rotate(1deg);
+            /* 微微歪一點，像手拿照片 */
+            box-shadow: 0 15px 30px rgba(223, 240, 240, 0.8);
+            /* 變成薄荷藍光暈 */
+            z-index: 10;
         }
 
         .img-wrapper {
             width: 100%;
             aspect-ratio: 1 / 1;
             position: relative;
-            background: #f4f4f4;
+            background: #fcfcfc;
             overflow: hidden;
+            /* 讓圖片本身也有微微的圓角，才不會太銳利 */
+            border-radius: 2px;
+            /* 加一點點內陰影，增加立體感 */
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.03);
         }
 
         .img-wrapper img {
@@ -588,10 +598,55 @@
             font-weight: 300;
             letter-spacing: 1px;
         }
+
+        /* === 新增：背景裝飾光點 (模擬水彩暈染) === */
+        .deco-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(60px);
+            /* 強力模糊，讓它變成一團霧氣 */
+            z-index: -1;
+            /* 放在最底層，不會擋到商品 */
+            opacity: 0.7;
+            animation: floatBlob 10s infinite alternate ease-in-out;
+        }
+
+        /* 左上角：加強薄荷綠 */
+        .blob-1 {
+            width: 300px;
+            height: 300px;
+            top: -50px;
+            left: -50px;
+            background: #cceeee;
+        }
+
+        /* 右下角：加強蜜桃粉 */
+        .blob-2 {
+            width: 400px;
+            height: 400px;
+            bottom: -100px;
+            right: -100px;
+            background: #ffe0e0;
+            animation-delay: -5s;
+            /* 讓兩個光點動的時間錯開 */
+        }
+
+        /* 讓光點緩慢呼吸移動的動畫 */
+        @keyframes floatBlob {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                transform: translate(30px, 20px) scale(1.1);
+            }
+        }
     </style>
 </head>
 
 <body>
+    <div class="deco-blob blob-1"></div>
+    <div class="deco-blob blob-2"></div>
 
     <header>
         <h1>2月新品</h1>
