@@ -36,18 +36,32 @@
 
         body {
             font-family: 'Noto Sans TC', sans-serif;
-            background-color: #fffaf4;
+
+            /* 1. 設定背景底色 */
+            /* 重要：請吸取你背景圖「最底端」的顏色填在這裡 */
+            /* 這樣當圖片滑完之後，接到純色背景會很自然，看不出接縫 */
+            background-color: #fffdf5;
+            /* 假設你的圖下面是淡淡的黃/膚色 */
+
             color: var(--primary);
             line-height: 1.6;
             padding-bottom: 80px;
 
-            /* === 背景設定 === */
-            /* 把你剛剛複製的網址貼在下面的單引號 ' ' 中間 */
+            /* === 背景圖片設定 === */
             background-image: url('https://i.ibb.co/1G5fmmPK/85.png');
 
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            /* 2. 寬度 100%，高度自動 */
+            /* 這樣在電腦上會拉寬填滿，在手機上會剛好對齊寬度 */
+            background-size: 100% auto;
+
+            /* 3. 對齊正上方 */
+            /* 保證天空、星星那些頭部的裝飾一定看得到 */
+            background-position: top center;
+
+            /* 4. 跟著網頁一起捲動 */
+            /* 讓背景像是一張貼在最上面的大海報，而不是死板的桌布 */
+            background-attachment: scroll;
+
             background-repeat: no-repeat;
         }
 
@@ -1011,5 +1025,3 @@
 </body>
 
 </html>
-
-
