@@ -34,27 +34,23 @@
             padding: 0;
         }
 
-        /* 修改後的 body 設定 */
         body {
             font-family: 'Noto Sans TC', sans-serif;
-            background-color: var(--bg-color);
-            /* 奶油白底色 */
+            /* 底色稍微調深一點點的奶茶白，讓白色的商品卡片更明顯 */
+            background-color: #f7f5f0;
             color: var(--primary);
             line-height: 1.6;
             padding-bottom: 80px;
 
-            /* === 修改重點 1：方格紙背景 (讓畫面不單調) === */
-            /* 這裡是用兩層線條畫出格子，顏色是很淡的灰色 */
+            /* === 背景設定：小圓點 + 顆粒感 === */
             background-image:
-                linear-gradient(#e0e0e0 1px, transparent 1px),
-                linear-gradient(90deg, #e0e0e0 1px, transparent 1px),
-                /* === 修改重點 2：顆粒感濾鏡 (加強版) === */
-                /* 下面這串最後面的 opacity='0.15' 就是顆粒濃度，原本是 0.03 太淡了 */
-                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
+                /* 1. 小圓點 (顏色是淡淡的灰咖色) */
+                radial-gradient(#dcdcdc 2px, transparent 2px),
+                /* 2. 顆粒濾鏡 (不透明度調高到 0.15，這次一定看得到！) */
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
 
-            /* 設定格子的大小，越大格子越寬 */
-            background-size: 30px 30px, 30px 30px, 200px 200px;
-            background-position: center;
+            /* 設定圓點的間距 (數字越小越密) */
+            background-size: 24px 24px, 200px 200px;
         }
 
         /* === 極簡 Header === */
