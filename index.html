@@ -602,33 +602,27 @@
             letter-spacing: 1px;
         }
 
-        /* === 星星除錯專用版 (紅色 + 不閃爍) === */
+        /* === 確認沒問題後，改回這個漂亮版本 === */
         .star-blink {
             position: fixed;
-            /* 固定在螢幕上 */
+            width: 6px;
+            /* 改回小巧尺寸 */
+            height: 6px;
 
-            /* 1. 尺寸加大，讓它無所遁形 */
-            width: 10px;
-            height: 10px;
+            /* 改用深香檳金，在淺色背景才看得到 */
+            background: #c5a059;
 
-            /* 2. 改成鮮紅色！(背景再亮都看得到) */
-            background: #ff0000;
-
-            /* 3. 加上黑色邊框，保證對比度 */
-            border: 2px solid #000;
+            /* 加深陰影，讓它像是在發光 */
+            box-shadow: 0 0 5px #d4af37, 0 0 10px #d4af37;
 
             border-radius: 50%;
-
-            /* 4. 關鍵：透明度設為 1 (直接顯示，不要漸變) */
-            opacity: 1;
-
-            z-index: 9999;
-            /* 層級拉到最高 */
+            opacity: 0;
+            /* 改回 0，配合動畫 */
+            z-index: 999;
             pointer-events: none;
-            /* 滑鼠可穿透 */
 
-            /* 5. 先把動畫關掉，確認它有出現再說 */
-            /* animation: twinkle 3s infinite ease-in-out; */
+            /* 把動畫加回來 */
+            animation: twinkle 3s infinite ease-in-out;
         }
 
         /* 讓星星忽明忽暗的動畫設定 */
