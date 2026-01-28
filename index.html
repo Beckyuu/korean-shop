@@ -602,26 +602,26 @@
             letter-spacing: 1px;
         }
 
-        /* === 星星閃爍特效 (修正版) === */
         .star-blink {
             position: fixed;
-            width: 4px;
-            /* 稍微變大一點點，比較明顯 */
-            height: 4px;
-            background: #fff;
+
+            /* 1. 先改大顆一點，確認有沒有出現 (原本是 3px) */
+            width: 8px;
+            height: 8px;
+
+            /* 2. 改成亮黃色，不要用白色了 */
+            background: #ffd700;
+
+            /* 3. 發光改成橘黃色光暈 */
+            box-shadow: 0 0 10px #ffcc00, 0 0 20px #ffaa00;
+
             border-radius: 50%;
-
-            /* 加強發光效果，讓它在淺色背景也能被看見 */
-            box-shadow: 0 0 5px #fff, 0 0 10px #ffdddd;
-
             opacity: 0;
+            /* 記得這裡要是 0，因為動畫會讓它從 0 變 1 */
 
-            /* ▼▼▼ 修改這裡 ▼▼▼ */
-            z-index: 1;
-            /* 改成正數，讓它浮在背景圖上面 */
+            /* 4. 改成 999，保證它在所有東西上面 */
+            z-index: 999;
             pointer-events: none;
-            /* 讓滑鼠點擊可以直接穿透星星，不影響操作 */
-            /* ▲▲▲ 修改這裡 ▲▲▲ */
 
             animation: twinkle 3s infinite ease-in-out;
         }
