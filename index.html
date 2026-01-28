@@ -36,32 +36,24 @@
 
         body {
             font-family: 'Noto Sans TC', sans-serif;
-            /* 1. 設定最底層的顏色：非常淡的奶油粉白，讓整體不顯髒 */
-            background-color: #fffafb;
+            background-color: #fff;
+            /* 預設白底 */
             color: var(--primary);
             line-height: 1.6;
             padding-bottom: 80px;
 
-            /* 2. 背景設定：模擬圖片中的粉紫暈染光暈 */
+            /* === 背景設定：藍粉水彩漸層 === */
             background-image:
-                /* --- 第1層：中間核心的粉紅光暈 (柔和的主角) --- */
-                radial-gradient(circle at 50% 50%, rgba(255, 192, 203, 0.25) 0%, transparent 55%),
+                /* 1. 核心漸層：從上面的薄荷藍(#dff0f0) 漸變到 下面的蜜桃粉(#fbe4e4) */
+                linear-gradient(to bottom, #dff0f0 0%, #fffcfc 45%, #fffcfc 55%, #fbe4e4 100%),
 
-                /* --- 第2層：左上角的淡紫色氛圍 (增加層次) --- */
-                radial-gradient(circle at 0% 0%, rgba(230, 230, 250, 0.4) 0%, transparent 50%),
+                /* 2. 為了更像紙張，保留一點點極淡的顆粒紋理 */
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
 
-                /* --- 第3層：右下角的暖色光 (平衡冷色) --- */
-                radial-gradient(circle at 100% 100%, rgba(255, 239, 213, 0.5) 0%, transparent 50%),
-
-                /* --- 第4層：星星裝飾 (用 SVG 畫出來的) --- */
-                url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 25L53 47L75 50L53 53L50 75L47 53L25 50L47 47Z' fill='%23b0a090' opacity='0.15'/%3E%3C/svg%3E");
-
-            /* 3. 設定背景固定與大小 */
+            /* 設定背景固定，滑動時會有像是在看畫布的感覺 */
             background-attachment: fixed;
-            /* 讓光暈固定，滑動時很有質感 */
-            background-size: 100% 100%, 100% 100%, 100% 100%, 150px 150px;
-            /* 最後一個是星星的大小，覺得太密可以改大 */
-            background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+            background-size: 100% 100%, 150px 150px;
+            background-repeat: no-repeat, repeat;
         }
 
         /* === 極簡 Header === */
