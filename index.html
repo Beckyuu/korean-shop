@@ -34,27 +34,22 @@
             padding: 0;
         }
 
-        body {
-            font-family: 'Noto Sans TC', sans-serif;
-            background-color: #fff;
-            /* 預設白底 */
-            color: var(--primary);
-            line-height: 1.6;
-            padding-bottom: 80px;
+body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background-color: #fffaf4;
+    color: var(--primary);
+    line-height: 1.6;
+    padding-bottom: 80px;
 
-            /* === 背景設定：藍粉水彩漸層 === */
-            background-image:
-                /* 1. 核心漸層：從上面的薄荷藍(#dff0f0) 漸變到 下面的蜜桃粉(#fbe4e4) */
-                linear-gradient(to bottom, #dff0f0 0%, #fffcfc 45%, #fffcfc 55%, #fbe4e4 100%),
+    /* === 背景設定 === */
+    /* 把你剛剛複製的網址貼在下面的單引號 ' ' 中間 */
+    background-image: url('https://i.ibb.co/b5Ff3vxd/Instagram.png');
 
-                /* 2. 為了更像紙張，保留一點點極淡的顆粒紋理 */
-                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
-
-            /* 設定背景固定，滑動時會有像是在看畫布的感覺 */
-            background-attachment: fixed;
-            background-size: 100% 100%, 150px 150px;
-            background-repeat: no-repeat, repeat;
-        }
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
 
         /* === 極簡 Header === */
         header {
@@ -182,28 +177,36 @@
             gap: 40px;
         }
 
-        /* === 修改後的商品卡片：拍立得照片風 === */
+        /* === 修改後的商品卡片：圓潤可愛風 === */
         .product-card {
             background: #ffffff;
-            /* 加大內距 (padding)，這就是拍立得的那圈白邊 */
-            padding: 12px 12px 20px 12px;
-            border-radius: 4px;
-            /* 拍立得的角通常沒那麼圓，稍微方一點 */
+            /* 1. 改成大圓角：讓卡片看起來很圓潤可愛 */
+            border-radius: 24px;
 
-            /* 關鍵修改：原本是黑影，現在改成淡淡的「蜜桃粉色陰影」 */
-            box-shadow: 0 10px 20px rgba(251, 228, 228, 0.6), 0 2px 6px rgba(0, 0, 0, 0.02);
+            /* 邊框設為透明，還是預留位置，避免跑版 */
+            border: 2px solid transparent;
 
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            /* 預設陰影：淡淡柔柔的粉色光暈 */
+            box-shadow: 0 8px 20px rgba(255, 230, 235, 0.5);
+
+            padding: 15px;
+            /* 增加一點內距讓畫面呼吸 */
             transition: all 0.3s ease;
             position: relative;
+            overflow: hidden;
         }
 
-        /* 滑鼠移過去的效果：浮起來 + 陰影變藍色 (呼應你的漸層) */
+        /* === 滑鼠移過去的效果 (修改重點) === */
         .product-card:hover {
-            transform: translateY(-8px) rotate(1deg);
-            /* 微微歪一點，像手拿照片 */
-            box-shadow: 0 15px 30px rgba(223, 240, 240, 0.8);
-            /* 變成薄荷藍光暈 */
+            /* 2. 這裡刪掉了 transform: translateY... 
+       所以現在滑鼠移上去，卡片會乖乖待在原地，不會動了！
+    */
+
+            /* 只改變邊框顏色和陰影，提示使用者選到了它 */
+            border-color: #ffdee9;
+            /* 邊框變粉紅 */
+            box-shadow: 0 12px 30px rgba(255, 210, 220, 0.7);
+            /* 陰影變深一點 */
             z-index: 10;
         }
 
