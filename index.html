@@ -217,67 +217,36 @@
             z-index: 10;
         }
 
-        /* === 修改後的圖片容器：準備放置手繪框 === */
+        /* === 修復版：純 CSS 手繪風框框 (不會破圖) === */
         .img-wrapper {
             width: 100%;
-            /* 設定為正方形，配合框框形狀 */
             aspect-ratio: 1 / 1;
-
-            /* 設為定位基準點，讓框框可以對齊它 */
+            /* 維持正方形 */
             position: relative;
-
             background: #fff;
-            /* 圖片底部稍微墊個白底 */
 
-            /* ▼▼▼ 關鍵修改：取消隱藏溢出 ▼▼▼ */
-            /* 這樣蠟筆不規則的邊緣才不會被切掉，看起來更自然 */
-            overflow: visible;
+            /* 1. 邊框設定：黑色手繪線條 (你可以改成你喜歡的顏色) */
+            border: 3px solid #444;
 
-            /* 取消原本的舊設定 */
-            /* border-radius: 2px; */
-            /* box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.03); */
+            /* 2. 關鍵魔法：設定不規則的圓角，模擬手繪的歪扭感 */
+            /* 這串數字會讓框框看起來不是死板的矩形，而是像手畫的 */
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
 
-            /* 讓圖片稍微縮小一點點，不要頂到蠟筆框的邊緣，留點白邊比較好看 */
+            /* 內距：讓圖片跟框框之間留一點白邊，更有拍立得的感覺 */
             padding: 10px;
+
+            /* 陰影：加一點點立體感 */
+            box-shadow: 2px 5px 15px rgba(0, 0, 0, 0.08);
+
+            overflow: hidden;
+            /* 確保圖片跑出去會被切掉 */
+            transition: all 0.3s ease;
         }
 
-        /* === ✨ 加入手繪蠟筆邊框圖層 ✨ === */
-        /* 利用 ::after 偽元素，在圖片上面蓋一層框框 */
-        .img-wrapper::after {
-            content: '';
-            position: absolute;
-
-            /* 讓框框稍微往外擴張一點點，包住整張圖 */
-            top: -5px;
-            left: -5px;
-            right: -5px;
-            bottom: -5px;
-
-            /* ▼▼▼ 這裡是你那張圖轉成的透明邊框網址 ▼▼▼ */
-            /* 我先用一個類似的手繪粉紅框代替示範，效果一樣 */
-            background-image: url('https://i.imgur.com/8Q6t5fU.png');
-
-            /* 讓框框拉伸填滿整個區域 */
-            background-size: 100% 100%;
-            background-repeat: no-repeat;
-
-            /* 讓滑鼠點擊可以穿透這個框框，才點得到裡面的商品或按鈕 */
-            pointer-events: none;
-
-            /* 確保框框在最上層 */
-            z-index: 2;
-        }
-
-        .img-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        /* 滑鼠移過去圖片放大 */
-        .product-card:hover .img-wrapper img {
-            transform: scale(1.05);
+        /* 滑鼠移過去的時候，框框形狀稍微變一下，感覺像在動 */
+        .product-card:hover .img-wrapper {
+            border-radius: 15px 225px 15px 255px / 255px 15px 225px 15px;
+            transform: scale(1.02);
         }
 
         /* 細節按鈕：簡約圓形 */
