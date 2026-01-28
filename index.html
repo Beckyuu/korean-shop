@@ -64,14 +64,18 @@
         }
 
         h1 {
-            font-weight: 300;
+            /* === 新增這一行：套用可愛圓體 === */
+            font-family: 'Zen Maru Gothic', sans-serif;
+
+            font-weight: 700;
+            /* 變粗一點比較可愛，原本是 300 */
             font-size: 2.5rem;
             letter-spacing: 4px;
-            margin-bottom: 10px;
+            margin-bottom: 0;
+            /* 為了配合 flex 排版，這裡歸零比較好 */
             color: #2c2c2c;
             position: relative;
             display: inline-block;
-            /* 為了定位星星 */
         }
 
         /* 標題右上角的小星星裝飾 */
