@@ -616,10 +616,9 @@
             background-size: contain;
             background-repeat: no-repeat;
 
-            /* 3. 關鍵修改：雙重發光濾鏡 ✨ */
-            /* 第一層(前)：強烈的白色光暈 (讓本體很亮) */
-            /* 第二層(後)：淡淡的香檳金光暈 (增加氛圍感) */
-            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 1)) drop-shadow(0 0 20px rgba(255, 215, 0, 0.6));
+    
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 1))
+                    drop-shadow(0 0 30px rgba(255, 255, 255, 0.4));
 
             opacity: 0;
             z-index: 99;
@@ -699,11 +698,11 @@
 
 <body>
     <div class="star-blink s1" style="top: 15%; left: 20%;"></div>
-    <div class="star-blink s2" style="top: 25%; left: 80%;"></div>
+    <div class="star-blink s2" style="top: 35%; left: 40%;"></div>
     <div class="star-blink s3" style="top: 50%; left: 10%;"></div>
     <div class="star-blink s4" style="top: 5%; left: 50%;"></div>
     <div class="star-blink s5" style="top: 80%; left: 90%;"></div>
-    <div class="star-blink s2" style="top: 35%; left: 40%;"></div>
+    <div class="star-blink s2" style="top: 18%; left: 88%;"></div>
 
     <header>
         <h1>2月新品</h1>
