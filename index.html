@@ -184,25 +184,36 @@
             gap: 40px;
         }
 
-        /* === 步驟 2：外層卡片變成白色手繪風框框 === */
+        /* === 步驟 2：外框改成「粉紅虛線手帳風」 === */
         .product-card {
             background: #ffffff;
-            /* 背景改回白色 */
 
-            /* 1. 邊框設定：黑色手繪線條 */
-            border: 3px solid #444;
+            /* 1. 關鍵：用「虛線」來營造手繪感，而不是讓框框變歪 */
+            border: 2px dashed var(--accent);
+            /* 會變成你的主題粉紅色虛線 */
 
-            /* 2. 關鍵魔法：設定不規則的手繪圓角 */
-            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            /* 2. 圓角設定：稍微圓一點，比較可愛 */
+            border-radius: 24px;
 
-            padding: 25px;
-            /* 內距加大一點，讓內容不要撞到歪歪的邊框 */
-            transition: all 0.3s ease;
+            padding: 20px;
+            /* 內距給足，內容才不會貼到邊邊 */
             position: relative;
-            overflow: visible;
+            transition: all 0.3s ease;
 
-            /* 加一點陰影讓它浮起來，像一張貼在雲上的紙 */
-            box-shadow: 5px 8px 25px rgba(0, 0, 0, 0.1);
+            /* 3. 特殊陰影：不模糊的實心陰影，看起來像貼紙或剪貼簿 */
+            box-shadow: 6px 6px 0px rgba(232, 166, 166, 0.3);
+        }
+
+        /* === 滑鼠移過去的效果 === */
+        .product-card:hover {
+            transform: translateY(-5px);
+            /* 微微浮起 */
+
+            /* 滑鼠移上去時，虛線變實線，增加互動感 */
+            border-style: solid;
+
+            /* 陰影變深一點 */
+            box-shadow: 8px 8px 0px rgba(232, 166, 166, 0.5);
         }
 
         /* === 滑鼠移過去的效果 === */
@@ -215,26 +226,34 @@
             box-shadow: 8px 12px 30px rgba(0, 0, 0, 0.15);
         }
 
-        /* === 步驟 1：恢復正常的照片容器 === */
+        /* === 步驟 1：修復圖片位置 (安全版) === */
         .img-wrapper {
             width: 100%;
             aspect-ratio: 1 / 1;
+            /* 強制正方形 */
             position: relative;
             background: #fcfcfc;
-            /* 微微的灰底 */
 
-            /* 改回原本規矩的圓角 */
-            border-radius: 12px;
+            /* 這裡只要簡單的圓角就好，不要歪來歪去 */
+            border-radius: 16px;
 
-            /* 恢復隱藏溢出，讓照片乖乖待在圓角裡 */
             overflow: hidden;
+            /* 把超出圓角的圖片切掉 */
+            margin-bottom: 15px;
+            /* 跟下面的文字留點距離 */
 
-            /* 加一點點內陰影增加質感 */
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.03);
+            /* 讓圖片乖乖待在中間 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-            /* 拿掉之前的手繪邊框設定 */
-            border: none;
-            padding: 0;
+        .img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* 確保圖片填滿且不變形 */
+            transition: transform 0.5s ease;
         }
 
         /* 滑鼠移過去照片稍微放大就好，不用變形了 */
