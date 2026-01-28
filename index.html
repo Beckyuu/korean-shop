@@ -123,18 +123,25 @@
             right: -30px;
         }
 
-        /* === 修改後的公告區：變寬 + 玻璃感 === */
+        /* === 修復版：變寬 + 玻璃感公告區 === */
         .memo-board {
-            /* ▼▼▼ 關鍵修改：把 600px 改成 850px (或更大)，讓它變寬 ▼▼▼ */
+            /* 寬度設定：夠寬才不會換行 */
             max-width: 850px;
+            width: 90%;
+            /* 在小手機上不要太寬 */
 
             margin: 0 auto 50px;
+
+            /* 玻璃感設定 */
             background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.9);
-            border-left: none;
+
+            /* 粉色上邊框 */
             border-top: 3px solid var(--accent);
+            border-left: none;
+
             padding: 25px 35px;
             text-align: left;
             line-height: 1.8;
@@ -323,46 +330,40 @@
             align-items: center;
         }
 
-        /* === 修改後的下拉選單：玻璃感 + 粉色箭頭 === */
+        /* === 修復版：玻璃感 + 粉色箭頭下拉選單 === */
         select {
-            /* 1. 清除瀏覽器預設樣式 (藏起醜醜的預設箭頭) */
+            /* 1. 清除預設醜樣式 */
             appearance: none;
             -webkit-appearance: none;
             -moz-appearance: none;
 
-            /* 2. 玻璃感背景設定 */
+            /* 2. 玻璃感背景 */
             background-color: rgba(255, 255, 255, 0.6);
-            /* 半透明白 */
             backdrop-filter: blur(5px);
-            /* 毛玻璃模糊 */
             -webkit-backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 255, 255, 0.8);
-            /* 半透明邊框 */
 
-            /* 3. 文字與排版 */
+            /* 3. 排版與文字 */
             padding: 8px 35px 8px 15px;
-            /* 右邊留多一點空間給箭頭 */
+            /* 右邊留位子給箭頭 */
             border-radius: 50px;
-            /* 圓角膠囊狀，配合按鈕 */
+            /* 圓形膠囊 */
             outline: none;
             color: #555;
             font-family: inherit;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.3s ease;
 
-            /* 4. 關鍵：用 SVG 自製粉紅色小箭頭 */
-            /* 這裡面有一串編碼，就是粉紅色箭頭的圖案 */
+            /* 4. 粉紅色小箭頭圖案 */
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23e8a6a6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
             background-repeat: no-repeat;
-            background-position: right 10px center;
-            /* 把箭頭定位在右邊 */
+            background-position: right 8px center;
             background-size: 16px;
 
-            /* 柔和陰影 */
             box-shadow: 0 4px 10px rgba(232, 166, 166, 0.1);
         }
 
-        /* 滑鼠移過去時，變更明顯一點 */
         select:hover {
             background-color: rgba(255, 255, 255, 0.85);
             box-shadow: 0 4px 15px rgba(232, 166, 166, 0.25);
