@@ -602,25 +602,28 @@
             letter-spacing: 1px;
         }
 
-        /* === 星星閃爍特效 === */
+        /* === 星星閃爍特效 (修正版) === */
         .star-blink {
             position: fixed;
-            /* 固定在螢幕上，不隨捲動跑掉 */
-            width: 3px;
-            /* 星星大小 */
-            height: 3px;
+            width: 4px;
+            /* 稍微變大一點點，比較明顯 */
+            height: 4px;
             background: #fff;
-            /* 純白色 */
             border-radius: 50%;
-            /* 變成圓形 */
-            box-shadow: 0 0 10px #fff, 0 0 20px #fff;
-            /* 加一點發光暈染 */
+
+            /* 加強發光效果，讓它在淺色背景也能被看見 */
+            box-shadow: 0 0 5px #fff, 0 0 10px #ffdddd;
+
             opacity: 0;
-            /* 一開始是透明的 */
-            z-index: -1;
-            /* 放在背景圖上面，但不要擋到商品 */
+
+            /* ▼▼▼ 修改這裡 ▼▼▼ */
+            z-index: 1;
+            /* 改成正數，讓它浮在背景圖上面 */
+            pointer-events: none;
+            /* 讓滑鼠點擊可以直接穿透星星，不影響操作 */
+            /* ▲▲▲ 修改這裡 ▲▲▲ */
+
             animation: twinkle 3s infinite ease-in-out;
-            /* 套用閃爍動畫 */
         }
 
         /* 讓星星忽明忽暗的動畫設定 */
