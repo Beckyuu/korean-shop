@@ -602,26 +602,33 @@
             letter-spacing: 1px;
         }
 
-        /* === 確認沒問題後，改回這個漂亮版本 === */
+        /* === 最終版：夢幻奶油白四芒星 ✨ === */
         .star-blink {
             position: fixed;
-            width: 6px;
-            /* 改回小巧尺寸 */
-            height: 6px;
 
-            /* 改用深香檳金，在淺色背景才看得到 */
-            background: #c5a059;
+            /* 1. 設定星星大小 (因為是圖案，可以稍微大一點點) */
+            width: 18px;
+            height: 18px;
 
-            /* 加深陰影，讓它像是在發光 */
-            box-shadow: 0 0 5px #d4af37, 0 0 10px #d4af37;
+            /* 2. 關鍵修改：不再是用色塊，而是用「星星圖案」 */
+            /* 這裡面是一張奶油白色的四芒星 SVG 圖檔 */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23fffcf0'%3E%3Cpath d='M12,0L14.59,9.41L24,12L14.59,14.59L12,24L9.41,14.59L0,12L9.41,9.41L12,0Z'/%3E%3C/svg%3E");
+            background-size: contain;
+            /* 讓星星完整顯示 */
+            background-repeat: no-repeat;
 
-            border-radius: 50%;
+            /* 3. 加上一點點柔焦光暈，讓它看起來軟軟的 */
+            filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8));
+
+            /* 4. 功能設定 (保持不變) */
             opacity: 0;
-            /* 改回 0，配合動畫 */
-            z-index: 999;
+            /* 配合動畫從透明開始 */
+            z-index: 99;
+            /* 浮在背景上 */
             pointer-events: none;
+            /* 滑鼠可穿透 */
 
-            /* 把動畫加回來 */
+            /* 5. 閃爍動畫 (保持不變) */
             animation: twinkle 3s infinite ease-in-out;
         }
 
