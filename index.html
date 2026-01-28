@@ -123,20 +123,35 @@
             right: -30px;
         }
 
-        /* === 公告區：乾淨的色塊 === */
+        /* === 公告區：改成韓系毛玻璃特效 === */
         .memo-board {
             max-width: 600px;
             margin: 0 auto 50px;
-            background: #fff;
-            border: 1px solid #eee;
+
+            /* 1. 背景改半透明白色 */
+            background: rgba(255, 255, 255, 0.65);
+
+            /* 2. 關鍵：背景模糊濾鏡 (毛玻璃效果) */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            /* 支援 Safari */
+
+            /* 3. 邊框改成半透明發光線條 */
+            border: 1px solid rgba(255, 255, 255, 0.8);
             border-left: 4px solid var(--accent);
-            /* 左邊一條綠色強調 */
+            /* 保留左邊綠色裝飾 */
+
             padding: 20px 25px;
-            border-radius: 4px;
-            font-size: 0.9rem;
+
+            /* 4. 圓角加大，配合產品卡片 */
+            border-radius: 20px;
+
+            font-size: 0.95rem;
+            /* 字稍微大一點點比較好讀 */
             color: var(--secondary);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
-            /* 非常淡的陰影 */
+
+            /* 柔和陰影 */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
         }
 
         .memo-title {
@@ -327,19 +342,29 @@
             color: #555;
         }
 
+        /* === 加入購物車按鈕：改成膠囊圓形 === */
         button.btn-add {
             background-color: var(--accent);
             color: #fff;
             border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
+            padding: 6px 20px;
+            /* 左右寬一點，看起來比較大器 */
+
+            /* 這裡改成 50px，就會變成圓圓的膠囊 */
+            border-radius: 50px;
+
             font-size: 0.9rem;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.2s;
+
+            /* 加一點微微的陰影，更有立體感 */
+            box-shadow: 0 4px 10px rgba(124, 148, 115, 0.3);
         }
 
         button.btn-add:hover {
             background-color: var(--accent-hover);
+            transform: translateY(-2px);
+            /* 滑鼠移上去微微上浮 */
         }
 
         /* 購物車浮動按鈕：簡約圓形 */
