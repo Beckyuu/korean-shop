@@ -123,34 +123,24 @@
             right: -30px;
         }
 
-        /* === 2. 修改公告區塊：粉色系＋解決文字跑版 === */
+        /* === 修改後的公告區：變寬 + 玻璃感 === */
         .memo-board {
-            max-width: 600px;
-            margin: 0 auto 50px;
+            /* ▼▼▼ 關鍵修改：把 600px 改成 850px (或更大)，讓它變寬 ▼▼▼ */
+            max-width: 850px;
 
-            /* 毛玻璃半透明效果 */
+            margin: 0 auto 50px;
             background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.9);
-
-            /* ▼▼▼ 關鍵修改：拿掉左邊綠線，改成上面粉紅細線 ▼▼▼ */
             border-left: none;
             border-top: 3px solid var(--accent);
-
-            /* 加大內距，讓文字呼吸，解決跑版問題 */
             padding: 25px 35px;
             text-align: left;
-            /* 確保文字靠左 */
             line-height: 1.8;
-            /* 行距拉開比較好讀 */
-
             border-radius: 20px;
-            /* 圓角 */
             font-size: 0.95rem;
             color: var(--secondary);
-
-            /* 柔和的粉色陰影 */
             box-shadow: 0 10px 30px rgba(232, 166, 166, 0.15);
         }
 
@@ -333,43 +323,49 @@
             align-items: center;
         }
 
+        /* === 修改後的下拉選單：玻璃感 + 粉色箭頭 === */
         select {
-            padding: 8px;
-            border: 1px solid #eee;
-            border-radius: 6px;
-            background: #fafafa;
+            /* 1. 清除瀏覽器預設樣式 (藏起醜醜的預設箭頭) */
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+
+            /* 2. 玻璃感背景設定 */
+            background-color: rgba(255, 255, 255, 0.6);
+            /* 半透明白 */
+            backdrop-filter: blur(5px);
+            /* 毛玻璃模糊 */
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            /* 半透明邊框 */
+
+            /* 3. 文字與排版 */
+            padding: 8px 35px 8px 15px;
+            /* 右邊留多一點空間給箭頭 */
+            border-radius: 50px;
+            /* 圓角膠囊狀，配合按鈕 */
             outline: none;
             color: #555;
-        }
-
-        /* === 修改按鈕：粉色膠囊風 === */
-        button.btn-add {
-            /* 這裡會自動吃到上面設定的粉紅色 */
-            background-color: var(--accent);
-            color: #fff;
-            border: none;
-            padding: 6px 24px;
-            /* 寬度加寬一點 */
-
-            /* 改成圓圓的膠囊形狀 */
-            border-radius: 50px;
-
-            font-size: 0.9rem;
-            font-weight: 500;
-            /* 字體稍微加粗 */
-            letter-spacing: 1px;
-            /* 增加一點字距，比較時尚 */
+            font-family: inherit;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
 
-            /* 加上粉紅色的發光陰影 */
-            box-shadow: 0 4px 15px rgba(232, 166, 166, 0.4);
+            /* 4. 關鍵：用 SVG 自製粉紅色小箭頭 */
+            /* 這裡面有一串編碼，就是粉紅色箭頭的圖案 */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23e8a6a6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            /* 把箭頭定位在右邊 */
+            background-size: 16px;
+
+            /* 柔和陰影 */
+            box-shadow: 0 4px 10px rgba(232, 166, 166, 0.1);
         }
 
-        button.btn-add:hover {
-            background-color: var(--accent-hover);
-            transform: translateY(-2px);
-            /* 微微上浮效果 */
+        /* 滑鼠移過去時，變更明顯一點 */
+        select:hover {
+            background-color: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 4px 15px rgba(232, 166, 166, 0.25);
         }
 
         /* 購物車浮動按鈕：簡約圓形 */
