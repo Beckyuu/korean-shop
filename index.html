@@ -1019,8 +1019,8 @@
             message += `下單平台: ${selectedShipping}`;
             // 這裡不用再寫任何結尾語，或者簡單加個 "謝謝" 也可以，目前保持乾淨
 
-            // 直通官方帳號
-            window.open(`https://line.me/R/oaMessage/@139gqqwy/?${encodeURIComponent(message)}`, '_blank');
+            // === 修改：使用 location.href 在手機上喚醒 App 的效果通常比 window.open 更好 ===
+            window.location.href = `https://line.me/R/oaMessage/@139gqqwy/?${encodeURIComponent(message)}`;
         }
 
         function showDetails(index) {
