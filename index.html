@@ -148,71 +148,69 @@
             margin: 15px auto 0;
         }
 
-        /* === 最終修正版：自動合身公告區 === */
+        /* === 最終版：隱形質感公告區 (縮小、透明) === */
         .memo-board {
-            /* 1. 寬度設定：改成 fit-content */
-            /* 意思是：文字有多長，框框就自動縮到多長，不會無故變寬 */
+            /* 寬度：維持自動縮放，但最大寬度縮小，讓它不要佔滿螢幕 */
             width: fit-content;
-            max-width: 95%;
-            /* 但最大不能超過螢幕寬度 (手機才不會爆掉) */
+            max-width: 85%;
 
-            margin: 0 auto 50px;
-            /* 置中 */
+            margin: 0 auto 40px;
+            /* 下方留白也縮小 */
 
-            /* 2. 設計感：拿掉頂部線條，改回純淨玻璃感 */
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            /* 關鍵修改：背景變得非常透 (0.3)，讓它融入背景色 */
+            background: rgba(255, 255, 255, 0.4);
 
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            /* 淡淡的白框 */
-            border-radius: 20px;
-            /* 圓潤一點比較可愛 */
+            /* 拿掉邊框，改成更柔和的圓角 */
+            border: none;
+            border-radius: 15px;
 
-            padding: 30px 40px;
-            /* 舒服的留白 */
+            /* 內距大幅縮小，讓框框變得很扁 */
+            padding: 20px 30px;
 
             text-align: left;
 
-            /* 3. 陰影：改成很淡很淡的灰色，比較乾淨 */
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            /* 陰影幾乎拿掉，只剩一點點立體感 */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
         }
 
         .memo-title {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.5rem;
+            /* 標題縮小 */
+            font-size: 1.1rem;
             font-style: italic;
-            color: #2c2c2c;
+            color: #888;
+            /* 顏色變淡，不搶眼 */
             display: block;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+            /* 標題跟內容距離拉近 */
             letter-spacing: 1px;
         }
 
-        /* 列表設定 */
         .memo-list {
             list-style: none;
             padding: 0;
             margin: 0;
         }
 
-        /* 每一行的樣式 */
         .memo-list li {
             position: relative;
-            margin-bottom: 10px;
-            padding-left: 20px;
-            /* 圓點跟文字的距離 */
+            margin-bottom: 5px;
+            /* 行距縮小 */
+            padding-left: 15px;
 
             font-family: 'Noto Sans TC', sans-serif;
-            font-size: 0.95rem;
-            color: #555;
-            line-height: 1.6;
+            /* 內文縮小，像說明書的小字 */
+            font-size: 0.8rem;
+            color: #666;
+            /* 深灰色 */
+            line-height: 1.5;
 
-            /* 4. 關鍵：電腦版強制不換行，讓它整齊排成一行 */
+            /* 電腦版強制不換行，保持整齊 */
             white-space: nowrap;
         }
 
-        /* 點點樣式 */
+        /* 點點也縮小 */
         .memo-list li::before {
             content: '·';
             position: absolute;
@@ -220,23 +218,18 @@
             top: 0;
             font-weight: bold;
             color: #d4a373;
-            /* 金棕色點點 */
-            transform: scale(1.5);
-            /* 點點稍微大顆一點 */
         }
 
-        /* 手機版設定：螢幕不夠寬時，才允許換行 */
+        /* 手機版設定 */
         @media (max-width: 768px) {
             .memo-list li {
                 white-space: normal;
-                /* 手機版自動換行 */
             }
 
+            /* 手機版允許換行 */
             .memo-board {
-                padding: 25px 20px;
-                /* 手機版內距縮小 */
                 width: 90%;
-                /* 手機版寬度固定 90% */
+                padding: 20px;
             }
         }
 
@@ -708,9 +701,15 @@
     <div class="memo-board">
         <span class="memo-title">Notice</span>
         <ul class="memo-list">
-            <li>商品採預購制，下單後約 10-15 個工作天寄出。</li>
+            <li>本頁商品皆為代購，下單後約 10-15 個工作天寄出。</li>
             <li>部分熱門品項可能提前缺貨，建議儘早下單。</li>
-            <li>選購完成後請點選「傳送至 LINE官方帳號」，確認訂單與匯款資訊。</li>
+            <li>選購後請點選「傳送至 LINE」，確認訂單與匯款資訊。</li>
+            <li>
+                <a href="https://myship.7-11.com.tw/general/detail/GM2508314219264" target="_blank"
+                    style="text-decoration: underline; color: #bfa092;">
+                    現貨免等專區 (7-11 賣貨便直購) ➝
+                </a>
+            </li>
         </ul>
     </div>
 
