@@ -382,102 +382,88 @@
             transform: translateY(0);
         }
 
-        /* === Footer Logo 改成呼應頭部的書寫體 === */
+        /* === Footer 頁尾完整設定 (請覆蓋原本的設定) === */
+        footer {
+            /* 1. 關鍵修復：把背景加回深黑色，這樣白字才看得到！ */
+            background-color: #1a1a1a;
+
+            color: #fff;
+            padding: 60px 20px;
+            /* 增加一點呼吸空間 */
+            text-align: center;
+            /* 確保所有內容置中 */
+            margin-top: 80px;
+            /* 讓頁尾跟上面商品區保持距離 */
+        }
+
+        /* 頁尾大標題 (Mina's Journal) */
         .footer-logo {
             font-family: 'Cormorant Garamond', serif;
-            /* 跟大標題用一樣的字體 */
-            font-size: 2.2rem;
-            /* 字放大一點 */
+            font-size: 2.5rem;
+            /* 字體再大一點點，更有氣勢 */
             font-weight: 600;
-            color: #fff;
+            color: #ffffff;
             /* 純白字 */
             margin-bottom: 5px;
-            /* 跟下面中文靠近一點 */
             font-style: italic;
-            /* 斜體，跟 Header 一樣 */
             letter-spacing: 1px;
         }
 
-        /* 新增：頁尾的中文小字 */
+        /* 頁尾副標題 (Mina．妝日子) */
         .footer-sub-logo {
             font-family: 'Noto Sans TC', sans-serif;
             font-size: 0.9rem;
-            color: #888;
-            /* 灰色，低調一點 */
+            color: #888888;
+            /* 深灰色，低調質感 */
             letter-spacing: 3px;
             /* 字距拉開 */
+            margin-bottom: 35px;
+            /* 跟下方連結的距離 */
+            font-weight: 300;
+        }
+
+        /* 連結區塊 */
+        .footer-links {
             margin-bottom: 30px;
-            /* 跟下面連結保持距離 */
-            font-weight: 300;
         }
 
-        /* === Footer Logo 優化：韓系高級黑體風 === */
-        .footer-logo {
-            font-family: 'Noto Sans TC', sans-serif;
-            /* 改回黑體，比較現代 */
-            font-weight: 300;
-            /* 用「細字體」看起來比較高級 */
-            font-size: 1.8rem;
-            /* 字體大小 */
-            letter-spacing: 5px;
-            /* 關鍵：字距拉寬，質感馬上出來 */
-            margin-bottom: 25px;
-            color: #fff;
-            /* 純白 */
-            font-style: normal;
-            /* 拿掉原本的斜體，中文斜體不好看 */
-        }
-
-        /* === 連結與圖示排版 === */
+        /* 連結樣式 */
         .social-link {
             text-decoration: none;
-            color: #aaa;
-            /* 稍微淡一點的灰，比較柔和 */
+            color: #aaaaaa;
+            /* 連結用淺灰色 */
             transition: all 0.3s;
             font-family: 'Noto Sans TC', sans-serif;
             letter-spacing: 1px;
-
-            /* 讓圖示跟文字垂直置中對齊 */
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            /* 圖示跟文字的距離 */
+            font-size: 0.9rem;
         }
 
         .social-link:hover {
-            color: #fff;
+            color: #ffffff;
+            /* 滑鼠移過去變亮白 */
             transform: translateY(-2px);
-            /* 移過去稍微浮起來 */
         }
 
-        /* 設定圖示的大小 */
+        .divider {
+            margin: 0 15px;
+            color: #555;
+            /* 分隔線深一點，才不會太搶眼 */
+            font-weight: 100;
+        }
+
         .icon {
             width: 18px;
             height: 18px;
             opacity: 0.8;
         }
 
-        /* 手機版優化：螢幕太小時讓它自動換行，不要擠在一起 */
-        @media (max-width: 600px) {
-            .footer-links {
-                display: flex;
-                flex-direction: column;
-                /* 垂直排列 */
-                gap: 15px;
-            }
-
-            .divider {
-                display: none;
-                /* 手機版隱藏分隔線 */
-            }
-        }
-
         .copyright {
             font-size: 0.75rem;
             color: #555;
-            border-top: 1px solid #333;
-            padding-top: 20px;
-            display: inline-block;
+            margin-top: 20px;
         }
 
         /* === 購物車與彈窗 (保持功能，微調樣式) === */
