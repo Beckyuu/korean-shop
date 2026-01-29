@@ -89,30 +89,40 @@
             font-weight: 400;
         }
 
-        /* 業務說明小字 */
+        /* === 業務說明：純文字雜誌風格 === */
         .service-info {
             font-family: 'Noto Sans TC', sans-serif;
-            font-size: 0.8rem;
-            color: #888;
-            /* 灰色字體 */
-            letter-spacing: 2px;
-            margin-top: 15px;
-
-            /* 讓這行字有點半透明背景，更有層次 */
-            display: inline-block;
-            padding: 5px 15px;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
-            /* 上面加一條極淡的線 */
-        }
-
-        .service-info .tag {
+            font-size: 0.9rem;
+            /* 字體適中 */
+            font-weight: 300;
+            /* 細字體，關鍵！細了就不像按鈕 */
             color: #666;
+            /* 柔和的深灰色 */
+            letter-spacing: 1.5px;
+            /* 字距拉開 */
+            margin-top: 20px;
+
+            /* 確保游標是「箭頭」而不是「小手」，這樣客人就不會想點 */
+            cursor: default;
+
+            /* 讓整行置中 */
+            text-align: center;
+            line-height: 1;
+            /* 讓高度緊湊一點 */
         }
 
-        .service-info .dot {
+        /* 分隔線樣式 */
+        .service-info .divider {
             color: #d4a373;
-            /* 中間的點點用金棕色 */
-            margin: 0 8px;
+            /* 金棕色，呼應主題 */
+            opacity: 0.5;
+            /* 半透明，讓它不要太搶眼 */
+            margin: 0 12px;
+            /* 控制文字之間的距離 */
+            font-weight: 100;
+            /* 線條極細 */
+            font-size: 0.8rem;
+            /* 分隔線稍微小一點 */
         }
 
         .brand-subtitle {
@@ -603,11 +613,11 @@
         <div class="brand-name">│ Mina．妝日子 │</div>
 
         <div class="service-info">
-            <span class="tag">KR 美妝保養</span>
-            <span class="dot">·</span>
-            <span class="tag">正品團購</span>
-            <span class="dot">·</span>
-            <span class="tag">Seoul Selection</span>
+            KR 美妝保養
+            <span class="divider">｜</span>
+            韓國各大官網代購
+            <span class="divider">｜</span>
+            私房選物團購
         </div>
 
         <div
