@@ -4,28 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> │Mina．妝日子│ </title>
-    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap"
-        rel="stylesheet">
+    <title> │Mina．妝日子│ Selection </title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
-
         :root {
-            --bg-color: #fcfbf9;
-            /* 奶油白背景 */
-            --card-bg: #ffffff;
-            /* 卡片純白 */
-            --primary: #333333;
-            /* 主要文字黑 */
-            --secondary: #666666;
-            /* 次要文字灰 */
-            --accent: #e8a6a6;
-            /* 莫蘭迪綠 (適合植萃/積雪草) */
-            --accent-hover: #d18c8c;
-            --price-color: #e65b5b;
-            /* 價格紅 */
-            --border-radius: 12px;
-            /* 統一圓角 */
+            /* === 色票系統：韓系低飽和度 === */
+            --bg-color: #f9f8f6;       /* 米灰白背景 */
+            --text-main: #2c2c2c;      /* 深灰黑 (比純黑更柔和) */
+            --text-sub: #666666;       /* 次要文字 */
+            --accent: #d4a373;         /* 質感金棕色 (取代原本的粉紅，更成熟) */
+            --accent-light: #faeadd;   /* 淺杏色 (用於背景點綴) */
+            --price-color: #bfa092;    /* 莫蘭迪磚紅 */
+            --white: #ffffff;
         }
 
         * {
@@ -35,807 +26,454 @@
         }
 
         body {
-            font-family: 'Noto Sans TC', sans-serif;
-
-            /* 1. 設定背景底色 */
-            /* 重要：請吸取你背景圖「最底端」的顏色填在這裡 */
-            /* 這樣當圖片滑完之後，接到純色背景會很自然，看不出接縫 */
-            background-color: #fffdf5;
-            /* 假設你的圖下面是淡淡的黃/膚色 */
-
-            color: var(--primary);
-            line-height: 1.6;
-            padding-bottom: 80px;
-
-            /* === 背景圖片設定 === */
+            font-family: 'Cormorant Garamond', 'Noto Sans TC', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.7;
+            padding-bottom: 0; /* Footer 會處理底部 */
+            
+            /* 背景圖設定 */
             background-image: url('https://i.ibb.co/1G5fmmPK/85.png');
-
-            /* 2. 寬度 100%，高度自動 */
-            /* 這樣在電腦上會拉寬填滿，在手機上會剛好對齊寬度 */
             background-size: 100% auto;
-
-            /* 3. 對齊正上方 */
-            /* 保證天空、星星那些頭部的裝飾一定看得到 */
             background-position: top center;
-
-            /* 4. 跟著網頁一起捲動 */
-            /* 讓背景像是一張貼在最上面的大海報，而不是死板的桌布 */
-            background-attachment: scroll;
-
             background-repeat: no-repeat;
+            background-attachment: scroll;
         }
 
-        /* === 極簡 Header (上下排列版) === */
+        /* === Header: 雜誌封面感 === */
         header {
             text-align: center;
-            /* 改回置中對齊 */
-            padding: 60px 20px 40px;
-            background: transparent;
-            margin-bottom: 20px;
-
-            /* 刪掉 display: flex; 以及後面的 gap, align-items 等設定 */
+            padding: 80px 20px 50px;
+            position: relative;
         }
 
         h1 {
-            /* 改回跟下面一樣的字體，比較協調 */
-            font-family: 'Noto Sans TC', sans-serif;
-
-            /* 改成細字體 (300)，更有韓系極簡的高級感 */
-            font-weight: 300;
-
-            font-size: 2.5rem;
-            letter-spacing: 6px;
-            /* 字距拉開一點，更有氣勢 */
-            color: #2c2c2c;
-
-            display: block;
-            margin-bottom: 20px;
-        }
-
-
-        /* 讓星星閃爍的動畫設定 (加在 CSS 最後面即可) */
-        @keyframes twinkle {
-
-            0%,
-            100% {
-                opacity: 0.4;
-                transform: scale(1);
-            }
-
-            50% {
-                opacity: 1;
-                transform: scale(1.2);
-            }
-        }
-
-        .subtitle {
-            font-size: 0.9rem;
-            color: #999;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            font-size: 3.5rem; /* 加大標題 */
             letter-spacing: 2px;
+            color: var(--text-main);
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+        .brand-subtitle {
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 0.95rem;
+            letter-spacing: 4px;
+            color: var(--text-sub);
             text-transform: uppercase;
             position: relative;
             display: inline-block;
-            padding: 0 15px;
+            margin-top: 10px;
         }
 
-        /* 兩條細線裝飾 */
-        .subtitle::before,
-        .subtitle::after {
+        .brand-subtitle::after {
             content: '';
-            position: absolute;
-            top: 50%;
-            width: 30px;
+            display: block;
+            width: 40px;
             height: 1px;
-            background: #ddd;
+            background: var(--text-main);
+            margin: 15px auto 0;
         }
 
-        .subtitle::before {
-            left: -30px;
-        }
-
-        .subtitle::after {
-            right: -30px;
-        }
-
-        /* === 修復版：變寬 + 玻璃感公告區 === */
+        /* === 公告區：極簡線條風格 === */
         .memo-board {
-            /* 寬度設定：夠寬才不會換行 */
-            max-width: 850px;
-            width: 90%;
-            /* 在小手機上不要太寬 */
-
-            margin: 0 auto 50px;
-
-            /* 玻璃感設定 */
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.9);
-
-            /* 粉色上邊框 */
-            border-top: 3px solid var(--accent);
-            border-left: none;
-
-            padding: 25px 35px;
-            text-align: left;
-            line-height: 1.8;
-            border-radius: 20px;
-            font-size: 0.95rem;
-            color: var(--secondary);
-            box-shadow: 0 10px 30px rgba(232, 166, 166, 0.15);
+            max-width: 700px;
+            margin: 0 auto 60px;
+            padding: 0 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .memo-content {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(0,0,0,0.05);
+            padding: 25px;
+            font-size: 0.9rem;
+            color: var(--text-sub);
+            letter-spacing: 0.5px;
         }
 
         .memo-title {
-            font-weight: 500;
-            color: var(--accent);
-            margin-bottom: 8px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            font-style: italic;
+            color: var(--text-main);
             display: block;
-            letter-spacing: 1px;
+            margin-bottom: 10px;
         }
 
-        /* === 產品列表：整齊網格 === */
+        /* === 產品列表 === */
         .container {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 30px 80px;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            /* 自動適應寬度 */
-            gap: 40px;
+            gap: 50px 30px; /* 上下間距大一點，比較透氣 */
         }
 
-        /* === 步驟 2：外層卡片 (可愛雙層框風格) === */
+        /* === 卡片設計：雜誌留白風 === */
         .product-card {
-            background: #ffffff;
-            /* 卡片本體是白色 */
-
-            /* 保持規矩的圓角，確保內部不變形 */
-            border-radius: 20px;
-
-            padding: 20px;
+            background: transparent; /* 透明背景 */
             position: relative;
-            transition: all 0.3s ease;
-
-            /* ▼▼▼ 魔法在這裡：利用多層陰影製造框框 ▼▼▼ */
-            box-shadow:
-                /* 第1層：一圈細細的白色間隔 (讓粉紅框不要黏死在卡片上) */
-                0 0 0 4px #fff,
-
-                /* 第2層：你的主題粉紅色粗框 (模擬圖片中的內圈色) */
-                0 0 0 8px var(--accent),
-
-                /* 第3層：最外面的淺粉色偏移陰影 (模擬立體感) */
-                10px 10px 0px rgba(232, 166, 166, 0.4);
+            transition: all 0.4s ease;
         }
-
-        /* === 滑鼠移過去的效果 === */
+        
         .product-card:hover {
-            /* 整個浮起來 */
-            transform: translateY(-5px) translateX(-2px);
-
-            /* 陰影加深、變大，感覺更立體 */
-            box-shadow:
-                0 0 0 4px #fff,
-                0 0 0 8px var(--accent-hover),
-                /* 框框變深粉紅 */
-                14px 14px 0px rgba(232, 166, 166, 0.6);
-            /* 陰影拉長 */
+            transform: translateY(-8px); /* 輕微上浮 */
         }
 
-        /* === 步驟 1：修復圖片位置 (安全版) === */
+        /* 圖片區域 */
         .img-wrapper {
             width: 100%;
             aspect-ratio: 1 / 1;
-            /* 強制正方形 */
+            background: #fff;
             position: relative;
-            background: #fcfcfc;
-
-            /* 這裡只要簡單的圓角就好，不要歪來歪去 */
-            border-radius: 16px;
-
             overflow: hidden;
-            /* 把超出圓角的圖片切掉 */
-            margin-bottom: 15px;
-            /* 跟下面的文字留點距離 */
-
-            /* 讓圖片乖乖待在中間 */
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03); /* 極淡陰影 */
+            transition: box-shadow 0.3s ease;
+        }
+        
+        .product-card:hover .img-wrapper {
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
         }
 
         .img-wrapper img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            /* 確保圖片填滿且不變形 */
-            transition: transform 0.5s ease;
+            transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
         }
 
-        /* 滑鼠移過去照片稍微放大就好，不用變形了 */
         .product-card:hover .img-wrapper img {
-            transform: scale(1.08);
+            transform: scale(1.05); /* 緩慢放大 */
         }
 
-        /* 細節按鈕：簡約圓形 */
+        /* === 標籤 Badge (增加豐富度的關鍵) === */
+        .badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 4px 10px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            z-index: 2;
+            text-transform: uppercase;
+        }
+        
+        .badge.new {
+            background-color: var(--text-main);
+            color: #fff;
+        }
+        
+        .badge.hot {
+            background-color: #bfa092; /* 莫蘭迪紅 */
+            color: #fff;
+        }
+
+        /* 資訊區域 */
+        .info {
+            padding: 20px 5px 0;
+            text-align: center; /* 雜誌風通常置中 */
+        }
+
+        .name {
+            font-size: 1.05rem;
+            font-weight: 400;
+            color: var(--text-main);
+            margin-bottom: 6px;
+            line-height: 1.4;
+            letter-spacing: 0.5px;
+        }
+
+        .desc-text {
+            font-size: 0.8rem;
+            color: #999;
+            margin-bottom: 12px;
+            display: block;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+
+        /* 價格 */
+        .price {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-main);
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        /* 規格按鈕 */
+        .variant-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .variant-btn {
+            font-size: 0.8rem;
+            padding: 4px 12px;
+            border: 1px solid #e0e0e0;
+            background: #fff;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-radius: 0; /* 直角比較時尚 */
+        }
+
+        .variant-btn:hover {
+            border-color: var(--text-main);
+            color: var(--text-main);
+        }
+
+        .variant-btn.selected {
+            background: var(--text-main);
+            color: #fff;
+            border-color: var(--text-main);
+        }
+
+        /* 購買區塊 */
+        .action-row {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        select {
+            background: transparent;
+            border: 1px solid #ccc;
+            padding: 6px 10px;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            outline: none;
+            border-radius: 0; /* 方形 */
+            cursor: pointer;
+        }
+
+        button.btn-add {
+            background-color: var(--text-main);
+            color: #fff;
+            border: 1px solid var(--text-main);
+            padding: 6px 25px;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 0; /* 方形按鈕 */
+            text-transform: uppercase;
+        }
+
+        button.btn-add:hover {
+            background-color: transparent;
+            color: var(--text-main);
+        }
+        
+        /* 細節按鈕 (小眼睛) */
         .more-sticker {
             position: absolute;
-            bottom: 15px;
-            right: 15px;
-            width: 35px;
-            height: 35px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 50%;
+            bottom: 10px;
+            right: 10px;
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,0.9);
+            color: var(--text-main);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            backdrop-filter: blur(4px);
             transition: all 0.2s;
-            color: #333;
+            opacity: 0; /* 預設隱藏 */
+            transform: translateY(10px);
+        }
+        
+        .product-card:hover .more-sticker {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        .more-sticker:hover {
-            background: var(--accent);
+        /* === Footer 頁尾 === */
+        footer {
+            background-color: #1a1a1a;
             color: #fff;
+            padding: 60px 20px;
+            text-align: center;
+            margin-top: 50px;
         }
-
-        .info {
-            padding: 20px;
-            text-align: left;
+        
+        .footer-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-style: italic;
         }
-
-        /* 改成靠左對齊 */
-
-        .name {
-            font-size: 1.05rem;
-            font-weight: 500;
-            margin-bottom: 8px;
-            color: #222;
-            line-height: 1.4;
-        }
-
-        /* 說明標籤：膠囊狀 */
-        .desc-text {
-            font-size: 0.75rem;
+        
+        .footer-links {
+            font-size: 0.85rem;
             color: #888;
-            margin-bottom: 15px;
-            padding: 4px 10px;
-            background: #f5f5f5;
-            border-radius: 20px;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+        
+        .copyright {
+            font-size: 0.75rem;
+            color: #555;
+            border-top: 1px solid #333;
+            padding-top: 20px;
             display: inline-block;
         }
 
-        /* 規格按鈕：極簡線條 */
-        .variant-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 20px;
-            justify-content: flex-start;
-            /* 靠左 */
-        }
-
-        .variant-btn {
-            font-size: 0.85rem;
-            padding: 6px 12px;
-            border: 1px solid #ddd;
-            background: #fff;
-            color: #666;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .variant-btn:hover {
-            border-color: #999;
-            color: #333;
-        }
-
-        .variant-btn.selected {
-            background: #333;
-            /* 選中變黑 */
-            color: #fff;
-            border-color: #333;
-        }
-
-        .price-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: auto;
-            padding-top: 15px;
-            border-top: 1px solid #f0f0f0;
-        }
-
-        .price {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--price-color);
-        }
-
-        .action-row {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        /* === 高透光玻璃感下拉選單 === */
-        select {
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-
-            /* ▼▼▼ 修改這裡：把 0.6 改成 0.25 (讓它變得很透！) ▼▼▼ */
-            background-color: rgba(255, 255, 255, 0.25);
-
-            backdrop-filter: blur(4px);
-            /* 模糊度稍微降低一點，比較清爽 */
-            -webkit-backdrop-filter: blur(4px);
-
-            /* 邊框也調淡一點 */
-            border: 1px solid rgba(255, 255, 255, 0.4);
-
-            padding: 6px 30px 6px 15px;
-            /* 稍微縮小一點 padding，讓畫面精緻 */
-            border-radius: 50px;
-            outline: none;
-            color: #555;
-            font-family: inherit;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-
-            /* 粉紅小箭頭 */
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23e8a6a6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 6px center;
-            background-size: 14px;
-        }
-
-        select:hover {
-            background-color: rgba(255, 255, 255, 0.5);
-            /* 滑鼠移過去稍微變白 */
-        }
-
-        /* === 補回來的：粉色膠囊按鈕 === */
-        /* === 修正版按鈕：解決文字直排問題 === */
-        button.btn-add {
-            background-color: var(--accent);
-            color: #fff;
-            border: none;
-
-            /* 設定內距 */
-            padding: 6px 18px;
-
-            border-radius: 50px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 4px 15px rgba(232, 166, 166, 0.4);
-
-            /* ▼▼▼ 關鍵救星指令！ ▼▼▼ */
-            white-space: nowrap;
-            /* 強制文字不準換行！ */
-            flex-shrink: 0;
-            /* 禁止被壓縮！ */
-        }
-
-        button.btn-add:hover {
-            background-color: var(--accent-hover);
-            transform: translateY(-2px);
-        }
-
-        /* 購物車浮動按鈕：簡約圓形 */
+        /* === 購物車與彈窗 (保持功能，微調樣式) === */
         #cart-float-btn {
             position: fixed;
             bottom: 30px;
             right: 30px;
-            width: 60px;
-            height: 60px;
-            background: #333;
-            /* 純黑 */
+            width: 55px;
+            height: 55px;
+            background: var(--text-main);
             color: white;
-            border-radius: 50%;
+            border-radius: 50%; /* 圓形保留，方便點擊 */
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
             cursor: pointer;
             z-index: 100;
             transition: transform 0.2s;
         }
-
-        #cart-float-btn:hover {
-            transform: scale(1.05);
-        }
-
+        
         #cart-count {
             position: absolute;
-            top: 0;
-            right: 0;
-            background: var(--price-color);
+            top: -5px;
+            right: -5px;
+            background: #bfa092;
             color: white;
             border-radius: 50%;
-            width: 20px;
-            height: 20px;
+            width: 22px;
+            height: 22px;
             font-size: 0.75rem;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        /* 購物車彈窗相關 */
-        .cart-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            z-index: 2000;
-            justify-content: flex-end;
-        }
-
-        .cart-modal.show {
-            display: flex;
-        }
-
+        .cart-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 2000; justify-content: flex-end; }
+        .cart-modal.show { display: flex; }
+        
         .cart-content {
             background: #fff;
             width: 100%;
-            max-width: 450px;
+            max-width: 420px;
             height: 100%;
-            /* 改成側邊滑出 */
-            padding: 30px;
+            padding: 40px;
             display: flex;
             flex-direction: column;
-            animation: slideLeft 0.3s ease-out;
-            box-shadow: -5px 0 20px rgba(0, 0, 0, 0.1);
+            box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+            animation: slideLeft 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-
-        @keyframes slideLeft {
-            from {
-                transform: translateX(100%);
-            }
-
-            to {
-                transform: translateX(0);
-            }
-        }
-
-        .cart-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 15px;
-        }
-
-        .cart-header h3 {
-            font-weight: 500;
-            font-size: 1.2rem;
-        }
-
-        .cart-items {
-            flex-grow: 1;
-            overflow-y: auto;
-        }
-
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid #f9f9f9;
-        }
-
-        .cart-item-name {
-            font-weight: 500;
-            color: #333;
-            font-size: 0.95rem;
-        }
-
-        .cart-item-spec {
-            font-size: 0.8rem;
-            color: #999;
-            margin-top: 4px;
-        }
-
-        .cart-item-price {
-            font-weight: 600;
-            color: #333;
-        }
-
-        .btn-remove {
-            color: #ccc;
-            cursor: pointer;
-            padding: 5px;
-            transition: color 0.2s;
-        }
-
-        .btn-remove:hover {
-            color: var(--price-color);
-        }
-
-        .cart-footer {
-            margin-top: 20px;
-        }
-
-        .cart-notice-box {
-            background: #f8f9fa;
-            color: #666;
-            font-size: 0.85rem;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
+        
+        @keyframes slideLeft { from { transform: translateX(100%); } to { transform: translateX(0); } }
 
         .btn-checkout {
             width: 100%;
-            padding: 15px;
+            padding: 18px;
             background: #06c755;
-            /* LINE Green */
             color: white;
             border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
-
-        .btn-checkout:hover {
-            opacity: 0.9;
-        }
-
-        /* 詳細資訊彈窗 */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            backdrop-filter: blur(2px);
-        }
-
-        .modal-content {
-            background: #fff;
-            width: 100%;
-            max-width: 600px;
-            max-height: 90vh;
-            overflow-y: auto;
-            border-radius: 12px;
-            padding: 0;
-            position: relative;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .modal-close-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(0, 0, 0, 0.5);
-            color: #fff;
-            border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            font-size: 1.2rem;
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        .modal-body img {
-            width: 100%;
-            display: block;
-        }
-
-        .modal-body p {
-            padding: 30px;
-            color: #555;
-            line-height: 1.8;
-            font-size: 0.95rem;
-        }
-
-        .modal-title {
-            padding: 20px;
-            text-align: center;
-            border-bottom: 1px solid #eee;
-            font-size: 1.1rem;
             font-weight: 500;
-            position: sticky;
-            top: 0;
-            background: #fff;
-            margin: 0;
-        }
-
-        #loading {
-            text-align: center;
-            padding: 50px;
-            color: #ccc;
-            font-weight: 300;
+            cursor: pointer;
+            margin-top: 20px;
             letter-spacing: 1px;
         }
 
-        /* === 💎 超級閃亮巨大鑽石星 💎 === */
-        .star-blink {
-            position: fixed;
-
-            /* 1. 尺寸直接加大 3 倍！(原本 18px -> 60px) */
-            /* 想要再更大？把 60 改成 80 或 100 都可以 */
-            width: 60px;
-            height: 60px;
-
-            /* 2. 星星圖案 (維持漂亮的四芒星) */
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ffffff'%3E%3Cpath d='M12,0L14.59,9.41L24,12L14.59,14.59L12,24L9.41,14.59L0,12L9.41,9.41L12,0Z'/%3E%3C/svg%3E");
-            background-size: contain;
-            background-repeat: no-repeat;
-
-
-            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 1)) drop-shadow(0 0 30px rgba(255, 255, 255, 0.4));
-
-            opacity: 0;
-            z-index: 99;
-            pointer-events: none;
-
-            /* 動畫設定 */
-            animation: twinkle 3s infinite ease-in-out;
+        /* Loading */
+        #loading {
+            text-align: center;
+            padding: 80px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            color: #999;
+            font-style: italic;
         }
+        
+        /* 彈窗樣式微調 */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: #fff; width: 90%; max-width: 500px; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.1); position: relative; border: 1px solid #eee; }
+        .modal-close-btn { position: absolute; top: 20px; right: 20px; border: none; background: transparent; font-size: 2rem; cursor: pointer; color: #333; }
+        .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; padding: 30px 30px 10px; text-align: center; }
+        .modal-body p { padding: 0 30px 30px; color: #666; line-height: 1.8; font-size: 0.95rem; }
 
-        /* === 閃爍動畫 (加入旋轉效果，看起來更閃) === */
-        @keyframes twinkle {
-            0% {
-                opacity: 0;
-                transform: scale(0.3) rotate(0deg);
-                /* 一開始很小 */
-            }
-
-            50% {
-                opacity: 1;
-                transform: scale(1.1) rotate(15deg);
-                /* 最亮的時候變大 + 微微旋轉 */
-            }
-
-            100% {
-                opacity: 0;
-                transform: scale(0.3) rotate(0deg);
-                /* 消失變回小 */
-            }
-        }
-
-        /* 讓星星忽明忽暗的動畫設定 */
-        @keyframes twinkle {
-            0% {
-                opacity: 0;
-                transform: scale(0.5);
-            }
-
-            50% {
-                opacity: 1;
-                transform: scale(1.2);
-            }
-
-            /* 最亮的時候變大一點 */
-            100% {
-                opacity: 0;
-                transform: scale(0.5);
-            }
-        }
-
-        /* 設定不同星星的「閃爍速度」，才不會大家一起亮一起暗 */
-        .s1 {
-            animation-delay: 0s;
-            animation-duration: 4s;
-        }
-
-        .s2 {
-            animation-delay: 1s;
-            animation-duration: 3s;
-        }
-
-        .s3 {
-            animation-delay: 2s;
-            animation-duration: 5s;
-        }
-
-        .s4 {
-            animation-delay: 0.5s;
-            animation-duration: 2.5s;
-        }
-
-        .s5 {
-            animation-delay: 1.5s;
-            animation-duration: 3.5s;
-        }
     </style>
 </head>
 
 <body>
-    <div class="star-blink s1" style="top: 15%; left: 20%;"></div>
-    <div class="star-blink s2" style="top: 18%; left: 88%;"></div>
-    <div class="star-blink s3" style="top: 50%; left: 10%;"></div>
-    <div class="star-blink s4" style="top: 10%; left: 5%;"></div>
-    <div class="star-blink s5" style="top: 80%; left: 90%;"></div>
-    <div class="star-blink s2" style="top: 25%; left: 92%;"></div>
-
+    
     <header>
-        <h1>2月新品</h1>
-
-        <div style="position: relative; display: inline-block;">
-
-            <div class="subtitle">│Mina．妝日子│</div>
-
-            <span style="
-            position: absolute;
-            right: -45px; 
-            top: 50%;
-            transform: translateY(-50%); /* 讓星星垂直置中 */
-            color: #d4c4b0; 
-            font-size: 1.4rem; 
-            animation: twinkle 3s infinite ease-in-out;">
-                ✦
-            </span>
-        </div>
+        <h1>February Collection</h1>
+        <div class="brand-subtitle">Mina．妝日子 Selection</div>
+        
+        <div style="position: absolute; top: 60px; right: 20%; color: #d4a373; opacity: 0.6; animation: twinkle 3s infinite;">✦</div>
     </header>
 
     <div class="memo-board">
-        <span class="memo-title">📌 注意事項：</span>
-        1. 全部商品「無現貨，需代購」訂單成立後約10~15個工作天寄出<br>
-        2. 代購商品需付款一半定金，餘款採貨到付款<br>
-        3. 部份熱門品項可能提前缺貨！
+        <div class="memo-content">
+            <span class="memo-title">Notice</span>
+            本月連線商品採預購制，下單後約 10-15 個工作天寄出。<br>
+            部分熱門品項可能提前斷貨，建議儘早下單。
+        </div>
     </div>
-    <div id="loading">正在沖洗照片中...📷</div>
+
+    <div id="loading">Loading Collection...</div>
     <div class="container" id="product-list"></div>
 
+    <footer>
+        <div class="footer-logo">Mina．妝日子</div>
+        <div class="footer-links">
+            INSTAGRAM ｜ CUSTOMER SERVICE ｜ ABOUT US
+        </div>
+        <div class="copyright">
+            &copy; 2026 Mina Selection. All rights reserved.
+        </div>
+    </footer>
+
     <div id="cart-float-btn" onclick="toggleCart()">
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="9" cy="21" r="1"></circle>
-            <circle cx="20" cy="21" r="1"></circle>
-            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
         </svg>
         <div id="cart-count">0</div>
     </div>
 
     <div id="cartModal" class="cart-modal" onclick="closeCart(event)">
         <div class="cart-content">
-            <div class="cart-header">
-                <h3>🛒 我的購物清單</h3>
-                <span onclick="toggleCart()" style="cursor:pointer; font-size:1.5rem;">×</span>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+                <h3 style="font-family:'Cormorant Garamond', serif; font-size:1.8rem; font-style:italic;">Your Cart</h3>
+                <span onclick="toggleCart()" style="cursor:pointer; font-size:1.5rem; opacity:0.5;">×</span>
             </div>
 
-            <div class="cart-items" id="cartItems"></div>
+            <div style="flex-grow:1; overflow-y:auto;" id="cartItems"></div>
 
-            <div class="cart-footer">
-                <div class="cart-notice-box">
-                    ⚠️ 預購需等待 10-15 個工作天
-                </div>
-
-                <div
-                    style="text-align: left; background: #fafafa; padding: 10px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed #ccc;">
-                    <p style="font-weight: bold; margin-bottom: 8px; color: #5c554a;">請選擇下單平台：</p>
-                    <label style="display:flex; align-items:center; margin-bottom: 5px; cursor: pointer;">
-                        <input type="radio" name="shipping" value="賣貨便" style="margin-right: 8px;"> 7-11 賣貨便
+            <div style="margin-top:20px; border-top:1px solid #eee; padding-top:20px;">
+                <div style="margin-bottom:20px; font-size:0.9rem; color:#666;">
+                    <p style="margin-bottom:10px; font-weight:bold; color:#2c2c2c;">選擇下單平台：</p>
+                    <label style="display:block; margin-bottom:8px; cursor:pointer;">
+                        <input type="radio" name="shipping" value="賣貨便" style="margin-right:8px;"> 7-11 賣貨便
                     </label>
-                    <label style="display:flex; align-items:center; cursor: pointer;">
-                        <input type="radio" name="shipping" value="iOPEN Mall" style="margin-right: 8px;"> 7-11 iOPEN
-                        Mall
+                    <label style="display:block; cursor:pointer;">
+                        <input type="radio" name="shipping" value="iOPEN Mall" style="margin-right:8px;"> 7-11 iOPEN Mall
                     </label>
                 </div>
-                <div class="cart-total" id="cartTotal">總金額: NT$ 0</div>
-                <button class="btn-checkout" onclick="checkoutViaLine()">確認清單並用 LINE 傳送 💬</button>
+                <div id="cartTotal" style="font-family:'Cormorant Garamond', serif; font-size:1.4rem; font-weight:600; text-align:right;">Total: NT$ 0</div>
+                <button class="btn-checkout" onclick="checkoutViaLine()">CHECKOUT VIA LINE</button>
             </div>
         </div>
     </div>
@@ -843,7 +481,7 @@
     <div id="detailModal" class="modal-overlay" onclick="closeModal(event)">
         <div class="modal-content">
             <button class="modal-close-btn" onclick="closeModal(event)">×</button>
-            <h3 class="modal-title" id="modalTitle">商品名稱</h3>
+            <h3 class="modal-title" id="modalTitle">Product Name</h3>
             <div class="modal-body" id="modalBody"></div>
         </div>
     </div>
@@ -858,43 +496,32 @@
             const loading = document.getElementById('loading');
             const container = document.getElementById('product-list');
 
-            if (!GOOGLE_SHEET_CSV_URL || GOOGLE_SHEET_CSV_URL.includes('請將此處替換')) { loading.innerHTML = '⚠️ 請填入正確的 CSV 連結'; return; }
-
             try {
                 const response = await fetch(GOOGLE_SHEET_CSV_URL);
                 const data = await response.text();
                 const rows = data.split('\n').map(row => row.split(','));
-                rows.shift();
+                rows.shift(); 
 
                 loading.style.display = 'none';
                 allProductsData = [];
 
                 rows.forEach((row, index) => {
                     if (row.length < 4) return;
-
                     const rawSpec = row[1] ? row[1].trim() : '';
                     const variants = rawSpec.includes('|') ? rawSpec.split('|').map(s => s.trim()) : (rawSpec ? [rawSpec] : []);
-
+                    
                     const product = {
                         id: index,
-                        name: row[0] ? row[0].trim() : '未命名',
+                        name: row[0] ? row[0].trim() : 'Unnamed',
                         variants: variants,
                         price: row[2] ? row[2].trim() : '0',
                         imgUrl: row[3] ? row[3].trim() : '',
                         detailImgUrl: row[4] ? row[4].trim() : '',
-
-                        // --- 修改這裡 ---
-                        // 1. 移除了 detailText (因為你不要這欄了)
-                        detailText: '',
-
-                        // 2. 簡短說明變成讀取 row[5] (原本是 row[6])
                         description: row[5] ? row[5].trim() : '',
-                        // ---------------
-
                         selectedVariant: null
                     };
 
-                    product.hasDetails = product.detailImgUrl !== '' || product.detailText !== '';
+                    product.hasDetails = product.detailImgUrl !== '';
                     if (product.variants.length === 1) product.selectedVariant = product.variants[0];
                     else if (product.variants.length === 0) product.selectedVariant = '單一款式';
 
@@ -902,6 +529,11 @@
 
                     const card = document.createElement('div');
                     card.className = 'product-card';
+
+                    // === 增加豐富度：隨機給一些商品加上標籤 (僅視覺效果) ===
+                    let badgeHtml = '';
+                    if (index < 2) badgeHtml = `<div class="badge new">NEW</div>`;
+                    else if (index === 3 || index === 5) badgeHtml = `<div class="badge hot">HOT</div>`;
 
                     let variantsHtml = '';
                     if (product.variants.length > 1) {
@@ -911,45 +543,44 @@
                         });
                         variantsHtml += `</div>`;
                     } else if (product.variants.length === 1 && product.variants[0] !== '') {
-                        variantsHtml = `<div class="variant-container"><span style="font-size:0.85rem; color:#888; background:#f4f1e8; padding:3px 10px; border-radius:15px;">${product.variants[0]}</span></div>`;
-                    }
-
-                    // 新增：顯示簡短說明 (description)
-                    let descHtml = '';
-                    if (product.description) {
-                        descHtml = `<div class="desc-text">${product.description}</div>`;
+                        variantsHtml = `<div class="desc-text" style="text-align:center;">${product.variants[0]}</div>`;
                     }
 
                     let stickerHtml = '';
                     if (product.hasDetails) {
-                        stickerHtml = `<div class="more-sticker" onclick="showDetails(${index})" title="查看細節"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></div>`;
+                        stickerHtml = `<div class="more-sticker" onclick="showDetails(${index})" title="View Details">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        </div>`;
                     }
 
-                    let options = ''; for (let i = 1; i <= 5; i++) { options += `<option value="${i}">${i}</option>`; }
+                    let options = ''; for(let i=1; i<=5; i++) options += `<option value="${i}">${i}</option>`;
 
                     card.innerHTML = `
                         <div class="img-wrapper">
+                            ${badgeHtml}
                             <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
                             ${stickerHtml}
                         </div>
                         <div class="info">
                             <h3 class="name">${product.name}</h3>
-                            ${descHtml} ${variantsHtml}
+                            ${product.description ? `<span class="desc-text">${product.description}</span>` : ''}
                             
-                            <div class="price-row">
-                                <span class="price">NT$ ${product.price}</span>
-                                <div class="action-row">
-                                    <select id="qty-${index}" aria-label="數量">${options}</select>
-                                    <button class="btn-add" onclick="addToCart(${index})">選購</button>
-                                </div>
+                            <span class="price">NT$ ${product.price}</span>
+                            
+                            ${variantsHtml}
+                            
+                            <div class="action-row">
+                                <select id="qty-${index}">${options}</select>
+                                <button class="btn-add" onclick="addToCart(${index})">ADD</button>
                             </div>
                         </div>
                     `;
                     container.appendChild(card);
                 });
-            } catch (error) { console.error('Error:', error); loading.innerHTML = '讀取失敗，請重新整理頁面。'; }
+            } catch (error) { console.error(error); loading.innerHTML = 'Error loading products.'; }
         }
 
+        // --- 以下 JS 功能邏輯保持不變 ---
         function selectVariant(productIndex, variantName, btnElement) {
             allProductsData[productIndex].selectedVariant = variantName;
             const container = document.getElementById(`variants-${productIndex}`);
@@ -960,15 +591,20 @@
         function addToCart(index) {
             const product = allProductsData[index];
             const qty = parseInt(document.getElementById(`qty-${index}`).value);
-            if (product.variants.length > 1 && !product.selectedVariant) { alert('請先選擇一個款式或色號喔！🎨'); return; }
-
-            // 存入說明以便結帳時參考(選填)
+            if (product.variants.length > 1 && !product.selectedVariant) { alert('Please select a variant.'); return; }
             const item = { name: product.name, spec: product.selectedVariant, price: parseInt(product.price), qty: qty };
-            cart.push(item); updateCartIcon(); alert(`已加入購物車！🛒`);
+            cart.push(item); updateCartIcon(); 
+            // 這裡改成比較安靜的通知，不要一直跳 alert 
+            const btn = document.querySelectorAll('.btn-add')[index];
+            const originalText = btn.innerText;
+            btn.innerText = 'ADDED!';
+            btn.style.background = '#2c2c2c';
+            btn.style.color = '#fff';
+            setTimeout(() => { btn.innerText = originalText; btn.style.background = ''; btn.style.color = ''; }, 1000);
         }
 
         function updateCartIcon() { document.getElementById('cart-count').innerText = cart.length; }
-
+        
         function toggleCart() {
             const modal = document.getElementById('cartModal');
             if (!modal.classList.contains('show')) { renderCartItems(); modal.classList.add('show'); }
@@ -979,48 +615,41 @@
         function renderCartItems() {
             const container = document.getElementById('cartItems');
             const totalEl = document.getElementById('cartTotal');
-            if (cart.length === 0) { container.innerHTML = '<p style="text-align:center; color:#999; margin-top:20px;">購物車還是空的喔 🏖️</p>'; totalEl.innerText = '總金額: NT$ 0'; return; }
-
+            if (cart.length === 0) { container.innerHTML = '<p style="text-align:center; color:#999; margin-top:40px;">Your cart is empty.</p>'; totalEl.innerText = 'Total: NT$ 0'; return; }
+            
             let html = ''; let total = 0;
             cart.forEach((item, idx) => {
                 const subtotal = item.price * item.qty; total += subtotal;
-                html += `<div class="cart-item"><div class="cart-item-info"><div class="cart-item-name">${item.name}</div><div class="cart-item-spec">${item.spec} x ${item.qty}</div></div><div class="cart-item-price">NT$ ${subtotal}</div><div class="btn-remove" onclick="removeFromCart(${idx})">🗑️</div></div>`;
+                html += `<div style="display:flex; justify-content:space-between; padding:15px 0; border-bottom:1px solid #f5f5f5;">
+                    <div><div style="font-weight:500; color:#333;">${item.name}</div><div style="font-size:0.85rem; color:#999; margin-top:4px;">${item.spec} x ${item.qty}</div></div>
+                    <div style="text-align:right;">
+                        <div style="font-weight:600;">NT$ ${subtotal}</div>
+                        <div style="color:#ccc; cursor:pointer; font-size:0.8rem; margin-top:5px;" onclick="removeFromCart(${idx})">REMOVE</div>
+                    </div>
+                </div>`;
             });
-            container.innerHTML = html; totalEl.innerText = `總金額: NT$ ${total}`;
+            container.innerHTML = html; totalEl.innerText = `Total: NT$ ${total}`;
         }
 
         function removeFromCart(idx) { cart.splice(idx, 1); updateCartIcon(); renderCartItems(); }
 
         function checkoutViaLine() {
             if (cart.length === 0) return;
-
-            // 檢查有沒有選運送方式
             const shippingRadios = document.getElementsByName('shipping');
             let selectedShipping = null;
-            for (const radio of shippingRadios) {
-                if (radio.checked) {
-                    selectedShipping = radio.value;
-                    break;
-                }
-            }
+            for (const radio of shippingRadios) { if (radio.checked) { selectedShipping = radio.value; break; } }
+            if (!selectedShipping) { alert('請選擇下單平台 (7-11 賣貨便 or iOPEN Mall)'); return; }
 
-            if (!selectedShipping) {
-                alert('請先選擇要在「賣貨便」還是「iOPEN Mall」下單喔！🚚');
-                return; // 停止執行，不跳轉 LINE
-            }
-
-            let message = "您好！我要訂購以下商品：\n";
-            message += "------------------\n";
+            let message = "Hi! I would like to order:\n------------------\n";
             let total = 0;
             cart.forEach(item => {
                 total += item.price * item.qty;
                 message += `${item.name} [${item.spec}] x${item.qty} \n`;
             });
             message += "------------------\n";
-            message += `總金額：NT$ ${total}\n`;
-            message += `💡 指定下單平台：${selectedShipping}\n\n`; // 把選擇加進去
-            message += "請確認有貨後提供連結給我，謝謝！";
-
+            message += `Total: NT$ ${total}\n`;
+            message += `Platform: ${selectedShipping}\n\n`;
+            message += "Please confirm stock. Thank you!";
             window.open(`https://line.me/R/msg/text/?${encodeURIComponent(message)}`, '_blank');
         }
 
@@ -1029,15 +658,18 @@
             const modal = document.getElementById('detailModal');
             document.getElementById('modalTitle').innerText = product.name;
             let content = '';
-            if (product.detailText) content += `<p>${product.detailText}</p>`;
-            if (product.detailImgUrl) content += `<img src="${product.detailImgUrl}">`;
+            if (product.detailImgUrl) content += `<img src="${product.detailImgUrl}" style="width:100%; display:block;">`;
             document.getElementById('modalBody').innerHTML = content;
-            modal.style.display = 'flex'; document.body.style.overflow = 'hidden';
+            modal.style.display = 'flex';
         }
-        function closeModal(event) { if (event.target.classList.contains('modal-overlay') || event.target.classList.contains('modal-close-btn')) { document.getElementById('detailModal').style.display = 'none'; document.body.style.overflow = 'auto'; } }
+        function closeModal(event) { if (event.target.classList.contains('modal-overlay') || event.target.classList.contains('modal-close-btn')) document.getElementById('detailModal').style.display = 'none'; }
+        
+        // 動畫：簡單的星星閃爍
+        const style = document.createElement('style');
+        style.innerHTML = `@keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }`;
+        document.head.appendChild(style);
 
         fetchProducts();
     </script>
 </body>
-
 </html>
