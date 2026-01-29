@@ -903,6 +903,27 @@
         let allProductsData = [];
         let cart = [];
 
+        // === 這是新加入的 CSV 解析工具 (放在 fetchProducts 上面) ===
+function parseCSVRow(row) {
+    const result = [];
+    let current = '';
+    let inQuote = false;
+    for (let i = 0; i < row.length; i++) {
+        const char = row[i];
+        if (char === '"') {
+            inQuote = !inQuote;
+        } else if (char === ',' && !inQuote) {
+            result.push(current.trim());
+            current = '';
+        } else {
+            current += char;
+        }
+    }
+    result.push(current.trim());
+    return result;
+}
+// ========================================================
+
         async function fetchProducts() {
             const loading = document.getElementById('loading');
             const container = document.getElementById('product-list');
@@ -910,7 +931,7 @@
             try {
                 const response = await fetch(GOOGLE_SHEET_CSV_URL);
                 const data = await response.text();
-                const rows = data.split('\n').map(row => row.split(','));
+                const rows = data.split('\n').map(row => parseCSVRow(row));
                 rows.shift();
 
                 loading.style.display = 'none';
