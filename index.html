@@ -148,42 +148,45 @@
             margin: 15px auto 0;
         }
 
-/* === 修復版：變寬 + 玻璃感公告區 === */
+        /* === 最終修正版：自動合身公告區 === */
         .memo-board {
-            /* 1. 寬度設定：從 700px 改成 850px，這樣文字才會在同一行！ */
-            max-width: 850px; 
-            width: 90%;       /* 在小手機上不要太寬 */
-            
+            /* 1. 寬度設定：改成 fit-content */
+            /* 意思是：文字有多長，框框就自動縮到多長，不會無故變寬 */
+            width: fit-content;
+            max-width: 95%;
+            /* 但最大不能超過螢幕寬度 (手機才不會爆掉) */
+
             margin: 0 auto 50px;
-            
-            /* 2. 設計感：玻璃擬態 + 頂部色條 */
-            background: rgba(255, 255, 255, 0.75); /* 微微透明 */
-            backdrop-filter: blur(10px);           /* 毛玻璃模糊 */
-            -webkit-backdrop-filter: blur(10px);
-            
-            border: 1px solid rgba(255, 255, 255, 0.9); /* 邊框變很淡 */
-            
-            /* 關鍵設計：只留上面的粗邊框，像信紙或卡片 */
-            border-top: 3px solid #d4a373; /* 金棕色 (或是你原本的粉色 var(--accent)) */
-            border-radius: 12px;           /* 圓角稍微小一點，比較俐落 */
-            
-            /* 3. 減少留白：原本 30px 改成 25px */
-            padding: 25px 35px;
-            
-            text-align: left;    /* 內容靠左 */
-            box-shadow: 0 10px 30px rgba(212, 163, 115, 0.15); /* 帶有金棕色的質感光暈 */
+            /* 置中 */
+
+            /* 2. 設計感：拿掉頂部線條，改回純淨玻璃感 */
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            /* 淡淡的白框 */
+            border-radius: 20px;
+            /* 圓潤一點比較可愛 */
+
+            padding: 30px 40px;
+            /* 舒服的留白 */
+
+            text-align: left;
+
+            /* 3. 陰影：改成很淡很淡的灰色，比較乾淨 */
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
         }
 
         .memo-title {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             font-style: italic;
             color: #2c2c2c;
-            
-            /* 讓標題自己在上面，稍微顯眼一點 */
             display: block;
             text-align: center;
-            margin-bottom: 15px; 
+            margin-bottom: 20px;
+            letter-spacing: 1px;
         }
 
         /* 列表設定 */
@@ -191,46 +194,52 @@
             list-style: none;
             padding: 0;
             margin: 0;
-            
-            /* 讓文字在框框裡置中排列的技巧 */
-            width: fit-content; 
-            margin: 0 auto;     
         }
 
         /* 每一行的樣式 */
         .memo-list li {
             position: relative;
-            margin-bottom: 6px;    /* 行距縮小一點 */
-            padding-left: 15px;
+            margin-bottom: 10px;
+            padding-left: 20px;
+            /* 圓點跟文字的距離 */
+
             font-family: 'Noto Sans TC', sans-serif;
-            font-size: 0.95rem;    /* 字體大小適中 */
+            font-size: 0.95rem;
             color: #555;
             line-height: 1.6;
-            
-            /* 強制不換行 (如果螢幕真的很小還是會換，但電腦版會強迫一行) */
+
+            /* 4. 關鍵：電腦版強制不換行，讓它整齊排成一行 */
             white-space: nowrap;
         }
 
-        /* 精緻圓點 */
+        /* 點點樣式 */
         .memo-list li::before {
             content: '·';
             position: absolute;
-            left: 0;
+            left: 5px;
             top: 0;
             font-weight: bold;
-            color: #d4a373; 
+            color: #d4a373;
+            /* 金棕色點點 */
+            transform: scale(1.5);
+            /* 點點稍微大顆一點 */
         }
 
-        /* 手機版適應：手機螢幕窄，一定會換行，所以要取消強制不換行 */
-        @media (max-width: 860px) {
+        /* 手機版設定：螢幕不夠寬時，才允許換行 */
+        @media (max-width: 768px) {
             .memo-list li {
-                white-space: normal; /* 手機版允許換行，不然字會被切掉 */
+                white-space: normal;
+                /* 手機版自動換行 */
             }
+
             .memo-board {
-                text-align: center; /* 手機版讓它稍微置中比較好看 */
+                padding: 25px 20px;
+                /* 手機版內距縮小 */
+                width: 90%;
+                /* 手機版寬度固定 90% */
             }
         }
-        
+
         /* === 產品列表 === */
         .container {
             max-width: 1200px;
@@ -698,11 +707,10 @@
 
     <div class="memo-board">
         <span class="memo-title">Notice</span>
-        
         <ul class="memo-list">
-            <li>全部商品「無現貨，需代購」訂單成立後約 10~15 個工作天寄出</li>
-            <li>代購商品需付款一半定金，餘款採貨到付款</li>
-            <li>選購完成後請點選「傳送至 LINE 官方帳號」，確認訂單與匯款資訊。</li>
+            <li>商品採預購制，下單後約 10-15 個工作天寄出。</li>
+            <li>部分熱門品項可能提前缺貨，建議儘早下單。</li>
+            <li>選購完成後請點選「傳送至 LINE官方帳號」，確認訂單與匯款資訊。</li>
         </ul>
     </div>
 
