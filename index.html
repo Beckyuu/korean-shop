@@ -382,13 +382,33 @@
             transform: translateY(0);
         }
 
-        /* === Footer 頁尾 === */
-        footer {
-            background-color: #1a1a1a;
+        /* === Footer Logo 改成呼應頭部的書寫體 === */
+        .footer-logo {
+            font-family: 'Cormorant Garamond', serif;
+            /* 跟大標題用一樣的字體 */
+            font-size: 2.2rem;
+            /* 字放大一點 */
+            font-weight: 600;
             color: #fff;
-            padding: 60px 20px;
-            text-align: center;
-            margin-top: 50px;
+            /* 純白字 */
+            margin-bottom: 5px;
+            /* 跟下面中文靠近一點 */
+            font-style: italic;
+            /* 斜體，跟 Header 一樣 */
+            letter-spacing: 1px;
+        }
+
+        /* 新增：頁尾的中文小字 */
+        .footer-sub-logo {
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 0.9rem;
+            color: #888;
+            /* 灰色，低調一點 */
+            letter-spacing: 3px;
+            /* 字距拉開 */
+            margin-bottom: 30px;
+            /* 跟下面連結保持距離 */
+            font-weight: 300;
         }
 
         /* === Footer Logo 優化：韓系高級黑體風 === */
@@ -636,7 +656,8 @@
     <div class="container" id="product-list"></div>
 
     <footer>
-        <div class="footer-logo">Mina．妝日子</div>
+        <div class="footer-logo">Mina's Journal</div>
+        <div class="footer-sub-logo">Mina．妝日子</div>
 
         <div class="footer-links">
             <a href="https://www.instagram.com/mina_k.beautyroom/" target="_blank" class="social-link">
