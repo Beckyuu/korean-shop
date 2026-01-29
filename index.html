@@ -196,18 +196,20 @@
         /* 每一行的樣式 (修正換行版) */
         .memo-list li {
             position: relative;
-            margin-bottom: 8px;   /* 行距微調 */
-            
+            margin-bottom: 8px;
+            /* 行距微調 */
+
             /* 圓點與文字的距離 (保留你剛剛覺得不錯的距離) */
-            padding-left: 25px;   
-            
+            padding-left: 25px;
+
             font-family: 'Noto Sans TC', sans-serif;
             font-size: 0.8rem;
             color: #666;
-            line-height: 1.6;     /* 行高設定 1.6，這樣兩行字之間才不會太擠 */
-            
+            line-height: 1.6;
+            /* 行高設定 1.6，這樣兩行字之間才不會太擠 */
+
             /* 修改這裡：原本是 nowrap (不換行)，改成 normal (允許換行) */
-            white-space: normal;  
+            white-space: normal;
         }
 
         /* 圓點設定 (確保它對齊第一行) */
@@ -215,11 +217,11 @@
             content: '·';
             position: absolute;
             left: 5px;
-            
+
             /* 修改這裡：原本是 top: 0，改成 top: 0px 搭配 line-height 對齊 */
             /* 這樣圓點會對齊第一行文字，而不是跑去兩行中間 */
-            top: 0px; 
-            
+            top: 0px;
+
             font-weight: bold;
             color: #d4a373;
         }
@@ -558,7 +560,7 @@
             z-index: 100;
             transition: transform 0.2s;
         }
-        
+
         /* 讓裡面的 SVG 圖示也跟著變大 */
         #cart-float-btn svg {
             width: 32px;
@@ -572,13 +574,15 @@
             background: #bfa092;
             color: white;
             border-radius: 50%;
-            width: 24px; /* 稍微加大 */
+            width: 24px;
+            /* 稍微加大 */
             height: 24px;
             font-size: 0.8rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 2px solid #fff; /* 加個白邊更有質感 */
+            border: 2px solid #fff;
+            /* 加個白邊更有質感 */
         }
 
         .cart-modal {
@@ -717,14 +721,15 @@
         <ul class="memo-list">
             <li>本頁商品皆為代購，下單後約 10-15 個工作天寄出。</li>
             <li>部分熱門品項可能提前缺貨，建議儘早下單。</li>
-            
+
             <li>
                 選購完成至購物車內點選「 傳送至 LINE官方帳號 」，<br>
                 方便確認訂單與匯款資訊。
             </li>
-            
+
             <li>
-                <a href="https://myship.7-11.com.tw/general/detail/GM2508314219264" target="_blank" style="text-decoration: underline; color: #bfa092;">
+                <a href="https://myship.7-11.com.tw/general/detail/GM2508314219264" target="_blank"
+                    style="text-decoration: underline; color: #bfa092;">
                     現貨免等專區 (7-11 賣貨便直購) ➝
                 </a>
             </li>
@@ -769,8 +774,8 @@
     </footer>
 
     <div id="cart-float-btn" onclick="toggleCart()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
             <line x1="3" y1="6" x2="21" y2="6"></line>
             <path d="M16 10a4 4 0 0 1-8 0"></path>
@@ -781,7 +786,9 @@
     <div id="cartModal" class="cart-modal" onclick="closeCart(event)">
         <div class="cart-content">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
-                <h3 style="font-family:'Noto Sans TC', sans-serif; font-size:1.5rem; font-weight:500;">購物清單</h3>
+                <h3
+                    style="font-family:'Noto Sans TC', sans-serif; font-size:1.6rem; font-weight:600; letter-spacing:1px; color:#2c2c2c;">
+                    購物清單</h3>
                 <span onclick="toggleCart()" style="cursor:pointer; font-size:1.5rem; opacity:0.5;">×</span>
             </div>
 
@@ -800,7 +807,7 @@
                 <div id="cartTotal"
                     style="font-family:'Noto Sans TC', sans-serif; font-size:1.2rem; font-weight:600; text-align:right;">
                     總金額: NT$ 0</div>
-                <button class="btn-checkout" onclick="checkoutViaLine()">傳送訂單至 LINE</button>
+                <button class="btn-checkout" onclick="checkoutViaLine()">傳送至LINE官方帳號</button>
             </div>
         </div>
     </div>
@@ -942,21 +949,37 @@
         function renderCartItems() {
             const container = document.getElementById('cartItems');
             const totalEl = document.getElementById('cartTotal');
-            // 修改：空購物車提示改為中文
-            if (cart.length === 0) { container.innerHTML = '<p style="text-align:center; color:#999; margin-top:40px; font-family:\'Noto Sans TC\'">購物車目前是空的</p>'; totalEl.innerText = '總金額: NT$ 0'; return; }
 
-            let html = ''; let total = 0;
+            if (cart.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:#999; margin-top:40px; font-family:\'Noto Sans TC\', sans-serif;">購物車目前是空的</p>';
+                totalEl.innerText = '總金額: NT$ 0';
+                return;
+            }
+
+            let html = '';
+            let total = 0;
             cart.forEach((item, idx) => {
-                const subtotal = item.price * item.qty; total += subtotal;
-                html += `<div style="display:flex; justify-content:space-between; padding:15px 0; border-bottom:1px solid #f5f5f5;">
-                    <div><div style="font-weight:500; color:#333;">${item.name}</div><div style="font-size:0.85rem; color:#999; margin-top:4px;">${item.spec} x ${item.qty}</div></div>
-                    <div style="text-align:right;">
-                        <div style="font-weight:600;">NT$ ${subtotal}</div>
-                        <div style="color:#ccc; cursor:pointer; font-size:0.8rem; margin-top:5px; font-family:'Noto Sans TC';" onclick="removeFromCart(${idx})">移除</div>
+                const subtotal = item.price * item.qty;
+                total += subtotal;
+                // 修改重點：
+                // 1. font-family: 'Noto Sans TC' -> 強制使用黑體，比較現代且清楚
+                // 2. font-size: 1.05rem -> 商品名稱放大
+                // 3. letter-spacing: 0.5px -> 增加一點字距，更有質感
+                html += `<div style="display:flex; justify-content:space-between; align-items:flex-start; padding:15px 0; border-bottom:1px solid #f5f5f5;">
+                    <div style="font-family: 'Noto Sans TC', sans-serif;">
+                        <div style="font-size:1.05rem; font-weight:500; color:#2c2c2c; letter-spacing:0.5px; margin-bottom:4px;">${item.name}</div>
+                        <div style="font-size:0.9rem; color:#666;">${item.spec} <span style="font-size:0.8rem; color:#999; margin:0 5px;">x</span> ${item.qty}</div>
+                    </div>
+                    <div style="text-align:right; font-family: 'Noto Sans TC', sans-serif;">
+                        <div style="font-weight:600; font-size:1rem; color:#2c2c2c;">NT$ ${subtotal}</div>
+                        <div style="color:#bfa092; cursor:pointer; font-size:0.85rem; margin-top:6px; text-decoration:underline;" onclick="removeFromCart(${idx})">移除</div>
                     </div>
                 </div>`;
             });
-            container.innerHTML = html; totalEl.innerText = `總金額: NT$ ${total}`; // 修改：Total 改為中文
+            container.innerHTML = html;
+            // 這裡也順便確保總金額的字體一致
+            totalEl.style.fontFamily = "'Noto Sans TC', sans-serif";
+            totalEl.innerText = `總金額: NT$ ${total}`;
         }
 
         function removeFromCart(idx) { cart.splice(idx, 1); updateCartIcon(); renderCartItems(); }
