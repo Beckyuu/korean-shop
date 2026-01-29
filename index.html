@@ -382,88 +382,93 @@
             transform: translateY(0);
         }
 
-        /* === Footer 頁尾完整設定 (請覆蓋原本的設定) === */
+        /* === 極簡瘦身版 Footer === */
         footer {
-            /* 1. 關鍵修復：把背景加回深黑色，這樣白字才看得到！ */
             background-color: #1a1a1a;
-
+            /* 維持深黑底色，質感才好 */
             color: #fff;
-            padding: 60px 20px;
-            /* 增加一點呼吸空間 */
+
+            /* 修改這裡：把原本的 60px 改成 30px，讓高度變扁，看起來才不會空 */
+            padding: 30px 20px;
+
             text-align: center;
-            /* 確保所有內容置中 */
-            margin-top: 80px;
-            /* 讓頁尾跟上面商品區保持距離 */
+            margin-top: 60px;
         }
 
-        /* 頁尾大標題 (Mina's Journal) */
-        .footer-logo {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.5rem;
-            /* 字體再大一點點，更有氣勢 */
-            font-weight: 600;
-            color: #ffffff;
-            /* 純白字 */
-            margin-bottom: 5px;
-            font-style: italic;
-            letter-spacing: 1px;
-        }
-
-        /* 頁尾副標題 (Mina．妝日子) */
-        .footer-sub-logo {
-            font-family: 'Noto Sans TC', sans-serif;
-            font-size: 0.9rem;
-            color: #888888;
-            /* 深灰色，低調質感 */
+        /* 新的簡約 Logo 樣式 */
+        .footer-logo-simple {
+            font-family: 'Cormorant Garamond', 'Noto Sans TC', sans-serif;
+            /* 混搭字體 */
+            font-size: 1.2rem;
+            /* 字不用太大，精緻就好 */
             letter-spacing: 3px;
-            /* 字距拉開 */
-            margin-bottom: 35px;
-            /* 跟下方連結的距離 */
-            font-weight: 300;
+            /* 字距拉開，這是高級感的關鍵 */
+            color: #ffffff;
+            margin-bottom: 20px;
+            /* 跟下面連結的距離縮短 */
+            font-weight: 500;
         }
 
-        /* 連結區塊 */
         .footer-links {
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+            /* 縮短距離 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            /* 連結之間的間距 */
         }
 
-        /* 連結樣式 */
         .social-link {
             text-decoration: none;
-            color: #aaaaaa;
-            /* 連結用淺灰色 */
+            color: #aaa;
             transition: all 0.3s;
             font-family: 'Noto Sans TC', sans-serif;
+            font-size: 0.85rem;
+            /* 字稍微縮小一點 */
             letter-spacing: 1px;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
+            gap: 6px;
         }
 
         .social-link:hover {
-            color: #ffffff;
-            /* 滑鼠移過去變亮白 */
-            transform: translateY(-2px);
-        }
-
-        .divider {
-            margin: 0 15px;
-            color: #555;
-            /* 分隔線深一點，才不會太搶眼 */
-            font-weight: 100;
+            color: #fff;
         }
 
         .icon {
-            width: 18px;
-            height: 18px;
-            opacity: 0.8;
+            width: 16px;
+            /* 圖示也稍微縮小 */
+            height: 16px;
+            opacity: 0.9;
+        }
+
+        .divider {
+            color: #444;
+            /* 分隔線深一點 */
+            font-weight: 100;
         }
 
         .copyright {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
+            /* 版權字縮到最小，不搶戲 */
             color: #555;
-            margin-top: 20px;
+            /* 讓它很暗，融入背景 */
+            margin-top: 0;
+            font-family: sans-serif;
+            /* 用最一般的字體就好 */
+        }
+
+        /* 手機版自動變成兩行，才不會太擠 */
+        @media (max-width: 600px) {
+            .footer-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .divider {
+                display: none;
+            }
         }
 
         /* === 購物車與彈窗 (保持功能，微調樣式) === */
@@ -670,7 +675,10 @@
         </div>
 
         <div class="copyright">
-            &copy; 2026 Mina Selection. All rights reserved.
+            &copy; 2026 MINA 妝日子. All rights reserved.<br>
+            <span style="opacity: 0.6; font-size: 0.6rem; margin-top: 5px; display: inline-block;">
+                本站僅提供代購服務，商品圖片版權歸各品牌官方所有 / Images from official brand websites.
+            </span>
         </div>
     </footer>
 
