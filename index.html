@@ -350,6 +350,48 @@
             letter-spacing: 1px;
         }
 
+        /* === 新增的連結樣式 (貼在 .footer-links 下面) === */
+
+        .social-link {
+            text-decoration: none;
+            /* 去掉底線 */
+            color: #888;
+            /* 原本是灰色 */
+            transition: all 0.3s;
+            /* 增加變色動畫 */
+            font-family: 'Noto Sans TC', sans-serif;
+            /* 用黑體比較好讀 */
+            letter-spacing: 1px;
+        }
+
+        .social-link:hover {
+            color: #fff;
+            /* 滑鼠移過去變亮白 */
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            /* 加一點發光效果 */
+        }
+
+        .divider {
+            margin: 0 15px;
+            opacity: 0.3;
+            color: #666;
+        }
+
+        /* 手機版優化：螢幕太小時讓它自動換行，不要擠在一起 */
+        @media (max-width: 600px) {
+            .footer-links {
+                display: flex;
+                flex-direction: column;
+                /* 垂直排列 */
+                gap: 15px;
+            }
+
+            .divider {
+                display: none;
+                /* 手機版隱藏分隔線 */
+            }
+        }
+
         .copyright {
             font-size: 0.75rem;
             color: #555;
@@ -520,8 +562,8 @@
     <div class="memo-board">
         <div class="memo-content">
             <span class="memo-title">Notice</span>
-            本月連線商品採預購制，下單後約 10-15 個工作天寄出。<br>
-            部分熱門品項可能提前斷貨，建議儘早下單。
+            商品採預購制，下單後約 10-15 個工作天寄出。<br>
+            部分熱門品項可能提前缺貨，建議儘早下單。
         </div>
     </div>
 
@@ -530,9 +572,19 @@
 
     <footer>
         <div class="footer-logo">Mina．妝日子</div>
+
         <div class="footer-links">
-            INSTAGRAM ｜ CUSTOMER SERVICE ｜ ABOUT US
+            <a href="https://www.instagram.com/mina_k.beautyroom/" target="_blank" class="social-link">
+                INSTAGRAM : mina_k.beautyroom
+            </a>
+
+            <span class="divider">｜</span>
+
+            <a href="https://line.me/R/ti/p/@139gqqwy" target="_blank" class="social-link">
+                LINE OA : @139gqqwy
+            </a>
         </div>
+
         <div class="copyright">
             &copy; 2026 Mina Selection. All rights reserved.
         </div>
