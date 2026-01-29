@@ -148,32 +148,85 @@
             margin: 15px auto 0;
         }
 
-        /* === 公告區：極簡線條風格 === */
+        /* === 公告區樣式優化 (修正字體與對齊) === */
+
+        /* 外框設定 (保持原本的寬度) */
         .memo-board {
             max-width: 700px;
             margin: 0 auto 60px;
             padding: 0 20px;
-            text-align: center;
             position: relative;
         }
 
+        /* 內容區塊 */
         .memo-content {
             background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(5px);
             border: 1px solid rgba(0, 0, 0, 0.05);
-            padding: 25px;
-            font-size: 0.9rem;
-            color: var(--text-sub);
+            padding: 30px 40px;
+            /* 左右空間加大一點，比較舒服 */
+
+            /* 1. 關鍵修正：強制使用黑體，解決數字太小的問題 */
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 0.95rem;
+            color: #666;
+            /* 深灰色 */
             letter-spacing: 0.5px;
+
+            /* 讓整個區塊在畫面中間 */
+            text-align: center;
         }
 
         .memo-title {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.2rem;
+            /* 標題維持英文襯線體 */
+            font-size: 1.4rem;
             font-style: italic;
             color: var(--text-main);
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
+            /* 標題跟內容拉開距離 */
+        }
+
+        /* 2. 新增：列表樣式 (讓文字左對齊) */
+        .memo-list {
+            list-style: none;
+            /* 拿掉醜醜的預設黑點 */
+            padding: 0;
+            margin: 0;
+            display: inline-block;
+            /* 讓列表區塊置中，但裡面的文字向左看齊 */
+            text-align: left;
+            /* 這是文字整齊的關鍵！ */
+        }
+
+        /* 每一行公告的設定 */
+        .memo-list li {
+            position: relative;
+            margin-bottom: 8px;
+            /* 每一行之間的距離 */
+            padding-left: 15px;
+            /* 留一點空間給前面的點點 */
+            line-height: 1.6;
+        }
+
+        /* 3. 自製精緻的小圓點 */
+        .memo-list li::before {
+            content: '·';
+            /* 用這個點 */
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-weight: bold;
+            color: #d4a373;
+            /* 金棕色，呼應主題 */
+        }
+
+        /* 手機版適應：避免文字太靠邊 */
+        @media (max-width: 600px) {
+            .memo-content {
+                padding: 25px 20px;
+            }
         }
 
         /* === 產品列表 === */
@@ -644,8 +697,11 @@
     <div class="memo-board">
         <div class="memo-content">
             <span class="memo-title">Notice</span>
-            商品採預購制，下單後約 10-15 個工作天寄出。<br>
-            部分熱門品項可能提前缺貨，建議儘早下單。
+            <ul class="memo-list">
+                <li>商品採預購制，下單後約 10-15 個工作天寄出。</li>
+                <li>部分熱門品項可能提前缺貨，建議儘早下單。</li>
+                <li>選購完成後請點選「傳送至 LINE官方帳號」，確認訂單與匯款資訊。</li>
+            </ul>
         </div>
     </div>
 
