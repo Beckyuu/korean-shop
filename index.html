@@ -874,13 +874,108 @@
     </div>
 
     <script>
-        /* === 購物車邏輯 (最終中文版) === */
+        /* =========================================
+           1. 商品資料庫 (請在這裡修改你的商品)
+           ========================================= */
+        const products = [
+            {
+                id: 1,
+                name: "Laneige 蘭芝 睡美人晚安面膜",
+                price: 850,
+                image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=500&q=80",
+                tag: "熱銷 TOP 1"
+            },
+            {
+                id: 2,
+                name: "Sulwhasoo 雪花秀 潤燥養膚精華",
+                price: 2280,
+                image: "https://images.unsplash.com/photo-1608248597279-f99d160bfbc8?auto=format&fit=crop&w=500&q=80",
+                tag: "店長推薦"
+            },
+            {
+                id: 3,
+                name: "Innisfree 綠茶籽保濕精華",
+                price: 680,
+                image: "https://images.unsplash.com/photo-1629198688000-71f23e745b6e?auto=format&fit=crop&w=500&q=80",
+                tag: "補水神器"
+            },
+            {
+                id: 4,
+                name: "3CE 九宮格眼影盤 #Overtake",
+                price: 1050,
+                image: "https://images.unsplash.com/photo-1596462502278-27bfdd403348?auto=format&fit=crop&w=500&q=80",
+                tag: "人氣彩妝"
+            },
+            {
+                id: 5,
+                name: "COSRX 蝸牛賦活黏液精華",
+                price: 550,
+                image: "https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=500&q=80",
+                tag: ""
+            },
+            {
+                id: 6,
+                name: "Banila Co. Zero 零感肌卸妝膏",
+                price: 490,
+                image: "https://images.unsplash.com/photo-1556228720-1957be83f360?auto=format&fit=crop&w=500&q=80",
+                tag: "回購率高"
+            }
+        ];
+
+        /* =========================================
+           2. 初始化：把商品畫到網頁上
+           ========================================= */
+        function renderProducts() {
+            // 嘗試抓取網頁上原本顯示 "Loading..." 的區塊
+            // 為了保險，我這裡列出幾種常見的 ID，程式會自動找
+            const container = document.querySelector('.product-grid') || document.getElementById('product-list') || document.querySelector('.products');
+
+            if (!container) {
+                console.error("找不到商品區塊！請確認 HTML 裡有一個 class='product-grid' 或 id='product-list' 的 div");
+                return;
+            }
+
+            // 清空原本的 Loading 文字
+            container.innerHTML = '';
+
+            // 一個一個把商品加進去
+            products.forEach(product => {
+                // 如果有標籤，顯示標籤；沒有則不顯示
+                const tagHtml = product.tag ? `<span class="product-tag">${product.tag}</span>` : '';
+
+                const productCard = `
+                <div class="product-card">
+                    <div class="product-image-box">
+                        <img src="${product.image}" alt="${product.name}">
+                        ${tagHtml}
+                        <button class="add-to-cart-btn" onclick="addToCart('${product.name}', ${product.price}, '${product.image}')">
+                            加入購物車
+                        </button>
+                    </div>
+                    <div class="product-info">
+                        <h3>${product.name}</h3>
+                        <p class="price">$${product.price}</p>
+                    </div>
+                </div>
+            `;
+                container.innerHTML += productCard;
+            });
+        }
+
+        // 當網頁載入完成後，立刻執行渲染
+        window.onload = function () {
+            renderProducts();
+        };
+
+        /* =========================================
+           3. 購物車邏輯 (中文版 + iOPEN Mall)
+           ========================================= */
         let cart = [];
 
-        // 1. 打開/關閉購物車
+        // 打開/關閉購物車
         function toggleCart() {
             const modal = document.getElementById('cartModal');
-            modal.classList.toggle('show');
+            if (modal) modal.classList.toggle('show');
         }
 
         // 點擊背景關閉
@@ -891,34 +986,32 @@
             }
         }
 
-        // 2. 加入購物車
+        // 加入購物車
         function addToCart(name, price, image) {
-            // 檢查是否已經在購物車裡
             const existingItem = cart.find(item => item.name === name);
-
             if (existingItem) {
                 existingItem.quantity += 1;
             } else {
-                // 如果沒有圖片，給個預設值以免報錯
-                if (!image) image = 'https://via.placeholder.com/50';
+                if (!image) image = '';
                 cart.push({ name, price, image, quantity: 1 });
             }
-
-            renderCart(); // 更新畫面
-            toggleCart(); // 自動打開購物車讓客人看一眼 (如果不想要自動打開，這行可以刪掉)
+            renderCart();
+            toggleCart(); // 自動打開讓客人看
         }
 
-        // 3. 移除商品
+        // 移除商品
         function removeFromCart(index) {
             cart.splice(index, 1);
             renderCart();
         }
 
-        // 4. 渲染購物車畫面 (把商品畫出來)
+        // 渲染購物車畫面
         function renderCart() {
             const cartItemsContainer = document.getElementById('cart-items');
             const cartTotalElement = document.getElementById('cart-total');
             const cartCountElement = document.getElementById('cart-count');
+
+            if (!cartItemsContainer) return;
 
             cartItemsContainer.innerHTML = '';
             let total = 0;
@@ -937,44 +1030,35 @@
                     cartItemsContainer.innerHTML += `
                     <div style="display: flex; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed #eee;">
                         <div style="width: 50px; height: 50px; background: #f0f0f0; border-radius: 4px; overflow: hidden; margin-right: 10px;">
-                            <img src="${item.image}" style="width: 100%; height: 100%; object-fit: cover;" alt="商品">
+                            <img src="${item.image}" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
-                        
                         <div style="flex: 1;">
                             <h4 style="margin: 0; font-size: 0.9rem; color: #333; font-weight: 500;">${item.name}</h4>
                             <p style="margin: 5px 0 0; font-size: 0.85rem; color: #888;">$${item.price} x ${item.quantity}</p>
                         </div>
-
                         <button onclick="removeFromCart(${index})" style="background: none; border: none; color: #ccc; cursor: pointer; font-size: 1.2rem; padding: 0 5px;">×</button>
                     </div>
                 `;
                 });
             }
 
-            // 更新總金額與數量
-            cartTotalElement.innerText = '$' + total;
-            if (cartCountElement) cartCountElement.innerText = count;
-
-            // 如果數量大於 0，顯示小紅點；否則隱藏
-            if (count > 0) {
-                cartCountElement.style.display = 'flex';
-            } else {
-                cartCountElement.style.display = 'none';
+            if (cartTotalElement) cartTotalElement.innerText = '$' + total;
+            if (cartCountElement) {
+                cartCountElement.innerText = count;
+                cartCountElement.style.display = count > 0 ? 'flex' : 'none';
             }
         }
 
-        // 5. 傳送至 LINE (關鍵功能)
+        // 傳送至 LINE
         function sendToLine() {
             if (cart.length === 0) {
                 alert('購物車是空的喔！無法結帳');
                 return;
             }
 
-            // 抓取客人選的取貨方式 (iOPEN Mall 或 宅配)
             const shippingSelect = document.getElementById('shippingSelect');
-            const shippingMethod = shippingSelect ? shippingSelect.value : 'iOPEN Mall'; // 預設值
+            const shippingMethod = shippingSelect ? shippingSelect.value : 'iOPEN Mall';
 
-            // 整理訂單文字
             let message = "嗨 Mina！我想訂購以下商品：\n------------------\n";
             let total = 0;
 
@@ -989,7 +1073,6 @@
             message += `------------------\n`;
             message += `麻煩幫我確認訂單，謝謝！`;
 
-            // 進行編碼並開啟 LINE
             const encodedMessage = encodeURIComponent(message);
             window.open(`https://line.me/R/oaMessage/@139gqqwy/?${encodedMessage}`, '_blank');
         }
