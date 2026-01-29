@@ -837,6 +837,34 @@
 
     <script>
         const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS_Cy5OSihu86kbG6c2iGLRUFSSVNnYuG_yanPRNuIF65KtJ_K9r-kXuz1IdWAbxnwfmvAWvWDjlywe/pub?output=csv';
+        // 🟢 新增這段：用來正確解析 CSV 的工具函式
+        function parseCSVLine(str) {
+            const result = [];
+            let start = 0;
+            let inQuotes = false;
+
+            for (let i = 0; i < str.length; i++) {
+                if (str[i] === '"') {
+                    inQuotes = !inQuotes; // 判斷是否在引號內
+                } else if (str[i] === ',' && !inQuotes) {
+                    // 如果遇到逗號，且不在引號內，才切分
+                    let field = str.substring(start, i).trim();
+                    // 去除欄位前後的引號
+                    if (field.startsWith('"') && field.endsWith('"')) {
+                        field = field.substring(1, field.length - 1).replace(/""/g, '"');
+                    }
+                    result.push(field);
+                    start = i + 1;
+                }
+            }
+            // 處理最後一個欄位
+            let lastField = str.substring(start).trim();
+            if (lastField.startsWith('"') && lastField.endsWith('"')) {
+                lastField = lastField.substring(1, lastField.length - 1).replace(/""/g, '"');
+            }
+            result.push(lastField);
+            return result;
+        }
 
         let allProductsData = [];
         let cart = [];
@@ -848,7 +876,7 @@
             try {
                 const response = await fetch(GOOGLE_SHEET_CSV_URL);
                 const data = await response.text();
-                const rows = data.split('\n').map(row => row.split(','));
+                const rows = data.split('\n').map(row => parseCSVLine(row));
                 rows.shift();
 
                 loading.style.display = 'none';
