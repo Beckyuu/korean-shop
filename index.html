@@ -193,33 +193,37 @@
             margin: 0;
         }
 
+        /* 每一行的樣式 (修正換行版) */
         .memo-list li {
             position: relative;
-            margin-bottom: 5px;
-            /* 行距縮小 */
-            padding-left: 15px;
-
+            margin-bottom: 8px;   /* 行距微調 */
+            
+            /* 圓點與文字的距離 (保留你剛剛覺得不錯的距離) */
+            padding-left: 25px;   
+            
             font-family: 'Noto Sans TC', sans-serif;
-            /* 內文縮小，像說明書的小字 */
             font-size: 0.8rem;
             color: #666;
-            /* 深灰色 */
-            line-height: 1.5;
-
-            /* 電腦版強制不換行，保持整齊 */
-            white-space: nowrap;
+            line-height: 1.6;     /* 行高設定 1.6，這樣兩行字之間才不會太擠 */
+            
+            /* 修改這裡：原本是 nowrap (不換行)，改成 normal (允許換行) */
+            white-space: normal;  
         }
 
-        /* 點點也縮小 */
+        /* 圓點設定 (確保它對齊第一行) */
         .memo-list li::before {
             content: '·';
             position: absolute;
             left: 5px;
-            top: 0;
+            
+            /* 修改這裡：原本是 top: 0，改成 top: 0px 搭配 line-height 對齊 */
+            /* 這樣圓點會對齊第一行文字，而不是跑去兩行中間 */
+            top: 0px; 
+            
             font-weight: bold;
             color: #d4a373;
         }
-
+        
         /* 手機版設定 */
         @media (max-width: 768px) {
             .memo-list li {
@@ -701,12 +705,16 @@
     <div class="memo-board">
         <span class="memo-title">Notice</span>
         <ul class="memo-list">
-            <li>本頁商品皆為代購，下單後約 10-15 個工作天寄出。</li>
+            <li>全館預購制，下單後約 10-15 個工作天寄出。</li>
             <li>部分熱門品項可能提前缺貨，建議儘早下單。</li>
-            <li>選購後請點選「傳送至 LINE」，確認訂單與匯款資訊。</li>
+            
             <li>
-                <a href="https://myship.7-11.com.tw/general/detail/GM2508314219264" target="_blank"
-                    style="text-decoration: underline; color: #bfa092;">
+                選購完成至購物車內點選「傳送至 LINE官方帳號」，<br>
+                確認訂單與匯款資訊。
+            </li>
+            
+            <li>
+                <a href="https://myship.7-11.com.tw/general/detail/GM2508314219264" target="_blank" style="text-decoration: underline; color: #bfa092;">
                     現貨免等專區 (7-11 賣貨便直購) ➝
                 </a>
             </li>
