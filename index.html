@@ -1019,27 +1019,37 @@
             message += `下單平台: ${selectedShipping}`;
             // 這裡不用再寫任何結尾語，或者簡單加個 "謝謝" 也可以，目前保持乾淨
 
-            // === 修改：使用 location.href 在手機上喚醒 App 的效果通常比 window.open 更好 ===
-            window.location.href = `https://line.me/R/oaMessage/@139gqqwy/?${encodeURIComponent(message)}`;
-        }
+            // === 修改：智慧判斷裝置，讓電腦版也能正常運作 ===
 
-        function showDetails(index) {
-            const product = allProductsData[index];
-            const modal = document.getElementById('detailModal');
-            document.getElementById('modalTitle').innerText = product.name;
-            let content = '';
-            if (product.detailImgUrl) content += `<img src="${product.detailImgUrl}" style="width:100%; display:block;">`;
-            document.getElementById('modalBody').innerHTML = content;
-            modal.style.display = 'flex';
-        }
-        function closeModal(event) { if (event.target.classList.contains('modal-overlay') || event.target.classList.contains('modal-close-btn')) document.getElementById('detailModal').style.display = 'none'; }
+            // 檢查是否為行動裝置 (手機/平板)
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-        // 動畫：簡單的星星閃爍
-        const style = document.createElement('style');
-        style.innerHTML = `@keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }`;
-        document.head.appendChild(style);
+            if (isMobile) {
+                // 【手機版】體驗最好：直接打開官方帳號對話框，並貼上文字
+                window.location.href = `https://line.me/R/oaMessage/@139gqqwy/?${encodeURIComponent(message)}`;
+            } else {
+                // 【電腦版】通用模式：使用 msg/text 分享連結
+                // 這會觸發電腦版 LINE 跳出「選擇傳送對象」視窗，客人選您的帳號即可，文字不會不見！
+                window.open(`https://line.me/R/msg/text/?${encodeURIComponent(message)}`, '_blank');
+            }
 
-        fetchProducts();
+            function showDetails(index) {
+                const product = allProductsData[index];
+                const modal = document.getElementById('detailModal');
+                document.getElementById('modalTitle').innerText = product.name;
+                let content = '';
+                if (product.detailImgUrl) content += `<img src="${product.detailImgUrl}" style="width:100%; display:block;">`;
+                document.getElementById('modalBody').innerHTML = content;
+                modal.style.display = 'flex';
+            }
+            function closeModal(event) { if (event.target.classList.contains('modal-overlay') || event.target.classList.contains('modal-close-btn')) document.getElementById('detailModal').style.display = 'none'; }
+
+            // 動畫：簡單的星星閃爍
+            const style = document.createElement('style');
+            style.innerHTML = `@keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }`;
+            document.head.appendChild(style);
+
+            fetchProducts();
     </script>
 </body>
 
