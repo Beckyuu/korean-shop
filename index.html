@@ -196,20 +196,18 @@
         /* 每一行的樣式 (修正換行版) */
         .memo-list li {
             position: relative;
-            margin-bottom: 8px;
-            /* 行距微調 */
-
+            margin-bottom: 8px;   /* 行距微調 */
+            
             /* 圓點與文字的距離 (保留你剛剛覺得不錯的距離) */
-            padding-left: 25px;
-
+            padding-left: 25px;   
+            
             font-family: 'Noto Sans TC', sans-serif;
             font-size: 0.8rem;
             color: #666;
-            line-height: 1.6;
-            /* 行高設定 1.6，這樣兩行字之間才不會太擠 */
-
+            line-height: 1.6;     /* 行高設定 1.6，這樣兩行字之間才不會太擠 */
+            
             /* 修改這裡：原本是 nowrap (不換行)，改成 normal (允許換行) */
-            white-space: normal;
+            white-space: normal;  
         }
 
         /* 圓點設定 (確保它對齊第一行) */
@@ -217,11 +215,11 @@
             content: '·';
             position: absolute;
             left: 5px;
-
+            
             /* 修改這裡：原本是 top: 0，改成 top: 0px 搭配 line-height 對齊 */
             /* 這樣圓點會對齊第一行文字，而不是跑去兩行中間 */
-            top: 0px;
-
+            top: 0px; 
+            
             font-weight: bold;
             color: #d4a373;
         }
@@ -540,74 +538,41 @@
             }
         }
 
-        /* === 購物車與彈窗 (升級版：顯眼金棕色 + 呼吸動畫) === */
-
-        /* 1. 購物車懸浮按鈕：變大、變顯眼 */
+        /* === 購物車與彈窗 (保持功能，微調樣式) === */
         #cart-float-btn {
             position: fixed;
             bottom: 30px;
             right: 30px;
-            z-index: 1000;
-            /* 確保在最上層 */
-
-            /* 尺寸加大 */
-            width: 70px;
-            height: 70px;
-
-            /* 改成金棕色背景 */
-            background: #d4a373;
+            width: 55px;
+            height: 55px;
+            background: var(--text-main);
             color: white;
-
             border-radius: 50%;
+            /* 圓形保留，方便點擊 */
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
             cursor: pointer;
-
-            /* 強力陰影：讓它浮起來 */
-            box-shadow: 0 5px 20px rgba(212, 163, 115, 0.6);
-
-            /* 動畫設定 */
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 100;
+            transition: transform 0.2s;
         }
 
-        /* 滑鼠移過去的效果：放大 + 變色 */
-        #cart-float-btn:hover {
-            transform: scale(1.1) rotate(-5deg);
-            /* 微微放大傾斜，很俏皮 */
-            background: #c49060;
-            /* 顏色變深一點 */
-        }
-
-        /* 購物車裡面的圖示大小 */
-        #cart-float-btn svg {
-            width: 32px;
-            height: 32px;
-            stroke-width: 2;
-        }
-
-        /* 2. 數量小紅點 */
         #cart-count {
             position: absolute;
-            top: 0;
-            right: 0;
+            top: -5px;
+            right: -5px;
             background: #bfa092;
-            /* 莫蘭迪紅 */
             color: white;
             border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            font-size: 0.85rem;
-            font-weight: bold;
+            width: 22px;
+            height: 22px;
+            font-size: 0.75rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 2px solid #fff;
-            /* 加個白邊，比較精緻 */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
-        /* 3. 購物車滑出視窗 (保持原本邏輯，只微調陰影) */
         .cart-modal {
             display: none;
             position: fixed;
@@ -615,12 +580,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            /* 背景黑一點，比較聚焦 */
+            background: rgba(0, 0, 0, 0.3);
             z-index: 2000;
             justify-content: flex-end;
-            backdrop-filter: blur(2px);
-            /* 背景模糊，更有質感 */
         }
 
         .cart-modal.show {
@@ -632,10 +594,10 @@
             width: 100%;
             max-width: 420px;
             height: 100%;
-            padding: 30px;
+            padding: 40px;
             display: flex;
             flex-direction: column;
-            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.2);
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
             animation: slideLeft 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -649,32 +611,16 @@
             }
         }
 
-        /* 4. 結帳按鈕 (改得更漂亮) */
         .btn-checkout {
             width: 100%;
-            padding: 15px;
-            /* 改成 LINE 的綠色，或是你要的金棕色也可以 */
+            padding: 18px;
             background: #06c755;
             color: white;
             border: none;
-            font-size: 1rem;
             font-weight: 500;
             cursor: pointer;
             margin-top: 20px;
             letter-spacing: 1px;
-            border-radius: 8px;
-            /* 圓角 */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            /* 圖示跟文字的距離 */
-            transition: background 0.3s;
-        }
-
-        .btn-checkout:hover {
-            background: #05b34c;
-            /* 深綠色 */
         }
 
         /* Loading */
@@ -761,15 +707,14 @@
         <ul class="memo-list">
             <li>本頁商品皆為代購，下單後約 10-15 個工作天寄出。</li>
             <li>部分熱門品項可能提前缺貨，建議儘早下單。</li>
-
+            
             <li>
                 選購完成至購物車內點選「 傳送至 LINE官方帳號 」，<br>
                 方便確認訂單與匯款資訊。
             </li>
-
+            
             <li>
-                <a href="https://myship.7-11.com.tw/general/detail/GM2508314219264" target="_blank"
-                    style="text-decoration: underline; color: #bfa092;">
+                <a href="https://myship.7-11.com.tw/general/detail/GM2508314219264" target="_blank" style="text-decoration: underline; color: #bfa092;">
                     現貨免等專區 (7-11 賣貨便直購) ➝
                 </a>
             </li>
@@ -814,53 +759,39 @@
     </footer>
 
     <div id="cart-float-btn" onclick="toggleCart()">
-        <div id="cart-count">0</div>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round">
-            <circle cx="9" cy="21" r="1"></circle>
-            <circle cx="20" cy="21" r="1"></circle>
-            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
         </svg>
+        <div id="cart-count">0</div>
     </div>
 
-    <div class="cart-modal" id="cartModal">
+    <div id="cartModal" class="cart-modal" onclick="closeCart(event)">
         <div class="cart-content">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h3 style="font-family: 'Noto Sans TC'; font-size: 1.2rem; color: #333; margin: 0;">您的購物車</h3>
-                <button onclick="toggleCart()"
-                    style="background:none; border:none; font-size: 1.5rem; cursor:pointer;">×</button>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+                <h3 style="font-family:'Cormorant Garamond', serif; font-size:1.8rem; font-style:italic;">Your Cart</h3>
+                <span onclick="toggleCart()" style="cursor:pointer; font-size:1.5rem; opacity:0.5;">×</span>
             </div>
 
-            <div id="cart-items" style="flex: 1; overflow-y: auto;">
-                <div style="text-align: center; color: #999; margin-top: 50px; font-size: 0.9rem;">
-                    購物車目前是空的
-                </div>
-            </div>
+            <div style="flex-grow:1; overflow-y:auto;" id="cartItems"></div>
 
-            <div style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px;">
-                <div style="display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 15px;">
-                    <span>總金額</span>
-                    <span id="cart-total">$0</span>
+            <div style="margin-top:20px; border-top:1px solid #eee; padding-top:20px;">
+                <div style="margin-bottom:20px; font-size:0.9rem; color:#666;">
+                    <p style="margin-bottom:10px; font-weight:bold; color:#2c2c2c;">選擇下單平台：</p>
+                    <label style="display:block; margin-bottom:8px; cursor:pointer;">
+                        <input type="radio" name="shipping" value="賣貨便" style="margin-right:8px;"> 7-11 賣貨便
+                    </label>
+                    <label style="display:block; cursor:pointer;">
+                        <input type="radio" name="shipping" value="iOPEN Mall" style="margin-right:8px;"> 7-11 iOPEN
+                        Mall
+                    </label>
                 </div>
-
-                <div style="margin-bottom: 15px;">
-                    <label style="display:block; margin-bottom:5px; color:#666; font-size:0.85rem;">取貨方式：</label>
-                    <select id="shippingSelect"
-                        style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; font-family:'Noto Sans TC'; background:#f9f9f9;">
-                        <option value="iOPEN Mall">iOPEN Mall (貨到付款)</option>
-                        <option value="宅配">宅配寄送</option>
-                    </select>
-                </div>
-
-                <button class="btn-checkout" onclick="sendToLine()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" style="width:20px; height:20px;">
-                        <path
-                            d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
-                        </path>
-                    </svg>
-                    傳送至 LINE 官方帳號
-                </button>
+                <div id="cartTotal"
+                    style="font-family:'Cormorant Garamond', serif; font-size:1.4rem; font-weight:600; text-align:right;">
+                    Total: NT$ 0</div>
+                <button class="btn-checkout" onclick="checkoutViaLine()">CHECKOUT VIA LINE</button>
             </div>
         </div>
     </div>
@@ -874,208 +805,189 @@
     </div>
 
     <script>
-        /* =========================================
-           1. 商品資料庫 (請在這裡修改你的商品)
-           ========================================= */
-        const products = [
-            {
-                id: 1,
-                name: "Laneige 蘭芝 睡美人晚安面膜",
-                price: 850,
-                image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=500&q=80",
-                tag: "熱銷 TOP 1"
-            },
-            {
-                id: 2,
-                name: "Sulwhasoo 雪花秀 潤燥養膚精華",
-                price: 2280,
-                image: "https://images.unsplash.com/photo-1608248597279-f99d160bfbc8?auto=format&fit=crop&w=500&q=80",
-                tag: "店長推薦"
-            },
-            {
-                id: 3,
-                name: "Innisfree 綠茶籽保濕精華",
-                price: 680,
-                image: "https://images.unsplash.com/photo-1629198688000-71f23e745b6e?auto=format&fit=crop&w=500&q=80",
-                tag: "補水神器"
-            },
-            {
-                id: 4,
-                name: "3CE 九宮格眼影盤 #Overtake",
-                price: 1050,
-                image: "https://images.unsplash.com/photo-1596462502278-27bfdd403348?auto=format&fit=crop&w=500&q=80",
-                tag: "人氣彩妝"
-            },
-            {
-                id: 5,
-                name: "COSRX 蝸牛賦活黏液精華",
-                price: 550,
-                image: "https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=500&q=80",
-                tag: ""
-            },
-            {
-                id: 6,
-                name: "Banila Co. Zero 零感肌卸妝膏",
-                price: 490,
-                image: "https://images.unsplash.com/photo-1556228720-1957be83f360?auto=format&fit=crop&w=500&q=80",
-                tag: "回購率高"
-            }
-        ];
+        const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS_Cy5OSihu86kbG6c2iGLRUFSSVNnYuG_yanPRNuIF65KtJ_K9r-kXuz1IdWAbxnwfmvAWvWDjlywe/pub?output=csv';
 
-        /* =========================================
-           2. 初始化：把商品畫到網頁上
-           ========================================= */
-        function renderProducts() {
-            // 嘗試抓取網頁上原本顯示 "Loading..." 的區塊
-            // 為了保險，我這裡列出幾種常見的 ID，程式會自動找
-            const container = document.querySelector('.product-grid') || document.getElementById('product-list') || document.querySelector('.products');
-
-            if (!container) {
-                console.error("找不到商品區塊！請確認 HTML 裡有一個 class='product-grid' 或 id='product-list' 的 div");
-                return;
-            }
-
-            // 清空原本的 Loading 文字
-            container.innerHTML = '';
-
-            // 一個一個把商品加進去
-            products.forEach(product => {
-                // 如果有標籤，顯示標籤；沒有則不顯示
-                const tagHtml = product.tag ? `<span class="product-tag">${product.tag}</span>` : '';
-
-                const productCard = `
-                <div class="product-card">
-                    <div class="product-image-box">
-                        <img src="${product.image}" alt="${product.name}">
-                        ${tagHtml}
-                        <button class="add-to-cart-btn" onclick="addToCart('${product.name}', ${product.price}, '${product.image}')">
-                            加入購物車
-                        </button>
-                    </div>
-                    <div class="product-info">
-                        <h3>${product.name}</h3>
-                        <p class="price">$${product.price}</p>
-                    </div>
-                </div>
-            `;
-                container.innerHTML += productCard;
-            });
-        }
-
-        // 當網頁載入完成後，立刻執行渲染
-        window.onload = function () {
-            renderProducts();
-        };
-
-        /* =========================================
-           3. 購物車邏輯 (中文版 + iOPEN Mall)
-           ========================================= */
+        let allProductsData = [];
         let cart = [];
 
-        // 打開/關閉購物車
+        async function fetchProducts() {
+            const loading = document.getElementById('loading');
+            const container = document.getElementById('product-list');
+
+            try {
+                const response = await fetch(GOOGLE_SHEET_CSV_URL);
+                const data = await response.text();
+                const rows = data.split('\n').map(row => row.split(','));
+                rows.shift();
+
+                loading.style.display = 'none';
+                allProductsData = [];
+
+                rows.forEach((row, index) => {
+                    if (row.length < 4) return;
+                    const rawSpec = row[1] ? row[1].trim() : '';
+                    const variants = rawSpec.includes('|') ? rawSpec.split('|').map(s => s.trim()) : (rawSpec ? [rawSpec] : []);
+
+                    const product = {
+                        id: index,
+                        name: row[0] ? row[0].trim() : 'Unnamed',
+                        variants: variants,
+                        price: row[2] ? row[2].trim() : '0',
+                        imgUrl: row[3] ? row[3].trim() : '',
+                        detailImgUrl: row[4] ? row[4].trim() : '',
+                        description: row[5] ? row[5].trim() : '',
+                        selectedVariant: null
+                    };
+
+                    product.hasDetails = product.detailImgUrl !== '';
+                    if (product.variants.length === 1) product.selectedVariant = product.variants[0];
+                    else if (product.variants.length === 0) product.selectedVariant = '單一款式';
+
+                    allProductsData.push(product);
+
+                    const card = document.createElement('div');
+                    card.className = 'product-card';
+
+                    // === 增加豐富度：隨機給一些商品加上標籤 (僅視覺效果) ===
+                    let badgeHtml = '';
+                    if (index < 2) badgeHtml = `<div class="badge new">NEW</div>`;
+                    else if (index === 3 || index === 5) badgeHtml = `<div class="badge hot">HOT</div>`;
+
+                    let variantsHtml = '';
+                    if (product.variants.length > 1) {
+                        variantsHtml = `<div class="variant-container" id="variants-${index}">`;
+                        product.variants.forEach(v => {
+                            variantsHtml += `<div class="variant-btn" onclick="selectVariant(${index}, '${v}', this)">${v}</div>`;
+                        });
+                        variantsHtml += `</div>`;
+                    } else if (product.variants.length === 1 && product.variants[0] !== '') {
+                        variantsHtml = `<div class="desc-text" style="text-align:center;">${product.variants[0]}</div>`;
+                    }
+
+                    let stickerHtml = '';
+                    if (product.hasDetails) {
+                        stickerHtml = `<div class="more-sticker" onclick="showDetails(${index})" title="View Details">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        </div>`;
+                    }
+
+                    let options = ''; for (let i = 1; i <= 5; i++) options += `<option value="${i}">${i}</option>`;
+
+                    card.innerHTML = `
+                        <div class="img-wrapper">
+                            ${badgeHtml}
+                            <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
+                            ${stickerHtml}
+                        </div>
+                        <div class="info">
+                            <h3 class="name">${product.name}</h3>
+                            ${product.description ? `<span class="desc-text">${product.description}</span>` : ''}
+                            
+                            <span class="price">NT$ ${product.price}</span>
+                            
+                            ${variantsHtml}
+                            
+                            <div class="action-row">
+                                <select id="qty-${index}">${options}</select>
+                                <button class="btn-add" onclick="addToCart(${index})">ADD</button>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (error) { console.error(error); loading.innerHTML = 'Error loading products.'; }
+        }
+
+        // --- 以下 JS 功能邏輯保持不變 ---
+        function selectVariant(productIndex, variantName, btnElement) {
+            allProductsData[productIndex].selectedVariant = variantName;
+            const container = document.getElementById(`variants-${productIndex}`);
+            for (let btn of container.getElementsByClassName('variant-btn')) { btn.classList.remove('selected'); }
+            btnElement.classList.add('selected');
+        }
+
+        function addToCart(index) {
+            const product = allProductsData[index];
+            const qty = parseInt(document.getElementById(`qty-${index}`).value);
+            if (product.variants.length > 1 && !product.selectedVariant) { alert('Please select a variant.'); return; }
+            const item = { name: product.name, spec: product.selectedVariant, price: parseInt(product.price), qty: qty };
+            cart.push(item); updateCartIcon();
+            // 這裡改成比較安靜的通知，不要一直跳 alert 
+            const btn = document.querySelectorAll('.btn-add')[index];
+            const originalText = btn.innerText;
+            btn.innerText = 'ADDED!';
+            btn.style.background = '#2c2c2c';
+            btn.style.color = '#fff';
+            setTimeout(() => { btn.innerText = originalText; btn.style.background = ''; btn.style.color = ''; }, 1000);
+        }
+
+        function updateCartIcon() { document.getElementById('cart-count').innerText = cart.length; }
+
         function toggleCart() {
             const modal = document.getElementById('cartModal');
-            if (modal) modal.classList.toggle('show');
+            if (!modal.classList.contains('show')) { renderCartItems(); modal.classList.add('show'); }
+            else { modal.classList.remove('show'); }
         }
+        function closeCart(e) { if (e.target.classList.contains('cart-modal')) document.getElementById('cartModal').classList.remove('show'); }
 
-        // 點擊背景關閉
-        window.onclick = function (event) {
-            const modal = document.getElementById('cartModal');
-            if (event.target == modal) {
-                modal.classList.remove('show');
-            }
-        }
+        function renderCartItems() {
+            const container = document.getElementById('cartItems');
+            const totalEl = document.getElementById('cartTotal');
+            if (cart.length === 0) { container.innerHTML = '<p style="text-align:center; color:#999; margin-top:40px;">Your cart is empty.</p>'; totalEl.innerText = 'Total: NT$ 0'; return; }
 
-        // 加入購物車
-        function addToCart(name, price, image) {
-            const existingItem = cart.find(item => item.name === name);
-            if (existingItem) {
-                existingItem.quantity += 1;
-            } else {
-                if (!image) image = '';
-                cart.push({ name, price, image, quantity: 1 });
-            }
-            renderCart();
-            toggleCart(); // 自動打開讓客人看
-        }
-
-        // 移除商品
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            renderCart();
-        }
-
-        // 渲染購物車畫面
-        function renderCart() {
-            const cartItemsContainer = document.getElementById('cart-items');
-            const cartTotalElement = document.getElementById('cart-total');
-            const cartCountElement = document.getElementById('cart-count');
-
-            if (!cartItemsContainer) return;
-
-            cartItemsContainer.innerHTML = '';
-            let total = 0;
-            let count = 0;
-
-            if (cart.length === 0) {
-                cartItemsContainer.innerHTML = `
-                <div style="text-align: center; color: #999; margin-top: 50px; font-size: 0.9rem;">
-                    購物車目前是空的
-                </div>`;
-            } else {
-                cart.forEach((item, index) => {
-                    total += item.price * item.quantity;
-                    count += item.quantity;
-
-                    cartItemsContainer.innerHTML += `
-                    <div style="display: flex; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed #eee;">
-                        <div style="width: 50px; height: 50px; background: #f0f0f0; border-radius: 4px; overflow: hidden; margin-right: 10px;">
-                            <img src="${item.image}" style="width: 100%; height: 100%; object-fit: cover;">
-                        </div>
-                        <div style="flex: 1;">
-                            <h4 style="margin: 0; font-size: 0.9rem; color: #333; font-weight: 500;">${item.name}</h4>
-                            <p style="margin: 5px 0 0; font-size: 0.85rem; color: #888;">$${item.price} x ${item.quantity}</p>
-                        </div>
-                        <button onclick="removeFromCart(${index})" style="background: none; border: none; color: #ccc; cursor: pointer; font-size: 1.2rem; padding: 0 5px;">×</button>
+            let html = ''; let total = 0;
+            cart.forEach((item, idx) => {
+                const subtotal = item.price * item.qty; total += subtotal;
+                html += `<div style="display:flex; justify-content:space-between; padding:15px 0; border-bottom:1px solid #f5f5f5;">
+                    <div><div style="font-weight:500; color:#333;">${item.name}</div><div style="font-size:0.85rem; color:#999; margin-top:4px;">${item.spec} x ${item.qty}</div></div>
+                    <div style="text-align:right;">
+                        <div style="font-weight:600;">NT$ ${subtotal}</div>
+                        <div style="color:#ccc; cursor:pointer; font-size:0.8rem; margin-top:5px;" onclick="removeFromCart(${idx})">REMOVE</div>
                     </div>
-                `;
-                });
-            }
-
-            if (cartTotalElement) cartTotalElement.innerText = '$' + total;
-            if (cartCountElement) {
-                cartCountElement.innerText = count;
-                cartCountElement.style.display = count > 0 ? 'flex' : 'none';
-            }
-        }
-
-        // 傳送至 LINE
-        function sendToLine() {
-            if (cart.length === 0) {
-                alert('購物車是空的喔！無法結帳');
-                return;
-            }
-
-            const shippingSelect = document.getElementById('shippingSelect');
-            const shippingMethod = shippingSelect ? shippingSelect.value : 'iOPEN Mall';
-
-            let message = "嗨 Mina！我想訂購以下商品：\n------------------\n";
-            let total = 0;
-
-            cart.forEach(item => {
-                message += `▪ ${item.name} x${item.quantity} ($${item.price * item.quantity})\n`;
-                total += item.price * item.quantity;
+                </div>`;
             });
-
-            message += `------------------\n`;
-            message += `💰 總金額：$${total}\n`;
-            message += `📦 取貨方式：${shippingMethod}\n`;
-            message += `------------------\n`;
-            message += `麻煩幫我確認訂單，謝謝！`;
-
-            const encodedMessage = encodeURIComponent(message);
-            window.open(`https://line.me/R/oaMessage/@139gqqwy/?${encodedMessage}`, '_blank');
+            container.innerHTML = html; totalEl.innerText = `Total: NT$ ${total}`;
         }
+
+        function removeFromCart(idx) { cart.splice(idx, 1); updateCartIcon(); renderCartItems(); }
+
+        function checkoutViaLine() {
+            if (cart.length === 0) return;
+            const shippingRadios = document.getElementsByName('shipping');
+            let selectedShipping = null;
+            for (const radio of shippingRadios) { if (radio.checked) { selectedShipping = radio.value; break; } }
+            if (!selectedShipping) { alert('請選擇下單平台 (7-11 賣貨便 or iOPEN Mall)'); return; }
+
+            let message = "Hi! I would like to order:\n------------------\n";
+            let total = 0;
+            cart.forEach(item => {
+                total += item.price * item.qty;
+                message += `${item.name} [${item.spec}] x${item.qty} \n`;
+            });
+            message += "------------------\n";
+            message += `Total: NT$ ${total}\n`;
+            message += `Platform: ${selectedShipping}\n\n`;
+            message += "Please confirm stock. Thank you!";
+            window.open(`https://line.me/R/msg/text/?${encodeURIComponent(message)}`, '_blank');
+        }
+
+        function showDetails(index) {
+            const product = allProductsData[index];
+            const modal = document.getElementById('detailModal');
+            document.getElementById('modalTitle').innerText = product.name;
+            let content = '';
+            if (product.detailImgUrl) content += `<img src="${product.detailImgUrl}" style="width:100%; display:block;">`;
+            document.getElementById('modalBody').innerHTML = content;
+            modal.style.display = 'flex';
+        }
+        function closeModal(event) { if (event.target.classList.contains('modal-overlay') || event.target.classList.contains('modal-close-btn')) document.getElementById('detailModal').style.display = 'none'; }
+
+        // 動畫：簡單的星星閃爍
+        const style = document.createElement('style');
+        style.innerHTML = `@keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }`;
+        document.head.appendChild(style);
+
+        fetchProducts();
     </script>
 </body>
 
