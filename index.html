@@ -36,16 +36,19 @@
         body {
             font-family: 'Cormorant Garamond', 'Noto Sans TC', sans-serif;
 
-            /* === 選項三：高級紙質感 === */
-            background-color: #f0ebe5;
-            /* 比較深的莫蘭迪灰泥色 */
+            /* === 選項一：流動光暈 === */
+            background-color: #fdfbf7;
+            /* 溫暖的米白底 */
 
-            /* 這裡使用一個雜訊紋理圖 */
-            background-image: url("https://www.transparenttextures.com/patterns/cream-paper.png");
+            /* 這裡用了三個顏色的漸層光球，交疊出豐富感 */
+            background-image:
+                radial-gradient(at 40% 20%, rgba(212, 163, 115, 0.15) 0px, transparent 50%),
+                radial-gradient(at 80% 0%, rgba(181, 131, 141, 0.1) 0px, transparent 50%),
+                radial-gradient(at 0% 50%, rgba(229, 152, 155, 0.1) 0px, transparent 50%);
 
-            background-repeat: repeat;
-            /* 讓紋理重複鋪滿 */
             background-attachment: fixed;
+            /* 這行很重要！讓背景固定住，滑動時有層次感 */
+            background-size: 100% 100%;
 
             color: var(--text-main);
             line-height: 1.7;
