@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> │Mina．妝日子│ Selection </title>
     <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Sans+TC:wght@300;400;500;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Sans+TC:wght@300;400;500&family=Noto+Serif+TC:wght@300;500&display=swap"
         rel="stylesheet">
 
     <style>
@@ -383,40 +383,37 @@
         }
 
         /* === 極簡瘦身版 Footer === */
+        /* === 最終優雅版 Footer === */
         footer {
             background-color: #1a1a1a;
-            /* 維持深黑底色，質感才好 */
             color: #fff;
-
-            /* 修改這裡：把原本的 60px 改成 30px，讓高度變扁，看起來才不會空 */
-            padding: 30px 20px;
-
+            padding: 40px 20px;
+            /* 高度適中 */
             text-align: center;
             margin-top: 60px;
         }
 
-        /* 新的簡約 Logo 樣式 */
+        /* LOGO 設定：改成宋體，更有氣質 */
         .footer-logo-simple {
-            font-family: 'Cormorant Garamond', 'Noto Sans TC', sans-serif;
-            /* 混搭字體 */
-            font-size: 1.2rem;
-            /* 字不用太大，精緻就好 */
-            letter-spacing: 3px;
-            /* 字距拉開，這是高級感的關鍵 */
+            /* 這裡改成 Noto Serif TC (宋體) */
+            font-family: 'Noto Serif TC', serif;
+
+            font-size: 1.6rem;
+            /* 字體放大一點，因為只剩一行，要夠顯眼 */
+            letter-spacing: 5px;
+            /* 寬字距，營造高級感 */
             color: #ffffff;
-            margin-bottom: 20px;
-            /* 跟下面連結的距離縮短 */
-            font-weight: 500;
+            margin-bottom: 25px;
+            font-weight: 300;
+            /* 細體宋字最美 */
         }
 
         .footer-links {
-            margin-bottom: 20px;
-            /* 縮短距離 */
+            margin-bottom: 25px;
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 15px;
-            /* 連結之間的間距 */
         }
 
         .social-link {
@@ -424,8 +421,8 @@
             color: #aaa;
             transition: all 0.3s;
             font-family: 'Noto Sans TC', sans-serif;
+            /* 連結維持黑體，比較清楚 */
             font-size: 0.85rem;
-            /* 字稍微縮小一點 */
             letter-spacing: 1px;
             display: inline-flex;
             align-items: center;
@@ -438,25 +435,31 @@
 
         .icon {
             width: 16px;
-            /* 圖示也稍微縮小 */
             height: 16px;
             opacity: 0.9;
         }
 
         .divider {
             color: #444;
-            /* 分隔線深一點 */
             font-weight: 100;
         }
 
         .copyright {
             font-size: 0.7rem;
-            /* 版權字縮到最小，不搶戲 */
             color: #555;
-            /* 讓它很暗，融入背景 */
-            margin-top: 0;
             font-family: sans-serif;
-            /* 用最一般的字體就好 */
+            line-height: 1.4;
+        }
+
+        @media (max-width: 600px) {
+            .footer-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .divider {
+                display: none;
+            }
         }
 
         /* 手機版自動變成兩行，才不會太擠 */
@@ -647,8 +650,7 @@
     <div class="container" id="product-list"></div>
 
     <footer>
-        <div class="footer-logo">Mina's Journal</div>
-        <div class="footer-sub-logo">Mina．妝日子</div>
+        <div class="footer-logo-simple">MINA 妝日子</div>
 
         <div class="footer-links">
             <a href="https://www.instagram.com/mina_k.beautyroom/" target="_blank" class="social-link">
@@ -660,9 +662,7 @@
                 </svg>
                 mina_k.beautyroom
             </a>
-
             <span class="divider">｜</span>
-
             <a href="https://line.me/R/ti/p/@139gqqwy" target="_blank" class="social-link">
                 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round">
@@ -676,8 +676,9 @@
 
         <div class="copyright">
             &copy; 2026 MINA 妝日子. All rights reserved.<br>
-            <span style="opacity: 0.6; font-size: 0.6rem; margin-top: 5px; display: inline-block;">
-                本站僅提供代購服務，商品圖片版權歸各品牌官方所有 / Images from official brand websites.
+            <span style="opacity: 0.5; font-size: 0.6rem; display: inline-block; margin-top: 8px; font-weight: 300;">
+                本站僅提供代購服務，商品圖片版權歸各品牌官方所有<br>
+                Images from official brand websites.
             </span>
         </div>
     </footer>
