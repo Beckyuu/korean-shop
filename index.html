@@ -237,17 +237,15 @@
             /* 上下間距大一點，比較透氣 */
         }
 
-        /* === 卡片設計：韓系高質感版 === */
+        /* === 卡片設計：韓系高質感 (終極修正版) === */
         .product-card {
             background: #fff;
-            /* 改用極簡的線條框，比陰影更耐看 */
-            border: 1px solid #f0f0f0;
-            border-radius: 0;
-            /* 直角設計更有雜誌感，若喜歡圓角可改 8px */
-
+            /* 極細邊框，比陰影更高級 */
+            border: 1px solid #eaeaea;
             position: relative;
             transition: all 0.4s ease;
 
+            /* 讓卡片高度一致，但內容排列更聰明 */
             display: flex;
             flex-direction: column;
             height: 100%;
@@ -255,7 +253,6 @@
 
         .product-card:hover {
             border-color: #d4a373;
-            /* 懸浮時框線變色 */
             transform: translateY(-3px);
         }
 
@@ -267,15 +264,14 @@
             position: relative;
             overflow: hidden;
             border-bottom: 1px solid #f9f9f9;
-            /* 圖片跟內容加一條超淡的分隔線 */
         }
 
         .img-wrapper img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            /* 圖片放大速度慢一點，比較優雅 */
             transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
-            /* 更優雅緩慢的放大效果 */
         }
 
         .product-card:hover .img-wrapper img {
@@ -285,31 +281,27 @@
         /* 資訊區域 */
         .info {
             padding: 18px 15px;
-            /* 增加留白，讓畫面呼吸 */
             text-align: center;
-            /* 置中更有大牌感 */
             flex-grow: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
-            /* 強制內容置中 */
         }
 
-        /* 商品名稱：重點修改！ */
+        /* 商品名稱：強制使用系統黑體 (解決字型醜的問題) */
         .name {
-            /* 強制指定好康的黑體 */
-            font-family: 'Noto Sans TC', sans-serif;
+            font-family: "Microsoft JhengHei", "PingFang TC", "Heiti TC", "Noto Sans TC", sans-serif;
             font-size: 0.95rem;
-            font-weight: 400;
-            /* 不要太粗，400比較優雅 */
-            color: #111;
-            /* 純黑更有力 */
+            font-weight: 500;
+            color: #222;
+            /* 更深的黑 */
 
-            letter-spacing: 1px;
-            /* 字距拉開，高級感的關鍵 */
-            line-height: 1.6;
+            letter-spacing: 1.5px;
+            /* 字距拉開，時尚感關鍵 */
+            line-height: 1.5;
 
-            margin-bottom: 8px;
+            margin-bottom: 5px;
+            /* 跟價格靠緊一點 */
             width: 100%;
 
             /* 限制 2 行 */
@@ -317,20 +309,26 @@
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            min-height: 3.2em;
+            min-height: 3em;
         }
 
-        /* 價格：保留原本漂亮的襯線體 */
+        /* 價格：這也是重點 */
         .price {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.2rem;
+            /* 英文數字維持襯線體比較美 */
+            font-size: 1.25rem;
             font-weight: 600;
             font-style: italic;
-            /* 斜體更有精品感 */
             color: #8c7b75;
-            /* 莫蘭迪棕色 */
-            margin-top: auto;
-            margin-bottom: 15px;
+
+            /* 修改重點：拿掉 margin-top: auto */
+            /* 讓價格緊跟著名字，不要分家 */
+            margin-top: 0;
+
+            /* 讓價格下方自動產生留白，把按鈕推到底部 */
+            margin-bottom: auto;
+            padding-bottom: 15px;
+            /* 留一點透氣空間 */
         }
 
         /* 規格按鈕 */
@@ -340,17 +338,20 @@
             gap: 6px;
             justify-content: center;
             margin-bottom: 15px;
+            width: 100%;
+            /* 確保寬度撐開 */
         }
 
         .variant-btn {
-            font-family: 'Noto Sans TC', sans-serif;
+            font-family: "Microsoft JhengHei", sans-serif;
             font-size: 0.75rem;
-            padding: 3px 10px;
-            border: 1px solid #e0e0e0;
+            padding: 4px 12px;
+            border: 1px solid #ddd;
             background: #fff;
             color: #888;
             cursor: pointer;
             transition: 0.2s;
+            border-radius: 2px;
         }
 
         .variant-btn.selected {
@@ -359,43 +360,54 @@
             color: #fff;
         }
 
-        /* 購買區塊 */
+        /* 購買區塊：優化選單樣式 */
         .action-row {
             width: 100%;
             display: flex;
             gap: 0;
-            /* 連在一起 */
             border: 1px solid #333;
-            /* 統一外框 */
+            background: #fff;
         }
 
         select {
+            /* 拿掉醜醜的預設外觀 */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+
             border: none;
             background: transparent;
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
             color: #333;
-            padding: 0 10px;
-            height: 35px;
+            padding: 0;
+            height: 38px;
+            /* 加高一點比較好點 */
             width: 35%;
             text-align: center;
+            text-align-last: center;
+            /* 強制文字置中 */
             border-right: 1px solid #333;
-            /* 中間分隔線 */
             cursor: pointer;
+            border-radius: 0;
         }
 
         button.btn-add {
             border: none;
             background: #fff;
             color: #333;
-            font-family: 'Noto Sans TC', sans-serif;
-            font-size: 0.8rem;
+            /* 按鈕字體也強制黑體 */
+            font-family: "Microsoft JhengHei", sans-serif;
+            font-size: 0.85rem;
             font-weight: 500;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
+            /* 字距加大更高級 */
             width: 65%;
-            height: 35px;
+            height: 38px;
             cursor: pointer;
             transition: all 0.3s;
+            border-radius: 0;
         }
 
         button.btn-add:hover {
