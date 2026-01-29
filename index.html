@@ -538,24 +538,31 @@
             }
         }
 
-        /* === 購物車與彈窗 (保持功能，微調樣式) === */
+        /* === 購物車與彈窗 (修改 1：圖示變大、時尚感增強) === */
         #cart-float-btn {
             position: fixed;
             bottom: 30px;
             right: 30px;
-            width: 55px;
-            height: 55px;
+            /* 放大按鈕尺寸 55px -> 70px */
+            width: 70px;
+            height: 70px;
             background: var(--text-main);
             color: white;
             border-radius: 50%;
-            /* 圓形保留，方便點擊 */
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            /* 陰影加深，更有懸浮層次感 */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
             cursor: pointer;
             z-index: 100;
             transition: transform 0.2s;
+        }
+        
+        /* 讓裡面的 SVG 圖示也跟著變大 */
+        #cart-float-btn svg {
+            width: 32px;
+            height: 32px;
         }
 
         #cart-count {
@@ -565,12 +572,13 @@
             background: #bfa092;
             color: white;
             border-radius: 50%;
-            width: 22px;
-            height: 22px;
-            font-size: 0.75rem;
+            width: 24px; /* 稍微加大 */
+            height: 24px;
+            font-size: 0.8rem;
             display: flex;
             align-items: center;
             justify-content: center;
+            border: 2px solid #fff; /* 加個白邊更有質感 */
         }
 
         .cart-modal {
@@ -621,6 +629,8 @@
             cursor: pointer;
             margin-top: 20px;
             letter-spacing: 1px;
+            /* 這裡的中文字距可以微調 */
+            font-family: 'Noto Sans TC', sans-serif;
         }
 
         /* Loading */
@@ -759,7 +769,7 @@
     </footer>
 
     <div id="cart-float-btn" onclick="toggleCart()">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
             <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -771,7 +781,7 @@
     <div id="cartModal" class="cart-modal" onclick="closeCart(event)">
         <div class="cart-content">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
-                <h3 style="font-family:'Cormorant Garamond', serif; font-size:1.8rem; font-style:italic;">Your Cart</h3>
+                <h3 style="font-family:'Noto Sans TC', sans-serif; font-size:1.5rem; font-weight:500;">購物清單</h3>
                 <span onclick="toggleCart()" style="cursor:pointer; font-size:1.5rem; opacity:0.5;">×</span>
             </div>
 
@@ -784,14 +794,13 @@
                         <input type="radio" name="shipping" value="賣貨便" style="margin-right:8px;"> 7-11 賣貨便
                     </label>
                     <label style="display:block; cursor:pointer;">
-                        <input type="radio" name="shipping" value="iOPEN Mall" style="margin-right:8px;"> 7-11 iOPEN
-                        Mall
+                        <input type="radio" name="shipping" value="iOPEN Mall" style="margin-right:8px;"> iOPEN Mall
                     </label>
                 </div>
                 <div id="cartTotal"
-                    style="font-family:'Cormorant Garamond', serif; font-size:1.4rem; font-weight:600; text-align:right;">
-                    Total: NT$ 0</div>
-                <button class="btn-checkout" onclick="checkoutViaLine()">CHECKOUT VIA LINE</button>
+                    style="font-family:'Noto Sans TC', sans-serif; font-size:1.2rem; font-weight:600; text-align:right;">
+                    總金額: NT$ 0</div>
+                <button class="btn-checkout" onclick="checkoutViaLine()">傳送訂單至 LINE</button>
             </div>
         </div>
     </div>
@@ -909,13 +918,13 @@
         function addToCart(index) {
             const product = allProductsData[index];
             const qty = parseInt(document.getElementById(`qty-${index}`).value);
-            if (product.variants.length > 1 && !product.selectedVariant) { alert('Please select a variant.'); return; }
+            if (product.variants.length > 1 && !product.selectedVariant) { alert('請選擇款式 (Please select a variant.)'); return; }
             const item = { name: product.name, spec: product.selectedVariant, price: parseInt(product.price), qty: qty };
             cart.push(item); updateCartIcon();
             // 這裡改成比較安靜的通知，不要一直跳 alert 
             const btn = document.querySelectorAll('.btn-add')[index];
             const originalText = btn.innerText;
-            btn.innerText = 'ADDED!';
+            btn.innerText = '已加入!'; // 改成中文
             btn.style.background = '#2c2c2c';
             btn.style.color = '#fff';
             setTimeout(() => { btn.innerText = originalText; btn.style.background = ''; btn.style.color = ''; }, 1000);
@@ -933,7 +942,8 @@
         function renderCartItems() {
             const container = document.getElementById('cartItems');
             const totalEl = document.getElementById('cartTotal');
-            if (cart.length === 0) { container.innerHTML = '<p style="text-align:center; color:#999; margin-top:40px;">Your cart is empty.</p>'; totalEl.innerText = 'Total: NT$ 0'; return; }
+            // 修改：空購物車提示改為中文
+            if (cart.length === 0) { container.innerHTML = '<p style="text-align:center; color:#999; margin-top:40px; font-family:\'Noto Sans TC\'">購物車目前是空的</p>'; totalEl.innerText = '總金額: NT$ 0'; return; }
 
             let html = ''; let total = 0;
             cart.forEach((item, idx) => {
@@ -942,11 +952,11 @@
                     <div><div style="font-weight:500; color:#333;">${item.name}</div><div style="font-size:0.85rem; color:#999; margin-top:4px;">${item.spec} x ${item.qty}</div></div>
                     <div style="text-align:right;">
                         <div style="font-weight:600;">NT$ ${subtotal}</div>
-                        <div style="color:#ccc; cursor:pointer; font-size:0.8rem; margin-top:5px;" onclick="removeFromCart(${idx})">REMOVE</div>
+                        <div style="color:#ccc; cursor:pointer; font-size:0.8rem; margin-top:5px; font-family:'Noto Sans TC';" onclick="removeFromCart(${idx})">移除</div>
                     </div>
                 </div>`;
             });
-            container.innerHTML = html; totalEl.innerText = `Total: NT$ ${total}`;
+            container.innerHTML = html; totalEl.innerText = `總金額: NT$ ${total}`; // 修改：Total 改為中文
         }
 
         function removeFromCart(idx) { cart.splice(idx, 1); updateCartIcon(); renderCartItems(); }
@@ -958,6 +968,7 @@
             for (const radio of shippingRadios) { if (radio.checked) { selectedShipping = radio.value; break; } }
             if (!selectedShipping) { alert('請選擇下單平台 (7-11 賣貨便 or iOPEN Mall)'); return; }
 
+            // 這裡保留英文格式發送給 Line，確保您看得懂訂單結構，若需改中文請告知
             let message = "Hi! I would like to order:\n------------------\n";
             let total = 0;
             cart.forEach(item => {
