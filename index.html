@@ -237,33 +237,40 @@
             /* 上下間距大一點，比較透氣 */
         }
 
-        /* === 卡片設計：雜誌留白風 === */
+        /* === 卡片設計：雜誌留白風 (緊湊對齊版) === */
         .product-card {
-            background: transparent;
-            /* 透明背景 */
+            background: #fff;
+            /* 改回白色底，讓卡片邊界更清楚 */
+            border-radius: 8px;
+            /* 圓角微調 */
+            overflow: hidden;
+            /* 確保內容不跑出去 */
             position: relative;
             transition: all 0.4s ease;
+
+            /* 關鍵：讓卡片變成彈性盒子，確保高度一致 */
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
 
         .product-card:hover {
-            transform: translateY(-8px);
-            /* 輕微上浮 */
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            /* 懸浮時加點陰影 */
         }
 
         /* 圖片區域 */
         .img-wrapper {
             width: 100%;
             aspect-ratio: 1 / 1;
-            background: #fff;
+            background: #f9f9f9;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
-            /* 極淡陰影 */
-            transition: box-shadow 0.3s ease;
         }
 
-        .product-card:hover .img-wrapper {
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+        .product-card:hover .img-wrapper img {
+            transform: scale(1.05);
         }
 
         .img-wrapper img {
@@ -273,93 +280,77 @@
             transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
         }
 
-        .product-card:hover .img-wrapper img {
-            transform: scale(1.05);
-            /* 緩慢放大 */
-        }
-
-        /* === 標籤 Badge (增加豐富度的關鍵) === */
-        .badge {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            padding: 4px 10px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            z-index: 2;
-            text-transform: uppercase;
-        }
-
-        .badge.new {
-            background-color: var(--text-main);
-            color: #fff;
-        }
-
-        .badge.hot {
-            background-color: #bfa092;
-            /* 莫蘭迪紅 */
-            color: #fff;
-        }
-
-        /* 資訊區域 */
+        /* 資訊區域 (關鍵修改：緊湊化) */
         .info {
-            padding: 20px 5px 0;
-            text-align: center;
-            /* 雜誌風通常置中 */
+            padding: 12px 10px;
+            /* 縮小內距 */
+            text-align: left;
+            /* 改成靠左對齊，比較現代 */
+
+            /* 讓這塊區域自動填滿剩餘空間，把按鈕推到底部 */
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .name {
-            font-size: 1.05rem;
-            font-weight: 400;
+            font-size: 0.95rem;
+            font-weight: 500;
             color: var(--text-main);
-            margin-bottom: 6px;
+            margin-bottom: 4px;
+            /* 縮小間距 */
             line-height: 1.4;
             letter-spacing: 0.5px;
+
+            /* 限制最多顯示 2 行，超過變 ... */
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            min-height: 2.8em;
+            /* 固定高度，確保排版整齊 */
         }
 
         .desc-text {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #999;
-            margin-bottom: 12px;
-            display: block;
-            font-family: 'Noto Sans TC', sans-serif;
+            margin-bottom: 8px;
+
+            /* 限制最多顯示 1 行，超過變 ... */
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 1.3em;
         }
 
         /* 價格 */
         .price {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 600;
-            color: var(--text-main);
-            display: block;
-            margin-bottom: 15px;
+            color: var(--price-color);
+            margin-top: auto;
+            /* 關鍵：把價格跟上面的文字分開，往推下 */
+            margin-bottom: 10px;
         }
 
-        /* 規格按鈕 */
+        /* 規格按鈕 (縮小間距) */
         .variant-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
-            justify-content: center;
-            margin-bottom: 15px;
+            gap: 5px;
+            margin-bottom: 10px;
         }
 
         .variant-btn {
-            font-size: 0.8rem;
-            padding: 4px 12px;
-            border: 1px solid #e0e0e0;
-            background: #fff;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border: 1px solid #eee;
             color: #888;
             cursor: pointer;
-            transition: all 0.2s;
-            border-radius: 0;
-            /* 直角比較時尚 */
-        }
-
-        .variant-btn:hover {
-            border-color: var(--text-main);
-            color: var(--text-main);
+            border-radius: 4px;
+            /* 小圓角 */
         }
 
         .variant-btn.selected {
@@ -368,13 +359,11 @@
             border-color: var(--text-main);
         }
 
-        /* 購買區塊 */
+        /* 購買區塊 (緊湊版) */
         .action-row {
             display: flex;
-            justify-content: center;
-            gap: 8px;
-            align-items: center;
-            margin-top: 10px;
+            gap: 5px;
+            margin-top: 0;
         }
 
         select {
@@ -692,75 +681,61 @@
             }
 
             .memo-board {
-                width: 90%;
-                padding: 20px;
+                width: 92%;
+                padding: 15px;
             }
 
             /* 1. 設定為 2 欄 */
             .container {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 20px 15px;
-                /* (上下間距 20px, 左右間距 15px) */
-                padding: 0 15px 80px;
+                gap: 15px 10px;
+                /* 縮小卡片間距 */
+                padding: 0 10px 80px;
+                /* 縮小左右留白 */
             }
 
-            /* 2. 關鍵：讓卡片變成彈性盒子，高度自動拉齊 */
-            .product-card {
-                display: flex;
-                flex-direction: column;
-                height: 100%;
-                /* 這一行會讓同一排的卡片一樣高 */
-            }
-
-            /* 3. 資訊區設定：讓按鈕永遠沉在最下面 */
+            /* 2. 手機版字體微調 */
             .info {
-                flex-grow: 1;
-                /* 佔據剩餘空間 */
-                display: flex;
-                flex-direction: column;
-                padding: 10px 0 0;
+                padding: 10px 8px;
             }
 
-            /* 讓商品名稱高度固定，避免一行兩行造成的落差 */
             .name {
-                font-size: 0.95rem;
-                /* 超過兩行就顯示 ... */
-                display: -webkit-box;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-                margin-bottom: 5px;
-                /* 稍微固定高度，讓排版更整齊 */
-                min-height: 2.8em;
+                font-size: 0.85rem;
+                /* 字體再縮小一點點以免換行太醜 */
+                min-height: 2.4em;
+                /* 高度對應調整 */
+            }
+
+            .desc-text {
+                display: none;
+                /* 手機版直接隱藏說明文字，讓畫面更乾淨！(解決太長的問題) */
             }
 
             .price {
                 font-size: 1rem;
-                margin-bottom: auto;
-                /* 這招會把下面的按鈕推到最底 */
+                margin-bottom: 8px;
             }
 
-            /* 恢復成左右排列 (因為2欄空間夠了) */
+            /* 按鈕與選單 */
             .action-row {
-                margin-top: 15px;
-                /* 按鈕跟上面的距離 */
                 flex-direction: row;
-                gap: 5px;
             }
 
-            /* 按鈕樣式微調 */
             select {
-                width: 40%;
+                width: 35%;
+                /* 數量佔小一點 */
                 font-size: 0.8rem;
-                padding: 4px;
-                height: 32px;
+                padding: 0 5px;
+                height: 30px;
+                border: 1px solid #eee;
             }
 
             button.btn-add {
-                width: 60%;
+                width: 65%;
+                /* 加入按鈕佔大一點 */
                 font-size: 0.8rem;
                 padding: 0;
-                height: 32px;
+                height: 30px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
