@@ -637,14 +637,65 @@
             font-family: 'Noto Sans TC', sans-serif;
         }
 
-        /* Loading */
+        /* === 新版 Loading 樣式：優雅轉圈圈 === */
         #loading {
-            text-align: center;
-            padding: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+            /* 確保至少有高度，不會太扁 */
+            gap: 25px;
+            /* 圈圈跟文字的距離 */
+        }
+
+        /* 轉圈圈本體 */
+        .loader-spinner {
+            width: 50px;
+            height: 50px;
+            /* 1. 底圈顏色 (淺灰) */
+            border: 2px solid #f0f0f0;
+            /* 2. 轉動線條顏色 (你的主題金棕色) */
+            border-top: 2px solid #d4a373;
+            border-radius: 50%;
+            /* 動畫設定：1秒轉一圈，無限循環 */
+            animation: spin 1s linear infinite;
+        }
+
+        /* 文字樣式 */
+        .loading-text {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.5rem;
+            /* 維持你的質感字體 */
+            font-size: 1.1rem;
             color: #999;
             font-style: italic;
+            letter-spacing: 1.5px;
+            /* 增加呼吸燈效果 (忽明忽暗) */
+            animation: breathe 2s ease-in-out infinite;
+        }
+
+        /* 定義旋轉動畫 */
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* 定義呼吸動畫 */
+        @keyframes breathe {
+
+            0%,
+            100% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 1;
+            }
         }
 
         /* 彈窗樣式微調 */
@@ -736,7 +787,10 @@
         </ul>
     </div>
 
-    <div id="loading">Loading Collection...</div>
+    <div id="loading">
+        <div class="loader-spinner"></div>
+        <span class="loading-text">loading.....</span>
+    </div>
     <div class="container" id="product-list"></div>
 
     <footer>
