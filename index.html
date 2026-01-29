@@ -631,14 +631,65 @@
             font-family: 'Noto Sans TC', sans-serif;
         }
 
-        /* Loading */
+        /* === 新版 Loading 動畫樣式 === */
         #loading {
-            text-align: center;
-            padding: 80px;
+            min-height: 200px;
+            /* 預留高度，避免畫面跳動 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            /* 圖案跟文字的距離 */
+            padding: 60px 0;
+        }
+
+        /* 製作一個韓系質感的轉圈圈 */
+        .loader-spinner {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #faeadd;
+            /* 淺杏色底 */
+            border-top: 2px solid #d4a373;
+            /* 金棕色轉動線條 */
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            /* 讓它旋轉 */
+        }
+
+        .loading-text {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.5rem;
-            color: #999;
+            font-size: 1.1rem;
+            color: #bfa092;
+            /* 莫蘭迪色文字 */
             font-style: italic;
+            letter-spacing: 1px;
+            animation: pulse 1.5s ease-in-out infinite;
+            /* 讓文字像呼吸一樣忽明忽暗 */
+        }
+
+        /* 定義旋轉動畫 */
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* 定義呼吸動畫 */
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 1;
+            }
         }
 
         /* 彈窗樣式微調 */
@@ -798,8 +849,10 @@
         </ul>
     </div>
 
-    <div id="loading">Loading Collection...</div>
-    <div class="container" id="product-list"></div>
+    <div id="loading">
+        <div class="loader-spinner"></div>
+        <div class="loading-text">Loading...</div>
+    </div>
 
     <footer>
         <div class="footer-logo-simple">│ Mina · 妝日子 │</div>
@@ -904,25 +957,25 @@
         let cart = [];
 
         // === 這是新加入的 CSV 解析工具 (放在 fetchProducts 上面) ===
-function parseCSVRow(row) {
-    const result = [];
-    let current = '';
-    let inQuote = false;
-    for (let i = 0; i < row.length; i++) {
-        const char = row[i];
-        if (char === '"') {
-            inQuote = !inQuote;
-        } else if (char === ',' && !inQuote) {
+        function parseCSVRow(row) {
+            const result = [];
+            let current = '';
+            let inQuote = false;
+            for (let i = 0; i < row.length; i++) {
+                const char = row[i];
+                if (char === '"') {
+                    inQuote = !inQuote;
+                } else if (char === ',' && !inQuote) {
+                    result.push(current.trim());
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
             result.push(current.trim());
-            current = '';
-        } else {
-            current += char;
+            return result;
         }
-    }
-    result.push(current.trim());
-    return result;
-}
-// ========================================================
+        // ========================================================
 
         async function fetchProducts() {
             const loading = document.getElementById('loading');
