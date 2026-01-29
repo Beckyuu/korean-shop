@@ -1007,7 +1007,7 @@
 
             if (!selectedShipping) { alert('請選擇下單平台 (7-11 賣貨便 or iOPEN Mall)'); return; }
 
-            // === 訂單內容 ===
+            // 1. 準備訂單文字
             let message = "您好，我想訂購以下商品：\n------------------\n";
             let total = 0;
             cart.forEach(item => {
@@ -1018,27 +1018,40 @@
             message += `總金額: NT$ ${total}\n`;
             message += `下單平台: ${selectedShipping}`;
 
-            // === 智慧判斷裝置 ===
+            // 2. 準備 LINE 的傳送連結
+            const lineUrl = `https://line.me/R/oaMessage/@139gqqwy/?${encodeURIComponent(message)}`;
 
-            // 檢查是否為行動裝置 (手機/平板)
+            // 3. 智慧判斷裝置
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
             if (isMobile) {
-                // 【手機版】體驗最好：直接打開官方帳號對話框，並貼上文字
-                // (手機版通常可以處理 未加好友 -> 引導加好友 -> 帶入文字 的流程)
-                window.location.href = `https://line.me/R/oaMessage/@139gqqwy/?${encodeURIComponent(message)}`;
+                // === 手機版 ===
+                // 直接打開 LINE App
+                window.location.href = lineUrl;
             } else {
-                // 【電腦版】聰明招式：複製文字 + 跳轉加好友頁面
+                // === 電腦版 (終極解法) ===
+                // 借用現有的 detailModal 彈窗，顯示一個「包好訂單連結」的 QR Code
 
-                // 1. 嘗試將訂單內容複製到剪貼簿
-                navigator.clipboard.writeText(message).then(() => {
-                    // 成功複製後
-                    alert("訂單內容已自動複製！\n\n即將前往 LINE 官方帳號頁面，\n請加入好友後，在對話框「貼上」即可傳送訂單。");
-                    window.open('https://line.me/ti/p/@139gqqwy', '_blank');
-                }).catch(err => {
-                    // 萬一瀏覽器不支援自動複製，就退回原本的分享視窗模式
-                    window.open(`https://line.me/R/msg/text/?${encodeURIComponent(message)}`, '_blank');
-                });
+                const modal = document.getElementById('detailModal');
+                const title = document.getElementById('modalTitle');
+                const body = document.getElementById('modalBody');
+
+                // 產生 QR Code 圖片網址
+                const qrImgUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(lineUrl)}`;
+
+                title.innerText = "請使用手機掃描下單";
+                title.style.fontFamily = "'Noto Sans TC', sans-serif";
+
+                body.innerHTML = `
+                    <div style="text-align:center; padding: 20px 0;">
+                        <p style="margin-bottom:20px; color:#666; font-family:'Noto Sans TC', sans-serif;">
+                            拿起手機開啟 LINE 或相機<br>掃描下方 QR Code，訂單將自動帶入對話框！
+                        </p>
+                        <img src="${qrImgUrl}" alt="Order QR Code" style="width:200px; height:200px; border:1px solid #eee; padding:10px;">
+                    </div>
+                `;
+
+                modal.style.display = 'flex';
             }
         }
 
