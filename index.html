@@ -90,25 +90,28 @@
         }
 
         /* === 業務說明：純文字雜誌風格 === */
+        /* === 業務說明：精緻備註風格 (修正版) === */
         .service-info {
             font-family: 'Noto Sans TC', sans-serif;
-            font-size: 0.9rem;
-            /* 字體適中 */
-            font-weight: 300;
-            /* 細字體，關鍵！細了就不像按鈕 */
-            color: #666;
-            /* 柔和的深灰色 */
-            letter-spacing: 1.5px;
-            /* 字距拉開 */
-            margin-top: 20px;
 
-            /* 確保游標是「箭頭」而不是「小手」，這樣客人就不會想點 */
+            /* 1. 字體縮小：原本 0.9rem -> 改成 0.75rem (約 12px)，看起來才像備註 */
+            font-size: 0.75rem;
+
+            /* 2. 顏色變淡：改成淺灰色，不搶標題風采 */
+            color: #999;
+
+            /* 3. 字距微調：稍微寬一點點就好，比較優雅 */
+            letter-spacing: 1px;
+
+            margin-top: 12px;
+            /* 離上面店名近一點，強調從屬關係 */
+            text-align: center;
+
+            /* 4. 關鍵：游標設為預設箭頭，這樣滑過去不會以為可以點 */
             cursor: default;
 
-            /* 讓整行置中 */
-            text-align: center;
-            line-height: 1;
-            /* 讓高度緊湊一點 */
+            /* 讓它維持一行，不換行 */
+            white-space: nowrap;
         }
 
         /* 分隔線樣式 */
@@ -613,11 +616,7 @@
         <div class="brand-name">│ Mina．妝日子 │</div>
 
         <div class="service-info">
-            KR 美妝保養
-            <span class="divider">｜</span>
-            韓國各大官網代購
-            <span class="divider">｜</span>
-            私房選物團購
+            KR 美妝保養 &nbsp;·&nbsp; 韓國各大官網代購 &nbsp;·&nbsp; 私房選品團購
         </div>
 
         <div
