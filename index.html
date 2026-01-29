@@ -237,164 +237,170 @@
             /* 上下間距大一點，比較透氣 */
         }
 
-        /* === 卡片設計：雜誌留白風 (緊湊對齊版) === */
+        /* === 卡片設計：韓系高質感版 === */
         .product-card {
             background: #fff;
-            /* 改回白色底，讓卡片邊界更清楚 */
-            border-radius: 8px;
-            /* 圓角微調 */
-            overflow: hidden;
-            /* 確保內容不跑出去 */
+            /* 改用極簡的線條框，比陰影更耐看 */
+            border: 1px solid #f0f0f0;
+            border-radius: 0;
+            /* 直角設計更有雜誌感，若喜歡圓角可改 8px */
+
             position: relative;
             transition: all 0.4s ease;
 
-            /* 關鍵：讓卡片變成彈性盒子，確保高度一致 */
             display: flex;
             flex-direction: column;
             height: 100%;
         }
 
         .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-            /* 懸浮時加點陰影 */
+            border-color: #d4a373;
+            /* 懸浮時框線變色 */
+            transform: translateY(-3px);
         }
 
         /* 圖片區域 */
         .img-wrapper {
             width: 100%;
             aspect-ratio: 1 / 1;
-            background: #f9f9f9;
+            background: #fcfcfc;
             position: relative;
             overflow: hidden;
-        }
-
-        .product-card:hover .img-wrapper img {
-            transform: scale(1.05);
+            border-bottom: 1px solid #f9f9f9;
+            /* 圖片跟內容加一條超淡的分隔線 */
         }
 
         .img-wrapper img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+            transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+            /* 更優雅緩慢的放大效果 */
         }
 
-        /* 資訊區域 (關鍵修改：緊湊化) */
-        .info {
-            padding: 12px 10px;
-            /* 縮小內距 */
-            text-align: left;
-            /* 改成靠左對齊，比較現代 */
+        .product-card:hover .img-wrapper img {
+            transform: scale(1.08);
+        }
 
-            /* 讓這塊區域自動填滿剩餘空間，把按鈕推到底部 */
+        /* 資訊區域 */
+        .info {
+            padding: 18px 15px;
+            /* 增加留白，讓畫面呼吸 */
+            text-align: center;
+            /* 置中更有大牌感 */
             flex-grow: 1;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            /* 強制內容置中 */
         }
 
+        /* 商品名稱：重點修改！ */
         .name {
+            /* 強制指定好康的黑體 */
+            font-family: 'Noto Sans TC', sans-serif;
             font-size: 0.95rem;
-            font-weight: 500;
-            color: var(--text-main);
-            margin-bottom: 4px;
-            /* 縮小間距 */
-            line-height: 1.4;
-            letter-spacing: 0.5px;
+            font-weight: 400;
+            /* 不要太粗，400比較優雅 */
+            color: #111;
+            /* 純黑更有力 */
 
-            /* 限制最多顯示 2 行，超過變 ... */
+            letter-spacing: 1px;
+            /* 字距拉開，高級感的關鍵 */
+            line-height: 1.6;
+
+            margin-bottom: 8px;
+            width: 100%;
+
+            /* 限制 2 行 */
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            min-height: 2.8em;
-            /* 固定高度，確保排版整齊 */
+            min-height: 3.2em;
         }
 
-        .desc-text {
-            font-size: 0.75rem;
-            color: #999;
-            margin-bottom: 8px;
-
-            /* 限制最多顯示 1 行，超過變 ... */
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            height: 1.3em;
-        }
-
-        /* 價格 */
+        /* 價格：保留原本漂亮的襯線體 */
         .price {
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.2rem;
             font-weight: 600;
-            color: var(--price-color);
+            font-style: italic;
+            /* 斜體更有精品感 */
+            color: #8c7b75;
+            /* 莫蘭迪棕色 */
             margin-top: auto;
-            /* 關鍵：把價格跟上面的文字分開，往推下 */
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
-        /* 規格按鈕 (縮小間距) */
+        /* 規格按鈕 */
         .variant-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 5px;
-            margin-bottom: 10px;
+            gap: 6px;
+            justify-content: center;
+            margin-bottom: 15px;
         }
 
         .variant-btn {
+            font-family: 'Noto Sans TC', sans-serif;
             font-size: 0.75rem;
-            padding: 2px 8px;
-            border: 1px solid #eee;
+            padding: 3px 10px;
+            border: 1px solid #e0e0e0;
+            background: #fff;
             color: #888;
             cursor: pointer;
-            border-radius: 4px;
-            /* 小圓角 */
+            transition: 0.2s;
         }
 
         .variant-btn.selected {
-            background: var(--text-main);
+            border-color: #333;
+            background: #333;
             color: #fff;
-            border-color: var(--text-main);
         }
 
-        /* 購買區塊 (緊湊版) */
+        /* 購買區塊 */
         .action-row {
+            width: 100%;
             display: flex;
-            gap: 5px;
-            margin-top: 0;
+            gap: 0;
+            /* 連在一起 */
+            border: 1px solid #333;
+            /* 統一外框 */
         }
 
         select {
+            border: none;
             background: transparent;
-            border: 1px solid #ccc;
-            padding: 6px 10px;
-            font-size: 0.9rem;
-            color: var(--text-main);
-            outline: none;
-            border-radius: 0;
-            /* 方形 */
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            color: #333;
+            padding: 0 10px;
+            height: 35px;
+            width: 35%;
+            text-align: center;
+            border-right: 1px solid #333;
+            /* 中間分隔線 */
             cursor: pointer;
         }
 
         button.btn-add {
-            background-color: var(--text-main);
-            color: #fff;
-            border: 1px solid var(--text-main);
-            padding: 6px 25px;
-            font-size: 0.85rem;
-            letter-spacing: 1px;
+            border: none;
+            background: #fff;
+            color: #333;
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            width: 65%;
+            height: 35px;
             cursor: pointer;
             transition: all 0.3s;
-            border-radius: 0;
-            /* 方形按鈕 */
-            text-transform: uppercase;
         }
 
         button.btn-add:hover {
-            background-color: transparent;
-            color: var(--text-main);
+            background: #333;
+            color: #fff;
         }
 
         /* 細節按鈕 (小眼睛) */
@@ -950,14 +956,11 @@
 
                     card.innerHTML = `
                         <div class="img-wrapper">
-                            ${badgeHtml}
                             <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
                             ${stickerHtml}
                         </div>
                         <div class="info">
                             <h3 class="name">${product.name}</h3>
-                            ${product.description ? `<span class="desc-text">${product.description}</span>` : ''}
-                            
                             <span class="price">NT$ ${product.price}</span>
                             
                             ${variantsHtml}
