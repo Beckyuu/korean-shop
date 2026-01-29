@@ -184,46 +184,42 @@
             gap: 40px;
         }
 
-        /* === 步驟 2：外框改成「粉紅虛線手帳風」 === */
+        /* === 步驟 2：外層卡片 (可愛雙層框風格) === */
         .product-card {
             background: #ffffff;
+            /* 卡片本體是白色 */
 
-            /* 1. 關鍵：用「虛線」來營造手繪感，而不是讓框框變歪 */
-            border: 2px dashed var(--accent);
-            /* 會變成你的主題粉紅色虛線 */
-
-            /* 2. 圓角設定：稍微圓一點，比較可愛 */
-            border-radius: 24px;
+            /* 保持規矩的圓角，確保內部不變形 */
+            border-radius: 20px;
 
             padding: 20px;
-            /* 內距給足，內容才不會貼到邊邊 */
             position: relative;
             transition: all 0.3s ease;
 
-            /* 3. 特殊陰影：不模糊的實心陰影，看起來像貼紙或剪貼簿 */
-            box-shadow: 6px 6px 0px rgba(232, 166, 166, 0.3);
+            /* ▼▼▼ 魔法在這裡：利用多層陰影製造框框 ▼▼▼ */
+            box-shadow:
+                /* 第1層：一圈細細的白色間隔 (讓粉紅框不要黏死在卡片上) */
+                0 0 0 4px #fff,
+
+                /* 第2層：你的主題粉紅色粗框 (模擬圖片中的內圈色) */
+                0 0 0 8px var(--accent),
+
+                /* 第3層：最外面的淺粉色偏移陰影 (模擬立體感) */
+                10px 10px 0px rgba(232, 166, 166, 0.4);
         }
 
         /* === 滑鼠移過去的效果 === */
         .product-card:hover {
-            transform: translateY(-5px);
-            /* 微微浮起 */
+            /* 整個浮起來 */
+            transform: translateY(-5px) translateX(-2px);
 
-            /* 滑鼠移上去時，虛線變實線，增加互動感 */
-            border-style: solid;
-
-            /* 陰影變深一點 */
-            box-shadow: 8px 8px 0px rgba(232, 166, 166, 0.5);
-        }
-
-        /* === 滑鼠移過去的效果 === */
-        .product-card:hover {
-            /* 讓框框形狀稍微變一下，感覺在動 */
-            border-radius: 15px 225px 15px 255px / 255px 15px 225px 15px;
-            transform: translateY(-5px) rotate(-1deg);
-            /* 微微浮起並歪一點點，更俏皮 */
-            z-index: 10;
-            box-shadow: 8px 12px 30px rgba(0, 0, 0, 0.15);
+            /* 陰影加深、變大，感覺更立體 */
+            box-shadow:
+                0 0 0 4px #fff,
+                0 0 0 8px var(--accent-hover),
+                /* 框框變深粉紅 */
+                14px 14px 0px rgba(232, 166, 166, 0.6);
+            /* 陰影拉長 */
         }
 
         /* === 步驟 1：修復圖片位置 (安全版) === */
