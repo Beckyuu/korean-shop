@@ -816,7 +816,13 @@
             <div id="cartTotal"
                 style="font-family:'Noto Sans TC', sans-serif; font-size:1.2rem; font-weight:600; text-align:right;">
                 總金額: NT$ 0</div>
-            <button class="btn-checkout" onclick="checkoutViaLine()">傳送至LINE官方帳號</button>
+
+            <p
+                style="font-size:0.85rem; color:#bfa092; margin: 15px 0 5px; text-align:center; font-family:'Noto Sans TC', sans-serif; line-height:1.5;">
+                ※ 確認訂單並完成定金匯款後，<br>訂單才算正式成立喔！謝謝
+            </p>
+
+            <button class="btn-checkout" onclick="checkoutViaLine()">傳送至 LINE官方帳號</button>
         </div>
     </div>
     </div>
@@ -998,20 +1004,23 @@
             const shippingRadios = document.getElementsByName('shipping');
             let selectedShipping = null;
             for (const radio of shippingRadios) { if (radio.checked) { selectedShipping = radio.value; break; } }
+
             if (!selectedShipping) { alert('請選擇下單平台 (7-11 賣貨便 or iOPEN Mall)'); return; }
 
-            // 這裡保留英文格式發送給 Line，確保您看得懂訂單結構，若需改中文請告知
-            let message = "Hi! I would like to order:\n------------------\n";
+            // === 修改重點：訊息內容保持乾淨，只列出商品與金額 ===
+            let message = "您好，我想訂購以下商品：\n------------------\n";
             let total = 0;
             cart.forEach(item => {
                 total += item.price * item.qty;
                 message += `${item.name} [${item.spec}] x${item.qty} \n`;
             });
             message += "------------------\n";
-            message += `Total: NT$ ${total}\n`;
-            message += `Platform: ${selectedShipping}\n\n`;
-            message += "Please confirm stock. Thank you!";
-            window.open(`https://line.me/R/msg/text/?${encodeURIComponent(message)}`, '_blank');
+            message += `總金額: NT$ ${total}\n`;
+            message += `下單平台: ${selectedShipping}`;
+            // 這裡不用再寫任何結尾語，或者簡單加個 "謝謝" 也可以，目前保持乾淨
+
+            // 直通官方帳號
+            window.open(`https://line.me/R/oaMessage/@139gqqwy/?${encodeURIComponent(message)}`, '_blank');
         }
 
         function showDetails(index) {
