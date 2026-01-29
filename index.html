@@ -5,17 +5,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> │Mina．妝日子│ Selection </title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Sans+TC:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+
     <style>
         :root {
             /* === 色票系統：韓系低飽和度 === */
-            --bg-color: #f9f8f6;       /* 米灰白背景 */
-            --text-main: #2c2c2c;      /* 深灰黑 (比純黑更柔和) */
-            --text-sub: #666666;       /* 次要文字 */
-            --accent: #d4a373;         /* 質感金棕色 (取代原本的粉紅，更成熟) */
-            --accent-light: #faeadd;   /* 淺杏色 (用於背景點綴) */
-            --price-color: #bfa092;    /* 莫蘭迪磚紅 */
+            --bg-color: #f9f8f6;
+            /* 米灰白背景 */
+            --text-main: #2c2c2c;
+            /* 深灰黑 (比純黑更柔和) */
+            --text-sub: #666666;
+            /* 次要文字 */
+            --accent: #d4a373;
+            /* 質感金棕色 (取代原本的粉紅，更成熟) */
+            --accent-light: #faeadd;
+            /* 淺杏色 (用於背景點綴) */
+            --price-color: #bfa092;
+            /* 莫蘭迪磚紅 */
             --white: #ffffff;
         }
 
@@ -27,17 +35,24 @@
 
         body {
             font-family: 'Cormorant Garamond', 'Noto Sans TC', sans-serif;
-            background-color: var(--bg-color);
+
+            /* === 選項一：流動光暈 === */
+            background-color: #fdfbf7;
+            /* 溫暖的米白底 */
+
+            /* 這裡用了三個顏色的漸層光球，交疊出豐富感 */
+            background-image:
+                radial-gradient(at 40% 20%, rgba(212, 163, 115, 0.15) 0px, transparent 50%),
+                radial-gradient(at 80% 0%, rgba(181, 131, 141, 0.1) 0px, transparent 50%),
+                radial-gradient(at 0% 50%, rgba(229, 152, 155, 0.1) 0px, transparent 50%);
+
+            background-attachment: fixed;
+            /* 這行很重要！讓背景固定住，滑動時有層次感 */
+            background-size: 100% 100%;
+
             color: var(--text-main);
             line-height: 1.7;
-            padding-bottom: 0; /* Footer 會處理底部 */
-            
-            /* 背景圖設定 */
-            background-image: url('https://i.ibb.co/1G5fmmPK/85.png');
-            background-size: 100% auto;
-            background-position: top center;
-            background-repeat: no-repeat;
-            background-attachment: scroll;
+            padding-bottom: 0;
         }
 
         /* === Header: 雜誌封面感 === */
@@ -50,7 +65,8 @@
         h1 {
             font-family: 'Cormorant Garamond', serif;
             font-weight: 600;
-            font-size: 3.5rem; /* 加大標題 */
+            font-size: 3.5rem;
+            /* 加大標題 */
             letter-spacing: 2px;
             color: var(--text-main);
             margin-bottom: 10px;
@@ -85,11 +101,11 @@
             text-align: center;
             position: relative;
         }
-        
+
         .memo-content {
             background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(5px);
-            border: 1px solid rgba(0,0,0,0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
             padding: 25px;
             font-size: 0.9rem;
             color: var(--text-sub);
@@ -112,18 +128,21 @@
             padding: 0 30px 80px;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 50px 30px; /* 上下間距大一點，比較透氣 */
+            gap: 50px 30px;
+            /* 上下間距大一點，比較透氣 */
         }
 
         /* === 卡片設計：雜誌留白風 === */
         .product-card {
-            background: transparent; /* 透明背景 */
+            background: transparent;
+            /* 透明背景 */
             position: relative;
             transition: all 0.4s ease;
         }
-        
+
         .product-card:hover {
-            transform: translateY(-8px); /* 輕微上浮 */
+            transform: translateY(-8px);
+            /* 輕微上浮 */
         }
 
         /* 圖片區域 */
@@ -133,12 +152,13 @@
             background: #fff;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.03); /* 極淡陰影 */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+            /* 極淡陰影 */
             transition: box-shadow 0.3s ease;
         }
-        
+
         .product-card:hover .img-wrapper {
-            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
         }
 
         .img-wrapper img {
@@ -149,7 +169,8 @@
         }
 
         .product-card:hover .img-wrapper img {
-            transform: scale(1.05); /* 緩慢放大 */
+            transform: scale(1.05);
+            /* 緩慢放大 */
         }
 
         /* === 標籤 Badge (增加豐富度的關鍵) === */
@@ -164,21 +185,23 @@
             z-index: 2;
             text-transform: uppercase;
         }
-        
+
         .badge.new {
             background-color: var(--text-main);
             color: #fff;
         }
-        
+
         .badge.hot {
-            background-color: #bfa092; /* 莫蘭迪紅 */
+            background-color: #bfa092;
+            /* 莫蘭迪紅 */
             color: #fff;
         }
 
         /* 資訊區域 */
         .info {
             padding: 20px 5px 0;
-            text-align: center; /* 雜誌風通常置中 */
+            text-align: center;
+            /* 雜誌風通常置中 */
         }
 
         .name {
@@ -225,7 +248,8 @@
             color: #888;
             cursor: pointer;
             transition: all 0.2s;
-            border-radius: 0; /* 直角比較時尚 */
+            border-radius: 0;
+            /* 直角比較時尚 */
         }
 
         .variant-btn:hover {
@@ -255,7 +279,8 @@
             font-size: 0.9rem;
             color: var(--text-main);
             outline: none;
-            border-radius: 0; /* 方形 */
+            border-radius: 0;
+            /* 方形 */
             cursor: pointer;
         }
 
@@ -268,7 +293,8 @@
             letter-spacing: 1px;
             cursor: pointer;
             transition: all 0.3s;
-            border-radius: 0; /* 方形按鈕 */
+            border-radius: 0;
+            /* 方形按鈕 */
             text-transform: uppercase;
         }
 
@@ -276,7 +302,7 @@
             background-color: transparent;
             color: var(--text-main);
         }
-        
+
         /* 細節按鈕 (小眼睛) */
         .more-sticker {
             position: absolute;
@@ -284,17 +310,18 @@
             right: 10px;
             width: 32px;
             height: 32px;
-            background: rgba(255,255,255,0.9);
+            background: rgba(255, 255, 255, 0.9);
             color: var(--text-main);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: all 0.2s;
-            opacity: 0; /* 預設隱藏 */
+            opacity: 0;
+            /* 預設隱藏 */
             transform: translateY(10px);
         }
-        
+
         .product-card:hover .more-sticker {
             opacity: 1;
             transform: translateY(0);
@@ -308,21 +335,21 @@
             text-align: center;
             margin-top: 50px;
         }
-        
+
         .footer-logo {
             font-family: 'Cormorant Garamond', serif;
             font-size: 2rem;
             margin-bottom: 20px;
             font-style: italic;
         }
-        
+
         .footer-links {
             font-size: 0.85rem;
             color: #888;
             margin-bottom: 30px;
             letter-spacing: 1px;
         }
-        
+
         .copyright {
             font-size: 0.75rem;
             color: #555;
@@ -340,16 +367,17 @@
             height: 55px;
             background: var(--text-main);
             color: white;
-            border-radius: 50%; /* 圓形保留，方便點擊 */
+            border-radius: 50%;
+            /* 圓形保留，方便點擊 */
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
             cursor: pointer;
             z-index: 100;
             transition: transform 0.2s;
         }
-        
+
         #cart-count {
             position: absolute;
             top: -5px;
@@ -365,9 +393,22 @@
             justify-content: center;
         }
 
-        .cart-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 2000; justify-content: flex-end; }
-        .cart-modal.show { display: flex; }
-        
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 2000;
+            justify-content: flex-end;
+        }
+
+        .cart-modal.show {
+            display: flex;
+        }
+
         .cart-content {
             background: #fff;
             width: 100%;
@@ -376,11 +417,19 @@
             padding: 40px;
             display: flex;
             flex-direction: column;
-            box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
             animation: slideLeft 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        
-        @keyframes slideLeft { from { transform: translateX(100%); } to { transform: translateX(0); } }
+
+        @keyframes slideLeft {
+            from {
+                transform: translateX(100%);
+            }
+
+            to {
+                transform: translateX(0);
+            }
+        }
 
         .btn-checkout {
             width: 100%;
@@ -403,24 +452,69 @@
             color: #999;
             font-style: italic;
         }
-        
-        /* 彈窗樣式微調 */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-content { background: #fff; width: 90%; max-width: 500px; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.1); position: relative; border: 1px solid #eee; }
-        .modal-close-btn { position: absolute; top: 20px; right: 20px; border: none; background: transparent; font-size: 2rem; cursor: pointer; color: #333; }
-        .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; padding: 30px 30px 10px; text-align: center; }
-        .modal-body p { padding: 0 30px 30px; color: #666; line-height: 1.8; font-size: 0.95rem; }
 
+        /* 彈窗樣式微調 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #fff;
+            width: 90%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+            position: relative;
+            border: 1px solid #eee;
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            border: none;
+            background: transparent;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .modal-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            padding: 30px 30px 10px;
+            text-align: center;
+        }
+
+        .modal-body p {
+            padding: 0 30px 30px;
+            color: #666;
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
     </style>
 </head>
 
 <body>
-    
+
     <header>
         <h1>February Collection</h1>
         <div class="brand-subtitle">Mina．妝日子 Selection</div>
-        
-        <div style="position: absolute; top: 60px; right: 20%; color: #d4a373; opacity: 0.6; animation: twinkle 3s infinite;">✦</div>
+
+        <div
+            style="position: absolute; top: 60px; right: 20%; color: #d4a373; opacity: 0.6; animation: twinkle 3s infinite;">
+            ✦</div>
     </header>
 
     <div class="memo-board">
@@ -445,7 +539,8 @@
     </footer>
 
     <div id="cart-float-btn" onclick="toggleCart()">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
             <line x1="3" y1="6" x2="21" y2="6"></line>
             <path d="M16 10a4 4 0 0 1-8 0"></path>
@@ -469,10 +564,13 @@
                         <input type="radio" name="shipping" value="賣貨便" style="margin-right:8px;"> 7-11 賣貨便
                     </label>
                     <label style="display:block; cursor:pointer;">
-                        <input type="radio" name="shipping" value="iOPEN Mall" style="margin-right:8px;"> 7-11 iOPEN Mall
+                        <input type="radio" name="shipping" value="iOPEN Mall" style="margin-right:8px;"> 7-11 iOPEN
+                        Mall
                     </label>
                 </div>
-                <div id="cartTotal" style="font-family:'Cormorant Garamond', serif; font-size:1.4rem; font-weight:600; text-align:right;">Total: NT$ 0</div>
+                <div id="cartTotal"
+                    style="font-family:'Cormorant Garamond', serif; font-size:1.4rem; font-weight:600; text-align:right;">
+                    Total: NT$ 0</div>
                 <button class="btn-checkout" onclick="checkoutViaLine()">CHECKOUT VIA LINE</button>
             </div>
         </div>
@@ -500,7 +598,7 @@
                 const response = await fetch(GOOGLE_SHEET_CSV_URL);
                 const data = await response.text();
                 const rows = data.split('\n').map(row => row.split(','));
-                rows.shift(); 
+                rows.shift();
 
                 loading.style.display = 'none';
                 allProductsData = [];
@@ -509,7 +607,7 @@
                     if (row.length < 4) return;
                     const rawSpec = row[1] ? row[1].trim() : '';
                     const variants = rawSpec.includes('|') ? rawSpec.split('|').map(s => s.trim()) : (rawSpec ? [rawSpec] : []);
-                    
+
                     const product = {
                         id: index,
                         name: row[0] ? row[0].trim() : 'Unnamed',
@@ -553,7 +651,7 @@
                         </div>`;
                     }
 
-                    let options = ''; for(let i=1; i<=5; i++) options += `<option value="${i}">${i}</option>`;
+                    let options = ''; for (let i = 1; i <= 5; i++) options += `<option value="${i}">${i}</option>`;
 
                     card.innerHTML = `
                         <div class="img-wrapper">
@@ -593,7 +691,7 @@
             const qty = parseInt(document.getElementById(`qty-${index}`).value);
             if (product.variants.length > 1 && !product.selectedVariant) { alert('Please select a variant.'); return; }
             const item = { name: product.name, spec: product.selectedVariant, price: parseInt(product.price), qty: qty };
-            cart.push(item); updateCartIcon(); 
+            cart.push(item); updateCartIcon();
             // 這裡改成比較安靜的通知，不要一直跳 alert 
             const btn = document.querySelectorAll('.btn-add')[index];
             const originalText = btn.innerText;
@@ -604,7 +702,7 @@
         }
 
         function updateCartIcon() { document.getElementById('cart-count').innerText = cart.length; }
-        
+
         function toggleCart() {
             const modal = document.getElementById('cartModal');
             if (!modal.classList.contains('show')) { renderCartItems(); modal.classList.add('show'); }
@@ -616,7 +714,7 @@
             const container = document.getElementById('cartItems');
             const totalEl = document.getElementById('cartTotal');
             if (cart.length === 0) { container.innerHTML = '<p style="text-align:center; color:#999; margin-top:40px;">Your cart is empty.</p>'; totalEl.innerText = 'Total: NT$ 0'; return; }
-            
+
             let html = ''; let total = 0;
             cart.forEach((item, idx) => {
                 const subtotal = item.price * item.qty; total += subtotal;
@@ -663,7 +761,7 @@
             modal.style.display = 'flex';
         }
         function closeModal(event) { if (event.target.classList.contains('modal-overlay') || event.target.classList.contains('modal-close-btn')) document.getElementById('detailModal').style.display = 'none'; }
-        
+
         // 動畫：簡單的星星閃爍
         const style = document.createElement('style');
         style.innerHTML = `@keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }`;
@@ -672,4 +770,5 @@
         fetchProducts();
     </script>
 </body>
+
 </html>
