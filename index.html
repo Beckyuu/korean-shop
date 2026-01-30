@@ -291,28 +291,40 @@
             /* 緩慢放大 */
         }
 
-        /* === 標籤 Badge (增加豐富度的關鍵) === */
+        /* === 優化後的標籤 Badge (韓系絲帶感) === */
         .badge {
             position: absolute;
-            top: 10px;
-            left: 10px;
-            padding: 4px 10px;
-            font-size: 0.7rem;
-            font-weight: 600;
+            top: 0;
+            left: 15px;
+            /* 稍微往內縮一點 */
+            padding: 6px 10px 8px;
+            /* 下方留長一點 */
+            font-size: 0.75rem;
+            font-weight: 500;
             letter-spacing: 1px;
             z-index: 2;
-            text-transform: uppercase;
-        }
-
-        .badge.new {
-            background-color: var(--text-main);
             color: #fff;
+
+            /* 做成下方有缺口的絲帶形狀 */
+            clip-path: polygon(0% 0%, 100% 0%, 100% 85%, 50% 100%, 0% 85%);
+
+            /* 加上微微的陰影，更有層次 */
+            filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
         }
 
+        /* NEW: 質感霧金 (呼應你的主題色) */
+        .badge.new {
+            background-color: #d4a373;
+        }
+
+        /* HOT: 溫柔磚紅 */
         .badge.hot {
             background-color: #bfa092;
-            /* 莫蘭迪紅 */
-            color: #fff;
+        }
+
+        /* SALE: 顯眼的紅色 (備用) */
+        .badge.sale {
+            background-color: #c97c7c;
         }
 
         /* 資訊區域 */
@@ -949,6 +961,7 @@
                         imgUrl: row[3] ? row[3].trim() : '',
                         detailImgUrl: row[4] ? row[4].trim() : '',
                         description: row[5] ? row[5].trim() : '',
+                        tag: row[6] ? row[6].trim().toUpperCase() : ''
                         selectedVariant: null
                     };
 
@@ -961,10 +974,15 @@
                     const card = document.createElement('div');
                     card.className = 'product-card';
 
-                    // === 增加豐富度：隨機給一些商品加上標籤 (僅視覺效果) ===
+                    // === 修改後：根據 Google Sheet 的 G 欄決定顯示什麼標籤 ===
                     let badgeHtml = '';
-                    if (index < 2) badgeHtml = `<div class="badge new">NEW</div>`;
-                    else if (index === 3 || index === 5) badgeHtml = `<div class="badge hot">HOT</div>`;
+                    if (product.tag === 'NEW') {
+                        badgeHtml = `<div class="badge new">NEW</div>`;
+                    } else if (product.tag === 'HOT') {
+                        badgeHtml = `<div class="badge hot">HOT</div>`;
+                    } else if (product.tag === 'SALE') {
+                        badgeHtml = `<div class="badge sale">SALE</div>`;
+                    }
 
                     let variantsHtml = '';
                     if (product.variants.length > 1) {
