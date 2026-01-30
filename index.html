@@ -387,25 +387,32 @@
         .variant-btn {
             font-family: 'Noto Sans TC', sans-serif;
             font-size: 0.8rem;
-            /* 字小一點才優雅 */
             color: #888;
             background: #fff;
-
-            /* 極細邊框 */
             border: 1px solid #e0e0e0;
-
-            /* 變成圓潤的米粒形狀 */
             border-radius: 15px;
+            /* 米粒圓潤感 */
             padding: 4px 12px;
 
             cursor: pointer;
+            /* 關鍵：滑鼠要是小手手 */
             transition: all 0.2s;
+
+            /* ⚠️ 注意：這裡絕對不能有 pointer-events: none */
         }
 
-        /* 滑鼠移過去 */
+        /* 2. 一般按鈕的滑鼠滑過效果 */
         .variant-btn:hover {
             border-color: #d4a373;
             color: #d4a373;
+        }
+
+        /* 3. 一般按鈕「被點選」的狀態 (變成實心金) */
+        .variant-btn.selected {
+            background: #d4a373;
+            color: #fff;
+            border-color: #d4a373;
+            box-shadow: 0 2px 5px rgba(212, 163, 115, 0.3);
         }
 
         /* === 單一規格專用：輕盈鏤空風格 === */
@@ -434,7 +441,6 @@
         }
 
         /* === 單一規格文字 (美化版) === */
-        /* === 單一規格文字 (優雅中文版) === */
         .single-variant-text {
             /* 關鍵：強制用黑體，才不會變成新細明體！ */
             font-family: 'Noto Sans TC', sans-serif;
@@ -933,67 +939,6 @@
             font-size: 0.95rem;
         }
 
-        /* 選擇規格：精緻短版風格 */
-        /* === 4. 規格選單 (縮短 + 美化) === */
-        .variant-select {
-            /* 寬度設定：改成 70% 左右，比較精緻 */
-            width: 70%;
-            max-width: 200px;
-            /* 也不要太寬 */
-
-            /* 置中 */
-            margin: 5px auto 15px;
-            display: block;
-
-            padding: 6px;
-            /* 稍微扁一點 */
-            font-family: 'Noto Sans TC', sans-serif;
-            font-size: 0.85rem;
-            color: #d4a373;
-            background-color: #fff;
-            border: 1px solid #d4a373;
-            border-radius: 4px;
-            cursor: pointer;
-            text-align: center;
-            text-align-last: center;
-
-            appearance: none;
-            -webkit-appearance: none;
-
-            /* 箭頭 */
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 8px center;
-            background-size: 10px;
-        }
-
-        .variant-select:hover {
-            background-color: #fdfbf7;
-            /* 滑過去變淡米色 */
-        }
-
-        .variant-select:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(212, 163, 115, 0.2);
-        }
-
-        /* === 單一規格 (鎖定版)：改成金色質感 === */
-        .variant-select:disabled {
-            border: 1px solid #d4a373;
-            /* 邊框變金 */
-            color: #d4a373;
-            /* 文字變金 */
-            background-color: #fff;
-            /* 背景全白 */
-            opacity: 1;
-            /* 確保顏色飽和，不要半透明 */
-
-            cursor: default;
-            /* 滑鼠維持箭頭，暗示不能點 */
-            background-image: none;
-            /* 不顯示下拉箭頭 */
-        }
-
         /* 詳情按鈕：永久顯示版 */
         .more-sticker {
             position: absolute;
@@ -1464,6 +1409,13 @@
 
         function forceCloseModal() {
             document.getElementById('detailModal').style.display = 'none';
+        }
+
+        // 🟢 補上這個：讓點擊背景也能關閉詳情視窗
+        function closeModal(event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                document.getElementById('detailModal').style.display = 'none';
+            }
         }
 
         // 動畫：簡單的星星閃爍
