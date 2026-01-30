@@ -408,14 +408,29 @@
             color: #d4a373;
         }
 
-        /* 被選中的狀態 */
-        .variant-btn.selected {
-            background: #d4a373;
-            /* 實心金棕色 */
-            color: #fff;
-            border-color: #d4a373;
-            box-shadow: 0 2px 5px rgba(212, 163, 115, 0.3);
-            /* 微微發光 */
+        /* === 單一規格專用：輕盈鏤空風格 === */
+        .variant-btn.single-mode {
+            background-color: #fff;
+            /* 背景改回白色 */
+            color: #d4a373;
+            /* 文字維持金色 */
+            border: 1px solid #d4a373;
+            /* 邊框維持金色 */
+
+            cursor: default;
+            /* 滑鼠游標改回箭頭 */
+            pointer-events: none;
+            /* 讓它不能被點選 */
+
+            font-weight: 500;
+            /* 字稍微加重一點點，提升質感 */
+            padding: 4px 16px;
+            /* 稍微寬一點點 */
+            box-shadow: none;
+            /* 拿掉陰影，讓它扁平化 */
+
+            /* 如果覺得純白太單調，可以試試看極淡的米色背景，把上面那行改成： */
+            /* background-color: #fdf6f0; */
         }
 
         /* === 單一規格文字 (美化版) === */
@@ -504,16 +519,21 @@
             flex-direction: column;
         }
 
-        /* === 3. 副標題 (強制佔位，解決對齊) === */
+        /* === 副標題 (微調加強版) === */
         .desc-text {
             display: block;
             font-size: 0.85rem;
-            color: #888;
+
+            /* 🔴 修改 1：顏色從 #888 改成 #666 (深一點) */
+            color: #666;
+
             margin-bottom: 8px;
             font-family: 'Noto Sans TC', sans-serif;
-            font-weight: 300;
+
+            /* 🔴 修改 2：字重從 300 改成 400 (正常粗細，不要太細) */
+            font-weight: 400;
+
             line-height: 1.4;
-            /* 最小高度：確保大家都有位子 */
             min-height: 1.4em;
         }
 
@@ -1245,17 +1265,16 @@
                         });
                         variantsHtml += `</div>`;
                     } else {
-                        // 如果是單一規格 -> 顯示優雅的金色英文
-                        // 這裡你可以決定要顯示 'ONE SIZE' 還是 'CLASSIC'
-                        let singleName = (product.variants.length === 1 && product.variants[0] !== '') ? product.variants[0] : '單一規格';
+                        // 情況 B：單一規格
+                        let singleName = (product.variants.length === 1 && product.variants[0] !== '') ? product.variants[0] : 'ONE SIZE';
 
-                        // 預設幫他選好
                         product.selectedVariant = singleName;
 
-                        // 修改：單一規格也用「按鈕」的殼裝起來，並加上 selected 讓它變金色
+                        // 🔴 修改重點：把 class="variant-btn selected" 改成 class="variant-btn single-mode"
+                        // 我們要用 CSS 另外定義 single-mode 的長相，不要用原本那種很重的實心色
                         variantsHtml = `
                             <div class="variant-container">
-                                <div class="variant-btn selected" style="cursor: default; pointer-events: none;">
+                                <div class="variant-btn single-mode">
                                     ${singleName}
                                 </div>
                             </div>`;
