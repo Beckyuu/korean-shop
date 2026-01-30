@@ -942,6 +942,8 @@
             try {
                 const response = await fetch(GOOGLE_SHEET_CSV_URL);
                 const data = await response.text();
+
+                // 使用 parseCSVLine 來處理逗號問題
                 const rows = data.split('\n').map(row => parseCSVLine(row));
                 rows.shift();
 
@@ -960,9 +962,8 @@
                         price: row[2] ? row[2].trim() : '0',
                         imgUrl: row[3] ? row[3].trim() : '',
                         detailImgUrl: row[4] ? row[4].trim() : '',
-                        description: row[5] ? row[5].trim() : '',
-                        tag: row[6] ? row[6].trim().toUpperCase() : ''
-                        selectedVariant: null
+                        description: row[5] ? row[5].trim() : '', // 記得這裡有逗號
+                        tag: row[6] ? row[6].trim().toUpperCase() : '' // 新增的標籤欄位
                     };
 
                     product.hasDetails = product.detailImgUrl !== '';
@@ -974,7 +975,7 @@
                     const card = document.createElement('div');
                     card.className = 'product-card';
 
-                    // === 修改後：根據 Google Sheet 的 G 欄決定顯示什麼標籤 ===
+                    // === 這裡就是剛剛改的標籤邏輯 ===
                     let badgeHtml = '';
                     if (product.tag === 'NEW') {
                         badgeHtml = `<div class="badge new">NEW</div>`;
