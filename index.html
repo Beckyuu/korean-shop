@@ -254,12 +254,8 @@
             background: transparent;
             position: relative;
             transition: all 0.4s ease;
-
-            /* === 新增：讓卡片變成彈性盒子，為了做對齊 === */
-            display: flex;
-            flex-direction: column;
             height: 100%;
-            /* 讓它長滿整個格子 */
+
         }
 
         .product-card:hover {
@@ -331,16 +327,20 @@
             background-color: #c97c7c;
         }
 
+        /* === 資訊區域 (改用 Grid 排版) === */
         .info {
             padding: 15px 5px 0;
             text-align: center;
+            height: 100%;
+            /* 佔滿高度 */
 
-            /* === 新增：這兩行是關鍵 === */
-            flex-grow: 1;
-            /* 佔滿卡片剩下的高度 */
-            display: flex;
-            flex-direction: column;
-            /* 讓裡面的內容由上往下排 */
+            /* 🟢 啟用 Grid */
+            display: grid;
+            /* 定義 5 行的高度 */
+            /* 主標題(自動) | 副標題(固定高度) | 規格(自動) | 價格(最小高度) | 按鈕(自動，推到底部) */
+            grid-template-rows: auto 1.4em auto minmax(1.5em, auto) 1fr;
+            gap: 10px;
+            /* 行與行之間的間距 */
         }
 
         .name {
@@ -375,10 +375,7 @@
             font-weight: 600;
             color: #2c2c2c;
             display: block;
-            margin-bottom: 15px;
 
-            /* === 關鍵魔法：把價格和下方的按鈕，用力推到最下面 === */
-            margin-top: auto;
         }
 
         /* 規格按鈕 */
@@ -413,12 +410,13 @@
             border-color: var(--text-main);
         }
 
-        /* 購買區塊 */
         .action-row {
             display: flex;
             justify-content: center;
             gap: 8px;
             align-items: center;
+            /* 🟢 讓它靠下對齊 */
+            align-self: end;
             margin-top: 10px;
         }
 
