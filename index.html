@@ -760,6 +760,52 @@
             line-height: 1.8;
             font-size: 0.95rem;
         }
+
+        /* === 時尚下拉選單 (取代原本的按鈕) === */
+        .variant-select {
+            width: 100%;
+            padding: 10px 12px;
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 0.9rem;
+            color: #555;
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 0;
+            /* 方形才時尚 */
+            cursor: pointer;
+            margin-bottom: 15px;
+
+            /* 關鍵：移除預設醜醜的箭頭 */
+            appearance: none;
+            -webkit-appearance: none;
+
+            /* 自訂質感小箭頭 (用 SVG 畫一個金棕色的 v ) */
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .variant-select:hover,
+        .variant-select:focus {
+            border-color: #d4a373;
+            /* 選取時變金棕色 */
+            outline: none;
+        }
+
+        /* 單一規格 (鎖定版) 的樣式 */
+        .variant-select:disabled {
+            background-color: #f9f8f6;
+            /* 淡淡的米灰色背景 */
+            color: #999;
+            border-color: #eee;
+            cursor: default;
+            /* 單一規格不需要箭頭，讓畫面更乾淨 */
+            background-image: none;
+            text-align: center;
+            /* 文字置中 */
+        }
     </style>
 </head>
 
@@ -985,15 +1031,30 @@
                         badgeHtml = `<div class="badge sale">SALE</div>`;
                     }
 
+                    // === 修改後：下拉選單邏輯 (含單一規格鎖定) ===
                     let variantsHtml = '';
+
                     if (product.variants.length > 1) {
-                        variantsHtml = `<div class="variant-container" id="variants-${index}">`;
+                        // 情況 A：多種款式 -> 產生可選的 Dropdown
+                        variantsHtml = `<select class="variant-select" onchange="selectVariant(${index}, this.value)">
+                            <option value="" disabled selected>請選擇款式 (Select)...</option>`;
+
                         product.variants.forEach(v => {
-                            variantsHtml += `<div class="variant-btn" onclick="selectVariant(${index}, '${v}', this)">${v}</div>`;
+                            variantsHtml += `<option value="${v}">${v}</option>`;
                         });
-                        variantsHtml += `</div>`;
-                    } else if (product.variants.length === 1 && product.variants[0] !== '') {
-                        variantsHtml = `<div class="desc-text" style="text-align:center;">${product.variants[0]}</div>`;
+
+                        variantsHtml += `</select>`;
+                    } else {
+                        // 情況 B：單一規格 -> 產生鎖定的 Dropdown (為了排版整齊)
+                        // 如果有寫規格名就用規格名，沒寫就顯示「單一款式」
+                        let singleName = (product.variants.length === 1 && product.variants[0] !== '') ? product.variants[0] : '單一款式';
+
+                        // 預設幫他選好，這樣客人才不用點
+                        product.selectedVariant = singleName;
+
+                        variantsHtml = `<select class="variant-select" disabled>
+                            <option selected>${singleName}</option>
+                        </select>`;
                     }
 
                     let stickerHtml = '';
@@ -1030,12 +1091,9 @@
             } catch (error) { console.error(error); loading.innerHTML = 'Error loading products.'; }
         }
 
-        // --- 以下 JS 功能邏輯保持不變 ---
-        function selectVariant(productIndex, variantName, btnElement) {
-            allProductsData[productIndex].selectedVariant = variantName;
-            const container = document.getElementById(`variants-${productIndex}`);
-            for (let btn of container.getElementsByClassName('variant-btn')) { btn.classList.remove('selected'); }
-            btnElement.classList.add('selected');
+        // 更新後的選取功能 (給下拉選單用)
+        function selectVariant(productIndex, value) {
+            allProductsData[productIndex].selectedVariant = value;
         }
 
         function addToCart(index) {
