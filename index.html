@@ -384,31 +384,34 @@
 
         }
 
-        /* === 米粒按鈕 (取代原本的框框) === */
+        /* === 米粒按鈕 (預設就是金色質感) === */
         .variant-btn {
             font-family: 'Noto Sans TC', sans-serif;
             font-size: 0.8rem;
-            color: #888;
+
+            /* 🔴 修改 1：預設文字就是金色 */
+            color: #d4a373;
+
             background: #fff;
-            border: 1px solid #e0e0e0;
+
+            /* 🔴 修改 2：預設邊框就是金色 */
+            border: 1px solid #d4a373;
+
             border-radius: 15px;
-            /* 米粒圓潤感 */
             padding: 4px 12px;
 
             cursor: pointer;
-            /* 關鍵：滑鼠要是小手手 */
             transition: all 0.2s;
-
-            /* ⚠️ 注意：這裡絕對不能有 pointer-events: none */
         }
 
-        /* 2. 一般按鈕的滑鼠滑過效果 */
+        /* 滑鼠移過去 (變成實心，給點預覽感) */
         .variant-btn:hover {
-            border-color: #d4a373;
-            color: #d4a373;
+            background: #fdfbf7;
+            /* 極淡米色 */
+            /* 邊框和文字維持金色 */
         }
 
-        /* 3. 一般按鈕「被點選」的狀態 (變成實心金) */
+        /* 被選中的狀態 (變成實心金 + 白字) */
         .variant-btn.selected {
             background: #d4a373;
             color: #fff;
@@ -1260,29 +1263,35 @@
             } catch (error) { console.error(error); loading.innerHTML = 'Error loading products.'; }
         }
 
-        // 按鈕點擊功能
+        // 按鈕點擊功能 (支援取消選取)
         function selectVariant(productIndex, value, btnElement) {
-            // 1. 記錄選了什麼
-            allProductsData[productIndex].selectedVariant = value;
+            const product = allProductsData[productIndex];
 
-            // 2. 視覺回饋：把同一區的按鈕顏色重置
-            const container = document.getElementById(`variants-${productIndex}`);
-            const btns = container.getElementsByClassName('variant-btn');
+            // 🔴 判斷：如果這個按鈕已經是被選中狀態，代表使用者想「取消」
+            if (btnElement.classList.contains('selected')) {
+                // 1. 移除樣式 (變回空心金)
+                btnElement.classList.remove('selected');
 
-            for (let btn of btns) {
-                btn.classList.remove('selected');
+                // 2. 清除已選規格 (這樣加入購物車時會擋住，或需要另外處理)
+                product.selectedVariant = null;
+
+            } else {
+                // 🔴 如果還沒被選，代表使用者想「選取」
+
+                // 1. 先把同一區的其他兄弟按鈕都取消 (變成空心金)
+                const container = document.getElementById(`variants-${productIndex}`);
+                const btns = container.getElementsByClassName('variant-btn');
+
+                for (let btn of btns) {
+                    btn.classList.remove('selected');
+                }
+
+                // 2. 把自己變成實心金
+                btnElement.classList.add('selected');
+
+                // 3. 記錄選了什麼
+                product.selectedVariant = value;
             }
-
-            // 3. 把被點到的這個按鈕變色
-            btnElement.classList.add('selected');
-        }
-
-        function updateCartIcon() { document.getElementById('cart-count').innerText = cart.length; }
-
-        function toggleCart() {
-            const modal = document.getElementById('cartModal');
-            if (!modal.classList.contains('show')) { renderCartItems(); modal.classList.add('show'); }
-            else { modal.classList.remove('show'); }
         }
         function closeCart(e) { if (e.target.classList.contains('cart-modal')) document.getElementById('cartModal').classList.remove('show'); }
 
