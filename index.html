@@ -364,36 +364,71 @@
             min-height: 1.4em;
         }
 
-        /* 規格按鈕 */
+        /* === 規格容器：讓按鈕置中排列 === */
         .variant-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
+            /* 自動換行 */
             justify-content: center;
+            /* 關鍵：讓按鈕全部置中 */
+            gap: 6px;
+            /* 按鈕之間的間距 */
+
             margin-bottom: 15px;
+            /* 跟下方價格的距離 */
+
+            /* 視覺整齊的秘密：設定最小高度 */
+            min-height: 28px;
+            align-content: center;
+            /* 讓內容垂直居中 */
         }
 
+        /* === 米粒按鈕 (取代原本的框框) === */
         .variant-btn {
+            font-family: 'Noto Sans TC', sans-serif;
             font-size: 0.8rem;
-            padding: 4px 12px;
-            border: 1px solid #e0e0e0;
-            background: #fff;
+            /* 字小一點才優雅 */
             color: #888;
+            background: #fff;
+
+            /* 極細邊框 */
+            border: 1px solid #e0e0e0;
+
+            /* 變成圓潤的米粒形狀 */
+            border-radius: 15px;
+            padding: 4px 12px;
+
             cursor: pointer;
             transition: all 0.2s;
-            border-radius: 0;
-            /* 直角比較時尚 */
         }
 
+        /* 滑鼠移過去 */
         .variant-btn:hover {
-            border-color: var(--text-main);
-            color: var(--text-main);
+            border-color: #d4a373;
+            color: #d4a373;
         }
 
+        /* 被選中的狀態 */
         .variant-btn.selected {
-            background: var(--text-main);
+            background: #d4a373;
+            /* 實心金棕色 */
             color: #fff;
-            border-color: var(--text-main);
+            border-color: #d4a373;
+            box-shadow: 0 2px 5px rgba(212, 163, 115, 0.3);
+            /* 微微發光 */
+        }
+
+        /* === 單一規格文字 (美化版) === */
+        .single-variant-text {
+            font-family: 'Bodoni Moda', serif;
+            /* 漂亮的英文字體 */
+            font-size: 0.95rem;
+            color: #d4a373;
+            /* 金色 */
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 15px;
+            /* 確保跟價格有距離 */
         }
 
         .action-row {
@@ -1191,30 +1226,29 @@
                         badgeHtml = `<div class="badge sale">SALE</div>`;
                     }
 
-                    // === 修改後：下拉選單邏輯 (含單一規格鎖定) ===
+                    // === 修改後：韓系米粒按鈕排版 ===
                     let variantsHtml = '';
 
                     if (product.variants.length > 1) {
-                        // 情況 A：多種款式 -> 產生可選的 Dropdown
-                        variantsHtml = `<select class="variant-select" onchange="selectVariant(${index}, this.value)">
-                            <option value="" disabled selected>請選擇款式 (Select)...</option>`;
-
+                        // 如果有多個規格 -> 產生按鈕群組
+                        variantsHtml = `<div class="variant-container" id="variants-${index}">`;
                         product.variants.forEach(v => {
-                            variantsHtml += `<option value="${v}">${v}</option>`;
+                            variantsHtml += `<div class="variant-btn" onclick="selectVariant(${index}, '${v}', this)">${v}</div>`;
                         });
-
-                        variantsHtml += `</select>`;
+                        variantsHtml += `</div>`;
                     } else {
-                        // 情況 B：單一規格
-                        // 修改這裡：如果沒寫規格，預設顯示 'ONE SIZE' 比較時尚
+                        // 如果是單一規格 -> 顯示優雅的金色英文
+                        // 這裡你可以決定要顯示 'ONE SIZE' 還是 'CLASSIC'
                         let singleName = (product.variants.length === 1 && product.variants[0] !== '') ? product.variants[0] : 'ONE SIZE';
 
-                        // 預設幫他選好，這樣客人才不用點
+                        // 預設幫他選好
                         product.selectedVariant = singleName;
 
-                        variantsHtml = `<select class="variant-select" disabled>
-                            <option selected>${singleName}</option>
-                        </select>`;
+                        // 雖然是單一規格，我們還是用 container 包起來，這樣高度才會對齊！
+                        variantsHtml = `
+                            <div class="variant-container">
+                                <span class="single-variant-text">${singleName}</span>
+                            </div>`;
                     }
 
                     let stickerHtml = '';
@@ -1254,24 +1288,21 @@
             } catch (error) { console.error(error); loading.innerHTML = 'Error loading products.'; }
         }
 
-        // 更新後的選取功能 (給下拉選單用)
-        function selectVariant(productIndex, value) {
+        // 按鈕點擊功能
+        function selectVariant(productIndex, value, btnElement) {
+            // 1. 記錄選了什麼
             allProductsData[productIndex].selectedVariant = value;
-        }
 
-        function addToCart(index) {
-            const product = allProductsData[index];
-            const qty = parseInt(document.getElementById(`qty-${index}`).value);
-            if (product.variants.length > 1 && !product.selectedVariant) { alert('請選擇款式 (Please select a variant.)'); return; }
-            const item = { name: product.name, spec: product.selectedVariant, price: parseInt(product.price), qty: qty };
-            cart.push(item); updateCartIcon();
-            // 這裡改成比較安靜的通知，不要一直跳 alert 
-            const btn = document.querySelectorAll('.btn-add')[index];
-            const originalText = btn.innerText;
-            btn.innerText = '已加入!'; // 改成中文
-            btn.style.background = '#2c2c2c';
-            btn.style.color = '#fff';
-            setTimeout(() => { btn.innerText = originalText; btn.style.background = ''; btn.style.color = ''; }, 1000);
+            // 2. 視覺回饋：把同一區的按鈕顏色重置
+            const container = document.getElementById(`variants-${productIndex}`);
+            const btns = container.getElementsByClassName('variant-btn');
+
+            for (let btn of btns) {
+                btn.classList.remove('selected');
+            }
+
+            // 3. 把被點到的這個按鈕變色
+            btnElement.classList.add('selected');
         }
 
         function updateCartIcon() { document.getElementById('cart-count').innerText = cart.length; }
