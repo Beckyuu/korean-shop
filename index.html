@@ -343,30 +343,19 @@
             letter-spacing: 0.5px;
         }
 
-        /* === 行銷副標 (原本的描述文字) === */
+        /* === 1. 副標 (描述文字)：改成簡約文字，跟標題是一家人 === */
         .desc-text {
-            display: inline-block;
-            /* 讓它變成塊狀，才能加框 */
+            display: block;
+            /* 換行 */
             font-size: 0.85rem;
-            color: #d4a373;
-            /* 字體改用你的主題金棕色 */
-            background-color: #fdfbf7;
-            /* 極淡的米色背景 */
-            border: 1px solid #eaddd5;
-            /* 細細的邊框 */
-            padding: 4px 10px;
-            /* 內部留白 */
-            border-radius: 4px;
-            /* 微微圓角 */
-            margin-bottom: 12px;
+            color: #888;
+            /* 深灰色 */
+            margin-bottom: 15px;
+            /* 跟下方留點距離 */
             font-family: 'Noto Sans TC', sans-serif;
+            font-weight: 300;
             letter-spacing: 0.5px;
-
-            /* 讓長文字不要撐爆，超過顯示點點點 */
-            max-width: 100%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            line-height: 1.4;
         }
 
         /* 價格 */
@@ -779,50 +768,89 @@
             font-size: 0.95rem;
         }
 
-        /* === 時尚下拉選單 (取代原本的按鈕) === */
+        /* === 2. 選擇規格：移植原本的「金色框框」風格 === */
         .variant-select {
             width: 100%;
-            padding: 10px 12px;
+            padding: 8px 12px;
             font-family: 'Noto Sans TC', sans-serif;
             font-size: 0.9rem;
-            color: #555;
+            color: #d4a373;
+            /* 文字金棕色 */
             background-color: #fff;
-            border: 1px solid #e0e0e0;
-            border-radius: 0;
-            /* 方形才時尚 */
+
+            /* 金色邊框 */
+            border: 1px solid #d4a373;
+            border-radius: 4px;
+            /* 微微圓角 */
+
             cursor: pointer;
             margin-bottom: 15px;
+            /* 跟價格的距離 */
+            text-align: center;
+            text-align-last: center;
+            /* 讓文字強制置中 */
 
-            /* 關鍵：移除預設醜醜的箭頭 */
             appearance: none;
             -webkit-appearance: none;
 
-            /* 自訂質感小箭頭 (用 SVG 畫一個金棕色的 v ) */
+            /* 下拉箭頭改用簡單的線條，或者直接不顯示箭頭保持極簡 */
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
             background-repeat: no-repeat;
             background-position: right 10px center;
-            background-size: 16px;
+            background-size: 14px;
             transition: all 0.3s;
         }
 
-        .variant-select:hover,
-        .variant-select:focus {
-            border-color: #d4a373;
-            /* 選取時變金棕色 */
-            outline: none;
+        .variant-select:hover {
+            background-color: #fdfbf7;
+            /* 滑過去變淡米色 */
         }
 
-        /* 單一規格 (鎖定版) 的樣式 */
+        .variant-select:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(212, 163, 115, 0.2);
+        }
+
+        /* 單一規格鎖定時 */
         .variant-select:disabled {
-            background-color: #f9f8f6;
-            /* 淡淡的米灰色背景 */
-            color: #999;
-            border-color: #eee;
-            cursor: default;
-            /* 單一規格不需要箭頭，讓畫面更乾淨 */
+            border-color: #e0e0e0;
+            color: #aaa;
             background-image: none;
-            text-align: center;
-            /* 文字置中 */
+            cursor: default;
+        }
+
+        /* === 4. 詳情按鈕：改成永久顯示在右下角 === */
+        .more-sticker {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+
+            /* 改成膠囊形狀按鈕 */
+            padding: 4px 12px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #555;
+            border: 1px solid #eee;
+            border-radius: 20px;
+
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.75rem;
+            font-family: 'Noto Sans TC', sans-serif;
+            cursor: pointer;
+            z-index: 5;
+
+            /* 永久顯示，不再隱藏 */
+            opacity: 1;
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+
+        .more-sticker:hover {
+            background: #2c2c2c;
+            color: #fff;
+            border-color: #2c2c2c;
         }
     </style>
 </head>
@@ -1077,26 +1105,29 @@
 
                     let stickerHtml = '';
                     if (product.hasDetails) {
-                        stickerHtml = `<div class="more-sticker" onclick="showDetails(${index})" title="View Details">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        // 修改：加上文字 "查看詳情"
+                        stickerHtml = `<div class="more-sticker" onclick="showDetails(${index})">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                            查看詳情
                         </div>`;
                     }
 
                     let options = ''; for (let i = 1; i <= 5; i++) options += `<option value="${i}">${i}</option>`;
 
+                    // === 排版順序大風吹 ===
                     card.innerHTML = `
                         <div class="img-wrapper">
                             ${badgeHtml}
                             <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
-                            ${stickerHtml}
-                        </div>
+                            ${stickerHtml} </div>
                         <div class="info">
                             <h3 class="name">${product.name}</h3>
+                            
                             ${product.description ? `<span class="desc-text">${product.description}</span>` : ''}
                             
-                            <span class="price">NT$ ${product.price}</span>
-                            
                             ${variantsHtml}
+
+                            <span class="price">NT$ ${product.price}</span>
                             
                             <div class="action-row">
                                 <select id="qty-${index}">${options}</select>
@@ -1236,12 +1267,26 @@
             const product = allProductsData[index];
             const modal = document.getElementById('detailModal');
             document.getElementById('modalTitle').innerText = product.name;
+
             let content = '';
-            if (product.detailImgUrl) content += `<img src="${product.detailImgUrl}" style="width:100%; display:block;">`;
+            // === 修改重點：支援多張圖片 (用逗號分隔) ===
+            if (product.detailImgUrl) {
+                // 用逗號 , 來切割網址
+                const urls = product.detailImgUrl.split(',');
+
+                urls.forEach(url => {
+                    // 清除前後空白並產生圖片
+                    if (url.trim()) {
+                        content += `<img src="${url.trim()}" style="width:100%; display:block; margin-bottom:10px;">`;
+                    }
+                });
+            } else {
+                content = '<p style="text-align:center; padding:20px;">尚無詳細圖片</p>';
+            }
+
             document.getElementById('modalBody').innerHTML = content;
             modal.style.display = 'flex';
         }
-        function closeModal(event) { if (event.target.classList.contains('modal-overlay') || event.target.classList.contains('modal-close-btn')) document.getElementById('detailModal').style.display = 'none'; }
 
         // 動畫：簡單的星星閃爍
         const style = document.createElement('style');
