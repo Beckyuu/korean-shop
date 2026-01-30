@@ -254,8 +254,13 @@
             background: transparent;
             position: relative;
             transition: all 0.4s ease;
+            /* 改回 Flexbox，這是最穩定的排版 */
+            display: flex;
+            flex-direction: column;
             height: 100%;
-
+            /* 確保卡片拉長 */
+            padding-bottom: 10px;
+            /* 底部留點空間 */
         }
 
         .product-card:hover {
@@ -327,20 +332,14 @@
             background-color: #c97c7c;
         }
 
-        /* === 資訊區域 (改用 Grid 排版) === */
+        /* === 2. 資訊區域 (負責對齊) === */
         .info {
             padding: 15px 5px 0;
             text-align: center;
-            height: 100%;
-            /* 佔滿高度 */
-
-            /* 🟢 啟用 Grid */
-            display: grid;
-            /* 定義 5 行的高度 */
-            /* 主標題(自動) | 副標題(固定高度) | 規格(自動) | 價格(最小高度) | 按鈕(自動，推到底部) */
-            grid-template-rows: auto 1.4em auto minmax(1.5em, auto) 1fr;
-            gap: 10px;
-            /* 行與行之間的間距 */
+            /* 讓資訊區佔滿剩下空間 */
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .name {
@@ -357,16 +356,12 @@
             display: block;
             font-size: 0.85rem;
             color: #888;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-family: 'Noto Sans TC', sans-serif;
             font-weight: 300;
             line-height: 1.4;
-
-            /* 🟢 關鍵修改：設定最小高度，強制佔位 */
+            /* 最小高度：確保大家都有位子 */
             min-height: 1.4em;
-
-            /* 確保空元素也會被撐開 */
-            box-sizing: content-box;
         }
 
         .price {
@@ -375,7 +370,10 @@
             font-weight: 600;
             color: #2c2c2c;
             display: block;
+            margin-bottom: 15px;
 
+            /* 關鍵：把價格跟下面的按鈕一起推到底 */
+            margin-top: auto;
         }
 
         /* 規格按鈕 */
@@ -415,9 +413,8 @@
             justify-content: center;
             gap: 8px;
             align-items: center;
-            /* 🟢 讓它靠下對齊 */
-            align-self: end;
-            margin-top: 10px;
+            /* 確保它不會被擠出去 */
+            flex-shrink: 0;
         }
 
         select {
@@ -451,28 +448,128 @@
             color: var(--text-main);
         }
 
-        /* 細節按鈕 (小眼睛) */
+        /* === 1. 卡片結構 (修復按鈕消失問題) === */
+        .product-card {
+            background: transparent;
+            position: relative;
+            transition: all 0.4s ease;
+            /* 改回 Flexbox，這是最穩定的排版 */
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            /* 確保卡片拉長 */
+            padding-bottom: 10px;
+            /* 底部留點空間 */
+        }
+
+        /* === 2. 資訊區域 (負責對齊) === */
+        .info {
+            padding: 15px 5px 0;
+            text-align: center;
+            /* 讓資訊區佔滿剩下空間 */
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* === 3. 副標題 (強制佔位，解決對齊) === */
+        .desc-text {
+            display: block;
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 8px;
+            font-family: 'Noto Sans TC', sans-serif;
+            font-weight: 300;
+            line-height: 1.4;
+            /* 最小高度：確保大家都有位子 */
+            min-height: 1.4em;
+        }
+
+        /* === 4. 規格選單 (縮短 + 美化) === */
+        .variant-select {
+            /* 寬度設定：改成 70% 左右，比較精緻 */
+            width: 70%;
+            max-width: 200px;
+            /* 也不要太寬 */
+
+            /* 置中 */
+            margin: 5px auto 15px;
+            display: block;
+
+            padding: 6px;
+            /* 稍微扁一點 */
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 0.85rem;
+            color: #d4a373;
+            background-color: #fff;
+            border: 1px solid #d4a373;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            text-align-last: center;
+
+            appearance: none;
+            -webkit-appearance: none;
+
+            /* 箭頭 */
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 10px;
+        }
+
+        /* === 5. 價格 (推到底部) === */
+        .price {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c2c2c;
+            display: block;
+            margin-bottom: 15px;
+
+            /* 關鍵：把價格跟下面的按鈕一起推到底 */
+            margin-top: auto;
+        }
+
+        /* === 6. 購買按鈕區 === */
+        .action-row {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            align-items: center;
+            /* 確保它不會被擠出去 */
+            flex-shrink: 0;
+        }
+
+        /* === 7. 詳情按鈕 (永久顯示) === */
         .more-sticker {
             position: absolute;
             bottom: 10px;
             right: 10px;
-            width: 32px;
-            height: 32px;
-            background: rgba(255, 255, 255, 0.9);
-            color: var(--text-main);
+            width: auto;
+            padding: 5px 12px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #555;
+            border: 1px solid #eee;
+            border-radius: 20px;
+
             display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 5px;
+            font-size: 0.75rem;
+            font-family: 'Noto Sans TC', sans-serif;
             cursor: pointer;
-            transition: all 0.2s;
-            opacity: 0;
-            /* 預設隱藏 */
-            transform: translateY(10px);
+            z-index: 5;
+
+            /* 永久顯示設定 */
+            opacity: 1;
+            transform: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .product-card:hover .more-sticker {
-            opacity: 1;
-            transform: translateY(0);
+        .more-sticker:hover {
+            background: #2c2c2c;
+            color: #fff;
         }
 
         /* === 最終極簡版 Footer (緊湊型) === */
@@ -780,23 +877,21 @@
         }
 
         /* 選擇規格：精緻短版風格 */
+        /* === 4. 規格選單 (縮短 + 美化) === */
         .variant-select {
-            /* 1. 縮短寬度：不再是 100%，改用 auto 或固定寬度 */
-            width: auto;
-            min-width: 160px;
-            /* 設定最小寬度，避免字太少時框框太小 */
-            max-width: 90%;
-            /* 避免太長超出邊界 */
+            /* 寬度設定：改成 70% 左右，比較精緻 */
+            width: 70%;
+            max-width: 200px;
+            /* 也不要太寬 */
 
-            /* 2. 置中：因為寬度縮小了，要讓它自己在卡片中間 */
-            margin: 0 auto 15px;
+            /* 置中 */
+            margin: 5px auto 15px;
             display: block;
 
-            padding: 6px 12px;
-            /* 內距縮小一點，比較秀氣 */
+            padding: 6px;
+            /* 稍微扁一點 */
             font-family: 'Noto Sans TC', sans-serif;
             font-size: 0.85rem;
-            /* 字體稍微縮小 */
             color: #d4a373;
             background-color: #fff;
             border: 1px solid #d4a373;
@@ -808,11 +903,11 @@
             appearance: none;
             -webkit-appearance: none;
 
-            /* 箭頭樣式保持不變 */
+            /* 箭頭 */
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
             background-repeat: no-repeat;
             background-position: right 8px center;
-            background-size: 12px;
+            background-size: 10px;
         }
 
         .variant-select:hover {
@@ -1139,7 +1234,7 @@
                         <div class="info">
                             <h3 class="name">${product.name}</h3>
                             
-                            ${product.description ? `<span class="desc-text">${product.description}</span>` : ''}
+                            <span class="desc-text">${product.description || '&nbsp;'}</span>
                             
                             ${variantsHtml}
 
