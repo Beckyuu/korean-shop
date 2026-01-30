@@ -5,8 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> │Mina．妝日子│ </title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Sans+TC:wght@300;400;500&family=Zen+Maru+Gothic:wght@300;400;500&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Noto+Sans+TC:wght@300;400;500&display=swap"
         rel="stylesheet">
 
     <style>
@@ -419,16 +418,25 @@
         }
 
         /* === 單一規格文字 (美化版) === */
+        /* === 單一規格文字 (優雅中文版) === */
         .single-variant-text {
-            font-family: 'Bodoni Moda', serif;
-            /* 漂亮的英文字體 */
-            font-size: 0.95rem;
+            /* 關鍵：強制用黑體，才不會變成新細明體！ */
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 0.9rem;
             color: #d4a373;
             /* 金色 */
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            /* 字距拉開一點，更有呼吸感 */
+
             display: block;
-            margin-bottom: 15px;
-            /* 確保跟價格有距離 */
+            width: 100%;
+            /* 確保佔滿寬度，才能置中 */
+            text-align: center;
+            /* 文字置中 */
+
+            /* 調整距離：跟上面的副標題拉開一點 */
+            margin-top: 8px;
+            margin-bottom: 5px;
         }
 
         .action-row {
@@ -541,23 +549,23 @@
             background-size: 10px;
         }
 
-        /* === 5. 價格 (推到底部) === */
+        /* === 價格 (時尚無襯線體) === */
         .price {
-            /* 修改字體為 Bodoni Moda，看起來更挺拔、高級 */
-            font-family: 'Bodoni Moda', serif;
+            /* 改用 Tenor Sans，這是一款乾淨、現代的時尚字體 */
+            font-family: 'Tenor Sans', sans-serif;
 
-            font-size: 1.4rem;
-            /* 數字稍微大一點點 */
-            font-weight: 500;
+            font-size: 1.5rem;
+            /* 數字可以大方一點 */
+            font-weight: 400;
+            /* 不需要太粗，Tenor Sans 細細的就很好看 */
             color: #2c2c2c;
             display: block;
             margin-bottom: 15px;
 
-            /* 關鍵：把價格跟下面的按鈕一起推到底 */
+            /* 推到底部 */
             margin-top: auto;
 
             letter-spacing: 0.5px;
-            /* 數字間距拉開一點點 */
         }
 
         /* === 6. 購買按鈕區 === */
@@ -1239,7 +1247,7 @@
                     } else {
                         // 如果是單一規格 -> 顯示優雅的金色英文
                         // 這裡你可以決定要顯示 'ONE SIZE' 還是 'CLASSIC'
-                        let singleName = (product.variants.length === 1 && product.variants[0] !== '') ? product.variants[0] : 'ONE SIZE';
+                        let singleName = (product.variants.length === 1 && product.variants[0] !== '') ? product.variants[0] : '單一規格';
 
                         // 預設幫他選好
                         product.selectedVariant = singleName;
