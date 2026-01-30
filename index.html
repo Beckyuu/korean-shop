@@ -1398,6 +1398,53 @@
             }
         }
 
+        // 🟢 補回這個：加入購物車的功能
+        function addToCart(index) {
+            const product = allProductsData[index];
+            const qtySelect = document.getElementById(`qty-${index}`);
+            const qty = parseInt(qtySelect.value);
+
+            // 1. 檢查有沒有選規格 (如果沒選，product.selectedVariant 會是 null)
+            if (!product.selectedVariant) {
+                alert('請先選擇一個款式或是規格喔！');
+                return;
+            }
+
+            // 2. 處理價格 (把 NT$ 和逗號拿掉，轉成數字)
+            // 假設價格字串是 "1,200" 或 "850"
+            let priceNum = parseInt(product.price.replace(/[^0-9]/g, ''));
+
+            // 3. 建立購物車項目
+            const cartItem = {
+                name: product.name,
+                spec: product.selectedVariant,
+                price: priceNum,
+                qty: qty
+            };
+
+            // 4. 加入全域購物車陣列
+            cart.push(cartItem);
+
+            // 5. 更新右下角浮動按鈕的數字
+            updateCartIcon();
+
+            // 6. 給個小提示 (可以依喜好改成其他效果)
+            // alert(`已加入：${product.name} [${product.selectedVariant}]`);
+
+            // 進階提示：讓按鈕變色一下，提示成功
+            const btn = event.target;
+            const originalText = btn.innerText;
+            btn.innerText = "OK!";
+            btn.style.backgroundColor = "#d4a373"; // 變成金色
+            btn.style.borderColor = "#d4a373";
+
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.style.backgroundColor = ""; // 變回原樣
+                btn.style.borderColor = "";
+            }, 1000);
+        }
+
         function showDetails(index) {
             const product = allProductsData[index];
             const modal = document.getElementById('detailModal');
