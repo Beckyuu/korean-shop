@@ -371,13 +371,17 @@
             justify-content: center;
             gap: 6px;
 
-            /* 🔴 修改重點：加入這個彈簧，讓它把自己推到最下面 */
-            margin-top: auto;
-            margin-bottom: 15px;
-
-            /* 視覺整齊的秘密 */
-            min-height: 28px;
+            /* 🔴 修改重點：讓容器長高，並讓內容置中 */
+            flex-grow: 1;
+            /* 1. 自動佔滿中間所有剩餘空間 */
             align-content: center;
+            /* 2. 讓裡面的按鈕垂直置中 (針對多行) */
+            align-items: center;
+            /* 3. 讓裡面的按鈕垂直置中 (針對單行) */
+
+            margin-bottom: 10px;
+            /* 跟下方價格留點距離 */
+
         }
 
         /* === 米粒按鈕 (取代原本的框框) === */
@@ -582,8 +586,7 @@
             display: block;
             margin-bottom: 15px;
 
-            /* 🔴 修改重點：這裡原本是 auto，現在要刪掉或改成 0 */
-            /* 因為推擠的工作已經交給上面的規格容器了 */
+            /* 🔴 確認這裡是 0，不要是 auto */
             margin-top: 0;
 
             letter-spacing: 0.5px;
