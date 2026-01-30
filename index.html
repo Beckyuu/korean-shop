@@ -352,7 +352,7 @@
             letter-spacing: 0.5px;
         }
 
-        /* 副標題樣式 */
+        /* 副標 (描述文字) */
         .desc-text {
             display: block;
             font-size: 0.85rem;
@@ -362,12 +362,9 @@
             font-weight: 300;
             line-height: 1.4;
 
-            /* === 新增：最小高度 === */
+            /* 🟢 新增這一行：即使沒字，也要佔一行的高度，避免跑位 */
             min-height: 1.4em;
-            /* 即使沒字，也強制佔一行的高度 */
         }
-
-        /* 如果該商品真的沒副標，JS 產生時內容是空的，這個 min-height 會確保它還是佔位子 */
 
         .price {
             font-family: 'Cormorant Garamond', serif;
@@ -781,37 +778,40 @@
             font-size: 0.95rem;
         }
 
-        /* === 2. 選擇規格：移植原本的「金色框框」風格 === */
+        /* 選擇規格：精緻短版風格 */
         .variant-select {
-            width: 100%;
-            padding: 8px 12px;
-            font-family: 'Noto Sans TC', sans-serif;
-            font-size: 0.9rem;
-            color: #d4a373;
-            /* 文字金棕色 */
-            background-color: #fff;
+            /* 1. 縮短寬度：不再是 100%，改用 auto 或固定寬度 */
+            width: auto;
+            min-width: 160px;
+            /* 設定最小寬度，避免字太少時框框太小 */
+            max-width: 90%;
+            /* 避免太長超出邊界 */
 
-            /* 金色邊框 */
+            /* 2. 置中：因為寬度縮小了，要讓它自己在卡片中間 */
+            margin: 0 auto 15px;
+            display: block;
+
+            padding: 6px 12px;
+            /* 內距縮小一點，比較秀氣 */
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 0.85rem;
+            /* 字體稍微縮小 */
+            color: #d4a373;
+            background-color: #fff;
             border: 1px solid #d4a373;
             border-radius: 4px;
-            /* 微微圓角 */
-
             cursor: pointer;
-            margin-bottom: 15px;
-            /* 跟價格的距離 */
             text-align: center;
             text-align-last: center;
-            /* 讓文字強制置中 */
 
             appearance: none;
             -webkit-appearance: none;
 
-            /* 下拉箭頭改用簡單的線條，或者直接不顯示箭頭保持極簡 */
+            /* 箭頭樣式保持不變 */
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
             background-repeat: no-repeat;
-            background-position: right 10px center;
-            background-size: 14px;
-            transition: all 0.3s;
+            background-position: right 8px center;
+            background-size: 12px;
         }
 
         .variant-select:hover {
@@ -832,47 +832,39 @@
             cursor: default;
         }
 
-        /* === 修正版：詳情按鈕 (自動寬度，字不會跑出去) === */
+        /* 詳情按鈕：永久顯示版 */
         .more-sticker {
             position: absolute;
             bottom: 10px;
             right: 10px;
-            /* 固定在右下角 */
-
-            /* 關鍵修正：讓寬度自動適應文字 */
             width: auto;
-            padding: 6px 15px;
-            /* 增加左右內距，讓膠囊長一點 */
-
-            background: rgba(255, 255, 255, 0.95);
+            padding: 5px 12px;
+            background: rgba(255, 255, 255, 0.9);
+            /*稍微透明一點的白底 */
             color: #555;
             border: 1px solid #eee;
             border-radius: 20px;
-            /* 膠囊圓角 */
 
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
             font-size: 0.75rem;
             font-family: 'Noto Sans TC', sans-serif;
-            font-weight: 500;
-            /* 字稍微加粗一點點 */
             cursor: pointer;
             z-index: 5;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            /* 加深一點陰影，讓它浮起來 */
-            transition: all 0.3s;
 
-            /* 確保文字不換行 */
-            white-space: nowrap;
+            /* 🟢 關鍵修改：這兩行讓它永遠顯示 */
+            opacity: 1;
+            transform: translateY(0);
+
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
 
+        /* 滑鼠移過去的效果 */
         .more-sticker:hover {
             background: #2c2c2c;
             color: #fff;
             border-color: #2c2c2c;
-            transform: translateY(-2px);
-            /* 滑鼠碰到時微微上浮 */
         }
     </style>
 </head>
