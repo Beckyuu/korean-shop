@@ -1252,10 +1252,12 @@
                         // 預設幫他選好
                         product.selectedVariant = singleName;
 
-                        // 雖然是單一規格，我們還是用 container 包起來，這樣高度才會對齊！
+                        // 修改：單一規格也用「按鈕」的殼裝起來，並加上 selected 讓它變金色
                         variantsHtml = `
                             <div class="variant-container">
-                                <span class="single-variant-text">${singleName}</span>
+                                <div class="variant-btn selected" style="cursor: default; pointer-events: none;">
+                                    ${singleName}
+                                </div>
                             </div>`;
                     }
 
