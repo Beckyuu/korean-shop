@@ -1302,6 +1302,68 @@
                 product.selectedVariant = value;
             }
         }
+
+// ==========================================
+        // 🟢 補回遺失的購物車功能 (請貼在 selectVariant 下面)
+        // ==========================================
+
+        function updateCartIcon() {
+            document.getElementById('cart-count').innerText = cart.length;
+        }
+
+        function toggleCart() {
+            const modal = document.getElementById('cartModal');
+            if (!modal.classList.contains('show')) {
+                renderCartItems();
+                modal.classList.add('show');
+            } else {
+                modal.classList.remove('show');
+            }
+        }
+
+        function addToCart(index) {
+            const product = allProductsData[index];
+            const qtySelect = document.getElementById(`qty-${index}`);
+            const qty = parseInt(qtySelect.value);
+
+            // 1. 檢查有沒有選規格
+            if (!product.selectedVariant) {
+                alert('請先選擇一個款式或是規格喔！');
+                return;
+            }
+
+            // 2. 處理價格 (把 NT$ 和逗號拿掉，轉成數字)
+            let priceNum = parseInt(product.price.replace(/[^0-9]/g, ''));
+
+            // 3. 建立購物車項目
+            const cartItem = {
+                name: product.name,
+                spec: product.selectedVariant,
+                price: priceNum,
+                qty: qty
+            };
+
+            // 4. 加入購物車
+            cart.push(cartItem);
+            updateCartIcon();
+
+            // 5. 按鈕變色提示成功
+            // 這裡使用 window.event 來抓取被點擊的按鈕，確保相容性
+            const btn = window.event ? window.event.target : null;
+            if (btn) {
+                const originalText = btn.innerText;
+                btn.innerText = "OK!";
+                btn.style.backgroundColor = "#d4a373";
+                btn.style.borderColor = "#d4a373";
+                
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.backgroundColor = "";
+                    btn.style.borderColor = "";
+                }, 1000);
+            }
+        }
+
         function closeCart(e) { if (e.target.classList.contains('cart-modal')) document.getElementById('cartModal').classList.remove('show'); }
 
         function renderCartItems() {
