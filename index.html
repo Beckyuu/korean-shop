@@ -250,12 +250,16 @@
             /* 上下間距大一點，比較透氣 */
         }
 
-        /* === 卡片設計：雜誌留白風 === */
         .product-card {
             background: transparent;
-            /* 透明背景 */
             position: relative;
             transition: all 0.4s ease;
+
+            /* === 新增：讓卡片變成彈性盒子，為了做對齊 === */
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            /* 讓它長滿整個格子 */
         }
 
         .product-card:hover {
@@ -327,11 +331,16 @@
             background-color: #c97c7c;
         }
 
-        /* 資訊區域 */
         .info {
-            padding: 20px 5px 0;
+            padding: 15px 5px 0;
             text-align: center;
-            /* 雜誌風通常置中 */
+
+            /* === 新增：這兩行是關鍵 === */
+            flex-grow: 1;
+            /* 佔滿卡片剩下的高度 */
+            display: flex;
+            flex-direction: column;
+            /* 讓裡面的內容由上往下排 */
         }
 
         .name {
@@ -343,29 +352,33 @@
             letter-spacing: 0.5px;
         }
 
-        /* === 1. 副標 (描述文字)：改成簡約文字，跟標題是一家人 === */
+        /* 副標題樣式 */
         .desc-text {
             display: block;
-            /* 換行 */
             font-size: 0.85rem;
             color: #888;
-            /* 深灰色 */
-            margin-bottom: 15px;
-            /* 跟下方留點距離 */
+            margin-bottom: 10px;
             font-family: 'Noto Sans TC', sans-serif;
             font-weight: 300;
-            letter-spacing: 0.5px;
             line-height: 1.4;
+
+            /* === 新增：最小高度 === */
+            min-height: 1.4em;
+            /* 即使沒字，也強制佔一行的高度 */
         }
 
-        /* 價格 */
+        /* 如果該商品真的沒副標，JS 產生時內容是空的，這個 min-height 會確保它還是佔位子 */
+
         .price {
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.3rem;
             font-weight: 600;
-            color: var(--text-main);
+            color: #2c2c2c;
             display: block;
             margin-bottom: 15px;
+
+            /* === 關鍵魔法：把價格和下方的按鈕，用力推到最下面 === */
+            margin-top: auto;
         }
 
         /* 規格按鈕 */
@@ -819,38 +832,47 @@
             cursor: default;
         }
 
-        /* === 4. 詳情按鈕：改成永久顯示在右下角 === */
+        /* === 修正版：詳情按鈕 (自動寬度，字不會跑出去) === */
         .more-sticker {
             position: absolute;
             bottom: 10px;
             right: 10px;
+            /* 固定在右下角 */
 
-            /* 改成膠囊形狀按鈕 */
-            padding: 4px 12px;
+            /* 關鍵修正：讓寬度自動適應文字 */
+            width: auto;
+            padding: 6px 15px;
+            /* 增加左右內距，讓膠囊長一點 */
+
             background: rgba(255, 255, 255, 0.95);
             color: #555;
             border: 1px solid #eee;
             border-radius: 20px;
+            /* 膠囊圓角 */
 
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
             font-size: 0.75rem;
             font-family: 'Noto Sans TC', sans-serif;
+            font-weight: 500;
+            /* 字稍微加粗一點點 */
             cursor: pointer;
             z-index: 5;
-
-            /* 永久顯示，不再隱藏 */
-            opacity: 1;
-            transform: translateY(0);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            /* 加深一點陰影，讓它浮起來 */
             transition: all 0.3s;
+
+            /* 確保文字不換行 */
+            white-space: nowrap;
         }
 
         .more-sticker:hover {
             background: #2c2c2c;
             color: #fff;
             border-color: #2c2c2c;
+            transform: translateY(-2px);
+            /* 滑鼠碰到時微微上浮 */
         }
     </style>
 </head>
@@ -987,7 +1009,8 @@
 
     <div id="detailModal" class="modal-overlay" onclick="closeModal(event)">
         <div class="modal-content">
-            <button class="modal-close-btn" onclick="closeModal(event)">×</button>
+            <button class="modal-close-btn" onclick="forceCloseModal()">×</button>
+
             <h3 class="modal-title" id="modalTitle">Product Name</h3>
             <div class="modal-body" id="modalBody"></div>
         </div>
@@ -1286,6 +1309,10 @@
 
             document.getElementById('modalBody').innerHTML = content;
             modal.style.display = 'flex';
+        }
+
+        function forceCloseModal() {
+            document.getElementById('detailModal').style.display = 'none';
         }
 
         // 動畫：簡單的星星閃爍
