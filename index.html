@@ -343,12 +343,30 @@
             letter-spacing: 0.5px;
         }
 
+        /* === 行銷副標 (原本的描述文字) === */
         .desc-text {
-            font-size: 0.8rem;
-            color: #999;
+            display: inline-block;
+            /* 讓它變成塊狀，才能加框 */
+            font-size: 0.85rem;
+            color: #d4a373;
+            /* 字體改用你的主題金棕色 */
+            background-color: #fdfbf7;
+            /* 極淡的米色背景 */
+            border: 1px solid #eaddd5;
+            /* 細細的邊框 */
+            padding: 4px 10px;
+            /* 內部留白 */
+            border-radius: 4px;
+            /* 微微圓角 */
             margin-bottom: 12px;
-            display: block;
             font-family: 'Noto Sans TC', sans-serif;
+            letter-spacing: 0.5px;
+
+            /* 讓長文字不要撐爆，超過顯示點點點 */
+            max-width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         /* 價格 */
