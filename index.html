@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> │Mina．妝日子│ </title>
     <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Sans+TC:wght@300;400;500&family=Zen+Maru+Gothic:wght@300;400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Sans+TC:wght@300;400;500&family=Zen+Maru+Gothic:wght@300;400;500&display=swap"
         rel="stylesheet">
 
     <style>
@@ -364,18 +364,6 @@
             min-height: 1.4em;
         }
 
-        .price {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #2c2c2c;
-            display: block;
-            margin-bottom: 15px;
-
-            /* 關鍵：把價格跟下面的按鈕一起推到底 */
-            margin-top: auto;
-        }
-
         /* 規格按鈕 */
         .variant-container {
             display: flex;
@@ -520,15 +508,21 @@
 
         /* === 5. 價格 (推到底部) === */
         .price {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.3rem;
-            font-weight: 600;
+            /* 修改字體為 Bodoni Moda，看起來更挺拔、高級 */
+            font-family: 'Bodoni Moda', serif;
+
+            font-size: 1.4rem;
+            /* 數字稍微大一點點 */
+            font-weight: 500;
             color: #2c2c2c;
             display: block;
             margin-bottom: 15px;
 
             /* 關鍵：把價格跟下面的按鈕一起推到底 */
             margin-top: auto;
+
+            letter-spacing: 0.5px;
+            /* 數字間距拉開一點點 */
         }
 
         /* === 6. 購買按鈕區 === */
@@ -920,12 +914,21 @@
             box-shadow: 0 0 0 2px rgba(212, 163, 115, 0.2);
         }
 
-        /* 單一規格鎖定時 */
+        /* === 單一規格 (鎖定版)：改成金色質感 === */
         .variant-select:disabled {
-            border-color: #e0e0e0;
-            color: #aaa;
-            background-image: none;
+            border: 1px solid #d4a373;
+            /* 邊框變金 */
+            color: #d4a373;
+            /* 文字變金 */
+            background-color: #fff;
+            /* 背景全白 */
+            opacity: 1;
+            /* 確保顏色飽和，不要半透明 */
+
             cursor: default;
+            /* 滑鼠維持箭頭，暗示不能點 */
+            background-image: none;
+            /* 不顯示下拉箭頭 */
         }
 
         /* 詳情按鈕：永久顯示版 */
@@ -1202,9 +1205,9 @@
 
                         variantsHtml += `</select>`;
                     } else {
-                        // 情況 B：單一規格 -> 產生鎖定的 Dropdown (為了排版整齊)
-                        // 如果有寫規格名就用規格名，沒寫就顯示「單一款式」
-                        let singleName = (product.variants.length === 1 && product.variants[0] !== '') ? product.variants[0] : '單一款式';
+                        // 情況 B：單一規格
+                        // 修改這裡：如果沒寫規格，預設顯示 'ONE SIZE' 比較時尚
+                        let singleName = (product.variants.length === 1 && product.variants[0] !== '') ? product.variants[0] : 'ONE SIZE';
 
                         // 預設幫他選好，這樣客人才不用點
                         product.selectedVariant = singleName;
