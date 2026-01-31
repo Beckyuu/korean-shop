@@ -951,41 +951,6 @@
             font-size: 0.95rem;
         }
 
-        /* 詳情按鈕：永久顯示版 */
-        .more-sticker {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            width: auto;
-            padding: 5px 12px;
-            background: rgba(255, 255, 255, 0.9);
-            /*稍微透明一點的白底 */
-            color: #555;
-            border: 1px solid #eee;
-            border-radius: 20px;
-
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 0.75rem;
-            font-family: 'Noto Sans TC', sans-serif;
-            cursor: pointer;
-            z-index: 5;
-
-            /* 🟢 關鍵修改：這兩行讓它永遠顯示 */
-            opacity: 1;
-            transform: translateY(0);
-
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        }
-
-        /* 滑鼠移過去的效果 */
-        .more-sticker:hover {
-            background: #2c2c2c;
-            color: #fff;
-            border-color: #2c2c2c;
-        }
-
         /* === 缺貨狀態專用樣式 (灰色鎖定) === */
         .variant-btn.out-of-stock {
             background-color: #f9f9f9 !important;
@@ -1526,53 +1491,60 @@
             }
         }
 
-        // === 修正後的彈窗邏輯 ===
+        // === 最終修正版：解決字體與圖片問題 ===
         function showDetails(index) {
             const product = allProductsData[index];
             const modal = document.getElementById('detailModal');
             const titleElement = document.getElementById('modalTitle');
             const modalBody = document.getElementById('modalBody');
 
-            // 1. 標題統一顯示商品名稱 (比較整齊)
+            // 1. 標題設定：標題可以使用藝術字體 (Cormorant)
             titleElement.innerHTML = product.name;
             titleElement.style.color = "#2c2c2c";
             titleElement.style.fontFamily = "'Cormorant Garamond', 'Noto Sans TC', sans-serif";
 
-            // 2. 準備內容區塊 (文字 + 圖片)
+            // 2. 準備內容 HTML
             let contentHtml = '';
 
-            // A. 先放文字說明 (如果有填寫的話)
-            // 這裡會讀取 Excel 的 I欄 (GiftDesc)，並支援 <br> 換行
+            // A. 文字區塊 (如果有填寫 I 欄)
             if (product.giftDesc && product.giftDesc.trim() !== "") {
                 contentHtml += `
-            <div style="margin-bottom: 25px; text-align: center; color: #d4a373; font-weight: 500; line-height: 1.8;">
-                ${product.giftDesc}
+            <div style="
+                margin-bottom: 25px; 
+                text-align: center; 
+                color: #d4a373; 
+                font-weight: 500; 
+                font-size: 1.1rem;
+                line-height: 1.8;
+                font-family: 'Noto Sans TC', sans-serif;"> ${product.giftDesc}
             </div>
-            <hr style="border: 0; border-top: 1px dashed #eee; margin: 0 auto 25px; width: 80%;">
+            <hr style="border: 0; border-top: 1px dashed #eee; margin: 0 auto 30px; width: 80%;">
         `;
             }
 
-            // B. 再放詳細圖片
+            // B. 圖片區塊 (如果有填寫 E 欄)
+            // 我們加上 console.log 來檢查是否有讀到圖片
             if (product.detailImgUrl && product.detailImgUrl.trim() !== "") {
                 const urls = product.detailImgUrl.split(',');
                 urls.forEach(url => {
-                    if (url.trim()) {
-                        contentHtml += `<img src="${url.trim()}" style="width:100%; display:block; margin-bottom:10px;">`;
+                    let cleanUrl = url.trim();
+                    if (cleanUrl) {
+                        // 修正：確保圖片寬度正確且有下邊距
+                        contentHtml += `<img src="${cleanUrl}" style="width:100%; display:block; margin-bottom:10px; border-radius: 4px;">`;
                     }
                 });
             } else {
-                // 如果沒圖也沒文字，才顯示這行
-                if (contentHtml === '') {
-                    contentHtml = '<p style="text-align:center; padding:20px; color:#999;">尚無詳細內容</p>';
+                // 只有當「真的沒圖」且「也沒文字」時才顯示這行
+                if (!contentHtml) {
+                    contentHtml = '<p style="text-align:center; padding:30px; color:#999; font-family:\'Noto Sans TC\'">尚無詳細內容</p>';
                 }
             }
 
-            // 3. 寫入內容並設定字體
+            // 3. 寫入內容
             modalBody.innerHTML = contentHtml;
 
-            // 🔴 關鍵修正：字體設定
-            // 英文用 Cormorant，中文強制用 Noto Sans TC (黑體)，這樣才不會變新細明體
-            modalBody.style.fontFamily = "'Cormorant Garamond', 'Noto Sans TC', sans-serif";
+            // 🔴 關鍵修正：彈窗內文「全域」強制使用黑體，避免出現新細明體
+            modalBody.style.fontFamily = "'Noto Sans TC', sans-serif";
 
             modal.style.display = 'flex';
         }
