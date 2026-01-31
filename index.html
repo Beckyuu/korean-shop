@@ -1050,6 +1050,27 @@
                 padding: 5px;
             }
         }
+
+        /* 1. 讓文字區塊開啟「彈性排版」 */
+        .info {
+            padding: 15px;
+
+            /* 關鍵：讓它佔滿剩下的高度 */
+            flex: 1 !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+
+        /* 2. 讓價格把自己推到最下面 */
+        .price {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #d4a373;
+            margin-bottom: 12px;
+
+            /* 關鍵：自動遠離上面的文字，黏在底部 */
+            margin-top: auto !important;
+        }
     </style>
 </head>
 
@@ -1244,10 +1265,12 @@
                     const rawSpec = row[1] ? row[1].trim() : '';
                     const variants = rawSpec.includes('|') ? rawSpec.split('|').map(s => s.trim()) : (rawSpec ? [rawSpec] : []);
                     const deadlineDate = row[7] ? row[7].trim() : null; // H欄: 收單時間
+                    const giftDesc = row[8] ? row[8].trim() : null;
 
                     const product = {
                         id: index,
                         name: row[0] ? row[0].trim() : 'Unnamed',
+                        giftDesc: giftDesc,
                         variants: variants,
                         price: row[2] ? row[2].trim() : '0',
                         imgUrl: row[3] ? row[3].trim() : '',
@@ -1502,11 +1525,22 @@
             }
         }
 
-        // 7. 詳情視窗功能
+        // 7. 詳情視窗功能 (修改版：支援顯示贈品內容)
         function showDetails(index) {
             const product = allProductsData[index];
             const modal = document.getElementById('detailModal');
-            document.getElementById('modalTitle').innerText = product.name;
+            const titleElement = document.getElementById('modalTitle');
+
+            // 🟢 判斷邏輯：如果有填寫 giftDesc (I欄)，標題就顯示 giftDesc
+            // 如果沒填 (是空的)，就乖乖顯示原本的品名 (name)
+            if (product.giftDesc && product.giftDesc !== "") {
+                titleElement.innerText = product.giftDesc;
+                // 可以加一點樣式讓它看起來不一樣 (例如字體顏色)
+                titleElement.style.color = "#d4a373";
+            } else {
+                titleElement.innerText = product.name;
+                titleElement.style.color = "#333"; // 回復原本顏色
+            }
 
             let content = '';
             if (product.detailImgUrl) {
