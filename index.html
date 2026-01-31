@@ -611,8 +611,8 @@
             right: 10px;
             width: auto;
             padding: 5px 12px;
-            background: rgba(255, 255, 255, 0.95);
-            color: #555;
+            background: #2c2c2c(255, 255, 255, 0.95);
+            color: #ffffff;
             border: 1px solid #eee;
             border-radius: 20px;
 
@@ -1060,17 +1060,6 @@
             display: flex !important;
             flex-direction: column !important;
         }
-
-        /* 2. 讓價格把自己推到最下面 */
-        .price {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #d4a373;
-            margin-bottom: 12px;
-
-            /* 關鍵：自動遠離上面的文字，黏在底部 */
-            margin-top: auto !important;
-        }
     </style>
 </head>
 
@@ -1328,10 +1317,10 @@
                     // 🔍 詳情按鈕
                     let stickerHtml = '';
                     if (product.hasDetails) {
+                        /* 找到這一段 */
                         stickerHtml = `<div class="more-sticker" onclick="showDetails(${index})">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                            查看詳情
-                        </div>`;
+    <svg ...略...></svg>
+    看更多...  </div>`;
                     }
 
                     // 🛒 ADD 按鈕 (含 SOLD OUT 判斷)
@@ -1531,30 +1520,29 @@
             const modal = document.getElementById('detailModal');
             const titleElement = document.getElementById('modalTitle');
 
-            // 🟢 判斷邏輯：如果有填寫 giftDesc (I欄)，標題就顯示 giftDesc
-            // 如果沒填 (是空的)，就乖乖顯示原本的品名 (name)
+            // 1. 設定標題 (這裡也要改成 innerHTML 以防萬一你也想在標題換行)
             if (product.giftDesc && product.giftDesc !== "") {
-                titleElement.innerText = product.giftDesc;
-                // 可以加一點樣式讓它看起來不一樣 (例如字體顏色)
+                // 👇 關鍵修改：把 innerText 改成 innerHTML
+                titleElement.innerHTML = product.giftDesc;
                 titleElement.style.color = "#d4a373";
             } else {
-                titleElement.innerText = product.name;
-                titleElement.style.color = "#333"; // 回復原本顏色
+                titleElement.innerHTML = product.name; // 👇 這裡也改成 innerHTML
+                titleElement.style.color = "#333";
             }
 
+            // 2. 設定內文圖片與文字
             let content = '';
-            if (product.detailImgUrl) {
-                const urls = product.detailImgUrl.split(',');
-                urls.forEach(url => {
-                    if (url.trim()) {
-                        content += `<img src="${url.trim()}" style="width:100%; display:block; margin-bottom:10px;">`;
-                    }
-                });
-            } else {
-                content = '<p style="text-align:center; padding:20px;">尚無詳細圖片</p>';
-            }
 
-            document.getElementById('modalBody').innerHTML = content;
+            // ...圖片處理邏輯保持不變...
+
+            // 3. 解決字體問題：在寫入 modalBody 時加入 style 設定
+            const modalBody = document.getElementById('modalBody');
+
+            // 👇 加入這行：強制將彈窗內容的字體改成與標題一致 (Cormorant Garamond)
+            modalBody.style.fontFamily = "'Cormorant Garamond', serif";
+            // 若覺得原本的斜體太難閱讀，可以加上 fontStyle: 'normal'
+
+            modalBody.innerHTML = content;
             modal.style.display = 'flex';
         }
 
