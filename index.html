@@ -263,6 +263,11 @@
             /* 底部留點空間 */
         }
 
+        .product-card:hover {
+            transform: translateY(-8px);
+            /* 輕微上浮 */
+        }
+
         /* 圖片區域 */
         .img-wrapper {
             width: 100%;
@@ -284,6 +289,11 @@
             height: 100%;
             object-fit: cover;
             transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+
+        .product-card:hover .img-wrapper img {
+            transform: scale(1.05);
+            /* 緩慢放大 */
         }
 
         /* === 優化後的標籤 Badge (韓系絲帶感) === */
@@ -604,47 +614,35 @@
             flex-shrink: 0;
         }
 
-        /* === 修正後的詳情按鈕 === */
+        /* === 7. 詳情按鈕 (永久顯示) === */
         .more-sticker {
             position: absolute;
             bottom: 10px;
             right: 10px;
             width: auto;
-            min-width: 80px;
-            /* 確保有足夠寬度 */
-            padding: 6px 14px;
-
-            /* 🔴 改成黑色底、白色字 */
-            background: #2c2c2c;
-            color: #fff;
-
-            border: 1px solid #2c2c2c;
+            padding: 5px 12px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #555;
+            border: 1px solid #eee;
             border-radius: 20px;
 
             display: flex;
             align-items: center;
-            justify-content: center;
-            /* 讓文字置中 */
             gap: 5px;
-
             font-size: 0.75rem;
             font-family: 'Noto Sans TC', sans-serif;
-            /* 確保中文是黑體 */
             cursor: pointer;
             z-index: 5;
 
-            /* 禁止換行，這是關鍵！ */
-            white-space: nowrap;
-
+            /* 永久顯示設定 */
             opacity: 1;
-            transform: translateY(0);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transform: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         }
 
         .more-sticker:hover {
-            background: #444;
-            /* 滑鼠移過去稍微變淺一點的黑 */
-            border-color: #444;
+            background: #2c2c2c;
+            color: #fff;
         }
 
         /* === 最終極簡版 Footer (緊湊型) === */
@@ -951,91 +949,39 @@
             font-size: 0.95rem;
         }
 
-        /* === 缺貨狀態專用樣式 (灰色鎖定) === */
-        .variant-btn.out-of-stock {
-            background-color: #f9f9f9 !important;
-            /* 極淺灰底 */
-            color: #ccc !important;
-            /* 淺灰字，看起來像失效 */
-            border-color: #e0e0e0 !important;
-            /* 淺灰框 */
+        /* 詳情按鈕：永久顯示版 */
+        .more-sticker {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: auto;
+            padding: 5px 12px;
+            background: rgba(255, 255, 255, 0.9);
+            /*稍微透明一點的白底 */
+            color: #555;
+            border: 1px solid #eee;
+            border-radius: 20px;
 
-            cursor: not-allowed !important;
-            /* 滑鼠移過去變成「禁止」符號 */
-            pointer-events: none;
-            /* 關鍵：讓它完全無法被點擊 */
-
-            box-shadow: none !important;
-        }
-
-        /* 避免被選中樣式覆蓋，確保它永遠是灰的 */
-        .variant-btn.out-of-stock:hover {
-            border-color: #e0e0e0 !important;
-            color: #ccc !important;
-        }
-
-        /* === 收單時間小標籤 (對齊神器) === */
-        .deadline-tag {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.75rem;
             font-family: 'Noto Sans TC', sans-serif;
-            font-size: 0.8rem;
-            color: #c97c7c;
-            /* 用稍微顯眼的磚紅色，強調急迫感 */
-            font-weight: 500;
-            letter-spacing: 0.5px;
+            cursor: pointer;
+            z-index: 5;
 
-            text-align: center;
-            margin-bottom: 4px;
-            /* 跟下方品名的距離 */
+            /* 🟢 關鍵修改：這兩行讓它永遠顯示 */
+            opacity: 1;
+            transform: translateY(0);
 
-            /* 🟢 關鍵：設定最小高度，就算沒文字也會佔位子，保證對齊 */
-            min-height: 1.2em;
-            line-height: 1.2em;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
 
-        /* === 手機版專用設定 (一排兩個) === */
-        @media (max-width: 768px) {
-            #product-list {
-                /* 關鍵指令：強制分成兩欄，各佔一半寬度 */
-                grid-template-columns: repeat(2, 1fr) !important;
-
-                /* 間距縮小：讓兩張卡片靠近一點，畫面比較緊湊 */
-                gap: 12px !important;
-                padding: 10px !important;
-                /* 整個列表邊緣留白 */
-            }
-
-            /* 卡片內部微調：避免變兩欄後太擠 */
-            .product-card {
-                /* 稍微縮小卡片內距，讓內容有更多空間 */
-                padding: 10px !important;
-            }
-
-            /* 調整手機版圖片高度 (可選) */
-            .product-card .img-wrapper {
-                height: 160px;
-            }
-
-            /* 手機版字體稍微縮小 */
-            .product-card .name {
-                font-size: 0.95rem;
-            }
-
-            /* 按鈕跟選單在手機版並排太擠的話，可以稍微縮小 */
-            .action-row select,
-            .action-row button {
-                font-size: 0.85rem;
-                padding: 5px;
-            }
-        }
-
-        /* 1. 讓文字區塊開啟「彈性排版」 */
-        .info {
-            padding: 15px;
-
-            /* 關鍵：讓它佔滿剩下的高度 */
-            flex: 1 !important;
-            display: flex !important;
-            flex-direction: column !important;
+        /* 滑鼠移過去的效果 */
+        .more-sticker:hover {
+            background: #2c2c2c;
+            color: #fff;
+            border-color: #2c2c2c;
         }
     </style>
 </head>
@@ -1181,17 +1127,19 @@
 
     <script>
         const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS_Cy5OSihu86kbG6c2iGLRUFSSVNnYuG_yanPRNuIF65KtJ_K9r-kXuz1IdWAbxnwfmvAWvWDjlywe/pub?output=csv';
-
-        // 1. CSV 解析工具
+        // 🟢 新增這段：用來正確解析 CSV 的工具函式
         function parseCSVLine(str) {
             const result = [];
             let start = 0;
             let inQuotes = false;
+
             for (let i = 0; i < str.length; i++) {
                 if (str[i] === '"') {
-                    inQuotes = !inQuotes;
+                    inQuotes = !inQuotes; // 判斷是否在引號內
                 } else if (str[i] === ',' && !inQuotes) {
+                    // 如果遇到逗號，且不在引號內，才切分
                     let field = str.substring(start, i).trim();
+                    // 去除欄位前後的引號
                     if (field.startsWith('"') && field.endsWith('"')) {
                         field = field.substring(1, field.length - 1).replace(/""/g, '"');
                     }
@@ -1199,6 +1147,7 @@
                     start = i + 1;
                 }
             }
+            // 處理最後一個欄位
             let lastField = str.substring(start).trim();
             if (lastField.startsWith('"') && lastField.endsWith('"')) {
                 lastField = lastField.substring(1, lastField.length - 1).replace(/""/g, '"');
@@ -1210,7 +1159,6 @@
         let allProductsData = [];
         let cart = [];
 
-        // 2. 抓取商品資料 (核心邏輯)
         async function fetchProducts() {
             const loading = document.getElementById('loading');
             const container = document.getElementById('product-list');
@@ -1218,190 +1166,150 @@
             try {
                 const response = await fetch(GOOGLE_SHEET_CSV_URL);
                 const data = await response.text();
+
+                // 使用 parseCSVLine 來處理逗號問題
                 const rows = data.split('\n').map(row => parseCSVLine(row));
-                rows.shift(); // 移除標題列
+                rows.shift();
 
                 loading.style.display = 'none';
                 allProductsData = [];
 
                 rows.forEach((row, index) => {
                     if (row.length < 4) return;
-
-                    // 基本資料讀取
                     const rawSpec = row[1] ? row[1].trim() : '';
                     const variants = rawSpec.includes('|') ? rawSpec.split('|').map(s => s.trim()) : (rawSpec ? [rawSpec] : []);
-                    const deadlineDate = row[7] ? row[7].trim() : null; // H欄: 收單時間
-                    const giftDesc = row[8] ? row[8].trim() : null;
 
                     const product = {
                         id: index,
                         name: row[0] ? row[0].trim() : 'Unnamed',
-                        giftDesc: giftDesc,
                         variants: variants,
                         price: row[2] ? row[2].trim() : '0',
                         imgUrl: row[3] ? row[3].trim() : '',
                         detailImgUrl: row[4] ? row[4].trim() : '',
-                        description: row[5] ? row[5].trim() : '',
-                        tag: row[6] ? row[6].trim().toUpperCase() : ''
+                        description: row[5] ? row[5].trim() : '', // 記得這裡有逗號
+                        tag: row[6] ? row[6].trim().toUpperCase() : '' // 新增的標籤欄位
                     };
 
                     product.hasDetails = product.detailImgUrl !== '';
+                    if (product.variants.length === 1) product.selectedVariant = product.variants[0];
+                    else if (product.variants.length === 0) product.selectedVariant = '單一款式';
 
-                    // 建立卡片
+                    allProductsData.push(product);
+
                     const card = document.createElement('div');
                     card.className = 'product-card';
 
-                    // 🏷️ 標籤邏輯 (NEW/HOT)
+                    // === 這裡就是剛剛改的標籤邏輯 ===
                     let badgeHtml = '';
-                    if (product.tag === 'NEW') badgeHtml = `<div class="badge new">NEW</div>`;
-                    else if (product.tag === 'HOT') badgeHtml = `<div class="badge hot">HOT</div>`;
-                    else if (product.tag === 'SALE') badgeHtml = `<div class="badge sale">SALE</div>`;
+                    if (product.tag === 'NEW') {
+                        badgeHtml = `<div class="badge new">NEW</div>`;
+                    } else if (product.tag === 'HOT') {
+                        badgeHtml = `<div class="badge hot">HOT</div>`;
+                    } else if (product.tag === 'SALE') {
+                        badgeHtml = `<div class="badge sale">SALE</div>`;
+                    }
 
-                    // 🎨 規格按鈕邏輯 (含缺貨處理)
+                    // === 修改後：韓系米粒按鈕排版 ===
                     let variantsHtml = '';
-                    let isSingleOOS = false; // 判斷單一規格是否缺貨
 
                     if (product.variants.length > 1) {
-                        // 多規格
+                        // 如果有多個規格 -> 產生按鈕群組
                         variantsHtml = `<div class="variant-container" id="variants-${index}">`;
                         product.variants.forEach(v => {
-                            let isOOS = v.includes('(缺)');
-                            let displayName = v.replace('(缺)', '');
-                            let oosClass = isOOS ? 'out-of-stock' : '';
-                            variantsHtml += `<div class="variant-btn ${oosClass}" onclick="selectVariant(${index}, '${displayName}', this)">${displayName}</div>`;
+                            variantsHtml += `<div class="variant-btn" onclick="selectVariant(${index}, '${v}', this)">${v}</div>`;
                         });
                         variantsHtml += `</div>`;
                     } else {
-                        // 單一規格
-                        let rawName = (product.variants.length === 1 && product.variants[0] !== '') ? product.variants[0] : '單一規格';
-                        let isOOS = rawName.includes('(缺)');
-                        if (isOOS) isSingleOOS = true;
+                        // 情況 B：單一規格
+                        let singleName = (product.variants.length === 1 && product.variants[0] !== '') ? product.variants[0] : '單一規格';
 
-                        let singleName = rawName.replace('(缺)', '');
-                        if (singleName.trim() === '') singleName = '單一規格'; // 防呆
+                        product.selectedVariant = singleName;
 
-                        // 預選邏輯
-                        if (!isOOS) product.selectedVariant = singleName;
-                        else product.selectedVariant = null;
-
-                        let btnClass = isOOS ? 'out-of-stock' : 'single-mode';
+                        // 🔴 修改重點：把 class="variant-btn selected" 改成 class="variant-btn single-mode"
+                        // 我們要用 CSS 另外定義 single-mode 的長相，不要用原本那種很重的實心色
                         variantsHtml = `
                             <div class="variant-container">
-                                <div class="variant-btn ${btnClass}">${singleName}</div>
+                                <div class="variant-btn single-mode">
+                                    ${singleName}
+                                </div>
                             </div>`;
                     }
 
-                    // 🔍 詳情按鈕
                     let stickerHtml = '';
                     if (product.hasDetails) {
-                        /* 找到這一段 */
+                        // 修改：加上文字 "查看詳情"
                         stickerHtml = `<div class="more-sticker" onclick="showDetails(${index})">
-    <svg ...略...></svg>
-    看更多...  </div>`;
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                            查看詳情
+                        </div>`;
                     }
 
-                    // 🛒 ADD 按鈕 (含 SOLD OUT 判斷)
-                    let btnHtml = '';
-                    if (isSingleOOS) {
-                        btnHtml = `<button class="btn-add" style="background-color:#ccc; border-color:#ccc; cursor:not-allowed;" disabled>SOLD OUT</button>`;
-                    } else {
-                        btnHtml = `<button class="btn-add" onclick="addToCart(${index})">ADD</button>`;
-                    }
-
-                    // 🕒 收單時間 (隱形佔位)
-                    let deadlineHtml = '';
-                    if (deadlineDate) {
-                        deadlineHtml = `<div class="deadline-tag">🕒 收單: ${deadlineDate}</div>`;
-                    } else {
-                        deadlineHtml = `<div class="deadline-tag">&nbsp;</div>`;
-                    }
-
-                    // 數量選單
                     let options = ''; for (let i = 1; i <= 5; i++) options += `<option value="${i}">${i}</option>`;
 
-                    // 組合 HTML
+                    // === 排版順序大風吹 ===
                     card.innerHTML = `
                         <div class="img-wrapper">
                             ${badgeHtml}
                             <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
-                            ${stickerHtml} 
-                        </div>
+                            ${stickerHtml} </div>
                         <div class="info">
-                            ${deadlineHtml}
                             <h3 class="name">${product.name}</h3>
+                            
                             <span class="desc-text">${product.description || '&nbsp;'}</span>
+                            
                             ${variantsHtml}
+
                             <span class="price">NT$ ${product.price}</span>
+                            
                             <div class="action-row">
                                 <select id="qty-${index}">${options}</select>
-                                ${btnHtml}
+                                <button class="btn-add" onclick="addToCart(${index})">ADD</button>
                             </div>
                         </div>
                     `;
                     container.appendChild(card);
-                    allProductsData.push(product); // 重要！儲存資料
                 });
-            } catch (error) {
-                console.error(error);
-                loading.innerHTML = 'Error loading products.';
-            }
+            } catch (error) { console.error(error); loading.innerHTML = 'Error loading products.'; }
         }
 
-        // 3. 規格選擇 (可取消)
+        // 按鈕點擊功能 (支援取消選取)
         function selectVariant(productIndex, value, btnElement) {
             const product = allProductsData[productIndex];
+
+            // 🔴 判斷：如果這個按鈕已經是被選中狀態，代表使用者想「取消」
             if (btnElement.classList.contains('selected')) {
+                // 1. 移除樣式 (變回空心金)
                 btnElement.classList.remove('selected');
+
+                // 2. 清除已選規格 (這樣加入購物車時會擋住，或需要另外處理)
                 product.selectedVariant = null;
+
             } else {
+                // 🔴 如果還沒被選，代表使用者想「選取」
+
+                // 1. 先把同一區的其他兄弟按鈕都取消 (變成空心金)
                 const container = document.getElementById(`variants-${productIndex}`);
                 const btns = container.getElementsByClassName('variant-btn');
-                for (let btn of btns) btn.classList.remove('selected');
+
+                for (let btn of btns) {
+                    btn.classList.remove('selected');
+                }
+
+                // 2. 把自己變成實心金
                 btnElement.classList.add('selected');
+
+                // 3. 記錄選了什麼
                 product.selectedVariant = value;
             }
         }
 
-        // 4. 加入購物車 (之前消失的就是這個！)
-        function addToCart(index) {
-            const product = allProductsData[index];
-            const qtySelect = document.getElementById(`qty-${index}`);
-            const qty = parseInt(qtySelect.value);
+// ==========================================
+        // 🟢 補回遺失的購物車功能 (請貼在 selectVariant 下面)
+        // ==========================================
 
-            if (!product.selectedVariant) {
-                alert('請先選擇一個款式或是規格喔！');
-                return;
-            }
-
-            let priceNum = parseInt(product.price.replace(/[^0-9]/g, ''));
-
-            const cartItem = {
-                name: product.name,
-                spec: product.selectedVariant,
-                price: priceNum,
-                qty: qty
-            };
-
-            cart.push(cartItem);
-            updateCartIcon();
-
-            // 按鈕回饋動畫
-            const btn = window.event ? window.event.target : null;
-            if (btn) {
-                const originalText = btn.innerText;
-                btn.innerText = "OK!";
-                btn.style.backgroundColor = "#d4a373";
-                btn.style.borderColor = "#d4a373";
-                setTimeout(() => {
-                    btn.innerText = originalText;
-                    btn.style.backgroundColor = "";
-                    btn.style.borderColor = "";
-                }, 1000);
-            }
+        function updateCartIcon() {
+            document.getElementById('cart-count').innerText = cart.length;
         }
-
-        // 5. 購物車介面功能
-        function updateCartIcon() { document.getElementById('cart-count').innerText = cart.length; }
 
         function toggleCart() {
             const modal = document.getElementById('cartModal');
@@ -1413,9 +1321,50 @@
             }
         }
 
-        function closeCart(e) { if (e.target.classList.contains('cart-modal')) document.getElementById('cartModal').classList.remove('show'); }
+        function addToCart(index) {
+            const product = allProductsData[index];
+            const qtySelect = document.getElementById(`qty-${index}`);
+            const qty = parseInt(qtySelect.value);
 
-        function removeFromCart(idx) { cart.splice(idx, 1); updateCartIcon(); renderCartItems(); }
+            // 1. 檢查有沒有選規格
+            if (!product.selectedVariant) {
+                alert('請先選擇一個款式或是規格喔！');
+                return;
+            }
+
+            // 2. 處理價格 (把 NT$ 和逗號拿掉，轉成數字)
+            let priceNum = parseInt(product.price.replace(/[^0-9]/g, ''));
+
+            // 3. 建立購物車項目
+            const cartItem = {
+                name: product.name,
+                spec: product.selectedVariant,
+                price: priceNum,
+                qty: qty
+            };
+
+            // 4. 加入購物車
+            cart.push(cartItem);
+            updateCartIcon();
+
+            // 5. 按鈕變色提示成功
+            // 這裡使用 window.event 來抓取被點擊的按鈕，確保相容性
+            const btn = window.event ? window.event.target : null;
+            if (btn) {
+                const originalText = btn.innerText;
+                btn.innerText = "OK!";
+                btn.style.backgroundColor = "#d4a373";
+                btn.style.borderColor = "#d4a373";
+                
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.backgroundColor = "";
+                    btn.style.borderColor = "";
+                }, 1000);
+            }
+        }
+
+        function closeCart(e) { if (e.target.classList.contains('cart-modal')) document.getElementById('cartModal').classList.remove('show'); }
 
         function renderCartItems() {
             const container = document.getElementById('cartItems');
@@ -1432,6 +1381,10 @@
             cart.forEach((item, idx) => {
                 const subtotal = item.price * item.qty;
                 total += subtotal;
+                // 修改重點：
+                // 1. font-family: 'Noto Sans TC' -> 強制使用黑體，比較現代且清楚
+                // 2. font-size: 1.05rem -> 商品名稱放大
+                // 3. letter-spacing: 0.5px -> 增加一點字距，更有質感
                 html += `<div style="display:flex; justify-content:space-between; align-items:flex-start; padding:15px 0; border-bottom:1px solid #f5f5f5;">
                     <div style="font-family: 'Noto Sans TC', sans-serif;">
                         <div style="font-size:1.05rem; font-weight:500; color:#2c2c2c; letter-spacing:0.5px; margin-bottom:4px;">${item.name}</div>
@@ -1444,11 +1397,13 @@
                 </div>`;
             });
             container.innerHTML = html;
+            // 這裡也順便確保總金額的字體一致
             totalEl.style.fontFamily = "'Noto Sans TC', sans-serif";
             totalEl.innerText = `總金額: NT$ ${total}`;
         }
 
-        // 6. 結帳功能
+        function removeFromCart(idx) { cart.splice(idx, 1); updateCartIcon(); renderCartItems(); }
+
         function checkoutViaLine() {
             if (cart.length === 0) return;
             const shippingRadios = document.getElementsByName('shipping');
@@ -1457,6 +1412,7 @@
 
             if (!selectedShipping) { alert('請選擇下單平台 (7-11 賣貨便 or iOPEN Mall)'); return; }
 
+            // 1. 準備訂單文字
             let message = "您好，我想訂購以下商品：\n------------------\n";
             let total = 0;
             cart.forEach(item => {
@@ -1467,18 +1423,30 @@
             message += `總金額: NT$ ${total}\n`;
             message += `下單平台: ${selectedShipping}`;
 
+            // 2. 準備 LINE 的傳送連結
             const lineUrl = `https://line.me/R/oaMessage/@139gqqwy/?${encodeURIComponent(message)}`;
+
+            // 3. 智慧判斷裝置
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
             if (isMobile) {
+                // === 手機版 ===
+                // 直接打開 LINE App
                 window.location.href = lineUrl;
             } else {
+                // === 電腦版 (終極解法) ===
+                // 借用現有的 detailModal 彈窗，顯示一個「包好訂單連結」的 QR Code
+
                 const modal = document.getElementById('detailModal');
                 const title = document.getElementById('modalTitle');
                 const body = document.getElementById('modalBody');
+
+                // 產生 QR Code 圖片網址
                 const qrImgUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(lineUrl)}`;
+
                 title.innerText = "請使用手機掃描下單";
                 title.style.fontFamily = "'Noto Sans TC', sans-serif";
+
                 body.innerHTML = `
                     <div style="text-align:center; padding: 20px 0;">
                         <p style="margin-bottom:20px; color:#666; font-family:'Noto Sans TC', sans-serif;">
@@ -1487,65 +1455,80 @@
                         <img src="${qrImgUrl}" alt="Order QR Code" style="width:200px; height:200px; border:1px solid #eee; padding:10px;">
                     </div>
                 `;
+
                 modal.style.display = 'flex';
             }
         }
 
-        // === 最終修正版：解決字體與圖片問題 ===
+        // 🟢 補回這個：加入購物車的功能
+        function addToCart(index) {
+            const product = allProductsData[index];
+            const qtySelect = document.getElementById(`qty-${index}`);
+            const qty = parseInt(qtySelect.value);
+
+            // 1. 檢查有沒有選規格 (如果沒選，product.selectedVariant 會是 null)
+            if (!product.selectedVariant) {
+                alert('請先選擇一個款式或是規格喔！');
+                return;
+            }
+
+            // 2. 處理價格 (把 NT$ 和逗號拿掉，轉成數字)
+            // 假設價格字串是 "1,200" 或 "850"
+            let priceNum = parseInt(product.price.replace(/[^0-9]/g, ''));
+
+            // 3. 建立購物車項目
+            const cartItem = {
+                name: product.name,
+                spec: product.selectedVariant,
+                price: priceNum,
+                qty: qty
+            };
+
+            // 4. 加入全域購物車陣列
+            cart.push(cartItem);
+
+            // 5. 更新右下角浮動按鈕的數字
+            updateCartIcon();
+
+            // 6. 給個小提示 (可以依喜好改成其他效果)
+            // alert(`已加入：${product.name} [${product.selectedVariant}]`);
+
+            // 進階提示：讓按鈕變色一下，提示成功
+            const btn = event.target;
+            const originalText = btn.innerText;
+            btn.innerText = "OK!";
+            btn.style.backgroundColor = "#d4a373"; // 變成金色
+            btn.style.borderColor = "#d4a373";
+
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.style.backgroundColor = ""; // 變回原樣
+                btn.style.borderColor = "";
+            }, 1000);
+        }
+
         function showDetails(index) {
             const product = allProductsData[index];
             const modal = document.getElementById('detailModal');
-            const titleElement = document.getElementById('modalTitle');
-            const modalBody = document.getElementById('modalBody');
+            document.getElementById('modalTitle').innerText = product.name;
 
-            // 1. 標題設定：標題可以使用藝術字體 (Cormorant)
-            titleElement.innerHTML = product.name;
-            titleElement.style.color = "#2c2c2c";
-            titleElement.style.fontFamily = "'Cormorant Garamond', 'Noto Sans TC', sans-serif";
-
-            // 2. 準備內容 HTML
-            let contentHtml = '';
-
-            // A. 文字區塊 (如果有填寫 I 欄)
-            if (product.giftDesc && product.giftDesc.trim() !== "") {
-                contentHtml += `
-            <div style="
-                margin-bottom: 25px; 
-                text-align: center; 
-                color: #d4a373; 
-                font-weight: 500; 
-                font-size: 1.1rem;
-                line-height: 1.8;
-                font-family: 'Noto Sans TC', sans-serif;"> ${product.giftDesc}
-            </div>
-            <hr style="border: 0; border-top: 1px dashed #eee; margin: 0 auto 30px; width: 80%;">
-        `;
-            }
-
-            // B. 圖片區塊 (如果有填寫 E 欄)
-            // 我們加上 console.log 來檢查是否有讀到圖片
-            if (product.detailImgUrl && product.detailImgUrl.trim() !== "") {
+            let content = '';
+            // === 修改重點：支援多張圖片 (用逗號分隔) ===
+            if (product.detailImgUrl) {
+                // 用逗號 , 來切割網址
                 const urls = product.detailImgUrl.split(',');
+
                 urls.forEach(url => {
-                    let cleanUrl = url.trim();
-                    if (cleanUrl) {
-                        // 修正：確保圖片寬度正確且有下邊距
-                        contentHtml += `<img src="${cleanUrl}" style="width:100%; display:block; margin-bottom:10px; border-radius: 4px;">`;
+                    // 清除前後空白並產生圖片
+                    if (url.trim()) {
+                        content += `<img src="${url.trim()}" style="width:100%; display:block; margin-bottom:10px;">`;
                     }
                 });
             } else {
-                // 只有當「真的沒圖」且「也沒文字」時才顯示這行
-                if (!contentHtml) {
-                    contentHtml = '<p style="text-align:center; padding:30px; color:#999; font-family:\'Noto Sans TC\'">尚無詳細內容</p>';
-                }
+                content = '<p style="text-align:center; padding:20px;">尚無詳細圖片</p>';
             }
 
-            // 3. 寫入內容
-            modalBody.innerHTML = contentHtml;
-
-            // 🔴 關鍵修正：彈窗內文「全域」強制使用黑體，避免出現新細明體
-            modalBody.style.fontFamily = "'Noto Sans TC', sans-serif";
-
+            document.getElementById('modalBody').innerHTML = content;
             modal.style.display = 'flex';
         }
 
@@ -1553,6 +1536,7 @@
             document.getElementById('detailModal').style.display = 'none';
         }
 
+        // 🟢 補上這個：讓點擊背景也能關閉詳情視窗
         function closeModal(event) {
             if (event.target.classList.contains('modal-overlay')) {
                 document.getElementById('detailModal').style.display = 'none';
@@ -1564,7 +1548,6 @@
         style.innerHTML = `@keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }`;
         document.head.appendChild(style);
 
-        // 啟動！
         fetchProducts();
     </script>
 </body>
