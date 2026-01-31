@@ -1494,17 +1494,9 @@
 
             // 2. 準備內容 HTML
 
-            // (A) 原本的描述 (例如套組內容)
-            let descHtml = '';
-            if (product.description) {
-                descHtml = `
-            <div style="text-align:center; padding:0 30px 10px; color:#666; font-family:'Zen Maru Gothic', sans-serif; font-size:1rem;">
-                ${product.description}
-            </div>
-        `;
-            }
-
-            // (B) 🔴 重點：贈品描述區域 (讀取 I 欄)
+            // (A) 🔴 已移除：原本的描述文字區域 (您提到的白色部分)
+            
+            // (B) 贈品描述區域 (讀取 I 欄)
             // 只有當 I 欄有填寫時，才會顯示這個粉紅框框
             let giftHtml = '';
             if (product.giftDesc) {
@@ -1529,8 +1521,8 @@
                 imgContent = '<p style="text-align:center; padding:20px;">尚無詳細圖片</p>';
             }
 
-            // 3. 組合顯示：描述 -> 贈品 -> 圖片
-            document.getElementById('modalBody').innerHTML = descHtml + giftHtml + imgContent;
+            // 3. 組合顯示：只剩下「贈品(粉紅框)」和「圖片」
+            document.getElementById('modalBody').innerHTML = giftHtml + imgContent;
 
             modal.style.display = 'flex';
         }
@@ -1539,7 +1531,7 @@
             document.getElementById('detailModal').style.display = 'none';
         }
 
-        // 🟢 補上這個：讓點擊背景也能關閉詳情視窗
+        // 🟢 讓點擊背景也能關閉詳情視窗
         function closeModal(event) {
             if (event.target.classList.contains('modal-overlay')) {
                 document.getElementById('detailModal').style.display = 'none';
