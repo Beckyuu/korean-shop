@@ -1014,6 +1014,42 @@
             min-height: 1.2em;
             line-height: 1.2em;
         }
+
+        /* === 手機版專用設定 (一排兩個) === */
+        @media (max-width: 768px) {
+            #product-list {
+                /* 關鍵指令：強制分成兩欄，各佔一半寬度 */
+                grid-template-columns: repeat(2, 1fr) !important;
+
+                /* 間距縮小：讓兩張卡片靠近一點，畫面比較緊湊 */
+                gap: 12px !important;
+                padding: 10px !important;
+                /* 整個列表邊緣留白 */
+            }
+
+            /* 卡片內部微調：避免變兩欄後太擠 */
+            .product-card {
+                /* 稍微縮小卡片內距，讓內容有更多空間 */
+                padding: 10px !important;
+            }
+
+            /* 調整手機版圖片高度 (可選) */
+            .product-card .img-wrapper {
+                height: 160px;
+            }
+
+            /* 手機版字體稍微縮小 */
+            .product-card .name {
+                font-size: 0.95rem;
+            }
+
+            /* 按鈕跟選單在手機版並排太擠的話，可以稍微縮小 */
+            .action-row select,
+            .action-row button {
+                font-size: 0.85rem;
+                padding: 5px;
+            }
+        }
     </style>
 </head>
 
