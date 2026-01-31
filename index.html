@@ -342,14 +342,25 @@
         }
 
         .name {
-            /* 🔴 修改：改用 Zen Maru Gothic 圓體 */
+            /* 🔴 修改：固定高度與置中 */
             font-family: 'Zen Maru Gothic', 'Noto Sans TC', sans-serif;
-
             font-size: 1.1rem;
-            /* 字體可以稍微大一點點，圓體大一點比較可愛 */
             font-weight: 500;
-            /* 圓體建議用 500 或 700，太細會看不清楚 */
             color: var(--text-main);
+
+            /* 設定固定高度 (大約是兩行字的高度) */
+            height: 3.2rem;
+
+            /* 讓文字垂直置中 (Flexbox 大法) */
+            display: flex;
+            align-items: center;
+            /* 垂直置中 */
+            justify-content: center;
+            /* 水平置中 */
+
+            /* 超出範圍隱藏 (以防萬一字太多) */
+            overflow: hidden;
+
             margin-bottom: 6px;
             line-height: 1.4;
             letter-spacing: 0.5px;
@@ -378,6 +389,7 @@
             flex-wrap: wrap;
             justify-content: center;
             gap: 6px;
+            margin-top: auto;
 
             /* 🔴 修改重點：讓容器長高，並讓內容置中 */
             flex-grow: 1;
@@ -588,21 +600,25 @@
             background-size: 10px;
         }
 
-        /* === 收單時間提醒 === */
+        /* 這是原本的收單時間樣式 */
         .deadline-badge {
             display: inline-block;
             background-color: #f4e3e3;
-            /* 很淡的紅底 */
             color: #c97c7c;
-            /* 莫蘭迪紅色字 */
             font-family: 'Noto Sans TC', sans-serif;
             font-size: 0.8rem;
             font-weight: 500;
             padding: 2px 10px;
             border-radius: 4px;
             margin-bottom: 8px;
-            /* 跟下方價格保持距離 */
             letter-spacing: 1px;
+        }
+
+        .deadline-badge.empty {
+            visibility: hidden;
+            /* 讓它看不見 */
+            background: transparent;
+            /* 背景變透明 */
         }
 
         /* === 價格 === */
@@ -1269,10 +1285,16 @@
 
                     let options = ''; for (let i = 1; i <= 5; i++) options += `<option value="${i}">${i}</option>`;
 
-                    // === 🔴 新增：收單時間 HTML 準備 ===
+                    // === 🟢 修改後：強制預留空間的邏輯 ===
                     let deadlineHtml = '';
+
                     if (product.deadline) {
+                        // 情況 A：有填寫日期 -> 顯示正常的紅色框框
                         deadlineHtml = `<div class="deadline-badge">⏳ 收單：${product.deadline}</div>`;
+                    } else {
+                        // 情況 B：沒填寫日期 -> 顯示一個「隱形」的框框 (class="empty")
+                        // 裡面放一個 &nbsp; (空白字元) 來撐開高度，這樣才會跟隔壁有寫日期的一樣高
+                        deadlineHtml = `<div class="deadline-badge empty">&nbsp;</div>`;
                     }
 
                     card.innerHTML = `
