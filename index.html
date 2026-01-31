@@ -1212,8 +1212,7 @@
                     const rawSpec = row[1] ? row[1].trim() : '';
                     const variants = rawSpec.includes('|') ? rawSpec.split('|').map(s => s.trim()) : (rawSpec ? [rawSpec] : []);
 
-                    // 2. 🟢 新增：讀取收單時間 (假設在 Google Sheet 的 H 欄，索引是 7)
-                    // 如果欄位是空的，我們就給它一個 null
+                    // 讀取收單時間 (H欄)
                     const deadlineDate = row[7] ? row[7].trim() : null;
 
                     const product = {
@@ -1228,25 +1227,89 @@
                     };
 
                     product.hasDetails = product.detailImgUrl !== '';
-                    // ... (中間判斷 variants.length 的邏輯不用變，維持上次給你的即可) ...
-                    // 為求保險，我這裡省略中間 variantsHtml 的生成程式碼，
-                    // 你只要保留上次那個「支援缺貨 + SOLD OUT」的版本就好
 
-                    // ... (中間省略 variantsHtml 生成邏輯) ...
+                    const card = document.createElement('div');
+                    card.className = 'product-card';
 
+                    // 🟢 1. 補回這裡：標籤邏輯 (NEW/HOT) - 上次就是漏了這段才壞掉！
+                    let badgeHtml = '';
+                    if (product.tag === 'NEW') {
+                        badgeHtml = `<div class="badge new">NEW</div>`;
+                    } else if (product.tag === 'HOT') {
+                        badgeHtml = `<div class="badge hot">HOT</div>`;
+                    } else if (product.tag === 'SALE') {
+                        badgeHtml = `<div class="badge sale">SALE</div>`;
+                    }
 
-                    // 🟢 3. 準備收單時間的 HTML (這段是新的！)
+                    // 🟢 2. 規格按鈕邏輯 (支援缺貨 + 防呆)
+                    let variantsHtml = '';
+                    let isSingleOOS = false; // 判斷單一規格是否缺貨
+
+                    if (product.variants.length > 1) {
+                        // A. 多規格模式
+                        variantsHtml = `<div class="variant-container" id="variants-${index}">`;
+                        product.variants.forEach(v => {
+                            let isOOS = v.includes('(缺)');
+                            let displayName = v.replace('(缺)', '');
+                            let oosClass = isOOS ? 'out-of-stock' : '';
+                            variantsHtml += `<div class="variant-btn ${oosClass}" onclick="selectVariant(${index}, '${displayName}', this)">${displayName}</div>`;
+                        });
+                        variantsHtml += `</div>`;
+
+                    } else {
+                        // B. 單一規格模式
+                        let rawName = (product.variants.length === 1 && product.variants[0] !== '') ? product.variants[0] : '單一規格';
+
+                        let isOOS = rawName.includes('(缺)');
+                        if (isOOS) isSingleOOS = true;
+
+                        let singleName = rawName.replace('(缺)', '');
+                        if (singleName.trim() === '') singleName = '單一規格'; // 防呆補字
+
+                        if (!isOOS) {
+                            product.selectedVariant = singleName;
+                        } else {
+                            product.selectedVariant = null;
+                        }
+
+                        let btnClass = isOOS ? 'out-of-stock' : 'single-mode';
+
+                        variantsHtml = `
+                            <div class="variant-container">
+                                <div class="variant-btn ${btnClass}">
+                                    ${singleName}
+                                </div>
+                            </div>`;
+                    }
+
+                    // 🟢 3. 詳情按鈕
+                    let stickerHtml = '';
+                    if (product.hasDetails) {
+                        stickerHtml = `<div class="more-sticker" onclick="showDetails(${index})">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                            查看詳情
+                        </div>`;
+                    }
+
+                    // 🟢 4. 判斷 ADD 按鈕要顯示什麼 (SOLD OUT 機制)
+                    let btnHtml = '';
+                    if (isSingleOOS) {
+                        btnHtml = `<button class="btn-add" style="background-color:#ccc; border-color:#ccc; cursor:not-allowed;" disabled>SOLD OUT</button>`;
+                    } else {
+                        btnHtml = `<button class="btn-add" onclick="addToCart(${index})">ADD</button>`;
+                    }
+
+                    // 🟢 5. 收單時間 (隱形佔位機制)
                     let deadlineHtml = '';
                     if (deadlineDate) {
-                        // 如果有時間 -> 顯示時鐘圖案 + 時間
                         deadlineHtml = `<div class="deadline-tag">🕒 收單: ${deadlineDate}</div>`;
                     } else {
-                        // 如果沒時間 -> 顯示「隱形空白」，用來佔位子保持對齊
                         deadlineHtml = `<div class="deadline-tag">&nbsp;</div>`;
                     }
 
+                    let options = ''; for (let i = 1; i <= 5; i++) options += `<option value="${i}">${i}</option>`;
 
-                    // === 產生卡片 HTML (記得把 deadlineHtml 放進去) ===
+                    // === 產生卡片 HTML ===
                     card.innerHTML = `
                         <div class="img-wrapper">
                             ${badgeHtml}
