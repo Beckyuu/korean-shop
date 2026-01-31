@@ -983,6 +983,29 @@
             color: #fff;
             border-color: #2c2c2c;
         }
+
+        /* === 缺貨狀態專用樣式 (灰色鎖定) === */
+        .variant-btn.out-of-stock {
+            background-color: #f9f9f9 !important;
+            /* 極淺灰底 */
+            color: #ccc !important;
+            /* 淺灰字，看起來像失效 */
+            border-color: #e0e0e0 !important;
+            /* 淺灰框 */
+
+            cursor: not-allowed !important;
+            /* 滑鼠移過去變成「禁止」符號 */
+            pointer-events: none;
+            /* 關鍵：讓它完全無法被點擊 */
+
+            box-shadow: none !important;
+        }
+
+        /* 避免被選中樣式覆蓋，確保它永遠是灰的 */
+        .variant-btn.out-of-stock:hover {
+            border-color: #e0e0e0 !important;
+            color: #ccc !important;
+        }
     </style>
 </head>
 
@@ -1209,27 +1232,50 @@
                         badgeHtml = `<div class="badge sale">SALE</div>`;
                     }
 
-                    // === 修改後：韓系米粒按鈕排版 ===
+                    // === 修改後：支援缺貨判斷的按鈕邏輯 ===
                     let variantsHtml = '';
 
                     if (product.variants.length > 1) {
-                        // 如果有多個規格 -> 產生按鈕群組
+                        // A. 多規格模式
                         variantsHtml = `<div class="variant-container" id="variants-${index}">`;
+
                         product.variants.forEach(v => {
-                            variantsHtml += `<div class="variant-btn" onclick="selectVariant(${index}, '${v}', this)">${v}</div>`;
+                            // 🕵️ 偵探模式：檢查有沒有寫 "(缺)"
+                            let isOOS = v.includes('(缺)');
+
+                            // 把 "(缺)" 拿掉，只留下原本的名字 (例如 "茶樹(缺)" -> "茶樹")
+                            let displayName = v.replace('(缺)', '');
+
+                            // 如果缺貨，加上 out-of-stock 這個 class
+                            let oosClass = isOOS ? 'out-of-stock' : '';
+
+                            variantsHtml += `<div class="variant-btn ${oosClass}" onclick="selectVariant(${index}, '${displayName}', this)">${displayName}</div>`;
                         });
+
                         variantsHtml += `</div>`;
+
                     } else {
-                        // 情況 B：單一規格
-                        let singleName = (product.variants.length === 1 && product.variants[0] !== '') ? product.variants[0] : '單一規格';
+                        // B. 單一規格模式
+                        let rawName = (product.variants.length === 1 && product.variants[0] !== '') ? product.variants[0] : '單一規格';
 
-                        product.selectedVariant = singleName;
+                        // 一樣檢查有沒有缺貨記號
+                        let isOOS = rawName.includes('(缺)');
+                        let singleName = rawName.replace('(缺)', '');
 
-                        // 🔴 修改重點：把 class="variant-btn selected" 改成 class="variant-btn single-mode"
-                        // 我們要用 CSS 另外定義 single-mode 的長相，不要用原本那種很重的實心色
+                        // 預設選中 (只有在"有貨"的時候才幫他預選)
+                        if (!isOOS) {
+                            product.selectedVariant = singleName;
+                        } else {
+                            product.selectedVariant = null; // 缺貨就不能預選
+                        }
+
+                        // 判斷要用金色樣式(single-mode) 還是 缺貨樣式(out-of-stock)
+                        // 如果缺貨，就給 out-of-stock；如果有貨，就給 single-mode
+                        let btnClass = isOOS ? 'out-of-stock' : 'single-mode';
+
                         variantsHtml = `
                             <div class="variant-container">
-                                <div class="variant-btn single-mode">
+                                <div class="variant-btn ${btnClass}">
                                     ${singleName}
                                 </div>
                             </div>`;
@@ -1303,7 +1349,7 @@
             }
         }
 
-// ==========================================
+        // ==========================================
         // 🟢 補回遺失的購物車功能 (請貼在 selectVariant 下面)
         // ==========================================
 
@@ -1355,7 +1401,7 @@
                 btn.innerText = "OK!";
                 btn.style.backgroundColor = "#d4a373";
                 btn.style.borderColor = "#d4a373";
-                
+
                 setTimeout(() => {
                     btn.innerText = originalText;
                     btn.style.backgroundColor = "";
