@@ -604,35 +604,47 @@
             flex-shrink: 0;
         }
 
-        /* === 7. 詳情按鈕 (永久顯示) === */
+        /* === 修正後的詳情按鈕 === */
         .more-sticker {
             position: absolute;
             bottom: 10px;
             right: 10px;
             width: auto;
-            padding: 5px 12px;
-            background: #2c2c2c(255, 255, 255, 0.95);
-            color: #ffffff;
-            border: 1px solid #eee;
+            min-width: 80px;
+            /* 確保有足夠寬度 */
+            padding: 6px 14px;
+
+            /* 🔴 改成黑色底、白色字 */
+            background: #2c2c2c;
+            color: #fff;
+
+            border: 1px solid #2c2c2c;
             border-radius: 20px;
 
             display: flex;
             align-items: center;
+            justify-content: center;
+            /* 讓文字置中 */
             gap: 5px;
+
             font-size: 0.75rem;
             font-family: 'Noto Sans TC', sans-serif;
+            /* 確保中文是黑體 */
             cursor: pointer;
             z-index: 5;
 
-            /* 永久顯示設定 */
+            /* 禁止換行，這是關鍵！ */
+            white-space: nowrap;
+
             opacity: 1;
-            transform: none;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
         .more-sticker:hover {
-            background: #2c2c2c;
-            color: #fff;
+            background: #444;
+            /* 滑鼠移過去稍微變淺一點的黑 */
+            border-color: #444;
         }
 
         /* === 最終極簡版 Footer (緊湊型) === */
@@ -1514,35 +1526,54 @@
             }
         }
 
-        // 7. 詳情視窗功能 (修改版：支援顯示贈品內容)
+        // === 修正後的彈窗邏輯 ===
         function showDetails(index) {
             const product = allProductsData[index];
             const modal = document.getElementById('detailModal');
             const titleElement = document.getElementById('modalTitle');
-
-            // 1. 設定標題 (這裡也要改成 innerHTML 以防萬一你也想在標題換行)
-            if (product.giftDesc && product.giftDesc !== "") {
-                // 👇 關鍵修改：把 innerText 改成 innerHTML
-                titleElement.innerHTML = product.giftDesc;
-                titleElement.style.color = "#d4a373";
-            } else {
-                titleElement.innerHTML = product.name; // 👇 這裡也改成 innerHTML
-                titleElement.style.color = "#333";
-            }
-
-            // 2. 設定內文圖片與文字
-            let content = '';
-
-            // ...圖片處理邏輯保持不變...
-
-            // 3. 解決字體問題：在寫入 modalBody 時加入 style 設定
             const modalBody = document.getElementById('modalBody');
 
-            // 👇 加入這行：強制將彈窗內容的字體改成與標題一致 (Cormorant Garamond)
-            modalBody.style.fontFamily = "'Cormorant Garamond', serif";
-            // 若覺得原本的斜體太難閱讀，可以加上 fontStyle: 'normal'
+            // 1. 標題統一顯示商品名稱 (比較整齊)
+            titleElement.innerHTML = product.name;
+            titleElement.style.color = "#2c2c2c";
+            titleElement.style.fontFamily = "'Cormorant Garamond', 'Noto Sans TC', sans-serif";
 
-            modalBody.innerHTML = content;
+            // 2. 準備內容區塊 (文字 + 圖片)
+            let contentHtml = '';
+
+            // A. 先放文字說明 (如果有填寫的話)
+            // 這裡會讀取 Excel 的 I欄 (GiftDesc)，並支援 <br> 換行
+            if (product.giftDesc && product.giftDesc.trim() !== "") {
+                contentHtml += `
+            <div style="margin-bottom: 25px; text-align: center; color: #d4a373; font-weight: 500; line-height: 1.8;">
+                ${product.giftDesc}
+            </div>
+            <hr style="border: 0; border-top: 1px dashed #eee; margin: 0 auto 25px; width: 80%;">
+        `;
+            }
+
+            // B. 再放詳細圖片
+            if (product.detailImgUrl && product.detailImgUrl.trim() !== "") {
+                const urls = product.detailImgUrl.split(',');
+                urls.forEach(url => {
+                    if (url.trim()) {
+                        contentHtml += `<img src="${url.trim()}" style="width:100%; display:block; margin-bottom:10px;">`;
+                    }
+                });
+            } else {
+                // 如果沒圖也沒文字，才顯示這行
+                if (contentHtml === '') {
+                    contentHtml = '<p style="text-align:center; padding:20px; color:#999;">尚無詳細內容</p>';
+                }
+            }
+
+            // 3. 寫入內容並設定字體
+            modalBody.innerHTML = contentHtml;
+
+            // 🔴 關鍵修正：字體設定
+            // 英文用 Cormorant，中文強制用 Noto Sans TC (黑體)，這樣才不會變新細明體
+            modalBody.style.fontFamily = "'Cormorant Garamond', 'Noto Sans TC', sans-serif";
+
             modal.style.display = 'flex';
         }
 
