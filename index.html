@@ -285,14 +285,14 @@
             object-fit: cover;
             transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
         }
-        
+
         /* 移除滑鼠懸停時的圖片移動與放大效果 */
         .product-card:hover {
-             /* transform: translateY(-8px); */
+            /* transform: translateY(-8px); */
         }
 
         .product-card:hover .img-wrapper img {
-             /* transform: scale(1.05); */
+            /* transform: scale(1.05); */
         }
 
         /* === 優化後的標籤 Badge (韓系絲帶感) === */
@@ -591,14 +591,17 @@
         /* === 收單時間提醒 === */
         .deadline-badge {
             display: inline-block;
-            background-color: #f4e3e3; /* 很淡的紅底 */
-            color: #c97c7c;           /* 莫蘭迪紅色字 */
+            background-color: #f4e3e3;
+            /* 很淡的紅底 */
+            color: #c97c7c;
+            /* 莫蘭迪紅色字 */
             font-family: 'Noto Sans TC', sans-serif;
             font-size: 0.8rem;
             font-weight: 500;
             padding: 2px 10px;
             border-radius: 4px;
-            margin-bottom: 8px;       /* 跟下方價格保持距離 */
+            margin-bottom: 8px;
+            /* 跟下方價格保持距離 */
             letter-spacing: 1px;
         }
 
@@ -920,13 +923,13 @@
         .modal-title {
             /* 修改這裡：換成跟商品大標題一樣的圓體 */
             font-family: 'Zen Maru Gothic', 'Noto Sans TC', sans-serif;
-            
+
             font-size: 1.5rem;
             padding: 30px 30px 10px;
             text-align: center;
-            
+
             /* 加一點粗細讓它更像標題 */
-            font-weight: 500; 
+            font-weight: 500;
         }
 
         .modal-body p {
@@ -943,12 +946,15 @@
             right: 10px;
             width: auto;
             padding: 5px 12px;
-            
+
             /* 修改這裡：改成預設就是黑底白字 */
-            background: #2c2c2c;  /* 黑底 */
-            color: #fff;          /* 白字 */
-            border: none;         /* 不需要邊框 */
-            
+            background: #2c2c2c;
+            /* 黑底 */
+            color: #fff;
+            /* 白字 */
+            border: none;
+            /* 不需要邊框 */
+
             border-radius: 20px;
             display: flex;
             align-items: center;
@@ -961,12 +967,14 @@
             /* 永久顯示設定 */
             opacity: 1;
             transform: translateY(0);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 加一點陰影比較立體 */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            /* 加一點陰影比較立體 */
         }
 
         /* 滑鼠移過去的效果 */
         .more-sticker:hover {
-            background: #444; /* 稍微變淺一點點的黑，讓客人知道有按到 */
+            background: #444;
+            /* 稍微變淺一點點的黑，讓客人知道有按到 */
             color: #fff;
         }
 
@@ -976,7 +984,7 @@
             background-color: #fff0f5;
             border: 1px dashed #e5989b;
             border-radius: 10px;
-            
+
             /* 文字設定 */
             color: #d65a5a;
             font-family: 'Zen Maru Gothic', sans-serif;
@@ -1266,7 +1274,7 @@
                     if (product.deadline) {
                         deadlineHtml = `<div class="deadline-badge">⏳ 收單：${product.deadline}</div>`;
                     }
-                    
+
                     card.innerHTML = `
                         <div class="img-wrapper">
                             ${badgeHtml}
@@ -1456,30 +1464,29 @@
 
             if (isMobile) {
                 // === 手機版 ===
-                // 直接打開 LINE App
                 window.location.href = lineUrl;
             } else {
-                // === 電腦版 (終極解法) ===
-                // 借用現有的 detailModal 彈窗，顯示一個「包好訂單連結」的 QR Code
-
+                // === 電腦版 (顯示 QR Code) ===
                 const modal = document.getElementById('detailModal');
                 const title = document.getElementById('modalTitle');
                 const body = document.getElementById('modalBody');
 
-                // 產生 QR Code 圖片網址
+                // 🔴 關鍵修正：結帳時要把標題顯示回來，不然會空空的
+                title.style.display = 'block';
+
                 const qrImgUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(lineUrl)}`;
 
                 title.innerText = "請使用手機掃描下單";
                 title.style.fontFamily = "'Noto Sans TC', sans-serif";
 
                 body.innerHTML = `
-                    <div style="text-align:center; padding: 20px 0;">
-                        <p style="margin-bottom:20px; color:#666; font-family:'Noto Sans TC', sans-serif;">
-                            拿起手機開啟 LINE 或相機<br>掃描下方 QR Code，訂單將自動帶入對話框！
-                        </p>
-                        <img src="${qrImgUrl}" alt="Order QR Code" style="width:200px; height:200px; border:1px solid #eee; padding:10px;">
-                    </div>
-                `;
+            <div style="text-align:center; padding: 20px 0;">
+                <p style="margin-bottom:20px; color:#666; font-family:'Noto Sans TC', sans-serif;">
+                    拿起手機開啟 LINE 或相機<br>掃描下方 QR Code，訂單將自動帶入對話框！
+                </p>
+                <img src="${qrImgUrl}" alt="Order QR Code" style="width:200px; height:200px; border:1px solid #eee; padding:10px;">
+            </div>
+        `;
 
                 modal.style.display = 'flex';
             }
@@ -1488,27 +1495,24 @@
         function showDetails(index) {
             const product = allProductsData[index];
             const modal = document.getElementById('detailModal');
+            const titleEl = document.getElementById('modalTitle');
 
-            // 1. 設定彈窗標題 (品名)
-            document.getElementById('modalTitle').innerText = product.name;
+            // 1. 隱藏標題 (因為您說彈窗內不需要顯示品名)
+            titleEl.style.display = 'none';
 
-            // 2. 準備內容 HTML
-
-            // (A) 🔴 已移除：原本的描述文字區域 (您提到的白色部分)
-            
-            // (B) 贈品描述區域 (讀取 I 欄)
-            // 只有當 I 欄有填寫時，才會顯示這個粉紅框框
+            // 2. 贈品區域 (I 欄)
+            // 🔴 修改重點：保留粉紅框 div，但把裡面的 <span>🎁 BONUS</span> 刪掉了
+            // 現在只會顯示您在 I 欄填寫的純文字
             let giftHtml = '';
             if (product.giftDesc) {
                 giftHtml = `
             <div class="gift-note">
-                <span class="gift-icon">🎁 BONUS</span>
                 ${product.giftDesc}
             </div>
         `;
             }
 
-            // (C) 詳細圖片
+            // 3. 詳細圖片
             let imgContent = '';
             if (product.detailImgUrl) {
                 const urls = product.detailImgUrl.split(',');
@@ -1521,7 +1525,7 @@
                 imgContent = '<p style="text-align:center; padding:20px;">尚無詳細圖片</p>';
             }
 
-            // 3. 組合顯示：只剩下「贈品(粉紅框)」和「圖片」
+            // 4. 組合內容：只剩下「純淨的粉紅贈品框」+「圖片」
             document.getElementById('modalBody').innerHTML = giftHtml + imgContent;
 
             modal.style.display = 'flex';
