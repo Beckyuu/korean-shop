@@ -908,18 +908,23 @@
             font-size: 0.95rem;
         }
 
-        /* 詳情按鈕：永久顯示版 */
+        /* === 7. 詳情按鈕 (永久顯示版) === */
         .more-sticker {
             position: absolute;
             bottom: 10px;
             right: 10px;
             width: auto;
             padding: 5px 12px;
-            background: #2c2c2c(255, 255, 255, 0.9);
-            color: #fff;
-            border: none;
-            border-radius: 20px;
 
+            /* 修改這裡：改成預設就是黑底白字 */
+            background: #2c2c2c;
+            /* 黑底 */
+            color: #fff;
+            /* 白字 */
+            border: none;
+            /* 不需要邊框 */
+
+            border-radius: 20px;
             display: flex;
             align-items: center;
             gap: 5px;
@@ -928,18 +933,18 @@
             cursor: pointer;
             z-index: 5;
 
-            /* 🟢 關鍵修改：這兩行讓它永遠顯示 */
+            /* 永久顯示設定 */
             opacity: 1;
             transform: translateY(0);
-
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            /* 加一點陰影比較立體 */
         }
 
         /* 滑鼠移過去的效果 */
         .more-sticker:hover {
-            background: #2c2c2c;
+            background: #444;
+            /* 稍微變淺一點點的黑，讓客人知道有按到 */
             color: #fff;
-            border-color: #2c2c2c;
         }
     </style>
 </head>
@@ -1146,6 +1151,8 @@
                         detailImgUrl: row[4] ? row[4].trim() : '',
                         description: row[5] ? row[5].trim() : '', // 記得這裡有逗號
                         tag: row[6] ? row[6].trim().toUpperCase() : '' // 新增的標籤欄位
+                        deadline: row[7] ? row[7].trim() : '',
+                        giftDesc: row[8] ? row[8].trim() : ''
                     };
 
                     product.hasDetails = product.detailImgUrl !== '';
@@ -1205,26 +1212,36 @@
                     let options = ''; for (let i = 1; i <= 5; i++) options += `<option value="${i}">${i}</option>`;
 
                     // === 排版順序大風吹 ===
+                    // === 🔴 新增：收單時間 HTML 準備 ===
+                    let deadlineHtml = '';
+                    if (product.deadline) {
+                        deadlineHtml = `<div class="deadline-badge">⏳ 收單：${product.deadline}</div>`;
+                    }
                     card.innerHTML = `
-                        <div class="img-wrapper">
-                            ${badgeHtml}
-                            <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
-                            ${stickerHtml} </div>
-                        <div class="info">
-                            <h3 class="name">${product.name}</h3>
-                            
-                            <span class="desc-text">${product.description || '&nbsp;'}</span>
-                            
-                            ${variantsHtml}
+    <div class="img-wrapper">
+        ${badgeHtml}
+        <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
+        ${stickerHtml} 
+    </div>
+    
+    <div class="info">
+        
+        ${deadlineHtml}
 
-                            <span class="price">NT$ ${product.price}</span>
-                            
-                            <div class="action-row">
-                                <select id="qty-${index}">${options}</select>
-                                <button class="btn-add" onclick="addToCart(${index})">ADD</button>
-                            </div>
-                        </div>
-                    `;
+        <h3 class="name">${product.name}</h3>
+        
+        <span class="desc-text">${product.description || '&nbsp;'}</span>
+        
+        ${variantsHtml}
+
+        <span class="price">NT$ ${product.price}</span>
+        
+        <div class="action-row">
+            <select id="qty-${index}">${options}</select>
+            <button class="btn-add" onclick="addToCart(${index})">ADD</button>
+        </div>
+    </div>
+`;
                     container.appendChild(card);
                 });
             } catch (error) { console.error(error); loading.innerHTML = 'Error loading products.'; }
@@ -1261,7 +1278,7 @@
             }
         }
 
-// ==========================================
+        // ==========================================
         // 🟢 補回遺失的購物車功能 (請貼在 selectVariant 下面)
         // ==========================================
 
@@ -1313,7 +1330,7 @@
                 btn.innerText = "OK!";
                 btn.style.backgroundColor = "#d4a373";
                 btn.style.borderColor = "#d4a373";
-                
+
                 setTimeout(() => {
                     btn.innerText = originalText;
                     btn.style.backgroundColor = "";
