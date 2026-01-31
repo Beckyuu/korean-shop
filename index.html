@@ -946,6 +946,36 @@
             /* 稍微變淺一點點的黑，讓客人知道有按到 */
             color: #fff;
         }
+
+        /* === 贈品專用樣式 (I欄) === */
+        .gift-note {
+            /* 粉嫩背景 + 虛線邊框 */
+            background-color: #fff0f5;
+            border: 1px dashed #e5989b;
+            border-radius: 10px;
+
+            /* 文字設定 */
+            color: #d65a5a;
+            font-family: 'Zen Maru Gothic', sans-serif;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            font-weight: 500;
+
+            /* 位置：跟上下拉開一點距離 */
+            margin: 10px 30px 25px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        /* 上面的 BONUS 小標籤 */
+        .gift-icon {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #e5989b;
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+        }
     </style>
 </head>
 
@@ -1150,7 +1180,7 @@
                         imgUrl: row[3] ? row[3].trim() : '',
                         detailImgUrl: row[4] ? row[4].trim() : '',
                         description: row[5] ? row[5].trim() : '', // 記得這裡有逗號
-                        tag: row[6] ? row[6].trim().toUpperCase() : '' // 新增的標籤欄位
+                        tag: row[6] ? row[6].trim().toUpperCase() : '', // 新增的標籤欄位
                         deadline: row[7] ? row[7].trim() : '',
                         giftDesc: row[8] ? row[8].trim() : ''
                     };
@@ -1485,25 +1515,50 @@
         function showDetails(index) {
             const product = allProductsData[index];
             const modal = document.getElementById('detailModal');
+
+            // 1. 設定彈窗標題 (品名)
             document.getElementById('modalTitle').innerText = product.name;
 
-            let content = '';
-            // === 修改重點：支援多張圖片 (用逗號分隔) ===
-            if (product.detailImgUrl) {
-                // 用逗號 , 來切割網址
-                const urls = product.detailImgUrl.split(',');
+            // 2. 準備內容 HTML
 
+            // (A) 原本的描述 (例如套組內容)
+            let descHtml = '';
+            if (product.description) {
+                descHtml = `
+            <div style="text-align:center; padding:0 30px 10px; color:#666; font-family:'Zen Maru Gothic', sans-serif; font-size:1rem;">
+                ${product.description}
+            </div>
+        `;
+            }
+
+            // (B) 🔴 重點：贈品描述區域 (讀取 I 欄)
+            // 只有當 I 欄有填寫時，才會顯示這個粉紅框框
+            let giftHtml = '';
+            if (product.giftDesc) {
+                giftHtml = `
+            <div class="gift-note">
+                <span class="gift-icon">🎁 BONUS</span>
+                ${product.giftDesc}
+            </div>
+        `;
+            }
+
+            // (C) 詳細圖片
+            let imgContent = '';
+            if (product.detailImgUrl) {
+                const urls = product.detailImgUrl.split(',');
                 urls.forEach(url => {
-                    // 清除前後空白並產生圖片
                     if (url.trim()) {
-                        content += `<img src="${url.trim()}" style="width:100%; display:block; margin-bottom:10px;">`;
+                        imgContent += `<img src="${url.trim()}" style="width:100%; display:block; margin-bottom:10px;">`;
                     }
                 });
             } else {
-                content = '<p style="text-align:center; padding:20px;">尚無詳細圖片</p>';
+                imgContent = '<p style="text-align:center; padding:20px;">尚無詳細圖片</p>';
             }
 
-            document.getElementById('modalBody').innerHTML = content;
+            // 3. 組合顯示：描述 -> 贈品 -> 圖片
+            document.getElementById('modalBody').innerHTML = descHtml + giftHtml + imgContent;
+
             modal.style.display = 'flex';
         }
 
