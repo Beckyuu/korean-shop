@@ -285,6 +285,15 @@
             object-fit: cover;
             transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
         }
+        
+        /* 移除滑鼠懸停時的圖片移動與放大效果 */
+        .product-card:hover {
+             /* transform: translateY(-8px); */
+        }
+
+        .product-card:hover .img-wrapper img {
+             /* transform: scale(1.05); */
+        }
 
         /* === 優化後的標籤 Badge (韓系絲帶感) === */
         .badge {
@@ -577,6 +586,20 @@
             background-repeat: no-repeat;
             background-position: right 8px center;
             background-size: 10px;
+        }
+
+        /* === 收單時間提醒 === */
+        .deadline-badge {
+            display: inline-block;
+            background-color: #f4e3e3; /* 很淡的紅底 */
+            color: #c97c7c;           /* 莫蘭迪紅色字 */
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+            padding: 2px 10px;
+            border-radius: 4px;
+            margin-bottom: 8px;       /* 跟下方價格保持距離 */
+            letter-spacing: 1px;
         }
 
         /* === 價格 === */
@@ -895,10 +918,15 @@
         }
 
         .modal-title {
-            font-family: 'Cormorant Garamond', serif;
+            /* 修改這裡：換成跟商品大標題一樣的圓體 */
+            font-family: 'Zen Maru Gothic', 'Noto Sans TC', sans-serif;
+            
             font-size: 1.5rem;
             padding: 30px 30px 10px;
             text-align: center;
+            
+            /* 加一點粗細讓它更像標題 */
+            font-weight: 500; 
         }
 
         .modal-body p {
@@ -915,15 +943,12 @@
             right: 10px;
             width: auto;
             padding: 5px 12px;
-
+            
             /* 修改這裡：改成預設就是黑底白字 */
-            background: #2c2c2c;
-            /* 黑底 */
-            color: #fff;
-            /* 白字 */
-            border: none;
-            /* 不需要邊框 */
-
+            background: #2c2c2c;  /* 黑底 */
+            color: #fff;          /* 白字 */
+            border: none;         /* 不需要邊框 */
+            
             border-radius: 20px;
             display: flex;
             align-items: center;
@@ -936,14 +961,12 @@
             /* 永久顯示設定 */
             opacity: 1;
             transform: translateY(0);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            /* 加一點陰影比較立體 */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 加一點陰影比較立體 */
         }
 
         /* 滑鼠移過去的效果 */
         .more-sticker:hover {
-            background: #444;
-            /* 稍微變淺一點點的黑，讓客人知道有按到 */
+            background: #444; /* 稍微變淺一點點的黑，讓客人知道有按到 */
             color: #fff;
         }
 
@@ -953,7 +976,7 @@
             background-color: #fff0f5;
             border: 1px dashed #e5989b;
             border-radius: 10px;
-
+            
             /* 文字設定 */
             color: #d65a5a;
             font-family: 'Zen Maru Gothic', sans-serif;
@@ -1107,7 +1130,6 @@
             <button class="btn-checkout" onclick="checkoutViaLine()">傳送至 LINE官方帳號</button>
         </div>
     </div>
-    </div>
 
     <div id="detailModal" class="modal-overlay" onclick="closeModal(event)">
         <div class="modal-content">
@@ -1181,8 +1203,8 @@
                         detailImgUrl: row[4] ? row[4].trim() : '',
                         description: row[5] ? row[5].trim() : '', // 記得這裡有逗號
                         tag: row[6] ? row[6].trim().toUpperCase() : '', // 新增的標籤欄位
-                        deadline: row[7] ? row[7].trim() : '',
-                        giftDesc: row[8] ? row[8].trim() : ''
+                        deadline: row[7] ? row[7].trim() : '', // 收單時間
+                        giftDesc: row[8] ? row[8].trim() : '' // 贈品描述
                     };
 
                     product.hasDetails = product.detailImgUrl !== '';
@@ -1220,8 +1242,6 @@
 
                         product.selectedVariant = singleName;
 
-                        // 🔴 修改重點：把 class="variant-btn selected" 改成 class="variant-btn single-mode"
-                        // 我們要用 CSS 另外定義 single-mode 的長相，不要用原本那種很重的實心色
                         variantsHtml = `
                             <div class="variant-container">
                                 <div class="variant-btn single-mode">
@@ -1241,37 +1261,37 @@
 
                     let options = ''; for (let i = 1; i <= 5; i++) options += `<option value="${i}">${i}</option>`;
 
-                    // === 排版順序大風吹 ===
                     // === 🔴 新增：收單時間 HTML 準備 ===
                     let deadlineHtml = '';
                     if (product.deadline) {
                         deadlineHtml = `<div class="deadline-badge">⏳ 收單：${product.deadline}</div>`;
                     }
+                    
                     card.innerHTML = `
-    <div class="img-wrapper">
-        ${badgeHtml}
-        <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
-        ${stickerHtml} 
-    </div>
-    
-    <div class="info">
-        
-        ${deadlineHtml}
+                        <div class="img-wrapper">
+                            ${badgeHtml}
+                            <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
+                            ${stickerHtml} 
+                        </div>
+                        
+                        <div class="info">
+                            
+                            ${deadlineHtml}
 
-        <h3 class="name">${product.name}</h3>
-        
-        <span class="desc-text">${product.description || '&nbsp;'}</span>
-        
-        ${variantsHtml}
+                            <h3 class="name">${product.name}</h3>
+                            
+                            <span class="desc-text">${product.description || '&nbsp;'}</span>
+                            
+                            ${variantsHtml}
 
-        <span class="price">NT$ ${product.price}</span>
-        
-        <div class="action-row">
-            <select id="qty-${index}">${options}</select>
-            <button class="btn-add" onclick="addToCart(${index})">ADD</button>
-        </div>
-    </div>
-`;
+                            <span class="price">NT$ ${product.price}</span>
+                            
+                            <div class="action-row">
+                                <select id="qty-${index}">${options}</select>
+                                <button class="btn-add" onclick="addToCart(${index})">ADD</button>
+                            </div>
+                        </div>
+                    `;
                     container.appendChild(card);
                 });
             } catch (error) { console.error(error); loading.innerHTML = 'Error loading products.'; }
@@ -1309,7 +1329,7 @@
         }
 
         // ==========================================
-        // 🟢 補回遺失的購物車功能 (請貼在 selectVariant 下面)
+        // 🟢 購物車功能區域
         // ==========================================
 
         function updateCartIcon() {
@@ -1463,53 +1483,6 @@
 
                 modal.style.display = 'flex';
             }
-        }
-
-        // 🟢 補回這個：加入購物車的功能
-        function addToCart(index) {
-            const product = allProductsData[index];
-            const qtySelect = document.getElementById(`qty-${index}`);
-            const qty = parseInt(qtySelect.value);
-
-            // 1. 檢查有沒有選規格 (如果沒選，product.selectedVariant 會是 null)
-            if (!product.selectedVariant) {
-                alert('請先選擇一個款式或是規格喔！');
-                return;
-            }
-
-            // 2. 處理價格 (把 NT$ 和逗號拿掉，轉成數字)
-            // 假設價格字串是 "1,200" 或 "850"
-            let priceNum = parseInt(product.price.replace(/[^0-9]/g, ''));
-
-            // 3. 建立購物車項目
-            const cartItem = {
-                name: product.name,
-                spec: product.selectedVariant,
-                price: priceNum,
-                qty: qty
-            };
-
-            // 4. 加入全域購物車陣列
-            cart.push(cartItem);
-
-            // 5. 更新右下角浮動按鈕的數字
-            updateCartIcon();
-
-            // 6. 給個小提示 (可以依喜好改成其他效果)
-            // alert(`已加入：${product.name} [${product.selectedVariant}]`);
-
-            // 進階提示：讓按鈕變色一下，提示成功
-            const btn = event.target;
-            const originalText = btn.innerText;
-            btn.innerText = "OK!";
-            btn.style.backgroundColor = "#d4a373"; // 變成金色
-            btn.style.borderColor = "#d4a373";
-
-            setTimeout(() => {
-                btn.innerText = originalText;
-                btn.style.backgroundColor = ""; // 變回原樣
-                btn.style.borderColor = "";
-            }, 1000);
         }
 
         function showDetails(index) {
