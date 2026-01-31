@@ -1232,45 +1232,39 @@
                         badgeHtml = `<div class="badge sale">SALE</div>`;
                     }
 
-                    // === 修改後：支援缺貨判斷的按鈕邏輯 ===
+                    // === 修改後：支援缺貨判斷 + 防呆 + SOLD OUT 按鈕 ===
                     let variantsHtml = '';
+                    let isSingleOOS = false; // 🚩 新增旗標：判斷單一規格是否缺貨
 
                     if (product.variants.length > 1) {
                         // A. 多規格模式
                         variantsHtml = `<div class="variant-container" id="variants-${index}">`;
-
                         product.variants.forEach(v => {
-                            // 🕵️ 偵探模式：檢查有沒有寫 "(缺)"
                             let isOOS = v.includes('(缺)');
-
-                            // 把 "(缺)" 拿掉，只留下原本的名字 (例如 "茶樹(缺)" -> "茶樹")
                             let displayName = v.replace('(缺)', '');
-
-                            // 如果缺貨，加上 out-of-stock 這個 class
                             let oosClass = isOOS ? 'out-of-stock' : '';
-
                             variantsHtml += `<div class="variant-btn ${oosClass}" onclick="selectVariant(${index}, '${displayName}', this)">${displayName}</div>`;
                         });
-
                         variantsHtml += `</div>`;
 
                     } else {
                         // B. 單一規格模式
                         let rawName = (product.variants.length === 1 && product.variants[0] !== '') ? product.variants[0] : '單一規格';
 
-                        // 一樣檢查有沒有缺貨記號
                         let isOOS = rawName.includes('(缺)');
+                        if (isOOS) isSingleOOS = true; // 記住：這個商品缺貨了
+
                         let singleName = rawName.replace('(缺)', '');
 
-                        // 預設選中 (只有在"有貨"的時候才幫他預選)
+                        // 🟢 修復重點：如果刪掉 (缺) 之後變空字串，自動補回 '單一規格'
+                        if (singleName.trim() === '') singleName = '單一規格';
+
                         if (!isOOS) {
                             product.selectedVariant = singleName;
                         } else {
-                            product.selectedVariant = null; // 缺貨就不能預選
+                            product.selectedVariant = null;
                         }
 
-                        // 判斷要用金色樣式(single-mode) 還是 缺貨樣式(out-of-stock)
-                        // 如果缺貨，就給 out-of-stock；如果有貨，就給 single-mode
                         let btnClass = isOOS ? 'out-of-stock' : 'single-mode';
 
                         variantsHtml = `
@@ -1281,23 +1275,34 @@
                             </div>`;
                     }
 
+                    // 處理詳情按鈕
                     let stickerHtml = '';
                     if (product.hasDetails) {
-                        // 修改：加上文字 "查看詳情"
                         stickerHtml = `<div class="more-sticker" onclick="showDetails(${index})">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                             查看詳情
                         </div>`;
                     }
 
+                    // 🟢 新增：判斷 ADD 按鈕要顯示什麼
+                    let btnHtml = '';
+                    if (isSingleOOS) {
+                        // 如果單一規格缺貨 -> 顯示灰色的 SOLD OUT，且不能點
+                        btnHtml = `<button class="btn-add" style="background-color:#ccc; border-color:#ccc; cursor:not-allowed;" disabled>SOLD OUT</button>`;
+                    } else {
+                        // 正常情況 -> 顯示 ADD
+                        btnHtml = `<button class="btn-add" onclick="addToCart(${index})">ADD</button>`;
+                    }
+
                     let options = ''; for (let i = 1; i <= 5; i++) options += `<option value="${i}">${i}</option>`;
 
-                    // === 排版順序大風吹 ===
+                    // === 產生卡片 HTML ===
                     card.innerHTML = `
                         <div class="img-wrapper">
                             ${badgeHtml}
                             <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
-                            ${stickerHtml} </div>
+                            ${stickerHtml} 
+                        </div>
                         <div class="info">
                             <h3 class="name">${product.name}</h3>
                             
@@ -1309,8 +1314,7 @@
                             
                             <div class="action-row">
                                 <select id="qty-${index}">${options}</select>
-                                <button class="btn-add" onclick="addToCart(${index})">ADD</button>
-                            </div>
+                                ${btnHtml} </div>
                         </div>
                     `;
                     container.appendChild(card);
