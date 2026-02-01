@@ -226,7 +226,7 @@
             color: #d4a373;
         }
 
-        /* 手機版設定 */
+        /* 手機版設定 (舊的保留，新的在最下面) */
         @media (max-width: 768px) {
             .memo-list li {
                 white-space: normal;
@@ -285,14 +285,14 @@
             object-fit: cover;
             transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
         }
-
+        
         /* 移除滑鼠懸停時的圖片移動與放大效果 */
         .product-card:hover {
-            /* transform: translateY(-8px); */
+             /* transform: translateY(-8px); */
         }
 
         .product-card:hover .img-wrapper img {
-            /* transform: scale(1.05); */
+             /* transform: scale(1.05); */
         }
 
         /* === 優化後的標籤 Badge (韓系絲帶感) === */
@@ -342,42 +342,40 @@
         }
 
         .name {
-            /* 🔴 修改：固定高度與置中 */
             font-family: 'Zen Maru Gothic', 'Noto Sans TC', sans-serif;
             font-size: 1.1rem;
             font-weight: 500;
             color: var(--text-main);
-
-            /* 設定固定高度 (大約是兩行字的高度) */
+            
+            /* 🔴 關鍵修改：設定固定高度 (兩行字高) */
             height: 3.2rem;
-
-            /* 讓文字垂直置中 (Flexbox 大法) */
+            
+            /* 讓文字垂直置中 */
             display: flex;
-            align-items: center;
-            /* 垂直置中 */
-            justify-content: center;
-            /* 水平置中 */
-
-            /* 超出範圍隱藏 (以防萬一字太多) */
+            align-items: center;     
+            justify-content: center; 
+            
+            /* 超出隱藏 */
             overflow: hidden;
-
+            
             margin-bottom: 6px;
             line-height: 1.4;
             letter-spacing: 0.5px;
         }
 
-        /* === 副標題 (描述文字) === */
+        /* === 副標題 (微調加強版) === */
         .desc-text {
             display: block;
             font-size: 0.85rem;
+
+            /* 🔴 修改 1：顏色從 #888 改成 #666 (深一點) */
             color: #666;
+
             margin-bottom: 8px;
+            font-family: 'Noto Sans TC', sans-serif;
 
-            /* 🔴 修改：也改用 Zen Maru Gothic，讓風格統一 */
-            font-family: 'Zen Maru Gothic', 'Noto Sans TC', sans-serif;
-
+            /* 🔴 修改 2：字重從 300 改成 400 (正常粗細，不要太細) */
             font-weight: 400;
-            /* 副標用標準粗細即可 */
 
             line-height: 1.4;
             min-height: 1.4em;
@@ -389,19 +387,14 @@
             flex-wrap: wrap;
             justify-content: center;
             gap: 6px;
-            margin-top: auto;
 
-            /* 🔴 修改重點：讓容器長高，並讓內容置中 */
+            /* 🔴 關鍵修改：這個指令會自動把上面的空間填滿，把自己推到最下面 */
+            margin-top: auto; 
+
             flex-grow: 1;
-            /* 1. 自動佔滿中間所有剩餘空間 */
             align-content: center;
-            /* 2. 讓裡面的按鈕垂直置中 (針對多行) */
             align-items: center;
-            /* 3. 讓裡面的按鈕垂直置中 (針對單行) */
-
             margin-bottom: 10px;
-            /* 跟下方價格留點距離 */
-
         }
 
         /* === 米粒按鈕 (預設就是金色質感) === */
@@ -600,25 +593,24 @@
             background-size: 10px;
         }
 
-        /* 這是原本的收單時間樣式 */
+        /* === 收單時間提醒 === */
         .deadline-badge {
             display: inline-block;
-            background-color: #f4e3e3;
-            color: #c97c7c;
+            background-color: #f4e3e3; /* 很淡的紅底 */
+            color: #c97c7c;           /* 莫蘭迪紅色字 */
             font-family: 'Noto Sans TC', sans-serif;
             font-size: 0.8rem;
             font-weight: 500;
             padding: 2px 10px;
             border-radius: 4px;
-            margin-bottom: 8px;
+            margin-bottom: 8px;       /* 跟下方價格保持距離 */
             letter-spacing: 1px;
         }
 
+        /* 這是新的：隱藏版收單時間 (用來佔位子) */
         .deadline-badge.empty {
-            visibility: hidden;
-            /* 讓它看不見 */
-            background: transparent;
-            /* 背景變透明 */
+            visibility: hidden; /* 讓它看不見 */
+            background: transparent; /* 背景變透明 */
         }
 
         /* === 價格 === */
@@ -939,13 +931,13 @@
         .modal-title {
             /* 修改這裡：換成跟商品大標題一樣的圓體 */
             font-family: 'Zen Maru Gothic', 'Noto Sans TC', sans-serif;
-
+            
             font-size: 1.5rem;
             padding: 30px 30px 10px;
             text-align: center;
-
+            
             /* 加一點粗細讓它更像標題 */
-            font-weight: 500;
+            font-weight: 500; 
         }
 
         .modal-body p {
@@ -962,15 +954,12 @@
             right: 10px;
             width: auto;
             padding: 5px 12px;
-
+            
             /* 修改這裡：改成預設就是黑底白字 */
-            background: #2c2c2c;
-            /* 黑底 */
-            color: #fff;
-            /* 白字 */
-            border: none;
-            /* 不需要邊框 */
-
+            background: #2c2c2c;  /* 黑底 */
+            color: #fff;          /* 白字 */
+            border: none;         /* 不需要邊框 */
+            
             border-radius: 20px;
             display: flex;
             align-items: center;
@@ -983,14 +972,12 @@
             /* 永久顯示設定 */
             opacity: 1;
             transform: translateY(0);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            /* 加一點陰影比較立體 */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 加一點陰影比較立體 */
         }
 
         /* 滑鼠移過去的效果 */
         .more-sticker:hover {
-            background: #444;
-            /* 稍微變淺一點點的黑，讓客人知道有按到 */
+            background: #444; /* 稍微變淺一點點的黑，讓客人知道有按到 */
             color: #fff;
         }
 
@@ -1000,7 +987,7 @@
             background-color: #fff0f5;
             border: 1px dashed #e5989b;
             border-radius: 10px;
-
+            
             /* 文字設定 */
             color: #d65a5a;
             font-family: 'Zen Maru Gothic', sans-serif;
@@ -1022,6 +1009,24 @@
             color: #e5989b;
             margin-bottom: 5px;
             letter-spacing: 2px;
+        }
+
+        /* === 手機版專用設定 (一排兩個) === */
+        @media (max-width: 768px) {
+            .container {
+                /* 1. 縮小卡片最小寬度，讓手機塞得下兩個 (原本是 280px) */
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important;
+                
+                /* 2. 縮小間距，才不會太擠 */
+                gap: 30px 15px !important; 
+                
+                /* 3. 調整左右留白 */
+                padding: 0 15px 80px !important;
+            }
+
+            /* 手機版字體稍微縮小一點點，避免爆版 */
+            .name { font-size: 1rem; height: 3rem; }
+            .price { font-size: 1.2rem; }
         }
     </style>
 </head>
@@ -1296,7 +1301,7 @@
                         // 裡面放一個 &nbsp; (空白字元) 來撐開高度，這樣才會跟隔壁有寫日期的一樣高
                         deadlineHtml = `<div class="deadline-badge empty">&nbsp;</div>`;
                     }
-
+                    
                     card.innerHTML = `
                         <div class="img-wrapper">
                             ${badgeHtml}
@@ -1436,23 +1441,34 @@
             cart.forEach((item, idx) => {
                 const subtotal = item.price * item.qty;
                 total += subtotal;
-                // 修改重點：
-                // 1. font-family: 'Noto Sans TC' -> 強制使用黑體，比較現代且清楚
-                // 2. font-size: 1.05rem -> 商品名稱放大
-                // 3. letter-spacing: 0.5px -> 增加一點字距，更有質感
-                html += `<div style="display:flex; justify-content:space-between; align-items:flex-start; padding:15px 0; border-bottom:1px solid #f5f5f5;">
-                    <div style="font-family: 'Noto Sans TC', sans-serif;">
-                        <div style="font-size:1.05rem; font-weight:500; color:#2c2c2c; letter-spacing:0.5px; margin-bottom:4px;">${item.name}</div>
-                        <div style="font-size:0.9rem; color:#666;">${item.spec} <span style="font-size:0.8rem; color:#999; margin:0 5px;">x</span> ${item.qty}</div>
+                
+                // 🔴 修改重點：使用 Grid 網格排版，左邊自動(1fr)，右邊固定(90px)
+                // 加上 text-overflow: ellipsis 讓過長的文字變成 "..."
+                html += `
+                <div style="display:grid; grid-template-columns: 1fr 90px; gap:10px; padding:15px 0; border-bottom:1px solid #f5f5f5; align-items:center;">
+                    
+                    <div style="font-family: 'Noto Sans TC', sans-serif; overflow:hidden;">
+                        <div style="
+                            font-size: 1rem; 
+                            font-weight: 500; 
+                            color: #2c2c2c; 
+                            margin-bottom: 4px; 
+                            white-space: nowrap;       /* 強制不換行 */
+                            overflow: hidden;          /* 超出隱藏 */
+                            text-overflow: ellipsis;   /* 變成 ... */
+                        ">${item.name}</div>
+                        <div style="font-size:0.85rem; color:#888;">${item.spec} <span style="font-size:0.8rem; color:#ccc; margin:0 5px;">x</span> ${item.qty}</div>
                     </div>
+
                     <div style="text-align:right; font-family: 'Noto Sans TC', sans-serif;">
                         <div style="font-weight:600; font-size:1rem; color:#2c2c2c;">NT$ ${subtotal}</div>
-                        <div style="color:#bfa092; cursor:pointer; font-size:0.85rem; margin-top:6px; text-decoration:underline;" onclick="removeFromCart(${idx})">移除</div>
+                        <div style="color:#bfa092; cursor:pointer; font-size:0.8rem; margin-top:6px; text-decoration:underline;" onclick="removeFromCart(${idx})">移除</div>
                     </div>
+
                 </div>`;
             });
             container.innerHTML = html;
-            // 這裡也順便確保總金額的字體一致
+            
             totalEl.style.fontFamily = "'Noto Sans TC', sans-serif";
             totalEl.innerText = `總金額: NT$ ${total}`;
         }
@@ -1486,6 +1502,7 @@
 
             if (isMobile) {
                 // === 手機版 ===
+                // 直接打開 LINE App
                 window.location.href = lineUrl;
             } else {
                 // === 電腦版 (顯示 QR Code) ===
@@ -1502,13 +1519,13 @@
                 title.style.fontFamily = "'Noto Sans TC', sans-serif";
 
                 body.innerHTML = `
-            <div style="text-align:center; padding: 20px 0;">
-                <p style="margin-bottom:20px; color:#666; font-family:'Noto Sans TC', sans-serif;">
-                    拿起手機開啟 LINE 或相機<br>掃描下方 QR Code，訂單將自動帶入對話框！
-                </p>
-                <img src="${qrImgUrl}" alt="Order QR Code" style="width:200px; height:200px; border:1px solid #eee; padding:10px;">
-            </div>
-        `;
+                    <div style="text-align:center; padding: 20px 0;">
+                        <p style="margin-bottom:20px; color:#666; font-family:'Noto Sans TC', sans-serif;">
+                            拿起手機開啟 LINE 或相機<br>掃描下方 QR Code，訂單將自動帶入對話框！
+                        </p>
+                        <img src="${qrImgUrl}" alt="Order QR Code" style="width:200px; height:200px; border:1px solid #eee; padding:10px;">
+                    </div>
+                `;
 
                 modal.style.display = 'flex';
             }
@@ -1528,10 +1545,10 @@
             let giftHtml = '';
             if (product.giftDesc) {
                 giftHtml = `
-            <div class="gift-note">
-                ${product.giftDesc}
-            </div>
-        `;
+                    <div class="gift-note">
+                        ${product.giftDesc}
+                    </div>
+                `;
             }
 
             // 3. 詳細圖片
