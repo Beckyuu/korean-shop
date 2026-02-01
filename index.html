@@ -234,14 +234,21 @@
 
             /* 手機版允許換行 */
             .memo-board {
-                width: fit-content !important;
-                /* 改成 fit-content */
+                display: table !important;
+                /* 關鍵！讓它像表格一樣，內容多寬、框就多寬 */
+                width: auto !important;
+                /* 自動寬度 */
                 max-width: 90% !important;
-                /* 設定最大寬度以免超出螢幕 */
+                /* 還是要限制一下，不要超出螢幕 */
+
                 padding: 20px 25px !important;
-                /* 稍微調整內距 */
+                /* 內距維持 */
                 margin: 0 auto 40px !important;
-                /* 確保置中 */
+                /* 上下左右自動置中 */
+
+                /* 確保背景色跟圓角還在 */
+                background: rgba(255, 255, 255, 0.4);
+                border-radius: 15px;
             }
         }
 
