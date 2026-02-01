@@ -1045,30 +1045,28 @@
                 padding: 0 12px 80px !important;
             }
 
-            /* 修正手機版標題 v2：保持單字完整不切斷 */
+            /* 修正手機版標題 v3：黃金比例 (單行塞得下 + 版面整齊) */
             .name {
-                font-size: 1.05rem !important;
-                /* 維持大字體 */
-                min-height: 4.2rem !important;
-                /* 維持對齊高度 */
+                /* 1. 字體稍微退一點，但還是比下方的 0.75rem 大很多 */
+                font-size: 0.95rem !important;
+
+                /* 2. 關鍵：把字距稍微拉緊，讓長英文可以塞進一行！ */
+                letter-spacing: -0.5px !important;
+
+                /* 3. 高度設定：配合兩行字的高度，確保隔壁商品對齊 */
+                min-height: 3.8rem !important;
+
                 line-height: 1.35 !important;
 
-                /* --- 關鍵修改在這裡 --- */
+                /* 顯示邏輯：維持最多顯示 3 行，超過變 ... */
                 display: -webkit-box !important;
                 -webkit-line-clamp: 3 !important;
                 -webkit-box-orient: vertical !important;
                 overflow: hidden !important;
-
-                /* 改成 normal，允許自然換行 */
                 white-space: normal !important;
 
-                /* 🔴 重點：從 break-all 改成 keep-all */
-                /* 作用：遇到英文字時，盡量保持完整，不要從中間切斷。如果一行塞不下，會整個單字換到下一行。 */
+                /* 4. 斷行邏輯：保持單字完整 */
                 word-break: keep-all !important;
-
-                /* 額外保險：針對某些瀏覽器的標準寫法 */
-                overflow-wrap: break-word !important;
-                /* ---------------------- */
 
                 margin-bottom: 4px !important;
                 justify-content: flex-start !important;
