@@ -1045,25 +1045,31 @@
                 padding: 0 12px 80px !important;
             }
 
-            /* 修正手機版標題：字體加大 + 高度拉高以維持整齊 */
+            /* 修正手機版標題 v2：保持單字完整不切斷 */
             .name {
-                /* 1. 字體從 0.8rem 改大為 1.05rem (比描述文字大) */
                 font-size: 1.05rem !important;
-
-                /* 2. 因為字變大了，高度要拉高才塞得下3行 */
-                /* 原本 3.2rem -> 改成 4.2rem，確保每張卡片高度一致對齊 */
+                /* 維持大字體 */
                 min-height: 4.2rem !important;
-
-                /* 3. 行高微調，讓閱讀舒適 */
+                /* 維持對齊高度 */
                 line-height: 1.35 !important;
 
-                /* 以下維持原本的斷行邏輯 */
+                /* --- 關鍵修改在這裡 --- */
                 display: -webkit-box !important;
                 -webkit-line-clamp: 3 !important;
                 -webkit-box-orient: vertical !important;
                 overflow: hidden !important;
+
+                /* 改成 normal，允許自然換行 */
                 white-space: normal !important;
-                word-break: break-all !important;
+
+                /* 🔴 重點：從 break-all 改成 keep-all */
+                /* 作用：遇到英文字時，盡量保持完整，不要從中間切斷。如果一行塞不下，會整個單字換到下一行。 */
+                word-break: keep-all !important;
+
+                /* 額外保險：針對某些瀏覽器的標準寫法 */
+                overflow-wrap: break-word !important;
+                /* ---------------------- */
+
                 margin-bottom: 4px !important;
                 justify-content: flex-start !important;
             }
