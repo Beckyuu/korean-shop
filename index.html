@@ -1032,28 +1032,27 @@
                 padding: 0 12px 80px !important;
             }
 
-            /* 修正手機版標題：專業的省略號寫法 */
+            /* 修正手機版標題：強制換行 + 顯示 3 行 */
             .name {
-                font-size: 0.85rem !important;
-                /* 字體再稍微縮一點點，適應窄螢幕 */
+                font-size: 0.8rem !important;
+                /* 1. 字體再微縮一點點，讓一行塞更多字 */
 
-                /* 2. 這是關鍵！超過兩行自動變成 ... */
                 display: -webkit-box !important;
-                -webkit-line-clamp: 2 !important;
-                /* 限制兩行 */
+                -webkit-line-clamp: 3 !important;
+                /* 2. 關鍵！改成顯示「3行」才變 ... */
                 -webkit-box-orient: vertical !important;
                 overflow: hidden !important;
                 white-space: normal !important;
 
-                /* 3. 對齊設定 */
-                min-height: 2.4rem !important;
-                /* 預留兩行的高度，讓只有一行的商品也能對齊 */
+                /* 3. 這是救星！強制切斷英文單字，讓字填滿整行，不會留白 */
+                word-break: break-all !important;
+
+                /* 4. 高度調整 (配合 3 行的高度) */
+                min-height: 3.2rem !important;
                 height: auto !important;
-                /* 取消固定高度 */
-                line-height: 1.35 !important;
+                line-height: 1.3 !important;
                 margin-bottom: 4px !important;
 
-                /* 讓文字靠上對齊，通常多行文字靠上比較好看 */
                 justify-content: flex-start !important;
             }
 
