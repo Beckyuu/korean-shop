@@ -1045,28 +1045,34 @@
                 padding: 0 12px 80px !important;
             }
 
-            /* 修正手機版標題：強制換行 + 顯示 3 行 */
+            /* 修正手機版標題：字體加大 + 高度拉高以維持整齊 */
             .name {
-                font-size: 0.8rem !important;
-                /* 1. 字體再微縮一點點，讓一行塞更多字 */
+                /* 1. 字體從 0.8rem 改大為 1.05rem (比描述文字大) */
+                font-size: 1.05rem !important;
 
+                /* 2. 因為字變大了，高度要拉高才塞得下3行 */
+                /* 原本 3.2rem -> 改成 4.2rem，確保每張卡片高度一致對齊 */
+                min-height: 4.2rem !important;
+
+                /* 3. 行高微調，讓閱讀舒適 */
+                line-height: 1.35 !important;
+
+                /* 以下維持原本的斷行邏輯 */
                 display: -webkit-box !important;
                 -webkit-line-clamp: 3 !important;
-                /* 2. 關鍵！改成顯示「3行」才變 ... */
                 -webkit-box-orient: vertical !important;
                 overflow: hidden !important;
                 white-space: normal !important;
-
-                /* 3. 這是救星！強制切斷英文單字，讓字填滿整行，不會留白 */
                 word-break: break-all !important;
-
-                /* 4. 高度調整 (配合 3 行的高度) */
-                min-height: 3.2rem !important;
-                height: auto !important;
-                line-height: 1.3 !important;
                 margin-bottom: 4px !important;
-
                 justify-content: flex-start !important;
+            }
+
+            /* 新增：手機版副標題/贈品文字稍微縮小，讓標題更突出 */
+            .desc-text {
+                font-size: 0.75rem !important;
+                /* 電腦版是 0.85，手機改小一點 */
+                margin-bottom: 6px !important;
             }
 
             /* 修正手機版價格 */
