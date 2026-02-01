@@ -1303,7 +1303,7 @@
             const container = document.getElementById('product-list');
 
             try {
-                const response = await fetch(GOOGLE_SHEET_CSV_URL);
+                const response = await fetch(GOOGLE_SHEET_CSV_URL + '&t=' + new Date().getTime());
                 const data = await response.text();
 
                 // 使用 parseCSVLine 來處理逗號問題
