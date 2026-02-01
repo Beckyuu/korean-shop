@@ -1021,30 +1021,40 @@
             letter-spacing: 2px;
         }
 
-        /* === 手機版專用設定 (一排兩個) === */
+        /* === 手機版專用設定：完美對齊版 === */
         @media (max-width: 768px) {
             .container {
-                /* 縮小卡片寬度，讓手機塞得下兩個 */
-                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important;
+                /* 1. 強制平分兩欄 (1fr 1fr)，不管手機多窄都保證是兩個一排 */
+                grid-template-columns: 1fr 1fr !important;
+
+                /* 間距縮小，把空間留給商品 */
                 gap: 20px 10px !important;
-                /* 間距縮小一點 */
-                padding: 0 10px 80px !important;
+                padding: 0 12px 80px !important;
             }
 
-            /* 修正手機版標題：縮小字體 + 調整高度 + 允許換行 */
+            /* 修正手機版標題：專業的省略號寫法 */
             .name {
-                font-size: 0.9rem !important;
-                /* 字體縮小 */
-                height: 3rem !important;
-                /* 高度縮小，剛好兩行 */
-                line-height: 1.3 !important;
-                /* 行距縮小，讓字比較緊湊 */
+                font-size: 0.85rem !important;
+                /* 字體再稍微縮一點點，適應窄螢幕 */
+
+                /* 2. 這是關鍵！超過兩行自動變成 ... */
+                display: -webkit-box !important;
+                -webkit-line-clamp: 2 !important;
+                /* 限制兩行 */
+                -webkit-box-orient: vertical !important;
+                overflow: hidden !important;
+                white-space: normal !important;
+
+                /* 3. 對齊設定 */
+                min-height: 2.4rem !important;
+                /* 預留兩行的高度，讓只有一行的商品也能對齊 */
+                height: auto !important;
+                /* 取消固定高度 */
+                line-height: 1.35 !important;
                 margin-bottom: 4px !important;
 
-                /* 確保文字垂直置中 */
-                display: flex;
-                align-items: center;
-                justify-content: center;
+                /* 讓文字靠上對齊，通常多行文字靠上比較好看 */
+                justify-content: flex-start !important;
             }
 
             /* 修正手機版價格 */
@@ -1055,33 +1065,30 @@
 
             /* 修正手機版按鈕大小 */
             button.btn-add {
-                padding: 4px 15px !important;
-                /* 按鈕變扁一點 */
+                padding: 4px 0 !important;
+                /* 左右不留白，避免按鈕被擠爆 */
+                width: 100% !important;
+                /* 按鈕寬度佔滿 */
                 font-size: 0.75rem !important;
             }
 
             /* 修正手機版規格按鈕 */
             .variant-btn {
                 font-size: 0.7rem !important;
-                padding: 2px 8px !important;
+                padding: 2px 6px !important;
+                margin-bottom: 2px !important;
             }
 
+            /* === 手機版專用：縮小「看更多」按鈕 (維持您原本的要求) === */
             .more-sticker {
                 padding: 3px 8px !important;
-                /* 內距縮小 */
                 font-size: 0.6rem !important;
-                /* 字體變很小 */
                 bottom: 5px !important;
-                /* 距離底部近一點 */
                 right: 5px !important;
-                /* 距離右邊近一點 */
                 border-radius: 12px !important;
-                /* 圓角縮小 */
                 gap: 3px !important;
-                /* 圖示跟字的距離縮小 */
             }
 
-            /* 圖示也要跟著縮小 */
             .more-sticker svg {
                 width: 10px !important;
                 height: 10px !important;
