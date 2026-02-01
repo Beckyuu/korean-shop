@@ -285,14 +285,14 @@
             object-fit: cover;
             transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
         }
-        
+
         /* 移除滑鼠懸停時的圖片移動與放大效果 */
         .product-card:hover {
-             /* transform: translateY(-8px); */
+            /* transform: translateY(-8px); */
         }
 
         .product-card:hover .img-wrapper img {
-             /* transform: scale(1.05); */
+            /* transform: scale(1.05); */
         }
 
         /* === 優化後的標籤 Badge (韓系絲帶感) === */
@@ -346,18 +346,18 @@
             font-size: 1.1rem;
             font-weight: 500;
             color: var(--text-main);
-            
+
             /* 🔴 關鍵修改：設定固定高度 (兩行字高) */
             height: 3.2rem;
-            
+
             /* 讓文字垂直置中 */
             display: flex;
-            align-items: center;     
-            justify-content: center; 
-            
+            align-items: center;
+            justify-content: center;
+
             /* 超出隱藏 */
             overflow: hidden;
-            
+
             margin-bottom: 6px;
             line-height: 1.4;
             letter-spacing: 0.5px;
@@ -389,7 +389,7 @@
             gap: 6px;
 
             /* 🔴 關鍵修改：這個指令會自動把上面的空間填滿，把自己推到最下面 */
-            margin-top: auto; 
+            margin-top: auto;
 
             flex-grow: 1;
             align-content: center;
@@ -596,21 +596,26 @@
         /* === 收單時間提醒 === */
         .deadline-badge {
             display: inline-block;
-            background-color: #f4e3e3; /* 很淡的紅底 */
-            color: #c97c7c;           /* 莫蘭迪紅色字 */
+            background-color: #f4e3e3;
+            /* 很淡的紅底 */
+            color: #c97c7c;
+            /* 莫蘭迪紅色字 */
             font-family: 'Noto Sans TC', sans-serif;
             font-size: 0.8rem;
             font-weight: 500;
             padding: 2px 10px;
             border-radius: 4px;
-            margin-bottom: 8px;       /* 跟下方價格保持距離 */
+            margin-bottom: 8px;
+            /* 跟下方價格保持距離 */
             letter-spacing: 1px;
         }
 
         /* 這是新的：隱藏版收單時間 (用來佔位子) */
         .deadline-badge.empty {
-            visibility: hidden; /* 讓它看不見 */
-            background: transparent; /* 背景變透明 */
+            visibility: hidden;
+            /* 讓它看不見 */
+            background: transparent;
+            /* 背景變透明 */
         }
 
         /* === 價格 === */
@@ -931,13 +936,13 @@
         .modal-title {
             /* 修改這裡：換成跟商品大標題一樣的圓體 */
             font-family: 'Zen Maru Gothic', 'Noto Sans TC', sans-serif;
-            
+
             font-size: 1.5rem;
             padding: 30px 30px 10px;
             text-align: center;
-            
+
             /* 加一點粗細讓它更像標題 */
-            font-weight: 500; 
+            font-weight: 500;
         }
 
         .modal-body p {
@@ -954,12 +959,15 @@
             right: 10px;
             width: auto;
             padding: 5px 12px;
-            
+
             /* 修改這裡：改成預設就是黑底白字 */
-            background: #2c2c2c;  /* 黑底 */
-            color: #fff;          /* 白字 */
-            border: none;         /* 不需要邊框 */
-            
+            background: #2c2c2c;
+            /* 黑底 */
+            color: #fff;
+            /* 白字 */
+            border: none;
+            /* 不需要邊框 */
+
             border-radius: 20px;
             display: flex;
             align-items: center;
@@ -972,12 +980,14 @@
             /* 永久顯示設定 */
             opacity: 1;
             transform: translateY(0);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 加一點陰影比較立體 */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            /* 加一點陰影比較立體 */
         }
 
         /* 滑鼠移過去的效果 */
         .more-sticker:hover {
-            background: #444; /* 稍微變淺一點點的黑，讓客人知道有按到 */
+            background: #444;
+            /* 稍微變淺一點點的黑，讓客人知道有按到 */
             color: #fff;
         }
 
@@ -987,7 +997,7 @@
             background-color: #fff0f5;
             border: 1px dashed #e5989b;
             border-radius: 10px;
-            
+
             /* 文字設定 */
             color: #d65a5a;
             font-family: 'Zen Maru Gothic', sans-serif;
@@ -1014,19 +1024,68 @@
         /* === 手機版專用設定 (一排兩個) === */
         @media (max-width: 768px) {
             .container {
-                /* 1. 縮小卡片最小寬度，讓手機塞得下兩個 (原本是 280px) */
+                /* 縮小卡片寬度，讓手機塞得下兩個 */
                 grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important;
-                
-                /* 2. 縮小間距，才不會太擠 */
-                gap: 30px 15px !important; 
-                
-                /* 3. 調整左右留白 */
-                padding: 0 15px 80px !important;
+                gap: 20px 10px !important;
+                /* 間距縮小一點 */
+                padding: 0 10px 80px !important;
             }
 
-            /* 手機版字體稍微縮小一點點，避免爆版 */
-            .name { font-size: 1rem; height: 3rem; }
-            .price { font-size: 1.2rem; }
+            /* 修正手機版標題：縮小字體 + 調整高度 + 允許換行 */
+            .name {
+                font-size: 0.9rem !important;
+                /* 字體縮小 */
+                height: 3rem !important;
+                /* 高度縮小，剛好兩行 */
+                line-height: 1.3 !important;
+                /* 行距縮小，讓字比較緊湊 */
+                margin-bottom: 4px !important;
+
+                /* 確保文字垂直置中 */
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            /* 修正手機版價格 */
+            .price {
+                font-size: 1.1rem !important;
+                margin-bottom: 8px !important;
+            }
+
+            /* 修正手機版按鈕大小 */
+            button.btn-add {
+                padding: 4px 15px !important;
+                /* 按鈕變扁一點 */
+                font-size: 0.75rem !important;
+            }
+
+            /* 修正手機版規格按鈕 */
+            .variant-btn {
+                font-size: 0.7rem !important;
+                padding: 2px 8px !important;
+            }
+
+            .more-sticker {
+                padding: 3px 8px !important;
+                /* 內距縮小 */
+                font-size: 0.6rem !important;
+                /* 字體變很小 */
+                bottom: 5px !important;
+                /* 距離底部近一點 */
+                right: 5px !important;
+                /* 距離右邊近一點 */
+                border-radius: 12px !important;
+                /* 圓角縮小 */
+                gap: 3px !important;
+                /* 圖示跟字的距離縮小 */
+            }
+
+            /* 圖示也要跟著縮小 */
+            .more-sticker svg {
+                width: 10px !important;
+                height: 10px !important;
+            }
         }
     </style>
 </head>
@@ -1301,7 +1360,7 @@
                         // 裡面放一個 &nbsp; (空白字元) 來撐開高度，這樣才會跟隔壁有寫日期的一樣高
                         deadlineHtml = `<div class="deadline-badge empty">&nbsp;</div>`;
                     }
-                    
+
                     card.innerHTML = `
                         <div class="img-wrapper">
                             ${badgeHtml}
@@ -1441,7 +1500,7 @@
             cart.forEach((item, idx) => {
                 const subtotal = item.price * item.qty;
                 total += subtotal;
-                
+
                 // 🔴 修改重點：使用 Grid 網格排版，左邊自動(1fr)，右邊固定(90px)
                 // 加上 text-overflow: ellipsis 讓過長的文字變成 "..."
                 html += `
@@ -1468,7 +1527,7 @@
                 </div>`;
             });
             container.innerHTML = html;
-            
+
             totalEl.style.fontFamily = "'Noto Sans TC', sans-serif";
             totalEl.innerText = `總金額: NT$ ${total}`;
         }
