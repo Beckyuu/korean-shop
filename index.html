@@ -1316,6 +1316,21 @@
         let allProductsData = [];
         let cart = [];
 
+        // 🟢 新增 1：讀取舊的購物車資料 (網頁一打開就執行)
+        function loadCart() {
+            const savedCart = localStorage.getItem('minaShopCart');
+            if (savedCart) {
+                cart = JSON.parse(savedCart);
+                updateCartIcon();
+            }
+        }
+
+        // 🟢 新增 2：把購物車存起來 (每次增減商品都要執行)
+        function saveCart() {
+            localStorage.setItem('minaShopCart', JSON.stringify(cart));
+            updateCartIcon();
+        }
+
         async function fetchProducts() {
             const loading = document.getElementById('loading');
             const container = document.getElementById('product-list');
@@ -1515,7 +1530,7 @@
 
             // 4. 加入購物車
             cart.push(cartItem);
-            updateCartIcon();
+            saveCart();
 
             // 5. 按鈕變色提示成功
             // 這裡使用 window.event 來抓取被點擊的按鈕，確保相容性
@@ -1583,7 +1598,11 @@
             totalEl.innerText = `總金額: NT$ ${total}`;
         }
 
-        function removeFromCart(idx) { cart.splice(idx, 1); updateCartIcon(); renderCartItems(); }
+        function removeFromCart(idx) {
+            cart.splice(idx, 1);
+            saveCart(); // 🔴 修改：這裡也改成 saveCart()
+            renderCartItems();
+        }
 
         function checkoutViaLine() {
             if (cart.length === 0) return;
@@ -1710,6 +1729,9 @@
         const style = document.createElement('style');
         style.innerHTML = `@keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }`;
         document.head.appendChild(style);
+
+        // 🔴 新增：先讀取購物車紀錄
+        loadCart();
 
         fetchProducts();
     </script>
