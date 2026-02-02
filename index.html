@@ -1124,20 +1124,22 @@
             }
         }
 
-        /* === 缺貨專用樣式 === */
+        /* === 缺貨專用樣式 (優雅隱藏版) === */
         .variant-btn.sold-out {
-            color: #ccc !important;
-            /* 字變灰色 */
-            border-color: #eee !important;
-            /* 框變淺灰 */
-            background-color: #f9f9f9 !important;
-            /* 底變極淺灰 */
-            text-decoration: line-through;
-            /* 加刪除線 */
+            color: #e0e0e0 !important;
+            /* 字體變成很淡很淡的灰色 */
+            border-color: #f0f0f0 !important;
+            /* 邊框幾乎看不見 */
+            background-color: #fff !important;
+            /* 背景保持純白 */
+
+            /* 拿掉刪除線 */
+            text-decoration: none !important;
+
             cursor: not-allowed;
             /* 滑鼠變禁止符號 */
             pointer-events: none;
-            /* 🔴 關鍵！這行讓按鈕「失去感應」，完全點不下去 */
+            /* 禁止點擊 */
         }
     </style>
 </head>
