@@ -1123,6 +1123,22 @@
                 height: 10px !important;
             }
         }
+
+        /* === 缺貨專用樣式 === */
+        .variant-btn.sold-out {
+            color: #ccc !important;
+            /* 字變灰色 */
+            border-color: #eee !important;
+            /* 框變淺灰 */
+            background-color: #f9f9f9 !important;
+            /* 底變極淺灰 */
+            text-decoration: line-through;
+            /* 加刪除線 */
+            cursor: not-allowed;
+            /* 滑鼠變禁止符號 */
+            pointer-events: none;
+            /* 🔴 關鍵！這行讓按鈕「失去感應」，完全點不下去 */
+        }
     </style>
 </head>
 
@@ -1357,7 +1373,13 @@
                         // 如果有多個規格 -> 產生按鈕群組
                         variantsHtml = `<div class="variant-container" id="variants-${index}">`;
                         product.variants.forEach(v => {
-                            variantsHtml += `<div class="variant-btn" onclick="selectVariant(${index}, '${v}', this)">${v}</div>`;
+                            // 1. 檢查名字裡有沒有 (缺)
+                            const isSoldOut = v.includes('(缺)');
+
+                            // 2. 如果有，就多加一個 sold-out 的 class
+                            const className = isSoldOut ? 'variant-btn sold-out' : 'variant-btn';
+
+                            variantsHtml += `<div class="${className}" onclick="selectVariant(${index}, '${v}', this)">${v}</div>`;
                         });
                         variantsHtml += `</div>`;
                     } else {
@@ -1366,38 +1388,43 @@
 
                         product.selectedVariant = singleName;
 
+                        // 1. 同樣檢查單一規格有沒有 (缺)
+                        const isSingleSoldOut = singleName.includes('(缺)');
+
+                        // 2. 如果缺貨，加上 sold-out 樣式
+                        const singleClass = isSingleSoldOut ? 'variant-btn single-mode sold-out' : 'variant-btn single-mode';
+
                         variantsHtml = `
                             <div class="variant-container">
-                                <div class="variant-btn single-mode">
+                                <div class="${singleClass}">
                                     ${singleName}
                                 </div>
                             </div>`;
-                    }
 
-                    let stickerHtml = '';
-                    if (product.hasDetails) {
-                        // 修改：加上文字 "查看詳情"
-                        stickerHtml = `<div class="more-sticker" onclick="showDetails(${index})">
+                        let stickerHtml = '';
+                        if (product.hasDetails) {
+                            // 修改：加上文字 "查看詳情"
+                            stickerHtml = `<div class="more-sticker" onclick="showDetails(${index})">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                             看更多…
                         </div>`;
-                    }
+                        }
 
-                    let options = ''; for (let i = 1; i <= 5; i++) options += `<option value="${i}">${i}</option>`;
+                        let options = ''; for (let i = 1; i <= 5; i++) options += `<option value="${i}">${i}</option>`;
 
-                    // === 🟢 修改後：強制預留空間的邏輯 ===
-                    let deadlineHtml = '';
+                        // === 🟢 修改後：強制預留空間的邏輯 ===
+                        let deadlineHtml = '';
 
-                    if (product.deadline) {
-                        // 情況 A：有填寫日期 -> 顯示正常的紅色框框
-                        deadlineHtml = `<div class="deadline-badge">⏳ 收單：${product.deadline}</div>`;
-                    } else {
-                        // 情況 B：沒填寫日期 -> 顯示一個「隱形」的框框 (class="empty")
-                        // 裡面放一個 &nbsp; (空白字元) 來撐開高度，這樣才會跟隔壁有寫日期的一樣高
-                        deadlineHtml = `<div class="deadline-badge empty">&nbsp;</div>`;
-                    }
+                        if (product.deadline) {
+                            // 情況 A：有填寫日期 -> 顯示正常的紅色框框
+                            deadlineHtml = `<div class="deadline-badge">⏳ 收單：${product.deadline}</div>`;
+                        } else {
+                            // 情況 B：沒填寫日期 -> 顯示一個「隱形」的框框 (class="empty")
+                            // 裡面放一個 &nbsp; (空白字元) 來撐開高度，這樣才會跟隔壁有寫日期的一樣高
+                            deadlineHtml = `<div class="deadline-badge empty">&nbsp;</div>`;
+                        }
 
-                    card.innerHTML = `
+                        card.innerHTML = `
                         <div class="img-wrapper">
                             ${badgeHtml}
                             <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
@@ -1422,8 +1449,8 @@
                             </div>
                         </div>
                     `;
-                    container.appendChild(card);
-                });
+                        container.appendChild(card);
+                    });
             } catch (error) { console.error(error); loading.innerHTML = 'Error loading products.'; }
         }
 
