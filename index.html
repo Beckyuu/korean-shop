@@ -1596,10 +1596,20 @@
             // 1. 準備訂單文字
             let message = "您好，我想訂購以下商品：\n------------------\n";
             let total = 0;
+
             cart.forEach(item => {
                 total += item.price * item.qty;
-                message += `${item.name} [${item.spec}] x${item.qty} \n`;
+
+                // 🔴 關鍵修改在這裡：幫名字「洗澡」
+                // 這裡的意思是：找到名字裡所有的 <br> (不管大寫小寫)，通通換成一個空白格 ' '
+                let cleanName = item.name.replace(/<br\s*\/?>/gi, ' ');
+
+                // 也要幫規格「洗澡」，以防萬一規格裡也有 <br>
+                let cleanSpec = item.spec ? item.spec.replace(/<br\s*\/?>/gi, ' ') : '';
+
+                message += `${cleanName} [${cleanSpec}] x${item.qty} \n`;
             });
+
             message += "------------------\n";
             message += `總金額: NT$ ${total}\n`;
             message += `下單平台: ${selectedShipping}`;
@@ -1612,7 +1622,6 @@
 
             if (isMobile) {
                 // === 手機版 ===
-                // 直接打開 LINE App
                 window.location.href = lineUrl;
             } else {
                 // === 電腦版 (顯示 QR Code) ===
@@ -1620,7 +1629,6 @@
                 const title = document.getElementById('modalTitle');
                 const body = document.getElementById('modalBody');
 
-                // 🔴 關鍵修正：結帳時要把標題顯示回來，不然會空空的
                 title.style.display = 'block';
 
                 const qrImgUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(lineUrl)}`;
