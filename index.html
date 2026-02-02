@@ -1593,49 +1593,57 @@
 
             if (!selectedShipping) { alert('請選擇下單平台 (7-11 賣貨便 or iOPEN Mall)'); return; }
 
-            // 1. 準備訂單文字
-            let message = "您好，我想訂購以下商品：\n------------------\n";
+            // === 1. 準備訂單開頭 (日期時間增加儀式感) ===
+            const now = new Date();
+            const dateStr = `${now.getMonth() + 1}/${now.getDate()}`;
+            let message = `您好，這是我的訂購清單 (${dateStr})：\n\n`;
+
             let total = 0;
 
-            cart.forEach(item => {
+            // === 2. 迴圈產生商品清單 (韓系收據風格) ===
+            cart.forEach((item, index) => {
                 total += item.price * item.qty;
 
-                // 🔴 關鍵修改在這裡：幫名字「洗澡」
-                // 這裡的意思是：找到名字裡所有的 <br> (不管大寫小寫)，通通換成一個空白格 ' '
+                // 清除 <br> 標籤，換成空白
                 let cleanName = item.name.replace(/<br\s*\/?>/gi, ' ');
-
-                // 也要幫規格「洗澡」，以防萬一規格裡也有 <br>
                 let cleanSpec = item.spec ? item.spec.replace(/<br\s*\/?>/gi, ' ') : '';
 
-                message += `${cleanName} [${cleanSpec}] x${item.qty} \n`;
+                // 產生編號：把 1 變成 01，更有設計感
+                let num = (index + 1).toString().padStart(2, '0');
+
+                // 排版格式：
+                // 01. 商品名稱
+                //    └ 規格 x 數量
+                message += `${num}. ${cleanName}\n`;
+
+                if (cleanSpec) {
+                    message += `   └ ${cleanSpec}  x${item.qty}\n`;
+                } else {
+                    message += `   └ 單一規格  x${item.qty}\n`;
+                }
+
+                // 每個商品之間多空一行，讓畫面呼吸，不要擠在一起
+                message += `\n`;
             });
 
-            message += "------------------\n";
+            message += "-----------------------------\n";
             message += `總金額: NT$ ${total}\n`;
             message += `下單平台: ${selectedShipping}`;
 
-            // 2. 準備 LINE 的傳送連結
+            // === 3. 傳送連結與裝置判斷 (維持不變) ===
             const lineUrl = `https://line.me/R/oaMessage/@139gqqwy/?${encodeURIComponent(message)}`;
-
-            // 3. 智慧判斷裝置
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
             if (isMobile) {
-                // === 手機版 ===
                 window.location.href = lineUrl;
             } else {
-                // === 電腦版 (顯示 QR Code) ===
                 const modal = document.getElementById('detailModal');
                 const title = document.getElementById('modalTitle');
                 const body = document.getElementById('modalBody');
-
                 title.style.display = 'block';
-
                 const qrImgUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(lineUrl)}`;
-
                 title.innerText = "請使用手機掃描下單";
                 title.style.fontFamily = "'Noto Sans TC', sans-serif";
-
                 body.innerHTML = `
                     <div style="text-align:center; padding: 20px 0;">
                         <p style="margin-bottom:20px; color:#666; font-family:'Noto Sans TC', sans-serif;">
@@ -1644,7 +1652,6 @@
                         <img src="${qrImgUrl}" alt="Order QR Code" style="width:200px; height:200px; border:1px solid #eee; padding:10px;">
                     </div>
                 `;
-
                 modal.style.display = 'flex';
             }
         }
