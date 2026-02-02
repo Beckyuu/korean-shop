@@ -1319,6 +1319,7 @@
             const container = document.getElementById('product-list');
 
             try {
+                // 1. 這裡改好了：加上時間戳記，強制電腦版每次都抓新資料
                 const response = await fetch(GOOGLE_SHEET_CSV_URL + '&t=' + new Date().getTime());
                 const data = await response.text();
 
@@ -1326,7 +1327,7 @@
                 const rows = data.split('\n').map(row => parseCSVLine(row));
                 rows.shift();
 
-                loading.style.display = 'none';
+                loading.style.display = 'none'; // 這一行執行到，圈圈才會消失
                 allProductsData = [];
 
                 rows.forEach((row, index) => {
@@ -1341,10 +1342,10 @@
                         price: row[2] ? row[2].trim() : '0',
                         imgUrl: row[3] ? row[3].trim() : '',
                         detailImgUrl: row[4] ? row[4].trim() : '',
-                        description: row[5] ? row[5].trim() : '', // 記得這裡有逗號
-                        tag: row[6] ? row[6].trim().toUpperCase() : '', // 新增的標籤欄位
-                        deadline: row[7] ? row[7].trim() : '', // 收單時間
-                        giftDesc: row[8] ? row[8].trim() : '' // 贈品描述
+                        description: row[5] ? row[5].trim() : '',
+                        tag: row[6] ? row[6].trim().toUpperCase() : '',
+                        deadline: row[7] ? row[7].trim() : '',
+                        giftDesc: row[8] ? row[8].trim() : ''
                     };
 
                     product.hasDetails = product.detailImgUrl !== '';
@@ -1356,7 +1357,7 @@
                     const card = document.createElement('div');
                     card.className = 'product-card';
 
-                    // === 這裡就是剛剛改的標籤邏輯 ===
+                    // === 標籤邏輯 ===
                     let badgeHtml = '';
                     if (product.tag === 'NEW') {
                         badgeHtml = `<div class="badge new">NEW</div>`;
@@ -1366,33 +1367,35 @@
                         badgeHtml = `<div class="badge sale">SALE</div>`;
                     }
 
-                    // === 修改後：韓系米粒按鈕排版 ===
+                    // === 2. 這裡改好了：缺貨按鈕變灰邏輯 ===
                     let variantsHtml = '';
 
                     if (product.variants.length > 1) {
-                        // 如果有多個規格 -> 產生按鈕群組
+                        // 多規格
                         variantsHtml = `<div class="variant-container" id="variants-${index}">`;
                         product.variants.forEach(v => {
-                            // 1. 檢查名字裡有沒有 (缺)
+                            // 判斷是否缺貨
                             const isSoldOut = v.includes('(缺)');
-
-                            // 2. 如果有，就多加一個 sold-out 的 class
                             const className = isSoldOut ? 'variant-btn sold-out' : 'variant-btn';
 
                             variantsHtml += `<div class="${className}" onclick="selectVariant(${index}, '${v}', this)">${v}</div>`;
                         });
                         variantsHtml += `</div>`;
                     } else {
-                        // 情況 B：單一規格
+                        // 單一規格
                         let singleName = (product.variants.length === 1 && product.variants[0] !== '') ? product.variants[0] : '單一規格';
 
-                        product.selectedVariant = singleName;
-
-                        // 1. 同樣檢查單一規格有沒有 (缺)
+                        // 判斷單一規格是否缺貨
+                        // 注意：如果 Excel 沒寫(缺)，這裡就不會變灰。如果單一規格也要變灰，請在 Excel 規格欄寫上 "XXX(缺)"
                         const isSingleSoldOut = singleName.includes('(缺)');
-
-                        // 2. 如果缺貨，加上 sold-out 樣式
                         const singleClass = isSingleSoldOut ? 'variant-btn single-mode sold-out' : 'variant-btn single-mode';
+
+                        // 如果缺貨，也不要預設選取，避免被加入購物車
+                        if (!isSingleSoldOut) {
+                            product.selectedVariant = singleName;
+                        } else {
+                            product.selectedVariant = null; // 缺貨就變成未選取狀態
+                        }
 
                         variantsHtml = `
                             <div class="variant-container">
@@ -1400,31 +1403,27 @@
                                     ${singleName}
                                 </div>
                             </div>`;
+                    }
 
-                        let stickerHtml = '';
-                        if (product.hasDetails) {
-                            // 修改：加上文字 "查看詳情"
-                            stickerHtml = `<div class="more-sticker" onclick="showDetails(${index})">
+                    let stickerHtml = '';
+                    if (product.hasDetails) {
+                        stickerHtml = `<div class="more-sticker" onclick="showDetails(${index})">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                             看更多…
                         </div>`;
-                        }
+                    }
 
-                        let options = ''; for (let i = 1; i <= 5; i++) options += `<option value="${i}">${i}</option>`;
+                    let options = ''; for (let i = 1; i <= 5; i++) options += `<option value="${i}">${i}</option>`;
 
-                        // === 🟢 修改後：強制預留空間的邏輯 ===
-                        let deadlineHtml = '';
+                    // === 收單日期邏輯 ===
+                    let deadlineHtml = '';
+                    if (product.deadline) {
+                        deadlineHtml = `<div class="deadline-badge">⏳ 收單：${product.deadline}</div>`;
+                    } else {
+                        deadlineHtml = `<div class="deadline-badge empty">&nbsp;</div>`;
+                    }
 
-                        if (product.deadline) {
-                            // 情況 A：有填寫日期 -> 顯示正常的紅色框框
-                            deadlineHtml = `<div class="deadline-badge">⏳ 收單：${product.deadline}</div>`;
-                        } else {
-                            // 情況 B：沒填寫日期 -> 顯示一個「隱形」的框框 (class="empty")
-                            // 裡面放一個 &nbsp; (空白字元) 來撐開高度，這樣才會跟隔壁有寫日期的一樣高
-                            deadlineHtml = `<div class="deadline-badge empty">&nbsp;</div>`;
-                        }
-
-                        card.innerHTML = `
+                    card.innerHTML = `
                         <div class="img-wrapper">
                             ${badgeHtml}
                             <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
@@ -1432,15 +1431,10 @@
                         </div>
                         
                         <div class="info">
-                            
                             ${deadlineHtml}
-
                             <h3 class="name">${product.name}</h3>
-                            
                             <span class="desc-text">${product.description || '&nbsp;'}</span>
-                            
                             ${variantsHtml}
-
                             <span class="price">NT$ ${product.price}</span>
                             
                             <div class="action-row">
@@ -1449,9 +1443,14 @@
                             </div>
                         </div>
                     `;
-                        container.appendChild(card);
-                    });
-            } catch (error) { console.error(error); loading.innerHTML = 'Error loading products.'; }
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                console.error(error);
+                // 如果出錯，至少要把圈圈關掉，並顯示錯誤
+                loading.style.display = 'none';
+                container.innerHTML = '<p style="text-align:center; padding:20px;">載入失敗，請檢查網路或聯繫管理員。</p>';
+            }
         }
 
         // 按鈕點擊功能 (支援取消選取)
