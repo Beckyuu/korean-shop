@@ -1321,15 +1321,12 @@
             const container = document.getElementById('product-list');
 
             try {
-                // 1. 這裡改好了：加上時間戳記，強制電腦版每次都抓新資料
                 const response = await fetch(GOOGLE_SHEET_CSV_URL + '&t=' + new Date().getTime());
                 const data = await response.text();
-
-                // 使用 parseCSVLine 來處理逗號問題
                 const rows = data.split('\n').map(row => parseCSVLine(row));
                 rows.shift();
 
-                loading.style.display = 'none'; // 這一行執行到，圈圈才會消失
+                loading.style.display = 'none';
                 allProductsData = [];
 
                 rows.forEach((row, index) => {
@@ -1359,50 +1356,44 @@
                     const card = document.createElement('div');
                     card.className = 'product-card';
 
-                    // === 標籤邏輯 ===
                     let badgeHtml = '';
-                    if (product.tag === 'NEW') {
-                        badgeHtml = `<div class="badge new">NEW</div>`;
-                    } else if (product.tag === 'HOT') {
-                        badgeHtml = `<div class="badge hot">HOT</div>`;
-                    } else if (product.tag === 'SALE') {
-                        badgeHtml = `<div class="badge sale">SALE</div>`;
-                    }
+                    if (product.tag === 'NEW') badgeHtml = `<div class="badge new">NEW</div>`;
+                    else if (product.tag === 'HOT') badgeHtml = `<div class="badge hot">HOT</div>`;
+                    else if (product.tag === 'SALE') badgeHtml = `<div class="badge sale">SALE</div>`;
 
-                    // === 2. 這裡改好了：缺貨按鈕變灰邏輯 ===
                     let variantsHtml = '';
 
                     if (product.variants.length > 1) {
-                        // 多規格
                         variantsHtml = `<div class="variant-container" id="variants-${index}">`;
                         product.variants.forEach(v => {
-                            // 判斷是否缺貨
                             const isSoldOut = v.includes('(缺)');
                             const className = isSoldOut ? 'variant-btn sold-out' : 'variant-btn';
 
-                            variantsHtml += `<div class="${className}" onclick="selectVariant(${index}, '${v}', this)">${v}</div>`;
+                            // 🔴 修改：顯示名稱時，把 (缺) 拿掉，這樣畫面上只會看到乾淨的色號
+                            const displayName = v.replace('(缺)', '');
+
+                            variantsHtml += `<div class="${className}" onclick="selectVariant(${index}, '${v}', this)">${displayName}</div>`;
                         });
                         variantsHtml += `</div>`;
                     } else {
-                        // 單一規格
                         let singleName = (product.variants.length === 1 && product.variants[0] !== '') ? product.variants[0] : '單一規格';
 
-                        // 判斷單一規格是否缺貨
-                        // 注意：如果 Excel 沒寫(缺)，這裡就不會變灰。如果單一規格也要變灰，請在 Excel 規格欄寫上 "XXX(缺)"
                         const isSingleSoldOut = singleName.includes('(缺)');
                         const singleClass = isSingleSoldOut ? 'variant-btn single-mode sold-out' : 'variant-btn single-mode';
 
-                        // 如果缺貨，也不要預設選取，避免被加入購物車
+                        // 🔴 修改：同樣把單一規格的 (缺) 拿掉
+                        const displaySingleName = singleName.replace('(缺)', '');
+
                         if (!isSingleSoldOut) {
                             product.selectedVariant = singleName;
                         } else {
-                            product.selectedVariant = null; // 缺貨就變成未選取狀態
+                            product.selectedVariant = null;
                         }
 
                         variantsHtml = `
                             <div class="variant-container">
                                 <div class="${singleClass}">
-                                    ${singleName}
+                                    ${displaySingleName}
                                 </div>
                             </div>`;
                     }
@@ -1417,7 +1408,6 @@
 
                     let options = ''; for (let i = 1; i <= 5; i++) options += `<option value="${i}">${i}</option>`;
 
-                    // === 收單日期邏輯 ===
                     let deadlineHtml = '';
                     if (product.deadline) {
                         deadlineHtml = `<div class="deadline-badge">⏳ 收單：${product.deadline}</div>`;
@@ -1431,14 +1421,12 @@
                             <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
                             ${stickerHtml} 
                         </div>
-                        
                         <div class="info">
                             ${deadlineHtml}
                             <h3 class="name">${product.name}</h3>
                             <span class="desc-text">${product.description || '&nbsp;'}</span>
                             ${variantsHtml}
                             <span class="price">NT$ ${product.price}</span>
-                            
                             <div class="action-row">
                                 <select id="qty-${index}">${options}</select>
                                 <button class="btn-add" onclick="addToCart(${index})">ADD</button>
@@ -1449,9 +1437,8 @@
                 });
             } catch (error) {
                 console.error(error);
-                // 如果出錯，至少要把圈圈關掉，並顯示錯誤
                 loading.style.display = 'none';
-                container.innerHTML = '<p style="text-align:center; padding:20px;">載入失敗，請檢查網路或聯繫管理員。</p>';
+                container.innerHTML = '<p style="text-align:center; padding:20px;">載入失敗。</p>';
             }
         }
 
