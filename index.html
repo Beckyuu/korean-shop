@@ -1626,36 +1626,39 @@
             let html = '';
             let total = 0;
             cart.forEach((item, idx) => {
-                const subtotal = item.price * item.qty;
-                total += subtotal;
-
-                // 🔴 修改重點：使用 Grid 網格排版，左邊自動(1fr)，右邊固定(90px)
-                // 加上 text-overflow: ellipsis 讓過長的文字變成 "..."
+                total += item.price * item.qty;
                 html += `
                 <div style="display:grid; grid-template-columns: 1fr 90px; gap:10px; padding:15px 0; border-bottom:1px solid #f5f5f5; align-items:center;">
-                    
                     <div style="font-family: 'Noto Sans TC', sans-serif; overflow:hidden;">
-                        <div style="
-                            font-size: 1rem; 
-                            font-weight: 500; 
-                            color: #2c2c2c; 
-                            margin-bottom: 4px; 
-                            white-space: nowrap;       /* 強制不換行 */
-                            overflow: hidden;          /* 超出隱藏 */
-                            text-overflow: ellipsis;   /* 變成 ... */
-                        ">${item.name}</div>
+                        <div style="font-size: 1rem; font-weight: 500; color: #2c2c2c; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.name}</div>
                         <div style="font-size:0.85rem; color:#888;">${item.spec} <span style="font-size:0.8rem; color:#ccc; margin:0 5px;">x</span> ${item.qty}</div>
                     </div>
-
                     <div style="text-align:right; font-family: 'Noto Sans TC', sans-serif;">
-                        <div style="font-weight:600; font-size:1rem; color:#2c2c2c;">NT$ ${subtotal}</div>
+                        <div style="font-weight:600; font-size:1rem; color:#2c2c2c;">NT$ ${item.price * item.qty}</div>
                         <div style="color:#bfa092; cursor:pointer; font-size:0.8rem; margin-top:6px; text-decoration:underline;" onclick="removeFromCart(${idx})">移除</div>
                     </div>
-
                 </div>`;
             });
-            container.innerHTML = html;
 
+            // 🔴 新增：VIP 專屬的暱稱輸入框
+            // 這裡會檢查網址有沒有 ?vip=...
+            const urlParams = new URLSearchParams(window.location.search);
+            const isVipMode = urlParams.has('vip'); // 只要有 vip 參數就視為 VIP 模式
+
+            if (isVipMode) {
+                html += `
+                    <div style="margin-top: 25px; background: #fff0f5; padding: 15px; border-radius: 8px; border: 1px dashed #e5989b;">
+                        <label style="display:block; font-size:0.9rem; color:#d65a5a; margin-bottom:8px; font-weight:bold;">
+                            ★ 社群 VIP 核對用
+                        </label>
+                        <input type="text" id="vip-nickname" placeholder="請問您在社群內的暱稱是？" 
+                            style="width:100%; padding:10px; border:1px solid #e5989b; border-radius:4px; font-size:0.9rem; outline:none;">
+                    </div>
+                `;
+            }
+            // --------------------------------
+
+            container.innerHTML = html;
             totalEl.style.fontFamily = "'Noto Sans TC', sans-serif";
             totalEl.innerText = `總金額: NT$ ${total}`;
         }
@@ -1668,25 +1671,48 @@
 
         function checkoutViaLine() {
             if (cart.length === 0) return;
+
+            // 1. 檢查下單平台
             const shippingRadios = document.getElementsByName('shipping');
             let selectedShipping = null;
             for (const radio of shippingRadios) { if (radio.checked) { selectedShipping = radio.value; break; } }
-
             if (!selectedShipping) { alert('請選擇下單平台 (7-11 賣貨便 or iOPEN Mall)'); return; }
 
-            // 1. 判斷是否為 VIP 訂單
+            // 2. VIP 暱稱檢查與讀取
             const urlParams = new URLSearchParams(window.location.search);
-            const isVipMode = urlParams.get(VIP_KEY) === VIP_VALUE;
+            // 這裡為了方便，只要網址有 ?vip 就啟動檢查
+            const isVipMode = urlParams.has('vip');
+            let vipNickname = '';
 
-            // 如果是 VIP，標題就加個星星記號
-            const titleTag = isVipMode ? ' ★社群專屬★' : '';
+            if (isVipMode) {
+                const nicknameInput = document.getElementById('vip-nickname');
+                if (nicknameInput) {
+                    vipNickname = nicknameInput.value.trim();
+                    if (vipNickname === '') {
+                        alert('⚠️ 為了核對 VIP 資格，請務必填寫您的「社群暱稱」喔！');
+                        // 自動幫客人把游標移到輸入框，方便他打字
+                        nicknameInput.focus();
+                        return; // 阻止結帳
+                    }
+                }
+            }
 
+            // 3. 準備訂單內容
             const now = new Date();
             const dateStr = `${now.getMonth() + 1}/${now.getDate()}`;
-            let message = `您好，這是我的訂購清單 (${dateStr})${titleTag}：\n\n`;
+
+            // 標題判斷
+            const titleTag = isVipMode ? ' ★社群VIP單★' : '';
+
+            let message = `您好，這是我的訂購清單 (${dateStr})${titleTag}：\n`;
+
+            // 🔴 如果有暱稱，顯示在最上面
+            if (vipNickname) {
+                message += `🙋‍♀️ 社群暱稱：${vipNickname}\n`;
+            }
+            message += `\n`; // 空一行
 
             let total = 0;
-
             cart.forEach((item, index) => {
                 total += item.price * item.qty;
                 let cleanName = item.name.replace(/<br\s*\/?>/gi, ' ');
@@ -1706,6 +1732,7 @@
             message += `總金額: NT$ ${total}\n`;
             message += `下單平台: ${selectedShipping}`;
 
+            // 4. 傳送
             const lineUrl = `https://line.me/R/oaMessage/@139gqqwy/?${encodeURIComponent(message)}`;
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
@@ -1718,15 +1745,11 @@
                 title.style.display = 'block';
                 const qrImgUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(lineUrl)}`;
                 title.innerText = "請使用手機掃描下單";
-                title.style.fontFamily = "'Noto Sans TC', sans-serif";
                 body.innerHTML = `
                     <div style="text-align:center; padding: 20px 0;">
-                        <p style="margin-bottom:20px; color:#666; font-family:'Noto Sans TC', sans-serif;">
-                            拿起手機開啟 LINE 或相機<br>掃描下方 QR Code，訂單將自動帶入對話框！
-                        </p>
+                        <p style="margin-bottom:20px; color:#666;">拿起手機掃描 QR Code<br>訂單將自動帶入對話框！</p>
                         <img src="${qrImgUrl}" alt="Order QR Code" style="width:200px; height:200px; border:1px solid #eee; padding:10px;">
-                    </div>
-                `;
+                    </div>`;
                 modal.style.display = 'flex';
             }
         }
