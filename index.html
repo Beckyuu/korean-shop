@@ -344,14 +344,13 @@
             background-color: #c97c7c;
         }
 
-        /* === 2. 資訊區域 (負責對齊) === */
         .info {
             padding: 15px 5px 0;
             text-align: center;
-            /* 讓資訊區佔滿剩下空間 */
             flex-grow: 1;
             display: flex;
             flex-direction: column;
+            align-items: center;
         }
 
         .name {
@@ -610,6 +609,10 @@
         .deadline-badge {
             display: block;
             /* 讓它自己佔一行 */
+            width: 100%;
+            /* 佔滿寬度 */
+            text-align: center;
+            /* 文字置中 */
             background-color: transparent;
             /* 關鍵：背景變透明！ */
             color: #c97c7c;
@@ -640,9 +643,12 @@
             font-weight: 500;
             color: #2c2c2c;
             display: block;
+            text-align: center;
+            width: 100%;
+
             margin-bottom: 15px;
 
-            /* 🔴 確認這裡是 0，不要是 auto */
+            /* 🔴 確認這裡是 0 */
             margin-top: 0;
 
             letter-spacing: 0.5px;
