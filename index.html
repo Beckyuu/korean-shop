@@ -1331,11 +1331,20 @@
             updateCartIcon();
         }
 
+        // 定義通關密語 (您可以改成自己喜歡的，例如 ?vip=love)
+        const VIP_KEY = 'vip';
+        const VIP_VALUE = 'mina';
+
         async function fetchProducts() {
             const loading = document.getElementById('loading');
             const container = document.getElementById('product-list');
 
             try {
+                // 1. 判斷現在是不是 VIP 模式
+                const urlParams = new URLSearchParams(window.location.search);
+                const isVipMode = urlParams.get(VIP_KEY) === VIP_VALUE;
+
+                // 強制更新資料
                 const response = await fetch(GOOGLE_SHEET_CSV_URL + '&t=' + new Date().getTime());
                 const data = await response.text();
                 const rows = data.split('\n').map(row => parseCSVLine(row));
@@ -1346,14 +1355,32 @@
 
                 rows.forEach((row, index) => {
                     if (row.length < 4) return;
+
+                    // --- 讀取基礎資料 ---
                     const rawSpec = row[1] ? row[1].trim() : '';
                     const variants = rawSpec.includes('|') ? rawSpec.split('|').map(s => s.trim()) : (rawSpec ? [rawSpec] : []);
+
+                    // 原價 (C欄)
+                    let originalPrice = row[2] ? row[2].trim() : '0';
+
+                    // VIP價 (J欄 - 也就是 index 9)
+                    let vipPrice = row[9] ? row[9].trim() : '';
+
+                    // --- 決定最終顯示價格 ---
+                    let finalPrice = originalPrice;
+                    let isSpecialPrice = false;
+
+                    // 如果是 VIP 模式 且 J欄有填數字
+                    if (isVipMode && vipPrice !== '') {
+                        finalPrice = vipPrice;
+                        isSpecialPrice = true; // 做個記號，等等可以讓價格變色 (選用)
+                    }
 
                     const product = {
                         id: index,
                         name: row[0] ? row[0].trim() : 'Unnamed',
                         variants: variants,
-                        price: row[2] ? row[2].trim() : '0',
+                        price: finalPrice, // 這裡直接存最終價格，購物車會自動抓這個
                         imgUrl: row[3] ? row[3].trim() : '',
                         detailImgUrl: row[4] ? row[4].trim() : '',
                         description: row[5] ? row[5].trim() : '',
@@ -1368,6 +1395,7 @@
 
                     allProductsData.push(product);
 
+                    // --- 建立卡片 HTML ---
                     const card = document.createElement('div');
                     card.className = 'product-card';
 
@@ -1377,39 +1405,27 @@
                     else if (product.tag === 'SALE') badgeHtml = `<div class="badge sale">SALE</div>`;
 
                     let variantsHtml = '';
-
                     if (product.variants.length > 1) {
                         variantsHtml = `<div class="variant-container" id="variants-${index}">`;
                         product.variants.forEach(v => {
                             const isSoldOut = v.includes('(缺)');
                             const className = isSoldOut ? 'variant-btn sold-out' : 'variant-btn';
-
-                            // 🔴 修改：顯示名稱時，把 (缺) 拿掉，這樣畫面上只會看到乾淨的色號
                             const displayName = v.replace('(缺)', '');
-
                             variantsHtml += `<div class="${className}" onclick="selectVariant(${index}, '${v}', this)">${displayName}</div>`;
                         });
                         variantsHtml += `</div>`;
                     } else {
                         let singleName = (product.variants.length === 1 && product.variants[0] !== '') ? product.variants[0] : '單一規格';
-
                         const isSingleSoldOut = singleName.includes('(缺)');
                         const singleClass = isSingleSoldOut ? 'variant-btn single-mode sold-out' : 'variant-btn single-mode';
-
-                        // 🔴 修改：同樣把單一規格的 (缺) 拿掉
                         const displaySingleName = singleName.replace('(缺)', '');
 
-                        if (!isSingleSoldOut) {
-                            product.selectedVariant = singleName;
-                        } else {
-                            product.selectedVariant = null;
-                        }
+                        if (!isSingleSoldOut) product.selectedVariant = singleName;
+                        else product.selectedVariant = null;
 
                         variantsHtml = `
                             <div class="variant-container">
-                                <div class="${singleClass}">
-                                    ${displaySingleName}
-                                </div>
+                                <div class="${singleClass}">${displaySingleName}</div>
                             </div>`;
                     }
 
@@ -1423,12 +1439,10 @@
 
                     let options = ''; for (let i = 1; i <= 5; i++) options += `<option value="${i}">${i}</option>`;
 
-                    let deadlineHtml = '';
-                    if (product.deadline) {
-                        deadlineHtml = `<div class="deadline-badge">⏳ 收單：${product.deadline}</div>`;
-                    } else {
-                        deadlineHtml = `<div class="deadline-badge empty">&nbsp;</div>`;
-                    }
+                    let deadlineHtml = product.deadline ? `<div class="deadline-badge">⏳ 收單：${product.deadline}</div>` : `<div class="deadline-badge empty">&nbsp;</div>`;
+
+                    // 價格顯示樣式 (如果是優惠價，可以換個顏色凸顯，這裡我先維持原本的黑色，若要變色可改成 color: #d65a5a)
+                    let priceStyle = isSpecialPrice ? 'color: #d65a5a; font-weight:600;' : '';
 
                     card.innerHTML = `
                         <div class="img-wrapper">
@@ -1441,7 +1455,9 @@
                             <h3 class="name">${product.name}</h3>
                             <span class="desc-text">${product.description || '&nbsp;'}</span>
                             ${variantsHtml}
-                            <span class="price">NT$ ${product.price}</span>
+                            
+                            <span class="price" style="${priceStyle}">NT$ ${product.price}</span>
+                            
                             <div class="action-row">
                                 <select id="qty-${index}">${options}</select>
                                 <button class="btn-add" onclick="addToCart(${index})">ADD</button>
@@ -1612,36 +1628,31 @@
 
             if (!selectedShipping) { alert('請選擇下單平台 (7-11 賣貨便 or iOPEN Mall)'); return; }
 
-            // === 1. 準備訂單開頭 (日期時間增加儀式感) ===
+            // 1. 判斷是否為 VIP 訂單
+            const urlParams = new URLSearchParams(window.location.search);
+            const isVipMode = urlParams.get(VIP_KEY) === VIP_VALUE;
+
+            // 如果是 VIP，標題就加個星星記號
+            const titleTag = isVipMode ? ' ★社群專屬訂單★' : '';
+
             const now = new Date();
             const dateStr = `${now.getMonth() + 1}/${now.getDate()}`;
-            let message = `您好，這是我的訂購清單 (${dateStr})：\n\n`;
+            let message = `您好，這是我的訂購清單 (${dateStr})${titleTag}：\n\n`;
 
             let total = 0;
 
-            // === 2. 迴圈產生商品清單 (韓系收據風格) ===
             cart.forEach((item, index) => {
                 total += item.price * item.qty;
-
-                // 清除 <br> 標籤，換成空白
                 let cleanName = item.name.replace(/<br\s*\/?>/gi, ' ');
                 let cleanSpec = item.spec ? item.spec.replace(/<br\s*\/?>/gi, ' ') : '';
-
-                // 產生編號：把 1 變成 01，更有設計感
                 let num = (index + 1).toString().padStart(2, '0');
 
-                // 排版格式：
-                // 01. 商品名稱
-                //    └ 規格 x 數量
                 message += `${num}. ${cleanName}\n`;
-
                 if (cleanSpec) {
                     message += `   └ ${cleanSpec}  x${item.qty}\n`;
                 } else {
                     message += `   └ 單一規格  x${item.qty}\n`;
                 }
-
-                // 每個商品之間多空一行，讓畫面呼吸，不要擠在一起
                 message += `\n`;
             });
 
@@ -1649,7 +1660,6 @@
             message += `總金額: NT$ ${total}\n`;
             message += `下單平台: ${selectedShipping}`;
 
-            // === 3. 傳送連結與裝置判斷 (維持不變) ===
             const lineUrl = `https://line.me/R/oaMessage/@139gqqwy/?${encodeURIComponent(message)}`;
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
