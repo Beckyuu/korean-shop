@@ -276,7 +276,7 @@
             /* 底部留點空間 */
         }
 
-        /* === 1. 修改 (最終質感版)：使用您指定的藍灰色放大鏡圖示 === */
+        /* 圖片區域 */
         .img-wrapper {
             width: 100%;
             aspect-ratio: 1 / 1;
@@ -284,42 +284,8 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+            /* 極淡陰影 */
             transition: box-shadow 0.3s ease;
-
-            /* 🔴 關鍵修改：使用您指定的藍灰色放大鏡作為游標 */
-            /* 這是一個高品質 SVG 圖示的編碼，會呈現出您要的質感 */
-            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24' fill='none' stroke='%23748c9e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8' fill='%23c2e1f5' fill-opacity='0.4'%3E%3C/circle%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'%3E%3C/line%3E%3C/svg%3E") 12 12, auto;
-        }
-
-        /* === 2. 新增：IG 風格多圖示 (右上角) === */
-        .gallery-icon {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-
-            /* 半透明黑底，讓它在白圖或黑圖上都看得到 */
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(2px);
-            /* 微微模糊背景，更有質感 */
-
-            color: #fff;
-            padding: 6px;
-            border-radius: 6px;
-            /* 圓角方形 */
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 5;
-            pointer-events: none;
-            /* 讓點擊穿透過去，點到下面的圖片 */
-        }
-
-        /* 圖示大小 */
-        .gallery-icon svg {
-            width: 16px;
-            height: 16px;
-            opacity: 0.9;
         }
 
         .product-card:hover .img-wrapper {
@@ -1408,7 +1374,11 @@
             const container = document.getElementById('product-list');
 
             try {
-                // 強制更新 (加上時間戳記)
+                // 1. 判斷現在是不是 VIP 模式
+                const urlParams = new URLSearchParams(window.location.search);
+                const isVipMode = urlParams.get(VIP_KEY) === VIP_VALUE;
+
+                // 強制更新資料
                 const response = await fetch(GOOGLE_SHEET_CSV_URL + '&t=' + new Date().getTime());
                 const data = await response.text();
                 const rows = data.split('\n').map(row => parseCSVLine(row));
@@ -1419,14 +1389,47 @@
 
                 rows.forEach((row, index) => {
                     if (row.length < 4) return;
+
+                    // --- 讀取基礎資料 ---
                     const rawSpec = row[1] ? row[1].trim() : '';
                     const variants = rawSpec.includes('|') ? rawSpec.split('|').map(s => s.trim()) : (rawSpec ? [rawSpec] : []);
+
+                    // 原價 (C欄)
+                    let originalPrice = row[2] ? row[2].trim() : '0';
+
+                    // VIP價 (J欄)
+                    let vipPrice = row[9] ? row[9].trim() : '';
+
+                    // --- 決定價格顯示方式 ---
+                    let finalPriceForCart = originalPrice; // 這是要存入購物車的實際價格
+                    let priceDisplayHtml = '';         // 這是要顯示在畫面上的 HTML
+
+                    // 如果是 VIP 模式 且 J欄有填數字 (且數字跟原價不一樣)
+                    if (isVipMode && vipPrice !== '' && vipPrice !== originalPrice) {
+
+                        finalPriceForCart = vipPrice; // 購物車要算優惠價
+
+                        // 🔴 關鍵：顯示「原價刪除線」+「VIP價」
+                        priceDisplayHtml = `
+                            <div class="price-container">
+                                <span class="price-original">NT$ ${originalPrice}</span>
+                                <span class="price-vip">NT$ ${vipPrice}</span>
+                            </div>
+                        `;
+
+                    } else {
+                        // 一般模式 (或是沒有優惠價)
+                        finalPriceForCart = originalPrice;
+
+                        // 只顯示原價 (維持原本樣式)
+                        priceDisplayHtml = `<span class="price">NT$ ${originalPrice}</span>`;
+                    }
 
                     const product = {
                         id: index,
                         name: row[0] ? row[0].trim() : 'Unnamed',
                         variants: variants,
-                        price: row[2] ? row[2].trim() : '0',
+                        price: finalPriceForCart, // 這一行很重要，確保加入購物車的錢是對的
                         imgUrl: row[3] ? row[3].trim() : '',
                         detailImgUrl: row[4] ? row[4].trim() : '',
                         description: row[5] ? row[5].trim() : '',
@@ -1441,16 +1444,15 @@
 
                     allProductsData.push(product);
 
+                    // --- 建立卡片 HTML ---
                     const card = document.createElement('div');
                     card.className = 'product-card';
 
-                    // === 標籤 Badge ===
                     let badgeHtml = '';
                     if (product.tag === 'NEW') badgeHtml = `<div class="badge new">NEW</div>`;
                     else if (product.tag === 'HOT') badgeHtml = `<div class="badge hot">HOT</div>`;
                     else if (product.tag === 'SALE') badgeHtml = `<div class="badge sale">SALE</div>`;
 
-                    // === 缺貨按鈕邏輯 ===
                     let variantsHtml = '';
                     if (product.variants.length > 1) {
                         variantsHtml = `<div class="variant-container" id="variants-${index}">`;
@@ -1466,54 +1468,41 @@
                         const isSingleSoldOut = singleName.includes('(缺)');
                         const singleClass = isSingleSoldOut ? 'variant-btn single-mode sold-out' : 'variant-btn single-mode';
                         const displaySingleName = singleName.replace('(缺)', '');
-                        if (!isSingleSoldOut) { product.selectedVariant = singleName; } else { product.selectedVariant = null; }
+
+                        if (!isSingleSoldOut) product.selectedVariant = singleName;
+                        else product.selectedVariant = null;
 
                         variantsHtml = `
                             <div class="variant-container">
-                                <div class="${singleClass}">
-                                    ${displaySingleName}
-                                </div>
+                                <div class="${singleClass}">${displaySingleName}</div>
                             </div>`;
                     }
 
-                    // === 🟢 關鍵修改：更精緻的 IG 風格圖示 ===
-                    let galleryIconHtml = '';
+                    let stickerHtml = '';
                     if (product.hasDetails) {
-                        galleryIconHtml = `
-                        <div class="gallery-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="5" y="5" width="14" height="14" rx="2" ry="2"></rect> <path d="M8 5V3h14v14h-2"></path> </svg>
+                        stickerHtml = `<div class="more-sticker" onclick="showDetails(${index})">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                            看更多…
                         </div>`;
                     }
 
-                    // 下拉選單
                     let options = ''; for (let i = 1; i <= 5; i++) options += `<option value="${i}">${i}</option>`;
 
-                    // 收單時間
-                    let deadlineHtml = '';
-                    if (product.deadline) {
-                        deadlineHtml = `<div class="deadline-badge">⏳ 收單：${product.deadline}</div>`;
-                    } else {
-                        deadlineHtml = `<div class="deadline-badge empty">&nbsp;</div>`;
-                    }
-
-                    // === 🟢 關鍵修改：把 onclick 加在最外層的 img-wrapper ===
-                    // 這樣點擊整張圖片都會觸發 showDetails
-                    let clickAction = product.hasDetails ? `onclick="showDetails(${index})"` : '';
+                    let deadlineHtml = product.deadline ? `<div class="deadline-badge">⏳ 收單：${product.deadline}</div>` : `<div class="deadline-badge empty">&nbsp;</div>`;
 
                     card.innerHTML = `
-                        <div class="img-wrapper" ${clickAction}>
+                        <div class="img-wrapper">
                             ${badgeHtml}
-                            ${galleryIconHtml}
                             <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
+                            ${stickerHtml} 
                         </div>
-                        
                         <div class="info">
                             ${deadlineHtml}
                             <h3 class="name">${product.name}</h3>
                             <span class="desc-text">${product.description || '&nbsp;'}</span>
                             ${variantsHtml}
-                            <span class="price">NT$ ${product.price}</span>
+                            
+                            ${priceDisplayHtml}
                             
                             <div class="action-row">
                                 <select id="qty-${index}">${options}</select>
