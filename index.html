@@ -999,43 +999,70 @@
             font-size: 0.95rem;
         }
 
-        /* === 7. 詳情按鈕 (永久顯示版) === */
+        /* === NEW: 極簡時尚放大鏡按鈕 === */
         .more-sticker {
             position: absolute;
-            bottom: 10px;
-            right: 10px;
-            width: auto;
-            padding: 5px 12px;
+            bottom: 12px;
+            right: 12px;
 
-            /* 修改這裡：改成預設就是黑底白字 */
-            background: #2c2c2c;
-            /* 黑底 */
-            color: #fff;
-            /* 白字 */
-            border: none;
-            /* 不需要邊框 */
+            /* 1. 變成正圓形 */
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
 
-            border-radius: 20px;
+            /* 2. 顏色：白底 + 深灰圖示 (最百搭的高級感) */
+            background: rgba(255, 255, 255, 0.95);
+            /* 稍微一點點透 */
+            color: #4a4a4a;
+
+            /* 3. 讓圖示置中 */
             display: flex;
             align-items: center;
-            gap: 5px;
-            font-size: 0.75rem;
-            font-family: 'Noto Sans TC', sans-serif;
+            justify-content: center;
+
+            /* 4. 裝飾：細緻的陰影，讓它浮起來 */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(2px);
+            /* 磨砂感 */
+
             cursor: pointer;
             z-index: 5;
-
-            /* 永久顯示設定 */
-            opacity: 1;
-            transform: translateY(0);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            /* 加一點陰影比較立體 */
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            /* 彈性動畫 */
         }
 
         /* 滑鼠移過去的效果 */
         .more-sticker:hover {
-            background: #444;
-            /* 稍微變淺一點點的黑，讓客人知道有按到 */
+            transform: scale(1.1);
+            /* 輕微放大 */
+            background: #2c2c2c;
+            /* 變成深色背景 */
             color: #fff;
+            /* 變成白色圖示 */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 確保裡面的 SVG 圖示大小剛好 */
+        .more-sticker svg {
+            width: 18px;
+            height: 18px;
+            stroke-width: 2;
+            /* 線條細一點比較優雅 */
+        }
+
+        /* 手機版微調：稍微小一點點就好，不要太小 */
+        @media (max-width: 768px) {
+            .more-sticker {
+                width: 32px;
+                height: 32px;
+                bottom: 8px;
+                right: 8px;
+            }
+
+            .more-sticker svg {
+                width: 16px;
+                height: 16px;
+            }
         }
 
         /* === 贈品專用樣式 (I欄) === */
@@ -1481,8 +1508,10 @@
                     let stickerHtml = '';
                     if (product.hasDetails) {
                         stickerHtml = `<div class="more-sticker" onclick="showDetails(${index})">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                            看更多…
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
                         </div>`;
                     }
 
