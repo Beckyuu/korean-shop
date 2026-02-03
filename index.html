@@ -1302,6 +1302,41 @@
             pointer-events: none;
             /* 禁止點擊 */
         }
+
+        /* ========================================= */
+        /* 🧪 測試區：贈品禮物卡風格 (如果不喜歡，整段刪掉即可還原) */
+        /* ========================================= */
+        .desc-text {
+            /* 1. 把它變成一個卡片 */
+            display: block !important;
+            /* 強制執行 */
+            width: 92% !important;
+            margin: 5px auto 12px !important;
+
+            /* 2. 櫻花粉底色 + 虛線邊框 */
+            background-color: #fff5f7 !important;
+            border: 1.5px dashed #ecaeb1 !important;
+            /* 邊框稍微加粗一點點更有感 */
+            border-radius: 10px !important;
+
+            /* 3. 調整內距，讓字不要貼壁 */
+            padding: 10px 8px !important;
+
+            /* 4. 文字設定 */
+            color: #d65a5a !important;
+            /* 深粉紅字 */
+            font-size: 0.85rem !important;
+            font-weight: 600 !important;
+            /* 字加粗，質感比較好 */
+            line-height: 1.6 !important;
+            /* 行距拉開，這是解決擁擠的關鍵 */
+            text-align: center !important;
+        }
+
+        /* 讓裡面的 "🎁" 圖案跟文字有一點呼吸空間 */
+        .desc-text::first-line {
+            /* 這是個小巧思，讓第一行稍微突出一點 (如果不支援就算了) */
+        }
     </style>
 </head>
 
