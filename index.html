@@ -646,6 +646,40 @@
             letter-spacing: 0.5px;
         }
 
+        /* === 價格比較樣式 === */
+        .price-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* 讓價格置中 */
+            gap: 8px;
+            /* 兩個價格中間的距離 */
+            margin-bottom: 15px;
+            /* 跟下方按鈕的距離 */
+        }
+
+        /* 被劃掉的原價 */
+        .price-original {
+            color: #bbb;
+            /* 淺灰色 */
+            font-size: 0.9rem;
+            /* 字稍微小一點 */
+            text-decoration: line-through;
+            /* 關鍵：刪除線 */
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        /* 顯眼的優惠價 */
+        .price-vip {
+            color: #d65a5a;
+            /* 漂亮的莫蘭迪紅 */
+            font-size: 1.3rem;
+            /* 字大一點 */
+            font-weight: 600;
+            /* 加粗 */
+            font-family: 'Fredoka', sans-serif;
+        }
+
         /* === 6. 購買按鈕區 === */
         .action-row {
             display: flex;
@@ -1331,7 +1365,7 @@
             updateCartIcon();
         }
 
-        // 定義通關密語 (您可以改成自己喜歡的，例如 ?vip=love)
+        // 定義通關密語 (您可以改成自己喜歡的)
         const VIP_KEY = 'vip';
         const VIP_VALUE = 'mina';
 
@@ -1363,24 +1397,39 @@
                     // 原價 (C欄)
                     let originalPrice = row[2] ? row[2].trim() : '0';
 
-                    // VIP價 (J欄 - 也就是 index 9)
+                    // VIP價 (J欄)
                     let vipPrice = row[9] ? row[9].trim() : '';
 
-                    // --- 決定最終顯示價格 ---
-                    let finalPrice = originalPrice;
-                    let isSpecialPrice = false;
+                    // --- 決定價格顯示方式 ---
+                    let finalPriceForCart = originalPrice; // 這是要存入購物車的實際價格
+                    let priceDisplayHtml = '';         // 這是要顯示在畫面上的 HTML
 
-                    // 如果是 VIP 模式 且 J欄有填數字
-                    if (isVipMode && vipPrice !== '') {
-                        finalPrice = vipPrice;
-                        isSpecialPrice = true; // 做個記號，等等可以讓價格變色 (選用)
+                    // 如果是 VIP 模式 且 J欄有填數字 (且數字跟原價不一樣)
+                    if (isVipMode && vipPrice !== '' && vipPrice !== originalPrice) {
+
+                        finalPriceForCart = vipPrice; // 購物車要算優惠價
+
+                        // 🔴 關鍵：顯示「原價刪除線」+「VIP價」
+                        priceDisplayHtml = `
+                            <div class="price-container">
+                                <span class="price-original">NT$ ${originalPrice}</span>
+                                <span class="price-vip">NT$ ${vipPrice}</span>
+                            </div>
+                        `;
+
+                    } else {
+                        // 一般模式 (或是沒有優惠價)
+                        finalPriceForCart = originalPrice;
+
+                        // 只顯示原價 (維持原本樣式)
+                        priceDisplayHtml = `<span class="price">NT$ ${originalPrice}</span>`;
                     }
 
                     const product = {
                         id: index,
                         name: row[0] ? row[0].trim() : 'Unnamed',
                         variants: variants,
-                        price: finalPrice, // 這裡直接存最終價格，購物車會自動抓這個
+                        price: finalPriceForCart, // 這一行很重要，確保加入購物車的錢是對的
                         imgUrl: row[3] ? row[3].trim() : '',
                         detailImgUrl: row[4] ? row[4].trim() : '',
                         description: row[5] ? row[5].trim() : '',
@@ -1441,9 +1490,6 @@
 
                     let deadlineHtml = product.deadline ? `<div class="deadline-badge">⏳ 收單：${product.deadline}</div>` : `<div class="deadline-badge empty">&nbsp;</div>`;
 
-                    // 價格顯示樣式 (如果是優惠價，可以換個顏色凸顯，這裡我先維持原本的黑色，若要變色可改成 color: #d65a5a)
-                    let priceStyle = isSpecialPrice ? 'color: #d65a5a; font-weight:600;' : '';
-
                     card.innerHTML = `
                         <div class="img-wrapper">
                             ${badgeHtml}
@@ -1456,7 +1502,7 @@
                             <span class="desc-text">${product.description || '&nbsp;'}</span>
                             ${variantsHtml}
                             
-                            <span class="price" style="${priceStyle}">NT$ ${product.price}</span>
+                            ${priceDisplayHtml}
                             
                             <div class="action-row">
                                 <select id="qty-${index}">${options}</select>
