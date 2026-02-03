@@ -393,20 +393,23 @@
             min-height: 1.4em;
         }
 
-        /* === 規格容器 === */
+        /* === 規格容器=== */
         .variant-container {
             display: flex;
             flex-wrap: wrap;
+
+            /* 確保內容物水平置中 */
             justify-content: center;
+
+            /* 確保容器本身也是滿寬的*/
+            width: 100%;
+
             gap: 6px;
-
-            /* 🔴 關鍵修改：這個指令會自動把上面的空間填滿，把自己推到最下面 */
             margin-top: auto;
-
-            flex-grow: 1;
-            align-content: center;
-            align-items: center;
             margin-bottom: 10px;
+
+            /* 讓它不要被其他屬性干擾 */
+            flex-grow: 0;
         }
 
         /* === 米粒按鈕 (預設就是金色質感) === */
