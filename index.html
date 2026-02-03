@@ -606,29 +606,31 @@
             background-size: 10px;
         }
 
-        /* === 收單時間提醒 === */
+        /* === 修改後的收單時間：極簡文字版 === */
         .deadline-badge {
-            display: inline-block;
-            background-color: #f4e3e3;
-            /* 很淡的紅底 */
+            display: block;
+            /* 讓它自己佔一行 */
+            background-color: transparent;
+            /* 關鍵：背景變透明！ */
             color: #c97c7c;
-            /* 莫蘭迪紅色字 */
+            /* 維持漂亮的莫蘭迪紅字 */
+
             font-family: 'Noto Sans TC', sans-serif;
             font-size: 0.8rem;
+            /* 字小一點，像註解 */
             font-weight: 500;
-            padding: 2px 10px;
-            border-radius: 4px;
-            margin-bottom: 8px;
-            /* 跟下方價格保持距離 */
+
+            padding: 0;
+            /* 拿掉內距 */
+            margin-bottom: 0px;
+            /* 貼近下方的價格 */
             letter-spacing: 1px;
         }
 
-        /* 這是新的：隱藏版收單時間 (用來佔位子) */
+        /* 隱藏版維持隱藏就好 */
         .deadline-badge.empty {
-            visibility: hidden;
-            /* 讓它看不見 */
-            background: transparent;
-            /* 背景變透明 */
+            display: none;
+            /* 直接不顯示，不佔空間 */
         }
 
         /* === 價格 === */
@@ -1525,12 +1527,13 @@
                             <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
                             ${stickerHtml} 
                         </div>
-                        <div class="info">
                             ${deadlineHtml}
                             <h3 class="name">${product.name}</h3>
                             <span class="desc-text">${product.description || '&nbsp;'}</span>
                             ${variantsHtml}
                             
+                            ${deadlineHtml}
+
                             ${priceDisplayHtml}
                             
                             <div class="action-row">
