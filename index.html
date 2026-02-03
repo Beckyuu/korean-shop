@@ -389,6 +389,76 @@
             width: 100%;
         }
 
+        /* === 時尚下拉選單 (B欄) === */
+        .style-select {
+            /* 1. 拿掉預設醜醜的外觀 */
+            appearance: none;
+            -webkit-appearance: none;
+
+            /* 2. 尺寸與排版 */
+            width: 80%;
+            /* 寬度設定 80%，留點白邊比較優雅 */
+            max-width: 220px;
+            padding: 8px 30px 8px 15px;
+            /* 右邊留多一點給箭頭 */
+            margin: 5px 0;
+
+            /* 3. 字體與顏色 */
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 0.9rem;
+            color: #555;
+            /* 深灰色文字 */
+            background-color: #fff;
+
+            /* 4. 極簡邊框 */
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            /* 微圓角 */
+
+            /* 5. 讓文字置中 */
+            text-align: center;
+            text-align-last: center;
+            /* 為了相容某些瀏覽器 */
+
+            cursor: pointer;
+            transition: all 0.3s;
+
+            /* 6. 關鍵：自製時尚箭頭 (SVG) */
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 14px;
+        }
+
+        /* 滑鼠移過去或點擊時的互動 */
+        .style-select:hover,
+        .style-select:focus {
+            border-color: #d4a373;
+            /* 變成主題金棕色 */
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(212, 163, 115, 0.1);
+        }
+
+        /* 缺貨選項的樣式 */
+        .style-select option:disabled {
+            color: #ccc;
+            font-style: italic;
+        }
+
+        /* 單一規格純文字樣式 (原本的稍微優化) */
+        .single-variant-text {
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 0.9rem;
+            color: #d4a373;
+            /* 金色 */
+            letter-spacing: 1px;
+            display: block;
+            width: 100%;
+            text-align: center;
+            margin: 8px 0;
+            font-weight: 500;
+        }
+
         /* === 規格容器=== */
         .variant-container {
             display: flex;
@@ -1482,29 +1552,45 @@
                     else if (product.tag === 'HOT') badgeHtml = `<div class="badge hot">HOT</div>`;
                     else if (product.tag === 'SALE') badgeHtml = `<div class="badge sale">SALE</div>`;
 
+                    // === 新版：規格顯示邏輯 (下拉選單 vs 單一文字) ===
                     let variantsHtml = '';
+
+                    // 情況 A：有多個規格 -> 顯示時尚下拉選單
                     if (product.variants.length > 1) {
-                        variantsHtml = `<div class="variant-container" id="variants-${index}">`;
+                        variantsHtml = `<div class="variant-container">
+                            <select class="style-select" onchange="selectVariantDropdown(${index}, this)">
+                                <option value="" disabled selected>請選擇款式</option>`;
+
                         product.variants.forEach(v => {
+                            // 處理缺貨
                             const isSoldOut = v.includes('(缺)');
-                            const className = isSoldOut ? 'variant-btn sold-out' : 'variant-btn';
-                            const displayName = v.replace('(缺)', '');
-                            variantsHtml += `<div class="${className}" onclick="selectVariant(${index}, '${v}', this)">${displayName}</div>`;
+                            const disabledAttr = isSoldOut ? 'disabled' : '';
+                            const cleanName = v.replace('(缺)', '');
+                            const displayText = isSoldOut ? `${cleanName} (Sold Out)` : cleanName;
+
+                            variantsHtml += `<option value="${v}" ${disabledAttr}>${displayText}</option>`;
                         });
-                        variantsHtml += `</div>`;
+
+                        variantsHtml += `</select></div>`;
+
+                        // 多規格預設為未選取，強迫客人選
+                        product.selectedVariant = null;
+
                     } else {
+                        // 情況 B：單一規格 -> 顯示優雅的純文字
                         let singleName = (product.variants.length === 1 && product.variants[0] !== '') ? product.variants[0] : '單一規格';
+
+                        // 處理單一規格缺貨
                         const isSingleSoldOut = singleName.includes('(缺)');
-                        const singleClass = isSingleSoldOut ? 'variant-btn single-mode sold-out' : 'variant-btn single-mode';
                         const displaySingleName = singleName.replace('(缺)', '');
 
-                        if (!isSingleSoldOut) product.selectedVariant = singleName;
-                        else product.selectedVariant = null;
-
-                        variantsHtml = `
-                            <div class="variant-container">
-                                <div class="${singleClass}">${displaySingleName}</div>
-                            </div>`;
+                        if (isSingleSoldOut) {
+                            variantsHtml = `<span class="single-variant-text" style="color:#ccc; text-decoration:line-through;">${displaySingleName} (完售)</span>`;
+                            product.selectedVariant = null; // 不能買
+                        } else {
+                            variantsHtml = `<span class="single-variant-text">${displaySingleName}</span>`;
+                            product.selectedVariant = singleName; // 自動選取
+                        }
                     }
 
                     let stickerHtml = '';
@@ -1596,6 +1682,19 @@
                 modal.classList.add('show');
             } else {
                 modal.classList.remove('show');
+            }
+        }
+
+        // 🟢 新增：處理下拉選單變更
+        function selectVariantDropdown(index, selectElement) {
+            const product = allProductsData[index];
+            product.selectedVariant = selectElement.value;
+
+            // 選好後，如果原本按鈕有顯示 "請先選擇..." 的警告色，可以把它復原 (優化體驗)
+            const btnAdd = selectElement.closest('.info').querySelector('.btn-add');
+            if (btnAdd) {
+                btnAdd.style.backgroundColor = "";
+                btnAdd.innerText = "ADD";
             }
         }
 
