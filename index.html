@@ -389,60 +389,88 @@
             width: 100%;
         }
 
-        /* === 時尚下拉選單 (B欄) === */
+        /* === 1. 下拉選單 (時尚膠囊版) === */
         .style-select {
-            /* 1. 拿掉預設醜醜的外觀 */
             appearance: none;
             -webkit-appearance: none;
 
-            /* 2. 尺寸與排版 */
-            width: 80%;
-            /* 寬度設定 80%，留點白邊比較優雅 */
-            max-width: 220px;
-            padding: 8px 30px 8px 15px;
-            /* 右邊留多一點給箭頭 */
-            margin: 5px 0;
+            /* 尺寸設定 */
+            width: 85%;
+            max-width: 240px;
+            padding: 8px 15px;
+            margin: 5px 0 10px;
+            /* 下方留點呼吸空間 */
 
-            /* 3. 字體與顏色 */
+            /* 字體設定 */
             font-family: 'Noto Sans TC', sans-serif;
             font-size: 0.9rem;
-            color: #555;
-            /* 深灰色文字 */
+            letter-spacing: 1px;
+            color: #d4a373;
+            /* 預設文字就是品牌金，比較高級 */
+
+            /* 外觀設定：改成漂亮的膠囊圓角 */
             background-color: #fff;
+            border: 1px solid #d4a373;
+            /* 實心金邊框 */
+            border-radius: 50px;
+            /* 關鍵：膠囊形狀 */
 
-            /* 4. 極簡邊框 */
-            border: 1px solid #e0e0e0;
-            border-radius: 4px;
-            /* 微圓角 */
-
-            /* 5. 讓文字置中 */
             text-align: center;
             text-align-last: center;
-            /* 為了相容某些瀏覽器 */
-
             cursor: pointer;
             transition: all 0.3s;
 
-            /* 6. 關鍵：自製時尚箭頭 (SVG) */
+            /* 箭頭：換成更細緻的金色小箭頭 */
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
             background-repeat: no-repeat;
-            background-position: right 10px center;
-            background-size: 14px;
+            background-position: right 12px center;
+            background-size: 12px;
         }
 
-        /* 滑鼠移過去或點擊時的互動 */
-        .style-select:hover,
-        .style-select:focus {
-            border-color: #d4a373;
-            /* 變成主題金棕色 */
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(212, 163, 115, 0.1);
+        /* 滑鼠移上去變色 */
+        .style-select:hover {
+            background-color: #fdfbf7;
+            /* 極淡米色背景 */
+            box-shadow: 0 2px 8px rgba(212, 163, 115, 0.2);
+            /* 微微發光 */
         }
 
-        /* 缺貨選項的樣式 */
-        .style-select option:disabled {
+        /* === 2. 單一規格 (偽裝成選單的樣子) === */
+        /* 這樣改完，它會跟上面的選單長得一模一樣，只差沒有箭頭 */
+        .single-variant-box {
+            display: block;
+            width: 85%;
+            max-width: 240px;
+            padding: 8px 15px;
+            margin: 5px auto 10px;
+            /* auto 讓它置中 */
+
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            color: #d4a373;
+            /* 也是金色字 */
+
+            background-color: #fff;
+            border: 1px solid #d4a373;
+            /* 也是金邊框 */
+            border-radius: 50px;
+            /* 也是膠囊 */
+
+            text-align: center;
+            cursor: default;
+            /* 滑鼠變回箭頭，告訴客人不用點 */
+
+            /* 讓它看起來跟選單高度完全一致 */
+            line-height: 1.2;
+        }
+
+        /* 缺貨時的樣子 */
+        .single-variant-box.sold-out {
+            border-color: #e0e0e0;
             color: #ccc;
-            font-style: italic;
+            background-color: #f9f9f9;
+            text-decoration: line-through;
         }
 
         /* 單一規格純文字樣式 (原本的稍微優化) */
@@ -1577,19 +1605,27 @@
                         product.selectedVariant = null;
 
                     } else {
-                        // 情況 B：單一規格 -> 顯示優雅的純文字
+                        // === 情況 B：單一規格 (現在改成顯示「膠囊框框」) ===
                         let singleName = (product.variants.length === 1 && product.variants[0] !== '') ? product.variants[0] : '單一規格';
 
-                        // 處理單一規格缺貨
+                        // 處理缺貨
                         const isSingleSoldOut = singleName.includes('(缺)');
                         const displaySingleName = singleName.replace('(缺)', '');
 
+                        // 判斷要用哪種樣式 (正常 vs 缺貨)
+                        const boxClass = isSingleSoldOut ? 'single-variant-box sold-out' : 'single-variant-box';
+
+                        // 🔴 這裡改成了 div，套用剛剛寫好的 .single-variant-box
+                        variantsHtml = `
+                            <div class="variant-container">
+                                <div class="${boxClass}">${displaySingleName}</div>
+                            </div>`;
+
+                        // 邏輯處理
                         if (isSingleSoldOut) {
-                            variantsHtml = `<span class="single-variant-text" style="color:#ccc; text-decoration:line-through;">${displaySingleName} (完售)</span>`;
-                            product.selectedVariant = null; // 不能買
+                            product.selectedVariant = null;
                         } else {
-                            variantsHtml = `<span class="single-variant-text">${displaySingleName}</span>`;
-                            product.selectedVariant = singleName; // 自動選取
+                            product.selectedVariant = singleName;
                         }
                     }
 
