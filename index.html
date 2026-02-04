@@ -531,48 +531,6 @@
             color: var(--text-main);
         }
 
-        /* === 1. 卡片結構 (修復按鈕消失問題) === */
-        .product-card {
-            background: transparent;
-            position: relative;
-            transition: all 0.4s ease;
-            /* 改回 Flexbox，這是最穩定的排版 */
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            /* 確保卡片拉長 */
-            padding-bottom: 10px;
-            /* 底部留點空間 */
-        }
-
-        /* === 2. 資訊區域 (負責對齊) === */
-        .info {
-            padding: 15px 5px 0;
-            text-align: center;
-            /* 讓資訊區佔滿剩下空間 */
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* === 副標題 (微調加強版) === */
-        .desc-text {
-            display: block;
-            font-size: 0.85rem;
-
-            /* 🔴 修改 1：顏色從 #888 改成 #666 (深一點) */
-            color: #666;
-
-            margin-bottom: 8px;
-            font-family: 'Noto Sans TC', sans-serif;
-
-            /* 🔴 修改 2：字重從 300 改成 400 (正常粗細，不要太細) */
-            font-weight: 400;
-
-            line-height: 1.4;
-            min-height: 1.4em;
-        }
-
         /* === 4. 規格選單 (縮短 + 美化) === */
         .variant-select {
             /* 寬度設定：改成 70% 左右，比較精緻 */
@@ -1695,10 +1653,6 @@
                     }
 
             container.innerHTML = html;
-            totalEl.style.fontFamily = "'Noto Sans TC', sans-serif";
-            totalEl.innerText = `總金額: NT$ ${total}`;
-
-            // 顯示總金額
             totalEl.style.fontFamily = "'Noto Sans TC', sans-serif";
             totalEl.innerText = `總金額: NT$ ${total}`;
 
