@@ -1658,20 +1658,31 @@
             }
             // --------------------------------
 
-            // 🟢 新增：定金計算邏輯
-            let depositHtml = ''; // 預設是空的 (不滿1000就不顯示)
+            // 🟢 修改：定金計算邏輯 (滿 1000 元)
+            let depositHtml = '';
 
             if (total >= 1000) {
-                // 1. 算出 25%
                 let rawDeposit = total * 0.25;
-
-                // 2. 四捨五入到百位 (例如 250->300, 320->300, 360->400)
                 let finalDeposit = Math.round(rawDeposit / 100) * 100;
 
-                // 3. 產生要顯示的 HTML (樣式：低調的灰棕色，不刺眼)
+                // ✨ 新樣式：
+                // 1. 文字改成：「需預付 25% 定金」清楚明瞭
+                // 2. 樣式：加上淺金黃色背景 + 深棕色字 + 邊框，讓它跟下面的字區分開來
                 depositHtml = `
-                    <div style="text-align:right; font-family:'Noto Sans TC', sans-serif; margin-top: 5px; color:#bfa092; font-size: 0.95rem;">
-                        (需預付定金: NT$ ${finalDeposit})
+                    <div style="
+                        background-color: #fffbf2; 
+                        border: 1px solid #d4a373; 
+                        border-radius: 6px;
+                        padding: 8px 10px;
+                        margin-top: 10px; 
+                        color: #8a6b5d; 
+                        font-size: 0.9rem; 
+                        font-weight: 500;
+                        text-align: center;
+                        font-family: 'Noto Sans TC', sans-serif;
+                    ">
+                        ⚠️ 訂單滿千需付 25% 定金<br>
+                        <span style="font-size: 1.1rem; font-weight: bold; color: #d65a5a;">NT$ ${finalDeposit}</span>
                     </div>
                 `;
             }
@@ -1767,11 +1778,13 @@
             message += "-----------------------------\n";
             message += `總金額: NT$ ${total}\n`;
 
-            // 🟢 新增：如果有達到門檻，訊息內也要加上定金
+            
             if (total >= 1000) {
                 let rawDeposit = total * 0.25;
                 let finalDeposit = Math.round(rawDeposit / 100) * 100;
-                message += `(含定金: NT$ ${finalDeposit})\n`;
+
+                // 改成這樣寫，更清楚：
+                message += `(含 25% 定金: NT$ ${finalDeposit})\n`;
             }
 
             message += `下單平台: ${selectedShipping}`;
