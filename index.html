@@ -1665,27 +1665,34 @@
                 let rawDeposit = total * 0.25;
                 let finalDeposit = Math.round(rawDeposit / 100) * 100;
 
-                // ✨ 新樣式：
-                // 1. 文字改成：「需預付 25% 定金」清楚明瞭
-                // 2. 樣式：加上淺金黃色背景 + 深棕色字 + 邊框，讓它跟下面的字區分開來
-                depositHtml = `
-                    <div style="
-                        background-color: #fffbf2; 
-                        border: 1px solid #d4a373; 
-                        border-radius: 6px;
-                        padding: 8px 10px;
-                        margin-top: 10px; 
-                        color: #8a6b5d; 
-                        font-size: 0.9rem; 
-                        font-weight: 500;
-                        text-align: center;
-                        font-family: 'Noto Sans TC', sans-serif;
+            // 1. 靠右對齊，跟總金額連在一起，像帳單一樣自然
+            // 2. 顏色用淺灰配金棕色，降低壓迫感
+            depositHtml = `
+                <div style="
+                    margin-top: 8px;
+                    text-align: right; 
+                    font-family: 'Noto Sans TC', sans-serif;
+                ">
+                    <span style="
+                        font-size: 0.85rem; 
+                        color: #999; 
+                        background: #f9f9f9; 
+                        padding: 4px 8px; 
+                        border-radius: 4px;
+                        margin-right: 8px;
                     ">
-                        ⚠️ 訂單滿千需付 25% 定金<br>
-                        <span style="font-size: 1.1rem; font-weight: bold; color: #d65a5a;">NT$ ${finalDeposit}</span>
-                    </div>
-                `;
-            }
+                        需預付定金 (25%)
+                    </span>
+                    <span style="
+                        font-size: 1.1rem; 
+                        color: #bfa092; /* 溫柔的顏色 */
+                        font-weight: 500;
+                    ">
+                        NT$ ${finalDeposit}
+                    </span>
+                </div>
+            `;
+                    }
 
             container.innerHTML = html;
             totalEl.style.fontFamily = "'Noto Sans TC', sans-serif";
