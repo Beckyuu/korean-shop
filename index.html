@@ -957,45 +957,49 @@
             font-size: 0.95rem;
         }
 
-        /* === 7. 詳情按鈕 (永久顯示版) === */
+/* === 7. 詳情按鈕 (更新：韓系毛玻璃風格) === */
         .more-sticker {
             position: absolute;
             bottom: 10px;
             right: 10px;
-            width: auto;
-            padding: 5px 12px;
+            z-index: 5;
+            
+            /* 🌟 關鍵修改：毛玻璃效果 */
+            background: rgba(255, 255, 255, 0.65); /* 65% 透明的白底 */
+            backdrop-filter: blur(4px);             /* 讓背景模糊，文字才清楚 */
+            -webkit-backdrop-filter: blur(4px);     /* 支援 iPhone */
+            
+            /* 邊框與形狀：改成柔和膠囊狀 */
+            border: 1px solid rgba(255, 255, 255, 0.8); /* 極淡的白框 */
+            border-radius: 30px; 
+            
+            /* 文字設定：改成深灰色，比純黑更優雅 */
+            color: #555; 
+            font-size: 0.75rem;
+            font-family: 'Noto Sans TC', sans-serif;
+            font-weight: 500;
+            letter-spacing: 1px; /* 字距拉開一點點 */
 
-            /* 修改這裡：改成預設就是黑底白字 */
-            background: #2c2c2c;
-            /* 黑底 */
-            color: #fff;
-            /* 白字 */
-            border: none;
-            /* 不需要邊框 */
-
-            border-radius: 20px;
+            /* 排版 */
             display: flex;
             align-items: center;
             gap: 5px;
-            font-size: 0.75rem;
-            font-family: 'Noto Sans TC', sans-serif;
+            width: auto;
+            padding: 5px 12px; /* 稍微留一點呼吸空間 */
+            
             cursor: pointer;
-            z-index: 5;
-
-            /* 永久顯示設定 */
-            opacity: 1;
-            transform: translateY(0);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            /* 加一點陰影比較立體 */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* 淡淡的陰影 */
+            transition: all 0.3s ease;
         }
 
         /* 滑鼠移過去的效果 */
         .more-sticker:hover {
-            background: #444;
-            /* 稍微變淺一點點的黑，讓客人知道有按到 */
-            color: #fff;
+            background: rgba(255, 255, 255, 0.9); /* 變更實心一點 */
+            color: #2c2c2c; /* 文字變深黑 */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* 陰影加深，浮起來的感覺 */
+            transform: translateY(-2px); /* 微微往上飄 */
         }
-
+        
         /* === 贈品專用樣式 (I欄) === */
         .gift-note {
             /* 粉嫩背景 + 虛線邊框 */
