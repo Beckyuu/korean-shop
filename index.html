@@ -957,96 +957,102 @@
             font-size: 0.95rem;
         }
 
-        /* === 7. 詳情按鈕 (更新：Mina's Journal 同款字體) === */
+        /* === 7. 詳情按鈕 (更新：極簡線框膠囊) === */
         .more-sticker {
             position: absolute;
-            bottom: 10px;
-            right: 10px;
+            bottom: 12px;
+            right: 12px;
             z-index: 5;
 
-            background: rgba(255, 255, 255, 0.65);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
+            /* 🌟 改成：完全透明背景 + 白色細框 */
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.9);
 
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 30px;
+            /* 🌟 形狀：變成完美的橢圓膠囊 */
+            border-radius: 50px;
 
-            /* 🌟 修改這裡：換成跟標題一樣的字體 */
+            /* 文字設定 */
             font-family: 'Cormorant Garamond', serif;
+            /* 維持漂亮的字體 */
             font-style: italic;
-            /* 斜體 */
-            font-size: 0.9rem;
-            /* 字稍微調大一點點，這字體偏小 */
-            font-weight: 600;
-            /* 加粗一點才清楚 */
-
-            color: #444;
+            font-size: 0.85rem;
+            color: #fff;
+            /* 白色文字 */
             letter-spacing: 1px;
+
+            /* 加一點文字陰影，確保在淺色圖片上也看得到 */
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            /* 微微的立體感 */
 
             display: flex;
             align-items: center;
-            gap: 5px;
-            width: auto;
-            padding: 4px 14px;
-            /* 優化比例 */
+            justify-content: center;
+            gap: 6px;
+
+            padding: 4px 16px;
+            /* 膠囊形狀 */
 
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
         }
 
+        /* 滑鼠移過去：變成實心白，字變黑 (反白效果) */
         .more-sticker:hover {
-            background: rgba(255, 255, 255, 0.9);
-            color: #000;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            background: #fff;
+            color: #2c2c2c;
+            border-color: #fff;
+            text-shadow: none;
             transform: translateY(-2px);
         }
 
-        /* === 新增：時尚下拉選單 (取代原本的按鈕) === */
+        /* 讓裡面的 SVG icon 也跟著變色 */
+        .more-sticker svg {
+            stroke: currentColor;
+            /* 跟隨文字顏色 */
+        }
+
+        /* === 新增：時尚下拉選單 (更新：橢圓膠囊版) === */
         .style-select {
             appearance: none;
-            /* 隱藏預設醜醜的箭頭 */
             -webkit-appearance: none;
 
             width: 100%;
-            /* 寬度自動填滿容器 */
-            max-width: 220px;
-            /* 但不要太寬 */
+            max-width: 200px;
+            /* 稍微縮窄一點點更精緻 */
             margin: 5px auto 10px;
-            /* 置中 */
             display: block;
 
-            /* 時尚細框風格 */
+            /* 🌟 風格：金棕色細框 */
             background-color: transparent;
             border: 1px solid #d4a373;
-            /* 金棕色邊框 */
             color: #d4a373;
-            /* 金棕色文字 */
-            border-radius: 4px;
-            /* 微圓角 */
 
-            padding: 6px 25px 6px 10px;
-            /* 右邊留空間給箭頭 */
+            /* 🌟 形狀：改成 50px 做成完美的橢圓形 */
+            border-radius: 50px;
+
+            /* 內距調整：因為變圓了，左右要留多一點空間才不會切到字 */
+            padding: 6px 35px 6px 20px;
 
             font-family: 'Noto Sans TC', sans-serif;
             font-size: 0.85rem;
             text-align: center;
-            /* 文字置中 */
             text-align-last: center;
-            /* 強制選單內文字置中 (支援部分瀏覽器) */
             cursor: pointer;
             outline: none;
+            transition: all 0.3s;
 
-            /* 自訂時尚小箭頭 (SVG) */
+            /* 箭頭位置微調 */
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
             background-repeat: no-repeat;
-            background-position: right 8px center;
-            background-size: 12px;
+            background-position: right 12px center;
+            /* 箭頭往內縮一點 */
+            background-size: 11px;
         }
 
         .style-select:hover {
             background-color: #fffbf5;
-            /* 滑鼠移過去微微變色 */
+            /* 淺淺的米色背景 */
         }
 
         /* 缺貨選項的樣式 */
