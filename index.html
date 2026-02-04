@@ -957,61 +957,59 @@
             font-size: 0.95rem;
         }
 
-        /* === 7. 詳情按鈕 (更新：極簡線框膠囊) === */
+/* === 7. 詳情按鈕 (修正：實心白底金字，保證清楚) === */
         .more-sticker {
             position: absolute;
             bottom: 12px;
             right: 12px;
             z-index: 5;
-
-            /* 🌟 改成：完全透明背景 + 白色細框 */
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.9);
-
-            /* 🌟 形狀：變成完美的橢圓膠囊 */
-            border-radius: 50px;
-
-            /* 文字設定 */
+            
+            /* 🌟 改成：實心純白背景 (這樣才看得到！) */
+            background-color: #ffffff;
+            
+            /* 文字顏色：跟下拉選單一樣的金棕色 */
+            color: #d4a373;
+            
+            /* 邊框：不需要，或者加一點點陰影讓它浮起來 */
+            border: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* 漂亮的陰影 */
+            
+            /* 形狀：維持妳喜歡的橢圓膠囊 */
+            border-radius: 50px; 
+            
+            /* 字體設定 */
             font-family: 'Cormorant Garamond', serif;
-            /* 維持漂亮的字體 */
             font-style: italic;
-            font-size: 0.85rem;
-            color: #fff;
-            /* 白色文字 */
+            font-size: 0.95rem; /* 字稍微大一點點 */
+            font-weight: 600;   /* 加粗才清楚 */
             letter-spacing: 1px;
-
-            /* 加一點文字陰影，確保在淺色圖片上也看得到 */
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            /* 微微的立體感 */
 
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-
-            padding: 4px 16px;
-            /* 膠囊形狀 */
-
+            gap: 5px;
+            
+            padding: 6px 18px; /* 大小適中 */
+            
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        /* 滑鼠移過去：變成實心白，字變黑 (反白效果) */
+        /* 滑鼠移過去：變成金底白字 (反轉色) */
         .more-sticker:hover {
-            background: #fff;
-            color: #2c2c2c;
-            border-color: #fff;
-            text-shadow: none;
-            transform: translateY(-2px);
+            background-color: #d4a373;
+            color: #ffffff;
+            transform: translateY(-2px); /* 微微上浮 */
+            box-shadow: 0 6px 15px rgba(212, 163, 115, 0.4); /* 金色暈光 */
         }
-
+        
         /* 讓裡面的 SVG icon 也跟著變色 */
         .more-sticker svg {
-            stroke: currentColor;
-            /* 跟隨文字顏色 */
+             stroke: currentColor;
+             width: 14px; /* icon 大小固定一下比較保險 */
+             height: 14px;
         }
-
+        
         /* === 新增：時尚下拉選單 (更新：橢圓膠囊版) === */
         .style-select {
             appearance: none;
