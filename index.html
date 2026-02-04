@@ -957,47 +957,102 @@
             font-size: 0.95rem;
         }
 
-/* === 7. 詳情按鈕 (更新：韓系毛玻璃風格) === */
+        /* === 7. 詳情按鈕 (更新：Mina's Journal 同款字體) === */
         .more-sticker {
             position: absolute;
             bottom: 10px;
             right: 10px;
             z-index: 5;
-            
-            /* 🌟 關鍵修改：毛玻璃效果 */
-            background: rgba(255, 255, 255, 0.65); /* 65% 透明的白底 */
-            backdrop-filter: blur(4px);             /* 讓背景模糊，文字才清楚 */
-            -webkit-backdrop-filter: blur(4px);     /* 支援 iPhone */
-            
-            /* 邊框與形狀：改成柔和膠囊狀 */
-            border: 1px solid rgba(255, 255, 255, 0.8); /* 極淡的白框 */
-            border-radius: 30px; 
-            
-            /* 文字設定：改成深灰色，比純黑更優雅 */
-            color: #555; 
-            font-size: 0.75rem;
-            font-family: 'Noto Sans TC', sans-serif;
-            font-weight: 500;
-            letter-spacing: 1px; /* 字距拉開一點點 */
 
-            /* 排版 */
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 30px;
+
+            /* 🌟 修改這裡：換成跟標題一樣的字體 */
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            /* 斜體 */
+            font-size: 0.9rem;
+            /* 字稍微調大一點點，這字體偏小 */
+            font-weight: 600;
+            /* 加粗一點才清楚 */
+
+            color: #444;
+            letter-spacing: 1px;
+
             display: flex;
             align-items: center;
             gap: 5px;
             width: auto;
-            padding: 5px 12px; /* 稍微留一點呼吸空間 */
-            
+            padding: 4px 14px;
+            /* 優化比例 */
+
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* 淡淡的陰影 */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
         }
 
-        /* 滑鼠移過去的效果 */
         .more-sticker:hover {
-            background: rgba(255, 255, 255, 0.9); /* 變更實心一點 */
-            color: #2c2c2c; /* 文字變深黑 */
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* 陰影加深，浮起來的感覺 */
-            transform: translateY(-2px); /* 微微往上飄 */
+            background: rgba(255, 255, 255, 0.9);
+            color: #000;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* === 新增：時尚下拉選單 (取代原本的按鈕) === */
+        .style-select {
+            appearance: none;
+            /* 隱藏預設醜醜的箭頭 */
+            -webkit-appearance: none;
+
+            width: 100%;
+            /* 寬度自動填滿容器 */
+            max-width: 220px;
+            /* 但不要太寬 */
+            margin: 5px auto 10px;
+            /* 置中 */
+            display: block;
+
+            /* 時尚細框風格 */
+            background-color: transparent;
+            border: 1px solid #d4a373;
+            /* 金棕色邊框 */
+            color: #d4a373;
+            /* 金棕色文字 */
+            border-radius: 4px;
+            /* 微圓角 */
+
+            padding: 6px 25px 6px 10px;
+            /* 右邊留空間給箭頭 */
+
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 0.85rem;
+            text-align: center;
+            /* 文字置中 */
+            text-align-last: center;
+            /* 強制選單內文字置中 (支援部分瀏覽器) */
+            cursor: pointer;
+            outline: none;
+
+            /* 自訂時尚小箭頭 (SVG) */
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 12px;
+        }
+
+        .style-select:hover {
+            background-color: #fffbf5;
+            /* 滑鼠移過去微微變色 */
+        }
+
+        /* 缺貨選項的樣式 */
+        .style-select option:disabled {
+            color: #ccc;
+            font-style: italic;
         }
 
         /* === 贈品專用樣式 (I欄) === */
@@ -1416,28 +1471,29 @@
                     else if (product.tag === 'SALE') badgeHtml = `<div class="badge sale">SALE</div>`;
 
                     let variantsHtml = '';
-                    if (product.variants.length > 1) {
-                        variantsHtml = `<div class="variant-container" id="variants-${index}">`;
+                    // 只要有規格 (且不是空的)，就顯示下拉選單
+                    if (product.variants.length > 0 && product.variants[0] !== '') {
+                        variantsHtml = `<select class="style-select" id="variant-select-${index}">`;
+
+                        // 預設選項：如果只有一個規格，直接顯示；如果有多個，顯示「Please select...」
+                        if (product.variants.length > 1) {
+                            variantsHtml += `<option value="" disabled selected>Please select...</option>`;
+                        }
+
                         product.variants.forEach(v => {
                             const isSoldOut = v.includes('(缺)');
-                            const className = isSoldOut ? 'variant-btn sold-out' : 'variant-btn';
-                            const displayName = v.replace('(缺)', '');
-                            variantsHtml += `<div class="${className}" onclick="selectVariant(${index}, '${v}', this)">${displayName}</div>`;
+                            const displayName = v.replace('(缺)', ' (Sold Out)');
+
+                            if (isSoldOut) {
+                                variantsHtml += `<option value="${v}" disabled style="color:#ccc;">${displayName}</option>`;
+                            } else {
+                                variantsHtml += `<option value="${v}">${displayName}</option>`;
+                            }
                         });
-                        variantsHtml += `</div>`;
+                        variantsHtml += `</select>`;
                     } else {
-                        let singleName = (product.variants.length === 1 && product.variants[0] !== '') ? product.variants[0] : '單一規格';
-                        const isSingleSoldOut = singleName.includes('(缺)');
-                        const singleClass = isSingleSoldOut ? 'variant-btn single-mode sold-out' : 'variant-btn single-mode';
-                        const displaySingleName = singleName.replace('(缺)', '');
-
-                        if (!isSingleSoldOut) product.selectedVariant = singleName;
-                        else product.selectedVariant = null;
-
-                        variantsHtml = `
-                            <div class="variant-container">
-                                <div class="${singleClass}">${displaySingleName}</div>
-                            </div>`;
+                        // 如果完全沒寫規格，顯示單一規格文字
+                        variantsHtml = `<div class="style-select" style="border:none; cursor:default; background:none;">單一規格</div>`;
                     }
 
                     let stickerHtml = '';
@@ -1481,37 +1537,6 @@
             }
         }
 
-        // 按鈕點擊功能 (支援取消選取)
-        function selectVariant(productIndex, value, btnElement) {
-            const product = allProductsData[productIndex];
-
-            // 🔴 判斷：如果這個按鈕已經是被選中狀態，代表使用者想「取消」
-            if (btnElement.classList.contains('selected')) {
-                // 1. 移除樣式 (變回空心金)
-                btnElement.classList.remove('selected');
-
-                // 2. 清除已選規格 (這樣加入購物車時會擋住，或需要另外處理)
-                product.selectedVariant = null;
-
-            } else {
-                // 🔴 如果還沒被選，代表使用者想「選取」
-
-                // 1. 先把同一區的其他兄弟按鈕都取消 (變成空心金)
-                const container = document.getElementById(`variants-${productIndex}`);
-                const btns = container.getElementsByClassName('variant-btn');
-
-                for (let btn of btns) {
-                    btn.classList.remove('selected');
-                }
-
-                // 2. 把自己變成實心金
-                btnElement.classList.add('selected');
-
-                // 3. 記錄選了什麼
-                product.selectedVariant = value;
-            }
-        }
-
         // ==========================================
         // 🟢 購物車功能區域
         // ==========================================
@@ -1535,36 +1560,49 @@
             const qtySelect = document.getElementById(`qty-${index}`);
             const qty = parseInt(qtySelect.value);
 
-            // 1. 檢查有沒有選規格
-            if (!product.selectedVariant) {
-                alert('請先選擇一個款式或是規格喔！');
-                return;
+            // 🔴 修改：從下拉選單抓取選中的值
+            let selectedSpec = null;
+            const selectEl = document.getElementById(`variant-select-${index}`);
+
+            if (selectEl) {
+                // 如果有選單，就看選了什麼
+                if (selectEl.tagName === 'SELECT') {
+                    selectedSpec = selectEl.value;
+                    if (selectedSpec === "") {
+                        alert('Please select a variant.\n請選擇一個款式喔！');
+                        return;
+                    }
+                } else {
+                    // 如果是那種「單一規格」的文字 div (上面寫 style="border:none...")
+                    selectedSpec = "單一規格";
+                }
+            } else {
+                // 防呆
+                selectedSpec = "單一規格";
             }
 
-            // 2. 處理價格 (把 NT$ 和逗號拿掉，轉成數字)
+            // 2. 處理價格
             let priceNum = parseInt(product.price.replace(/[^0-9]/g, ''));
 
             // 3. 建立購物車項目
             const cartItem = {
                 name: product.name,
-                spec: product.selectedVariant,
+                spec: selectedSpec, // 使用剛剛抓到的值
                 price: priceNum,
                 qty: qty
             };
 
-            // 4. 加入購物車
+            // ...後面維持一樣 (加入購物車 cart.push, saveCart, 按鈕變色特效...)
             cart.push(cartItem);
             saveCart();
 
-            // 5. 按鈕變色提示成功
-            // 這裡使用 window.event 來抓取被點擊的按鈕，確保相容性
+            // 按鈕變色特效 (維持原狀)
             const btn = window.event ? window.event.target : null;
             if (btn) {
                 const originalText = btn.innerText;
                 btn.innerText = "OK!";
                 btn.style.backgroundColor = "#d4a373";
                 btn.style.borderColor = "#d4a373";
-
                 setTimeout(() => {
                     btn.innerText = originalText;
                     btn.style.backgroundColor = "";
@@ -1627,9 +1665,9 @@
                 let rawDeposit = total * 0.25;
                 let finalDeposit = Math.round(rawDeposit / 100) * 100;
 
-            // 1. 靠右對齊，跟總金額連在一起，像帳單一樣自然
-            // 2. 顏色用淺灰配金棕色，降低壓迫感
-            depositHtml = `
+                // 1. 靠右對齊，跟總金額連在一起，像帳單一樣自然
+                // 2. 顏色用淺灰配金棕色，降低壓迫感
+                depositHtml = `
                 <div style="
                     margin-top: 8px;
                     text-align: right; 
@@ -1654,7 +1692,7 @@
                     </span>
                 </div>
             `;
-                    }
+            }
 
             container.innerHTML = html;
             totalEl.style.fontFamily = "'Noto Sans TC', sans-serif";
@@ -1743,7 +1781,7 @@
             message += "-----------------------------\n";
             message += `總金額: NT$ ${total}\n`;
 
-            
+
             if (total >= 1000) {
                 let rawDeposit = total * 0.25;
                 let finalDeposit = Math.round(rawDeposit / 100) * 100;
