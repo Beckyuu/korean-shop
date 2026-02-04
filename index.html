@@ -644,37 +644,32 @@
             font-family: 'Fredoka', sans-serif;
         }
 
-        /* === 6. 購買按鈕 (更新：韓系優雅金) === */
+        /* === 6. 購買按鈕  === */
         button.btn-add {
-            /* 背景：改成主題金棕色，不那麼沉重 */
             background-color: #d4a373;
             color: #fff;
-
-            /* 邊框：跟背景同色 */
             border: 1px solid #d4a373;
-
-            /* 形狀：改成圓角，呼應上面的橢圓規格框 */
             border-radius: 50px;
-
             padding: 6px 28px;
-            /* 稍微加寬，更有份量 */
             font-size: 0.85rem;
             letter-spacing: 1.5px;
-            /* 字距拉開，高級感 */
             cursor: pointer;
             transition: all 0.3s;
             font-family: 'Fredoka', sans-serif;
-            /* 用圓圓的英文字體 */
 
-            /* 讓它跟旁邊的數量選單對齊 */
+            /* 對齊設定 */
             height: 36px;
             line-height: 1;
+
+            /* 🌟 關鍵修改：用 Flexbox 讓文字上下左右都置中 */
             display: flex;
             align-items: center;
+            /* 垂直置中 */
+            justify-content: center;
+            /* 🌟 加了這行：水平置中 (修正手機版靠左問題) */
         }
 
         button.btn-add:hover {
-            /* 滑鼠移過去：變成白底金字 (反白效果) */
             background-color: #fff;
             color: #d4a373;
         }
@@ -1540,7 +1535,7 @@
                         });
                         variantsHtml += `</select>`;
                     } else {
-                        
+
                         let singleName = 'ONE SIZE';
                         if (product.variants.length === 1 && product.variants[0] !== '') {
                             singleName = product.variants[0];
