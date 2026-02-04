@@ -502,14 +502,20 @@
 
         select {
             background: transparent;
-            border: 1px solid #ccc;
-            padding: 6px 10px;
+            border: 1px solid #e0e0e0;
+            /* 邊框淡一點 */
+            padding: 0 10px;
+            height: 36px;
+            /* 高度跟按鈕一樣 */
             font-size: 0.9rem;
-            color: var(--text-main);
+            color: #666;
             outline: none;
-            border-radius: 0;
-            /* 方形 */
+            border-radius: 4px;
+            /* 微圓角 */
             cursor: pointer;
+            margin-right: 5px;
+            /* 跟按鈕保持距離 */
+            font-family: 'Fredoka', sans-serif;
         }
 
         button.btn-add {
@@ -638,14 +644,39 @@
             font-family: 'Fredoka', sans-serif;
         }
 
-        /* === 6. 購買按鈕區 === */
-        .action-row {
+        /* === 6. 購買按鈕 (更新：韓系優雅金) === */
+        button.btn-add {
+            /* 背景：改成主題金棕色，不那麼沉重 */
+            background-color: #d4a373;
+            color: #fff;
+
+            /* 邊框：跟背景同色 */
+            border: 1px solid #d4a373;
+
+            /* 形狀：改成圓角，呼應上面的橢圓規格框 */
+            border-radius: 50px;
+
+            padding: 6px 28px;
+            /* 稍微加寬，更有份量 */
+            font-size: 0.85rem;
+            letter-spacing: 1.5px;
+            /* 字距拉開，高級感 */
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Fredoka', sans-serif;
+            /* 用圓圓的英文字體 */
+
+            /* 讓它跟旁邊的數量選單對齊 */
+            height: 36px;
+            line-height: 1;
             display: flex;
-            justify-content: center;
-            gap: 8px;
             align-items: center;
-            /* 確保它不會被擠出去 */
-            flex-shrink: 0;
+        }
+
+        button.btn-add:hover {
+            /* 滑鼠移過去：變成白底金字 (反白效果) */
+            background-color: #fff;
+            color: #d4a373;
         }
 
         /* === 最終極簡版 Footer (緊湊型) === */
@@ -1056,6 +1087,20 @@
         .style-select option:disabled {
             color: #ccc;
             font-style: italic;
+        }
+
+        /* === 單一規格專用 (長得像選單，但不能點) === */
+        .style-select.readonly {
+            background-image: none;
+            /* 拿掉箭頭 */
+            padding: 6px 20px;
+            /* 左右平衡 */
+            cursor: default;
+            /* 滑鼠變回箭頭 */
+            color: #bfa092;
+            /* 字體顏色稍微柔和一點點，區分「不可選」 */
+            border-color: #e6d0c0;
+            /* 邊框也稍微淡一點點 */
         }
 
         /* === 贈品專用樣式 (I欄) === */
@@ -1495,8 +1540,14 @@
                         });
                         variantsHtml += `</select>`;
                     } else {
-                        // 如果完全沒寫規格，顯示單一規格文字
-                        variantsHtml = `<div class="style-select" style="border:none; cursor:default; background:none;">單一規格</div>`;
+                        
+                        let singleName = 'ONE SIZE';
+                        if (product.variants.length === 1 && product.variants[0] !== '') {
+                            singleName = product.variants[0];
+                        }
+
+                        // 使用 style-select 加上 readonly 類別
+                        variantsHtml = `<div class="style-select readonly">${singleName}</div>`;
                     }
 
                     let stickerHtml = '';
