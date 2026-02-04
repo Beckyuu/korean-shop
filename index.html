@@ -344,13 +344,14 @@
             background-color: #c97c7c;
         }
 
+        /* === 2. 資訊區域 (負責對齊) === */
         .info {
             padding: 15px 5px 0;
             text-align: center;
+            /* 讓資訊區佔滿剩下空間 */
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            align-items: center;
         }
 
         .name {
@@ -375,135 +376,38 @@
             letter-spacing: 0.5px;
         }
 
-        /* === 副標題 / 贈品描述 === */
+        /* === 副標題 (微調加強版) === */
         .desc-text {
             display: block;
             font-size: 0.85rem;
+
+            /* 🔴 修改 1：顏色從 #888 改成 #666 (深一點) */
             color: #666;
+
             margin-bottom: 8px;
             font-family: 'Noto Sans TC', sans-serif;
+
+            /* 🔴 修改 2：字重從 300 改成 400 (正常粗細，不要太細) */
             font-weight: 400;
+
             line-height: 1.4;
             min-height: 1.4em;
-            text-align: center;
-            width: 100%;
         }
 
-        /* === 1. 下拉選單 (時尚膠囊版) === */
-        .style-select {
-            appearance: none;
-            -webkit-appearance: none;
-
-            /* 尺寸設定 */
-            width: 85%;
-            max-width: 240px;
-            padding: 8px 15px;
-            margin: 5px 0 10px;
-            /* 下方留點呼吸空間 */
-
-            /* 字體設定 */
-            font-family: 'Noto Sans TC', sans-serif;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-            color: #d4a373;
-            /* 預設文字就是品牌金，比較高級 */
-
-            /* 外觀設定：改成漂亮的膠囊圓角 */
-            background-color: #fff;
-            border: 1px solid #d4a373;
-            /* 實心金邊框 */
-            border-radius: 50px;
-            /* 關鍵：膠囊形狀 */
-
-            text-align: center;
-            text-align-last: center;
-            cursor: pointer;
-            transition: all 0.3s;
-
-            /* 箭頭：換成更細緻的金色小箭頭 */
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            background-size: 12px;
-        }
-
-        /* 滑鼠移上去變色 */
-        .style-select:hover {
-            background-color: #fdfbf7;
-            /* 極淡米色背景 */
-            box-shadow: 0 2px 8px rgba(212, 163, 115, 0.2);
-            /* 微微發光 */
-        }
-
-        /* === 2. 單一規格 (偽裝成選單的樣子) === */
-        /* 這樣改完，它會跟上面的選單長得一模一樣，只差沒有箭頭 */
-        .single-variant-box {
-            display: block;
-            width: 85%;
-            max-width: 240px;
-            padding: 8px 15px;
-            margin: 5px auto 10px;
-            /* auto 讓它置中 */
-
-            font-family: 'Noto Sans TC', sans-serif;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-            color: #d4a373;
-            /* 也是金色字 */
-
-            background-color: #fff;
-            border: 1px solid #d4a373;
-            /* 也是金邊框 */
-            border-radius: 50px;
-            /* 也是膠囊 */
-
-            text-align: center;
-            cursor: default;
-            /* 滑鼠變回箭頭，告訴客人不用點 */
-
-            /* 讓它看起來跟選單高度完全一致 */
-            line-height: 1.2;
-        }
-
-        /* 缺貨時的樣子 */
-        .single-variant-box.sold-out {
-            border-color: #e0e0e0;
-            color: #ccc;
-            background-color: #f9f9f9;
-            text-decoration: line-through;
-        }
-
-        /* 單一規格純文字樣式 (原本的稍微優化) */
-        .single-variant-text {
-            font-family: 'Noto Sans TC', sans-serif;
-            font-size: 0.9rem;
-            color: #d4a373;
-            /* 金色 */
-            letter-spacing: 1px;
-            display: block;
-            width: 100%;
-            text-align: center;
-            margin: 8px 0;
-            font-weight: 500;
-        }
-
-        /* === 規格容器=== */
+        /* === 規格容器 === */
         .variant-container {
             display: flex;
             flex-wrap: wrap;
-
-            /* 確保內容物水平置中 */
             justify-content: center;
-
-            /* 確保容器本身也是滿寬的*/
-            width: 100%;
-
             gap: 6px;
-            margin-top: auto;
-            margin-bottom: 10px;
 
-            /* 讓它不要被其他屬性干擾 */
-            flex-grow: 0;
+            /* 🔴 關鍵修改：這個指令會自動把上面的空間填滿，把自己推到最下面 */
+            margin-top: auto;
+
+            flex-grow: 1;
+            align-content: center;
+            align-items: center;
+            margin-bottom: 10px;
         }
 
         /* === 米粒按鈕 (預設就是金色質感) === */
@@ -566,18 +470,23 @@
             /* background-color: #fdf6f0; */
         }
 
+        /* === 單一規格文字 (美化版) === */
         .single-variant-text {
+            /* 關鍵：強制用黑體，才不會變成新細明體！ */
             font-family: 'Noto Sans TC', sans-serif;
             font-size: 0.9rem;
             color: #d4a373;
+            /* 金色 */
             letter-spacing: 2px;
+            /* 字距拉開一點，更有呼吸感 */
 
             display: block;
             width: 100%;
-            /* 寬度全滿 */
+            /* 確保佔滿寬度，才能置中 */
             text-align: center;
             /* 文字置中 */
 
+            /* 調整距離：跟上面的副標題拉開一點 */
             margin-top: 8px;
             margin-bottom: 5px;
         }
@@ -697,35 +606,29 @@
             background-size: 10px;
         }
 
-        /* === 修改後的收單時間：極簡文字版 === */
+        /* === 收單時間提醒 === */
         .deadline-badge {
-            display: block;
-            /* 讓它自己佔一行 */
-            width: 100%;
-            /* 佔滿寬度 */
-            text-align: center;
-            /* 文字置中 */
-            background-color: transparent;
-            /* 關鍵：背景變透明！ */
+            display: inline-block;
+            background-color: #f4e3e3;
+            /* 很淡的紅底 */
             color: #c97c7c;
-            /* 維持漂亮的莫蘭迪紅字 */
-
+            /* 莫蘭迪紅色字 */
             font-family: 'Noto Sans TC', sans-serif;
             font-size: 0.8rem;
-            /* 字小一點，像註解 */
             font-weight: 500;
-
-            padding: 0;
-            /* 拿掉內距 */
-            margin-bottom: 0px;
-            /* 貼近下方的價格 */
+            padding: 2px 10px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            /* 跟下方價格保持距離 */
             letter-spacing: 1px;
         }
 
-        /* 隱藏版維持隱藏就好 */
+        /* 這是新的：隱藏版收單時間 (用來佔位子) */
         .deadline-badge.empty {
-            display: none;
-            /* 直接不顯示，不佔空間 */
+            visibility: hidden;
+            /* 讓它看不見 */
+            background: transparent;
+            /* 背景變透明 */
         }
 
         /* === 價格 === */
@@ -735,12 +638,9 @@
             font-weight: 500;
             color: #2c2c2c;
             display: block;
-            text-align: center;
-            width: 100%;
-
             margin-bottom: 15px;
 
-            /* 🔴 確認這裡是 0 */
+            /* 🔴 確認這裡是 0，不要是 auto */
             margin-top: 0;
 
             letter-spacing: 0.5px;
@@ -1099,70 +999,43 @@
             font-size: 0.95rem;
         }
 
-        /* === NEW: 極簡時尚放大鏡按鈕 === */
+        /* === 7. 詳情按鈕 (永久顯示版) === */
         .more-sticker {
             position: absolute;
-            bottom: 12px;
-            right: 12px;
+            bottom: 10px;
+            right: 10px;
+            width: auto;
+            padding: 5px 12px;
 
-            /* 1. 變成正圓形 */
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
+            /* 修改這裡：改成預設就是黑底白字 */
+            background: #2c2c2c;
+            /* 黑底 */
+            color: #fff;
+            /* 白字 */
+            border: none;
+            /* 不需要邊框 */
 
-            /* 2. 顏色：白底 + 深灰圖示 (最百搭的高級感) */
-            background: rgba(255, 255, 255, 0.95);
-            /* 稍微一點點透 */
-            color: #4a4a4a;
-
-            /* 3. 讓圖示置中 */
+            border-radius: 20px;
             display: flex;
             align-items: center;
-            justify-content: center;
-
-            /* 4. 裝飾：細緻的陰影，讓它浮起來 */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-            backdrop-filter: blur(2px);
-            /* 磨砂感 */
-
+            gap: 5px;
+            font-size: 0.75rem;
+            font-family: 'Noto Sans TC', sans-serif;
             cursor: pointer;
             z-index: 5;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            /* 彈性動畫 */
+
+            /* 永久顯示設定 */
+            opacity: 1;
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            /* 加一點陰影比較立體 */
         }
 
         /* 滑鼠移過去的效果 */
         .more-sticker:hover {
-            transform: scale(1.1);
-            /* 輕微放大 */
-            background: #2c2c2c;
-            /* 變成深色背景 */
+            background: #444;
+            /* 稍微變淺一點點的黑，讓客人知道有按到 */
             color: #fff;
-            /* 變成白色圖示 */
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        /* 確保裡面的 SVG 圖示大小剛好 */
-        .more-sticker svg {
-            width: 18px;
-            height: 18px;
-            stroke-width: 2;
-            /* 線條細一點比較優雅 */
-        }
-
-        /* 手機版微調：稍微小一點點就好，不要太小 */
-        @media (max-width: 768px) {
-            .more-sticker {
-                width: 32px;
-                height: 32px;
-                bottom: 8px;
-                right: 8px;
-            }
-
-            .more-sticker svg {
-                width: 16px;
-                height: 16px;
-            }
         }
 
         /* === 贈品專用樣式 (I欄) === */
@@ -1301,42 +1174,6 @@
             /* 滑鼠變禁止符號 */
             pointer-events: none;
             /* 禁止點擊 */
-        }
-
-        /* ========================================= */
-        /* 🧪 測試區 v2：螢光筆劃重點風格 (無框、細字) */
-        /* ========================================= */
-        .desc-text {
-            /* 1. 結構設定 */
-            display: block !important;
-            width: fit-content !important;
-            /* 關鍵！文字多寬、底色就多寬，不會變成大方塊 */
-            max-width: 90% !important;
-            /* 但也不要太寬 */
-            margin: 5px auto 15px !important;
-            /* 上下留白 */
-
-            /* 2. 外觀設定：去框、留底 */
-            background-color: #fff0f5 !important;
-            /* 極淡粉紅底 (像Highlighter) */
-            border: none !important;
-            /* 徹底拿掉邊框！ */
-            border-radius: 4px !important;
-            /* 微微圓角就好 */
-
-            /* 3. 文字設定：變細、變精緻 */
-            color: #d65a5a !important;
-            /* 維持深粉紅字 */
-            font-size: 0.85rem !important;
-            font-weight: 400 !important;
-            /* 🔴 關鍵：改回正常粗細 (原本是bold) */
-            line-height: 1.6 !important;
-            text-align: center !important;
-            padding: 4px 12px !important;
-            /* 內距縮小，讓它看起來輕盈 */
-
-            /* 4. 讓多行文字看起來整齊 */
-            white-space: normal !important;
         }
     </style>
 </head>
@@ -1616,62 +1453,36 @@
                     else if (product.tag === 'HOT') badgeHtml = `<div class="badge hot">HOT</div>`;
                     else if (product.tag === 'SALE') badgeHtml = `<div class="badge sale">SALE</div>`;
 
-                    // === 新版：規格顯示邏輯 (下拉選單 vs 單一文字) ===
                     let variantsHtml = '';
-
-                    // 情況 A：有多個規格 -> 顯示時尚下拉選單
                     if (product.variants.length > 1) {
-                        variantsHtml = `<div class="variant-container">
-                            <select class="style-select" onchange="selectVariantDropdown(${index}, this)">
-                                <option value="" disabled selected>請選擇款式</option>`;
-
+                        variantsHtml = `<div class="variant-container" id="variants-${index}">`;
                         product.variants.forEach(v => {
-                            // 處理缺貨
                             const isSoldOut = v.includes('(缺)');
-                            const disabledAttr = isSoldOut ? 'disabled' : '';
-                            const cleanName = v.replace('(缺)', '');
-                            const displayText = isSoldOut ? `${cleanName} (Sold Out)` : cleanName;
-
-                            variantsHtml += `<option value="${v}" ${disabledAttr}>${displayText}</option>`;
+                            const className = isSoldOut ? 'variant-btn sold-out' : 'variant-btn';
+                            const displayName = v.replace('(缺)', '');
+                            variantsHtml += `<div class="${className}" onclick="selectVariant(${index}, '${v}', this)">${displayName}</div>`;
                         });
-
-                        variantsHtml += `</select></div>`;
-
-                        // 多規格預設為未選取，強迫客人選
-                        product.selectedVariant = null;
-
+                        variantsHtml += `</div>`;
                     } else {
-                        // === 情況 B：單一規格 (現在改成顯示「膠囊框框」) ===
                         let singleName = (product.variants.length === 1 && product.variants[0] !== '') ? product.variants[0] : '單一規格';
-
-                        // 處理缺貨
                         const isSingleSoldOut = singleName.includes('(缺)');
+                        const singleClass = isSingleSoldOut ? 'variant-btn single-mode sold-out' : 'variant-btn single-mode';
                         const displaySingleName = singleName.replace('(缺)', '');
 
-                        // 判斷要用哪種樣式 (正常 vs 缺貨)
-                        const boxClass = isSingleSoldOut ? 'single-variant-box sold-out' : 'single-variant-box';
+                        if (!isSingleSoldOut) product.selectedVariant = singleName;
+                        else product.selectedVariant = null;
 
-                        // 🔴 這裡改成了 div，套用剛剛寫好的 .single-variant-box
                         variantsHtml = `
                             <div class="variant-container">
-                                <div class="${boxClass}">${displaySingleName}</div>
+                                <div class="${singleClass}">${displaySingleName}</div>
                             </div>`;
-
-                        // 邏輯處理
-                        if (isSingleSoldOut) {
-                            product.selectedVariant = null;
-                        } else {
-                            product.selectedVariant = singleName;
-                        }
                     }
 
                     let stickerHtml = '';
                     if (product.hasDetails) {
                         stickerHtml = `<div class="more-sticker" onclick="showDetails(${index})">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="11" cy="11" r="8"></circle>
-                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                            </svg>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                            看更多…
                         </div>`;
                     }
 
@@ -1685,12 +1496,12 @@
                             <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
                             ${stickerHtml} 
                         </div>
+                        <div class="info">
+                            ${deadlineHtml}
                             <h3 class="name">${product.name}</h3>
                             <span class="desc-text">${product.description || '&nbsp;'}</span>
                             ${variantsHtml}
                             
-                            ${deadlineHtml}
-
                             ${priceDisplayHtml}
                             
                             <div class="action-row">
@@ -1754,19 +1565,6 @@
                 modal.classList.add('show');
             } else {
                 modal.classList.remove('show');
-            }
-        }
-
-        // 🟢 新增：處理下拉選單變更
-        function selectVariantDropdown(index, selectElement) {
-            const product = allProductsData[index];
-            product.selectedVariant = selectElement.value;
-
-            // 選好後，如果原本按鈕有顯示 "請先選擇..." 的警告色，可以把它復原 (優化體驗)
-            const btnAdd = selectElement.closest('.info').querySelector('.btn-add');
-            if (btnAdd) {
-                btnAdd.style.backgroundColor = "";
-                btnAdd.innerText = "ADD";
             }
         }
 
@@ -1860,9 +1658,45 @@
             }
             // --------------------------------
 
+            // 🟢 新增：定金計算邏輯
+            let depositHtml = ''; // 預設是空的 (不滿1000就不顯示)
+
+            if (total >= 1000) {
+                // 1. 算出 25%
+                let rawDeposit = total * 0.25;
+
+                // 2. 四捨五入到百位 (例如 250->300, 320->300, 360->400)
+                let finalDeposit = Math.round(rawDeposit / 100) * 100;
+
+                // 3. 產生要顯示的 HTML (樣式：低調的灰棕色，不刺眼)
+                depositHtml = `
+                    <div style="text-align:right; font-family:'Noto Sans TC', sans-serif; margin-top: 5px; color:#bfa092; font-size: 0.95rem;">
+                        (需預付定金: NT$ ${finalDeposit})
+                    </div>
+                `;
+            }
+
             container.innerHTML = html;
             totalEl.style.fontFamily = "'Noto Sans TC', sans-serif";
             totalEl.innerText = `總金額: NT$ ${total}`;
+
+            // 顯示總金額
+            totalEl.style.fontFamily = "'Noto Sans TC', sans-serif";
+            totalEl.innerText = `總金額: NT$ ${total}`;
+
+            // 🟢 把定金顯示在總金額下面 (使用 insertAdjacentHTML 比較安全)
+            // 先清空舊的定金 (如果有的話)，避免重複
+            const oldDeposit = document.getElementById('deposit-display');
+            if (oldDeposit) oldDeposit.remove();
+
+            // 如果有定金，就加進去
+            if (depositHtml) {
+                // 建立一個有 ID 的 div 包住它，方便下次刪除
+                let div = document.createElement('div');
+                div.id = 'deposit-display';
+                div.innerHTML = depositHtml;
+                totalEl.after(div); // 放在總金額 (totalEl) 的正下方
+            }
         }
 
         function removeFromCart(idx) {
@@ -1932,6 +1766,14 @@
 
             message += "-----------------------------\n";
             message += `總金額: NT$ ${total}\n`;
+
+            // 🟢 新增：如果有達到門檻，訊息內也要加上定金
+            if (total >= 1000) {
+                let rawDeposit = total * 0.25;
+                let finalDeposit = Math.round(rawDeposit / 100) * 100;
+                message += `(含定金: NT$ ${finalDeposit})\n`;
+            }
+
             message += `下單平台: ${selectedShipping}`;
 
             // 4. 傳送
