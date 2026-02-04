@@ -957,59 +957,58 @@
             font-size: 0.95rem;
         }
 
-/* === 7. 詳情按鈕 (修正：實心白底金字，保證清楚) === */
+        /* === 7. 詳情按鈕 (最終版：極簡圓形放大鏡) === */
         .more-sticker {
             position: absolute;
-            bottom: 12px;
-            right: 12px;
+            bottom: 10px;
+            right: 10px;
             z-index: 5;
-            
-            /* 🌟 改成：實心純白背景 (這樣才看得到！) */
-            background-color: #ffffff;
-            
-            /* 文字顏色：跟下拉選單一樣的金棕色 */
-            color: #d4a373;
-            
-            /* 邊框：不需要，或者加一點點陰影讓它浮起來 */
-            border: none;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* 漂亮的陰影 */
-            
-            /* 形狀：維持妳喜歡的橢圓膠囊 */
-            border-radius: 50px; 
-            
-            /* 字體設定 */
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic;
-            font-size: 0.95rem; /* 字稍微大一點點 */
-            font-weight: 600;   /* 加粗才清楚 */
-            letter-spacing: 1px;
 
+            /* 🌟 外觀：實心白底小圓圈 */
+            background-color: #ffffff;
+            width: 36px;
+            /* 小巧的尺寸 */
+            height: 36px;
+            border-radius: 50%;
+            /* 變成正圓形 */
+
+            /* 讓裡面的放大鏡置中 */
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 5px;
-            
-            padding: 6px 18px; /* 大小適中 */
-            
+
+            /* 陰影：讓它浮起來，才不會像貼在圖片上 */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        /* 滑鼠移過去：變成金底白字 (反轉色) */
+        /* 滑鼠移過去：微微放大 + 變色 */
         .more-sticker:hover {
+            transform: scale(1.1);
+            /* 變大一點點 */
             background-color: #d4a373;
-            color: #ffffff;
-            transform: translateY(-2px); /* 微微上浮 */
-            box-shadow: 0 6px 15px rgba(212, 163, 115, 0.4); /* 金色暈光 */
+            /* 背景變金色 */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
         }
-        
-        /* 讓裡面的 SVG icon 也跟著變色 */
+
+        /* 圖示設定 */
         .more-sticker svg {
-             stroke: currentColor;
-             width: 14px; /* icon 大小固定一下比較保險 */
-             height: 14px;
+            stroke: #d4a373;
+            /* 預設是金色線條 */
+            width: 18px;
+            /* 圖示大小 */
+            height: 18px;
+            stroke-width: 2;
+            transition: all 0.3s;
         }
-        
+
+        /* 滑鼠移過去時，圖示變白色 */
+        .more-sticker:hover svg {
+            stroke: #ffffff;
+        }
+
         /* === 新增：時尚下拉選單 (更新：橢圓膠囊版) === */
         .style-select {
             appearance: none;
@@ -1502,10 +1501,10 @@
 
                     let stickerHtml = '';
                     if (product.hasDetails) {
+                        // 只保留 SVG 圖示，拿掉所有文字
                         stickerHtml = `<div class="more-sticker" onclick="showDetails(${index})">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                            &nbsp;VIEW&nbsp;
-                        </div>`;
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </div>`;
                     }
 
                     let options = ''; for (let i = 1; i <= 5; i++) options += `<option value="${i}">${i}</option>`;
