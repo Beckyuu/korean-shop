@@ -1262,38 +1262,50 @@
             /* 禁止點擊 */
         }
 
-        /* === 🚑 手機版間距急救包 (更新版：修復收單時間空隙) === */
+        /* === 🚑 手機版間距急救包 (V3: 強制置中 + 消除隱形空隙) === */
         @media (max-width: 768px) {
 
-            /* 1. 讓內容往上靠 */
+            /* 1. 🌟 關鍵大絕招：把所有「隱藏佔位」的樓層直接變不見！ */
+            /* 這樣就算 JS 沒改到，也能強制消除空隙 */
+            .mobile-hidden,
+            div[style*="visibility:hidden"],
+            span[style*="visibility:hidden"] {
+                display: none !important;
+            }
+
+            /* 2. 讓內容版面往上收 */
             .info {
                 justify-content: flex-start !important;
                 padding-top: 5px !important;
             }
 
-            /* 🌟 新增：收單時間標籤的下邊距歸零 */
+            /* 3. 收單時間標籤：緊貼下方品名 */
             .deadline-badge {
-                margin-bottom: 1px !important;
-                /* 原本是 8px，改成 1px 緊貼品名 */
+                margin-bottom: 2px !important;
             }
 
-            /* 2. 縮減品名高度 + 🌟 關鍵：讓文字靠上對齊 (消除上方空隙) */
+            /* 4. 品名修正：強制置中 + 高度自動適應 */
             .name {
-                min-height: 2.2rem !important;
-                /* 高度再縮小一點 */
-                margin-bottom: 2px !important;
+                /* 高度設定：改小一點，大概兩行字的高度 */
+                min-height: 2.4rem !important;
+                margin-bottom: 4px !important;
                 font-size: 0.95rem !important;
 
-                /* 讓文字往上浮，不要置中，這樣就沒有縫隙了 */
+                /* 🌟 修正左偏問題：強制置中！ */
                 display: flex !important;
-                align-items: flex-start !important;
-                /* 靠上對齊 */
+                justify-content: center !important;
+                /* 水平置中 */
+                align-items: center !important;
+                /* 垂直置中 */
+                text-align: center !important;
+
+                /* 重置內距 */
                 padding-top: 0 !important;
             }
 
-            /* 3. 縮減說明與贈品的間距 */
+            /* 5. 縮減說明與贈品的間距 (如果它們有出現的話) */
             .desc-text {
-                margin-bottom: 0px !important;
+                margin-bottom: 2px !important;
                 height: auto !important;
             }
 
@@ -1302,27 +1314,25 @@
                 height: auto !important;
             }
 
-            /* 4. 縮減規格選單 */
+            /* 6. 規格選單縮小間距 */
             .style-select,
             .style-select.readonly {
-                margin: 2px auto 6px !important;
+                margin: 2px auto 8px !important;
                 padding: 4px 15px 4px 10px !important;
             }
 
-            /* 5. 縮減價格間距 */
+            /* 7. 價格與按鈕區 */
             .price,
             .price-container {
-                margin-bottom: 6px !important;
+                margin-bottom: 8px !important;
                 margin-top: 0 !important;
             }
 
-            /* 6. 按鈕置底 */
             .action-row {
                 margin-top: auto !important;
                 padding-bottom: 5px !important;
             }
 
-            /* 修正按鈕大小 */
             button.btn-add {
                 height: 32px !important;
                 font-size: 0.75rem !important;
