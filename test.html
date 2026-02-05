@@ -1683,201 +1683,119 @@
     const VIP_VALUE = "mina";
 
     async function fetchProducts() {
-      const loading = document.getElementById("loading");
-      const container = document.getElementById("product-list");
+        const loading = document.getElementById("loading");
+        const container = document.getElementById("product-list");
 
-      try {
-        // 1. 判斷現在是不是 VIP 模式
-        const urlParams = new URLSearchParams(window.location.search);
-        const isVipMode = urlParams.get(VIP_KEY) === VIP_VALUE;
+        try {
+          // 1. 判斷現在是不是 VIP 模式
+          const urlParams = new URLSearchParams(window.location.search);
+          const isVipMode = urlParams.get(VIP_KEY) === VIP_VALUE;
 
-        // 強制更新資料
-        const response = await fetch(
-          GOOGLE_SHEET_CSV_URL + "&t=" + new Date().getTime(),
-        );
-        const data = await response.text();
-        const rows = data.split("\n").map((row) => parseCSVLine(row));
-        rows.shift();
+          // 強制更新資料
+          const response = await fetch(
+            GOOGLE_SHEET_CSV_URL + "&t=" + new Date().getTime(),
+          );
+          const data = await response.text();
+          const rows = data.split("\n").map((row) => parseCSVLine(row));
+          rows.shift(); // 移除標題列
 
-        loading.style.display = "none";
-        allProductsData = [];
-        container.innerHTML = "";
+          loading.style.display = "none";
+          allProductsData = [];
+          container.innerHTML = "";
 
-        rows.forEach((row, index) => {
-          if (row.length < 4) return;
+          rows.forEach((row, index) => {
+            if (row.length < 4) return;
 
-          // --- 讀取基礎資料 ---
-          const rawSpec = row[1] ? row[1].trim() : "";
-          const variants = rawSpec.includes("|")
-            ? rawSpec.split("|").map((s) => s.trim())
-            : rawSpec
-              ? [rawSpec]
-              : [];
+            // --- 讀取基礎資料 ---
+            const rawSpec = row[1] ? row[1].trim() : "";
+            const variants = rawSpec.includes("|")
+              ? rawSpec.split("|").map((s) => s.trim())
+              : rawSpec
+                ? [rawSpec]
+                : [];
 
-          // 原價 (C欄)
-          let originalPrice = row[2] ? row[2].trim() : "0";
+            // 價格處理
+            let originalPrice = row[2] ? row[2].trim() : "0";
+            let vipPrice = row[9] ? row[9].trim() : "";
+            let finalPriceForCart = originalPrice;
+            let priceDisplayHtml = "";
 
-          // VIP價 (J欄)
-          let vipPrice = row[9] ? row[9].trim() : "";
-
-          // --- 決定價格顯示方式 ---
-          let finalPriceForCart = originalPrice; // 這是要存入購物車的實際價格
-          let priceDisplayHtml = ""; // 這是要顯示在畫面上的 HTML
-
-          // 如果是 VIP 模式 且 J欄有填數字 (且數字跟原價不一樣)
-          if (isVipMode && vipPrice !== "" && vipPrice !== originalPrice) {
-            finalPriceForCart = vipPrice; // 購物車要算優惠價
-
-            // 🔴 關鍵：顯示「原價刪除線」+「VIP價」
-            priceDisplayHtml = `
-                            <div class="price-container">
-                                <span class="price-original">NT$ ${originalPrice}</span>
-                                <span class="price-vip">NT$ ${vipPrice}</span>
-                            </div>
-                        `;
-          } else {
-            // 一般模式 (或是沒有優惠價)
-            finalPriceForCart = originalPrice;
-
-            // 只顯示原價 (維持原本樣式)
-            priceDisplayHtml = `<span class="price">NT$ ${originalPrice}</span>`;
-          }
-
-          const product = {
-            id: index,
-            name: row[0] ? row[0].trim() : "Unnamed",
-            variants: variants,
-            price: finalPriceForCart, // 這一行很重要，確保加入購物車的錢是對的
-            imgUrl: row[3] ? row[3].trim() : "",
-            detailImgUrl: row[4] ? row[4].trim() : "",
-            description: row[5] ? row[5].trim() : "",
-            tag: row[6] ? row[6].trim().toUpperCase() : "",
-            deadline: row[7] ? row[7].trim() : "",
-            giftDesc: row[8] ? row[8].trim() : "",
-          };
-
-          product.hasDetails = product.detailImgUrl !== "";
-          if (product.variants.length === 1)
-            product.selectedVariant = product.variants[0];
-          else if (product.variants.length === 0)
-            product.selectedVariant = "單一款式";
-
-          allProductsData.push(product);
-
-          // --- 建立卡片 HTML ---
-          const card = document.createElement("div");
-          card.className = "product-card";
-
-          let badgeHtml = "";
-          if (product.tag === "NEW")
-            badgeHtml = `<div class="badge new">NEW</div>`;
-          else if (product.tag === "HOT")
-            badgeHtml = `<div class="badge hot">HOT</div>`;
-          else if (product.tag === "SALE")
-            badgeHtml = `<div class="badge sale">SALE</div>`;
-
-          let variantsHtml = "";
-          // 只要有規格 (且不是空的)，就顯示下拉選單
-          if (product.variants.length > 0 && product.variants[0] !== "") {
-            variantsHtml = `<select class="style-select" id="variant-select-${index}">`;
-
-            // 預設選項：如果只有一個規格，直接顯示；如果有多個，顯示「Please select...」
-            if (product.variants.length > 1) {
-              variantsHtml += `<option value="" disabled selected>Please select...</option>`;
-            }
-
-            product.variants.forEach((v) => {
-              const isSoldOut = v.includes("(缺)");
-              const displayName = v.replace("(缺)", " (Sold Out)");
-
-              if (isSoldOut) {
-                variantsHtml += `<option value="${v}" disabled style="color:#ccc;">${displayName}</option>`;
-              } else {
-                variantsHtml += `<option value="${v}">${displayName}</option>`;
-              }
-            });
-            variantsHtml += `</select>`;
-          } else {
-            // 情況 A：B 欄有填寫 (例如 100ML) -> 顯示出來
-            if (product.variants.length === 1 && product.variants[0] !== "") {
-              variantsHtml = `<div class="style-select readonly">${product.variants[0]}</div>`;
-            }
-            // 情況 B：B 欄沒填 (或原本是 ONE SIZE) -> 變隱形佔位
-            else {
-              // visibility: hidden 讓它隱形，但保留高度，確保下方價格對齊
-              variantsHtml = `<div class="style-select readonly" style="visibility: hidden;">placeholder</div>`;
-            }
-          }
-          let stickerHtml = "";
-          if (product.hasDetails) {
-            // 只保留 SVG 圖示，拿掉所有文字
-            stickerHtml = `<div class="more-sticker" onclick="showDetails(${index})">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            // VIP 價格邏輯
+            if (isVipMode && vipPrice !== "" && vipPrice !== originalPrice) {
+              finalPriceForCart = vipPrice;
+              priceDisplayHtml = `
+                    <div class="price-container">
+                        <span class="price-original">NT$ ${originalPrice}</span>
+                        <span class="price-vip">NT$ ${vipPrice}</span>
                     </div>`;
-          }
+            } else {
+              finalPriceForCart = originalPrice;
+              priceDisplayHtml = `<span class="price">NT$ ${originalPrice}</span>`;
+            }
 
-          let options = "";
-          for (let i = 1; i <= 5; i++)
-            options += `<option value="${i}">${i}</option>`;
+            const product = {
+              id: index,
+              name: row[0] ? row[0].trim() : "Unnamed",
+              variants: variants,
+              price: finalPriceForCart,
+              imgUrl: row[3] ? row[3].trim() : "",
+              detailImgUrl: row[4] ? row[4].trim() : "",
+              description: row[5] ? row[5].trim() : "",
+              tag: row[6] ? row[6].trim().toUpperCase() : "",
+              deadline: row[7] ? row[7].trim() : "",
+              giftDesc: row[8] ? row[8].trim() : "",
+            };
+            
+            // 處理規格預設值
+            if (product.variants.length === 1) product.selectedVariant = product.variants[0];
+            else if (product.variants.length === 0) product.selectedVariant = "單一款式";
 
-          let shortDeadline = product.deadline
-            ? product.deadline.replace(/^\d{4}\//, "")
-            : "";
+            allProductsData.push(product);
 
-          // 1. 準備收單時間 HTML
-          let deadlineHtml = product.deadline
-            ? `<div class="deadline-badge">⏳ 收單：${shortDeadline}</div>`
-            : `<div class="deadline-badge empty">&nbsp;</div>`;
+            // --- 建立極簡卡片 HTML (test.html 專用) ---
+            const card = document.createElement("div");
+            card.className = "product-card";
 
-          // === 2. 準備 F欄 (改成：產品副標題/容量) ===
-          // 這裡會讀取 F 欄 (description)，顯示在品名下方
-          let descHtml = "";
-          if (product.description) {
-            // 有填寫就顯示 (套用 desc-text 樣式)
-            descHtml = `<span class="desc-text">${product.description}</span>`;
-          } else {
-            // 沒填寫就用隱形佔位 (保持版面高度整齊，這點很重要！)
-            descHtml = `<span class="desc-text mobile-hidden">&nbsp;</span>`;
-          }
+            // 1. 標籤邏輯
+            let badgeHtml = "";
+            if (product.tag === "NEW") badgeHtml = `<div class="badge new">NEW</div>`;
+            else if (product.tag === "HOT") badgeHtml = `<div class="badge hot">HOT</div>`;
+            else if (product.tag === "SALE") badgeHtml = `<div class="badge sale">SALE</div>`;
 
-          // 3. 準備 I欄 (首頁只顯示簡單提示，例如「含詳細內容物」或直接隱藏)
-          let giftHtml = "";
-
-          // 1. 為了美觀，我們還是保留原本的標籤 Badge (New/Hot/Sale)
-          let badgeHtml = "";
-          if (product.tag === "NEW") badgeHtml = `<div class="badge new">NEW</div>`;
-          else if (product.tag === "HOT") badgeHtml = `<div class="badge hot">HOT</div>`;
-          else if (product.tag === "SALE") badgeHtml = `<div class="badge sale">SALE</div>`;
-
-          // 2. 組裝極簡卡片
-          card.innerHTML = `
-    <div class="img-wrapper" onclick="openQuickShop(${index})">
-        ${badgeHtml}
-        <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
-        </div>
-    
-    <div class="info">
-        <h3 class="name" onclick="openQuickShop(${index})" style="cursor:pointer;">${product.name}</h3>
-        
-        ${priceDisplayHtml}
-        
-        <div class="action-row" style="margin-top: 10px; justify-content: center;">
-            <button class="btn-add" onclick="openQuickShop(${index})" style="width: 100%; max-width: 200px;">
-                加入購物車
-            </button>
-        </div>
-    </div>
-`;
-          container.appendChild(card);
-        });
-      } catch (error) {
-        console.error(error);
-        loading.style.display = "none";
-        container.innerHTML =
-          '<p style="text-align:center; padding:20px;">載入失敗。</p>';
+            // 2. 組裝 HTML (點擊圖片或按鈕都會觸發 openQuickShop)
+            card.innerHTML = `
+                <div class="img-wrapper" style="cursor:pointer;" onclick="openQuickShop(${index})">
+                    ${badgeHtml}
+                    <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
+                </div>
+                
+                <div class="info">
+                    <h3 class="name" style="cursor:pointer;" onclick="openQuickShop(${index})">${product.name}</h3>
+                    
+                    ${priceDisplayHtml}
+                    
+                    <div class="action-row" style="margin-top: 10px; justify-content: center;">
+                        <button class="btn-add" onclick="openQuickShop(${index})" style="width: 100%; max-width: 200px;">
+                            加入購物車
+                        </button>
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+          });
+        } catch (error) {
+          console.error(error);
+          loading.style.display = "none";
+          container.innerHTML = '<p style="text-align:center; padding:20px;">載入失敗。</p>';
+        }
       }
-    }
 
+      // === 暫時新增一個空的 openQuickShop 函式，防止點擊報錯 ===
+      function openQuickShop(index) {
+          alert("購物彈窗功能即將上線！目前點擊的是第 " + index + " 個商品");
+          // 下一步我們會在這裡寫真正的彈窗程式碼
+      }
+      
     // ==========================================
     // 🟢 購物車功能區域
     // ==========================================
