@@ -1516,9 +1516,10 @@
     /* 內部文字樣式 */
     #qs-title {
       font-family: 'Zen Maru Gothic', sans-serif;
-      font-size: 1.6rem;
+      font-size: 1.3rem;
       color: #333;
       margin-bottom: 10px;
+      line-height: 1.5;
     }
 
     .qs-subtitle {
@@ -1582,15 +1583,29 @@
       font-weight: 500;
     }
 
-    .qs-select {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-size: 1rem;
-      color: #555;
-      outline: none;
-    }
+/* === 優化後的規格選單 === */
+.qs-select {
+    width: 100%;
+    
+    /* 🔴 修改 1：調整內距，讓字舒服地顯示 */
+    padding: 10px 15px; 
+    
+    /* 🔴 修改 2：換成你的主題金棕色邊框 */
+    border: 1px solid #d4a373; 
+    background-color: #fff;
+    
+    border-radius: 8px; /* 圓角 */
+    font-size: 0.95rem;
+    color: #555;
+    outline: none;
+    cursor: pointer;
+    appearance: none; 
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 15px center; /* 箭頭靠右 */
+    background-size: 12px;
+}
 
     /* 數量加減 */
     .qs-qty-wrapper {
@@ -2079,7 +2094,7 @@
       document.getElementById('qs-img').src = product.imgUrl;
 
       // 填入標題
-      document.getElementById('qs-title').innerText = product.name;
+      document.getElementById('qs-title').innerHTML = product.name;
 
       // 填入副標題 (F欄)
       const descEl = document.getElementById('qs-desc');
