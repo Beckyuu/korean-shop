@@ -1798,15 +1798,16 @@
             });
             variantsHtml += `</select>`;
           } else {
-            let singleName = "ONE SIZE";
+            // 情況 A：B 欄有填寫 (例如 100ML) -> 顯示出來
             if (product.variants.length === 1 && product.variants[0] !== "") {
-              singleName = product.variants[0];
+              variantsHtml = `<div class="style-select readonly">${product.variants[0]}</div>`;
             }
-
-            // 使用 style-select 加上 readonly 類別
-            variantsHtml = `<div class="style-select readonly">${singleName}</div>`;
+            // 情況 B：B 欄沒填 (或原本是 ONE SIZE) -> 變隱形佔位
+            else {
+              // visibility: hidden 讓它隱形，但保留高度，確保下方價格對齊
+              variantsHtml = `<div class="style-select readonly" style="visibility: hidden;">placeholder</div>`;
+            }
           }
-
           let stickerHtml = "";
           if (product.hasDetails) {
             // 只保留 SVG 圖示，拿掉所有文字
