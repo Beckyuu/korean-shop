@@ -381,28 +381,35 @@
       letter-spacing: 0.5px;
     }
 
-    /* === 副標題 (微調加強版) === */
+    /* ✅ 貼上這段新的 (時尚副標題樣式) */
     .desc-text {
       display: block;
-      font-size: 0.85rem;
+      /* 讓它自己佔一行 */
 
-      /* 顏色 */
-      color: #666;
-
-      /* 🔴 關鍵修改 1：縮小下間距 (原本 8px -> 改 4px) */
-      margin-bottom: 2px;
-
+      /* 字體設定：小巧精緻 */
       font-family: "Noto Sans TC", sans-serif;
-      font-weight: 400;
+      font-size: 0.85rem;
+      color: #999;
+      /* 淺灰色，不搶眼 */
+      letter-spacing: 1px;
+      /* 字距微寬 */
 
-      /* 🔴 關鍵修改 2：鎖死高度 (強制一行) */
+      /* 版面位置：置中 */
+      text-align: center;
+      margin-top: 4px;
+      /* 離品名近一點 */
+      margin-bottom: 8px;
+      /* 離按鈕遠一點 */
+
+      /* 高度控制 (避免沒填寫時版面亂跳) */
       height: 1.5em;
       line-height: 1.5;
-
-      /* 🔴 關鍵修改 3：超過一行自動變成 "..." (不讓它換行撐開) */
       white-space: nowrap;
+      /* 不換行 */
       overflow: hidden;
+      /* 超出隱藏 */
       text-overflow: ellipsis;
+      /* 變成 ... */
     }
 
     /* === ✨ 新版：時尚內容物清單小卡 (完整修正版) ✨ === */
@@ -1821,12 +1828,14 @@
             ? `<div class="deadline-badge">⏳ 收單：${shortDeadline}</div>`
             : `<div class="deadline-badge empty">&nbsp;</div>`;
 
-          // 2. 準備 F欄 (說明文字) HTML
+          // === 2. 準備 F欄 (改成：產品副標題/容量) ===
+          // 這裡會讀取 F 欄 (description)，顯示在品名下方
           let descHtml = "";
           if (product.description) {
-            descHtml = "";
+            // 有填寫就顯示 (套用 desc-text 樣式)
+            descHtml = `<span class="desc-text">${product.description}</span>`;
           } else {
-            // 保持空白佔位 (如果為了排版整齊) 或者也設為空
+            // 沒填寫就用隱形佔位 (保持版面高度整齊，這點很重要！)
             descHtml = `<span class="desc-text mobile-hidden">&nbsp;</span>`;
           }
 
