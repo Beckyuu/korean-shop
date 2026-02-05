@@ -405,37 +405,37 @@
       text-overflow: ellipsis;
     }
 
-    /* === ✨ 新版：時尚內容物清單小卡 ✨ === */
+    /* === ✨ 新版：時尚內容物清單小卡 (完整修正版) ✨ === */
     .content-info-card {
-      /* 卡片背景：極淡的奶油白 */
       background-color: #fffcf7;
-
-      /* 邊框：細緻的奶茶色 */
       border: 1px solid #e6d0c0;
       border-radius: 8px;
-      /* 稍微圓角 */
-
-      /* 內部空間 */
       padding: 30px 20px 20px;
-      margin: 10px 30px 25px;
-      /* 外距 */
+
+      /* 🌟 修改 1：加大上方距離，避開右上角按鈕 */
+      margin: 60px 30px 25px;
 
       position: relative;
-      /* 讓標籤可以定位 */
+
+      /* 🌟 修改 2：強制置中設定 */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      /* 水平置中 */
+      justify-content: center;
+      /* 垂直置中 */
       text-align: center;
+      /* 文字內容置中 */
     }
 
-    /* 上方的懸浮標籤 (類似絲帶或標籤貼紙) */
+    /* 上方的懸浮標籤 (STYLE 不變，但要補回來以免被刪掉) */
     .content-info-tag {
       position: absolute;
       top: -12px;
-      /* 往上浮出 */
       left: 50%;
       transform: translateX(-50%);
-      /* 置中 */
 
       background-color: #d4a373;
-      /* 你的主題金棕色 */
       color: #fff;
 
       font-family: 'Noto Sans TC', sans-serif;
@@ -445,22 +445,29 @@
 
       padding: 4px 15px;
       border-radius: 50px;
-      /* 膠囊形狀 */
-
-      /* 微微的陰影讓它立體 */
       box-shadow: 0 2px 5px rgba(212, 163, 115, 0.2);
       white-space: nowrap;
     }
 
-    /* 內容文字 */
+    /* 內容文字 (STYLE 不變) */
     .content-info-text {
       font-family: 'Zen Maru Gothic', 'Noto Sans TC', sans-serif;
-      /* 圓體更有親和力 */
       font-size: 0.95rem;
       color: #555;
       line-height: 1.8;
       white-space: pre-wrap;
-      /* 保留換行 */
+    }
+
+    /* 🌟 修改 3：美化右上角關閉按鈕 (覆蓋舊設定) */
+    .modal-close-btn {
+      color: #bfa092 !important;
+      /* 改成莫蘭迪紅棕色 */
+      top: 15px !important;
+      /* 位置微調 */
+      right: 15px !important;
+      font-weight: 300;
+      font-size: 2.2rem !important;
+      /* 放大一點比較好按 */
     }
 
     /* === 2. 首頁贈品行：回歸簡單單行 (原 I 欄) === */
@@ -2145,16 +2152,18 @@
       // 1. 隱藏標題 (維持畫面乾淨)
       titleEl.style.display = "none";
 
-      // 2. 準備「內容物清單」的 HTML (來自 F 欄：product.description)
+      // 2. 準備「內容物清單」 HTML 
+      // 🔴 修改來源：改成讀取 I 欄 (giftDesc)
       let contentCardHtml = "";
 
-      // 只要 F 欄有字，就顯示這張時尚小卡
-      if (product.description && product.description !== "") {
+      // 只要 I 欄 (giftDesc) 有資料，就顯示這張卡
+      if (product.giftDesc && product.giftDesc !== "") {
         contentCardHtml = `
       <div class="content-info-card">
-          <span class="content-info-tag">✦ 內容物清單 ✦</span>
+          <span class="content-info-tag">✦ WHAT'S INSIDE ✦</span>
+          
           <div class="content-info-text">
-              ${product.description}
+              ${product.giftDesc}
           </div>
       </div>
     `;
