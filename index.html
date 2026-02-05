@@ -412,44 +412,61 @@
         text-overflow: ellipsis;
       }
 
-      /* === 1. 彈窗專用：詳細內容物資訊卡 (新設計) === */
+/* === 1. 彈窗專用：詳細內容物資訊卡 (修正置中版) === */
       .content-info-card {
-        background-color: #fffbf5; /* 溫暖的米黃色背景 */
-        border: 1px solid #e6d0c0; /* 淡淡的金棕邊框 */
-        border-radius: 12px; /* 圓角 */
-        padding: 20px;
-        margin: 10px 20px 25px; /* 跟周圍保持距離 */
-        text-align: center;
-        position: relative; /* 為了放標籤 */
+          background-color: #fffbf5;
+          border: 1px solid #e6d0c0;
+          border-radius: 12px;
+          padding: 25px 20px 20px; 
+          
+          /* 🌟 修改 1：上方留白加大 (原本太擠，改大到 45px) */
+          margin: 45px 20px 25px;    
+          
+          /* 🌟 修改 2：Flexbox 強制置中大法 */
+          display: flex;
+          flex-direction: column;
+          align-items: center;     /* 水平置中 (關鍵) */
+          justify-content: center; /* 垂直置中 */
+          text-align: center;      /* 文字本身置中 */
+          
+          position: relative;
       }
 
       /* 卡片上面的標題標籤 */
       .content-info-tag {
-        display: inline-block;
-        background-color: #d4a373; /* 金棕色底 */
-        color: #fff; /* 白字 */
-        font-size: 0.85rem;
-        padding: 4px 15px;
-        border-radius: 20px; /* 膠囊形狀 */
-        position: absolute;
-        top: -12px; /* 讓它浮在卡片邊框上 */
-        left: 50%;
-        transform: translateX(-50%); /* 左右置中 */
-        letter-spacing: 2px;
-        font-family: "Noto Sans TC", sans-serif;
-        font-weight: 500;
+          display: inline-block;
+          background-color: #d4a373;
+          color: #fff;
+          font-size: 0.85rem;
+          padding: 4px 15px;
+          border-radius: 20px;
+          position: absolute;
+          
+          /* 標籤位置微調 */
+          top: -14px;                
+          left: 50%;
+          transform: translateX(-50%); /* 確保標籤本身也是正中間 */
+          
+          letter-spacing: 2px;
+          font-family: 'Noto Sans TC', sans-serif;
+          font-weight: 500;
+          white-space: nowrap; 
       }
 
       /* 裡面的文字內容 */
       .content-info-text {
-        font-family: "Zen Maru Gothic", "Noto Sans TC", sans-serif;
-        font-size: 1rem;
-        color: #555;
-        line-height: 1.8;
-        margin-top: 10px; /* 留空間給上面的標籤 */
-        white-space: pre-wrap; /* 支援換行 */
+          font-family: 'Zen Maru Gothic', 'Noto Sans TC', sans-serif;
+          font-size: 1rem;
+          color: #555;
+          line-height: 1.8;
+          margin-top: 10px;
+          white-space: pre-wrap;
+          
+          /* 🌟 修改 3：確保文字區塊寬度佔滿，且文字置中 */
+          width: 100%;
+          text-align: center; 
       }
-
+      
       /* === 2. 首頁贈品行：回歸簡單單行 (原 I 欄) === */
       .gift-row {
         font-family: "Noto Sans TC", sans-serif;
@@ -1883,16 +1900,6 @@
             // 3. 準備 I欄 (首頁只顯示簡單提示，例如「含詳細內容物」或直接隱藏)
             let giftHtml = "";
 
-            if (product.giftDesc) {
-              // 選項 A：顯示簡單一行紅字 (原本的樣子)
-              giftHtml = `<div class="gift-row">🎁 內含多樣商品</div>`;
-
-              // 選項 B：如果首頁完全不想顯示 I 欄，就用下面這行：
-              // giftHtml = `<div class="gift-row mobile-hidden" style="visibility:hidden;">Empty</div>`;
-            } else {
-              giftHtml = `<div class="gift-row mobile-hidden" style="visibility:hidden;">Empty</div>`;
-            }
-
             // 4. 組裝卡片
             card.innerHTML = `
                         <div class="img-wrapper">
@@ -2269,7 +2276,7 @@ function showDetails(index) {
 
         modal.style.display = "flex";
       }
-      
+
       function forceCloseModal() {
         document.getElementById("detailModal").style.display = "none";
       }
