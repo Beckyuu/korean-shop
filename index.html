@@ -1762,6 +1762,7 @@
 
           loading.style.display = "none";
           allProductsData = [];
+          container.innerHTML = "";
 
           rows.forEach((row, index) => {
             if (row.length < 4) return;
@@ -1993,7 +1994,7 @@
         saveCart();
 
         // 按鈕變色特效 (維持原狀)
-        const btn = window.event ? window.event.target : null;
+        const btn = window.event ? (window.event.target.tagName === 'BUTTON' ? window.event.target : window.event.target.closest('button')) : null;
         if (btn) {
           const originalText = btn.innerText;
           btn.innerText = "OK!";
