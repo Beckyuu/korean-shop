@@ -405,63 +405,62 @@
       text-overflow: ellipsis;
     }
 
-    /* === 1. 彈窗專用：詳細內容物資訊卡 (修正置中版) === */
+    /* === ✨ 新版：時尚內容物清單小卡 ✨ === */
     .content-info-card {
-      background-color: #fffbf5;
+      /* 卡片背景：極淡的奶油白 */
+      background-color: #fffcf7;
+
+      /* 邊框：細緻的奶茶色 */
       border: 1px solid #e6d0c0;
-      border-radius: 12px;
-      padding: 25px 20px 20px;
+      border-radius: 8px;
+      /* 稍微圓角 */
 
-      /* 🌟 修改 1：上方留白加大 (原本太擠，改大到 45px) */
-      margin: 45px 20px 25px;
-
-      /* 🌟 修改 2：Flexbox 強制置中大法 */
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      /* 水平置中 (關鍵) */
-      justify-content: center;
-      /* 垂直置中 */
-      text-align: center;
-      /* 文字本身置中 */
+      /* 內部空間 */
+      padding: 30px 20px 20px;
+      margin: 10px 30px 25px;
+      /* 外距 */
 
       position: relative;
+      /* 讓標籤可以定位 */
+      text-align: center;
     }
 
-    /* 卡片上面的標題標籤 */
+    /* 上方的懸浮標籤 (類似絲帶或標籤貼紙) */
     .content-info-tag {
-      display: inline-block;
-      background-color: #d4a373;
-      color: #fff;
-      font-size: 0.85rem;
-      padding: 4px 15px;
-      border-radius: 20px;
       position: absolute;
-
-      /* 標籤位置微調 */
-      top: -14px;
+      top: -12px;
+      /* 往上浮出 */
       left: 50%;
       transform: translateX(-50%);
-      /* 確保標籤本身也是正中間 */
+      /* 置中 */
 
-      letter-spacing: 2px;
+      background-color: #d4a373;
+      /* 你的主題金棕色 */
+      color: #fff;
+
       font-family: 'Noto Sans TC', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
       font-weight: 500;
+
+      padding: 4px 15px;
+      border-radius: 50px;
+      /* 膠囊形狀 */
+
+      /* 微微的陰影讓它立體 */
+      box-shadow: 0 2px 5px rgba(212, 163, 115, 0.2);
       white-space: nowrap;
     }
 
-    /* 裡面的文字內容 */
+    /* 內容文字 */
     .content-info-text {
       font-family: 'Zen Maru Gothic', 'Noto Sans TC', sans-serif;
-      font-size: 1rem;
+      /* 圓體更有親和力 */
+      font-size: 0.95rem;
       color: #555;
       line-height: 1.8;
-      margin-top: 10px;
       white-space: pre-wrap;
-
-      /* 🌟 修改 3：確保文字區塊寬度佔滿，且文字置中 */
-      width: 100%;
-      text-align: center;
+      /* 保留換行 */
     }
 
     /* === 2. 首頁贈品行：回歸簡單單行 (原 I 欄) === */
@@ -1806,9 +1805,9 @@
           // 2. 準備 F欄 (說明文字) HTML
           let descHtml = "";
           if (product.description) {
-            descHtml = `<span class="desc-text">${product.description}</span>`;
+            descHtml = "";
           } else {
-            // 🌟 關鍵：沒字的時候加上 mobile-hidden，手機版會自動消失，解決空隙問題！
+            // 保持空白佔位 (如果為了排版整齊) 或者也設為空
             descHtml = `<span class="desc-text mobile-hidden">&nbsp;</span>`;
           }
 
@@ -2143,33 +2142,25 @@
       const modal = document.getElementById("detailModal");
       const titleEl = document.getElementById("modalTitle");
 
-      // 1. 隱藏標題 (因為我們想讓畫面乾淨點)
+      // 1. 隱藏標題 (維持畫面乾淨)
       titleEl.style.display = "none";
 
-      // 2. I欄內容：轉化為漂亮卡片 (內容物清單)
-      let giftHtml = "";
-      if (product.giftDesc) {
-        giftHtml = `
-                    <div class="content-info-card">
-                        <span class="content-info-tag">內容物清單</span>
-                        <div class="content-info-text">
-                            ${product.giftDesc}
-                        </div>
-                    </div>
-                `;
+      // 2. 準備「內容物清單」的 HTML (來自 F 欄：product.description)
+      let contentCardHtml = "";
+
+      // 只要 F 欄有字，就顯示這張時尚小卡
+      if (product.description && product.description !== "") {
+        contentCardHtml = `
+      <div class="content-info-card">
+          <span class="content-info-tag">✦ 內容物清單 ✦</span>
+          <div class="content-info-text">
+              ${product.description}
+          </div>
+      </div>
+    `;
       }
 
-      // 🌟 3. F欄內容：補回這段！(行銷短語或說明)
-      // 就算 F 欄是寫「今日特價」，在彈窗裡顯示出來也很合理
-      let fullDescHtml = '';
-      if (product.description) {
-        fullDescHtml = `
-                <div style="text-align: center; padding: 0 30px 20px; color: #555; font-family: 'Noto Sans TC', sans-serif; font-size: 1rem; line-height: 1.8; white-space: pre-wrap;">
-                    ${product.description}
-                </div>`;
-      }
-
-      // 4. 詳細圖片
+      // 3. 詳細圖片 (讀取 detailImgUrl)
       let imgContent = "";
       if (product.detailImgUrl) {
         const urls = product.detailImgUrl.split(",");
@@ -2178,17 +2169,15 @@
             imgContent += `<img src="${url.trim()}" style="width:100%; display:block; margin-bottom:10px;">`;
           }
         });
-      } else {
-        // 如果連圖片都沒有，至少不要留白
-        if (!imgContent && !fullDescHtml && !giftHtml) {
-          imgContent = '<p style="text-align:center; padding:20px;">尚無詳細內容</p>';
-        }
       }
 
-      // 5. 組合內容 (現在 fullDescHtml 有定義了，不會報錯了！)
-      document.getElementById("modalBody").innerHTML =
-        giftHtml + fullDescHtml + imgContent;
+      // 防呆：如果什麼都沒有，至少顯示個提示
+      if (!contentCardHtml && !imgContent) {
+        imgContent = '<p style="text-align:center; padding:20px; color:#999;">尚無詳細內容</p>';
+      }
 
+      // 4. 組合並顯示 (內容卡片放上面，圖片放下面)
+      document.getElementById("modalBody").innerHTML = contentCardHtml + imgContent;
       modal.style.display = "flex";
     }
 
