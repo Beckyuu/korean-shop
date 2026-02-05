@@ -1420,6 +1420,240 @@
         display: none !important;
       }
     }
+
+    /* === 🛒 購物快速彈窗 (Quick Shop Modal) === */
+    .quick-shop-overlay {
+      display: none;
+      /* 預設隱藏 */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      /* 半透明黑底 */
+      backdrop-filter: blur(4px);
+      /* 背景模糊更有質感 */
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .quick-shop-overlay.show {
+      display: flex;
+      opacity: 1;
+    }
+
+    .quick-shop-content {
+      background: #fff;
+      width: 100%;
+      max-width: 900px;
+      /* 電腦版寬度 */
+      max-height: 90vh;
+      border-radius: 12px;
+      overflow-y: auto;
+      /* 內容多時可捲動 */
+      position: relative;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+
+    .quick-shop-overlay.show .quick-shop-content {
+      transform: translateY(0);
+    }
+
+    .quick-shop-body {
+      display: flex;
+      /* 左右排版關鍵 */
+      flex-wrap: wrap;
+    }
+
+    /* 左側圖片區 */
+    .quick-shop-img-box {
+      flex: 1;
+      min-width: 300px;
+      background: #f9f9f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .quick-shop-img-box img {
+      width: 100%;
+      max-width: 400px;
+      height: auto;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    /* 右側資訊區 */
+    .quick-shop-info-box {
+      flex: 1;
+      min-width: 300px;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 關閉按鈕 */
+    .quick-shop-close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background: transparent;
+      border: none;
+      font-size: 2rem;
+      color: #999;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    /* 內部文字樣式 */
+    #qs-title {
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-size: 1.6rem;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .qs-subtitle {
+      font-size: 1rem;
+      color: #888;
+      margin-bottom: 15px;
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+
+    #qs-price-box {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.5rem;
+      color: #2c2c2c;
+      font-weight: 500;
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #eee;
+    }
+
+    /* 禮物小卡 (沿用之前的設計但縮小一點) */
+    .qs-gift-card {
+      background: #fffcf7;
+      border: 1px solid #e6d0c0;
+      border-radius: 8px;
+      padding: 25px 15px 15px;
+      margin-bottom: 25px;
+      position: relative;
+      text-align: center;
+    }
+
+    .qs-gift-tag {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #d4a373;
+      color: #fff;
+      font-size: 0.75rem;
+      padding: 2px 12px;
+      border-radius: 20px;
+      letter-spacing: 1px;
+    }
+
+    .qs-gift-text {
+      font-size: 0.9rem;
+      color: #666;
+      line-height: 1.8;
+      white-space: normal;
+    }
+
+    /* 表單元件 */
+    .qs-section {
+      margin-bottom: 20px;
+    }
+
+    .qs-label {
+      display: block;
+      font-size: 0.9rem;
+      color: #333;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .qs-select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 1rem;
+      color: #555;
+      outline: none;
+    }
+
+    /* 數量加減 */
+    .qs-qty-wrapper {
+      display: flex;
+      width: 120px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+    }
+
+    .qs-qty-wrapper button {
+      width: 35px;
+      background: #f5f5f5;
+      border: none;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: #555;
+    }
+
+    .qs-qty-wrapper input {
+      width: 50px;
+      border: none;
+      text-align: center;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    /* 大按鈕 */
+    .qs-add-btn {
+      margin-top: auto;
+      /* 推到底部 */
+      width: 100%;
+      padding: 15px;
+      background: #d4a373;
+      /* 主題色 */
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .qs-add-btn:hover {
+      background: #bfa092;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(212, 163, 115, 0.3);
+    }
+
+    /* 手機版調整 */
+    @media (max-width: 768px) {
+      .quick-shop-info-box {
+        padding: 25px;
+      }
+
+      .quick-shop-img-box {
+        min-height: 250px;
+      }
+
+      #qs-title {
+        font-size: 1.4rem;
+      }
+    }
   </style>
 </head>
 
@@ -1510,6 +1744,49 @@
       </span>
     </div>
   </footer>
+
+  <div id="quickShopModal" class="quick-shop-overlay" onclick="closeQuickShop(event)">
+    <div class="quick-shop-content">
+      <button class="quick-shop-close" onclick="forceCloseQuickShop()">×</button>
+
+      <div class="quick-shop-body">
+        <div class="quick-shop-img-box">
+          <img id="qs-img" src="" alt="Product Image">
+        </div>
+
+        <div class="quick-shop-info-box">
+          <div id="qs-tag-container"></div>
+          <h2 id="qs-title">Product Name</h2>
+          <div id="qs-price-box">NT$ 0</div>
+
+          <div id="qs-desc" class="qs-subtitle"></div>
+
+          <div id="qs-gift-card" class="qs-gift-card" style="display:none;">
+            <span class="qs-gift-tag">✦ WHAT'S INSIDE ✦</span>
+            <div id="qs-gift-text" class="qs-gift-text"></div>
+          </div>
+
+          <div class="qs-section">
+            <label class="qs-label">規格 / 款式</label>
+            <select id="qs-variant-select" class="qs-select"></select>
+          </div>
+
+          <div class="qs-section">
+            <label class="qs-label">數量</label>
+            <div class="qs-qty-wrapper">
+              <button onclick="updateQsQty(-1)">−</button>
+              <input type="number" id="qs-qty" value="1" min="1" readonly>
+              <button onclick="updateQsQty(1)">+</button>
+            </div>
+          </div>
+
+          <button id="qs-add-btn" class="qs-add-btn" onclick="addToCartFromModal()">
+            加入購物車
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div id="cart-float-btn" onclick="toggleCart()">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -1683,87 +1960,87 @@
     const VIP_VALUE = "mina";
 
     async function fetchProducts() {
-        const loading = document.getElementById("loading");
-        const container = document.getElementById("product-list");
+      const loading = document.getElementById("loading");
+      const container = document.getElementById("product-list");
 
-        try {
-          // 1. 判斷現在是不是 VIP 模式
-          const urlParams = new URLSearchParams(window.location.search);
-          const isVipMode = urlParams.get(VIP_KEY) === VIP_VALUE;
+      try {
+        // 1. 判斷現在是不是 VIP 模式
+        const urlParams = new URLSearchParams(window.location.search);
+        const isVipMode = urlParams.get(VIP_KEY) === VIP_VALUE;
 
-          // 強制更新資料
-          const response = await fetch(
-            GOOGLE_SHEET_CSV_URL + "&t=" + new Date().getTime(),
-          );
-          const data = await response.text();
-          const rows = data.split("\n").map((row) => parseCSVLine(row));
-          rows.shift(); // 移除標題列
+        // 強制更新資料
+        const response = await fetch(
+          GOOGLE_SHEET_CSV_URL + "&t=" + new Date().getTime(),
+        );
+        const data = await response.text();
+        const rows = data.split("\n").map((row) => parseCSVLine(row));
+        rows.shift(); // 移除標題列
 
-          loading.style.display = "none";
-          allProductsData = [];
-          container.innerHTML = "";
+        loading.style.display = "none";
+        allProductsData = [];
+        container.innerHTML = "";
 
-          rows.forEach((row, index) => {
-            if (row.length < 4) return;
+        rows.forEach((row, index) => {
+          if (row.length < 4) return;
 
-            // --- 讀取基礎資料 ---
-            const rawSpec = row[1] ? row[1].trim() : "";
-            const variants = rawSpec.includes("|")
-              ? rawSpec.split("|").map((s) => s.trim())
-              : rawSpec
-                ? [rawSpec]
-                : [];
+          // --- 讀取基礎資料 ---
+          const rawSpec = row[1] ? row[1].trim() : "";
+          const variants = rawSpec.includes("|")
+            ? rawSpec.split("|").map((s) => s.trim())
+            : rawSpec
+              ? [rawSpec]
+              : [];
 
-            // 價格處理
-            let originalPrice = row[2] ? row[2].trim() : "0";
-            let vipPrice = row[9] ? row[9].trim() : "";
-            let finalPriceForCart = originalPrice;
-            let priceDisplayHtml = "";
+          // 價格處理
+          let originalPrice = row[2] ? row[2].trim() : "0";
+          let vipPrice = row[9] ? row[9].trim() : "";
+          let finalPriceForCart = originalPrice;
+          let priceDisplayHtml = "";
 
-            // VIP 價格邏輯
-            if (isVipMode && vipPrice !== "" && vipPrice !== originalPrice) {
-              finalPriceForCart = vipPrice;
-              priceDisplayHtml = `
+          // VIP 價格邏輯
+          if (isVipMode && vipPrice !== "" && vipPrice !== originalPrice) {
+            finalPriceForCart = vipPrice;
+            priceDisplayHtml = `
                     <div class="price-container">
                         <span class="price-original">NT$ ${originalPrice}</span>
                         <span class="price-vip">NT$ ${vipPrice}</span>
                     </div>`;
-            } else {
-              finalPriceForCart = originalPrice;
-              priceDisplayHtml = `<span class="price">NT$ ${originalPrice}</span>`;
-            }
+          } else {
+            finalPriceForCart = originalPrice;
+            priceDisplayHtml = `<span class="price">NT$ ${originalPrice}</span>`;
+          }
 
-            const product = {
-              id: index,
-              name: row[0] ? row[0].trim() : "Unnamed",
-              variants: variants,
-              price: finalPriceForCart,
-              imgUrl: row[3] ? row[3].trim() : "",
-              detailImgUrl: row[4] ? row[4].trim() : "",
-              description: row[5] ? row[5].trim() : "",
-              tag: row[6] ? row[6].trim().toUpperCase() : "",
-              deadline: row[7] ? row[7].trim() : "",
-              giftDesc: row[8] ? row[8].trim() : "",
-            };
-            
-            // 處理規格預設值
-            if (product.variants.length === 1) product.selectedVariant = product.variants[0];
-            else if (product.variants.length === 0) product.selectedVariant = "單一款式";
+          const product = {
+            id: index,
+            name: row[0] ? row[0].trim() : "Unnamed",
+            variants: variants,
+            price: finalPriceForCart,
+            imgUrl: row[3] ? row[3].trim() : "",
+            detailImgUrl: row[4] ? row[4].trim() : "",
+            description: row[5] ? row[5].trim() : "",
+            tag: row[6] ? row[6].trim().toUpperCase() : "",
+            deadline: row[7] ? row[7].trim() : "",
+            giftDesc: row[8] ? row[8].trim() : "",
+          };
 
-            allProductsData.push(product);
+          // 處理規格預設值
+          if (product.variants.length === 1) product.selectedVariant = product.variants[0];
+          else if (product.variants.length === 0) product.selectedVariant = "單一款式";
 
-            // --- 建立極簡卡片 HTML (test.html 專用) ---
-            const card = document.createElement("div");
-            card.className = "product-card";
+          allProductsData.push(product);
 
-            // 1. 標籤邏輯
-            let badgeHtml = "";
-            if (product.tag === "NEW") badgeHtml = `<div class="badge new">NEW</div>`;
-            else if (product.tag === "HOT") badgeHtml = `<div class="badge hot">HOT</div>`;
-            else if (product.tag === "SALE") badgeHtml = `<div class="badge sale">SALE</div>`;
+          // --- 建立極簡卡片 HTML (test.html 專用) ---
+          const card = document.createElement("div");
+          card.className = "product-card";
 
-            // 2. 組裝 HTML (點擊圖片或按鈕都會觸發 openQuickShop)
-            card.innerHTML = `
+          // 1. 標籤邏輯
+          let badgeHtml = "";
+          if (product.tag === "NEW") badgeHtml = `<div class="badge new">NEW</div>`;
+          else if (product.tag === "HOT") badgeHtml = `<div class="badge hot">HOT</div>`;
+          else if (product.tag === "SALE") badgeHtml = `<div class="badge sale">SALE</div>`;
+
+          // 2. 組裝 HTML (點擊圖片或按鈕都會觸發 openQuickShop)
+          card.innerHTML = `
                 <div class="img-wrapper" style="cursor:pointer;" onclick="openQuickShop(${index})">
                     ${badgeHtml}
                     <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
@@ -1781,21 +2058,166 @@
                     </div>
                 </div>
             `;
-            container.appendChild(card);
-          });
-        } catch (error) {
-          console.error(error);
-          loading.style.display = "none";
-          container.innerHTML = '<p style="text-align:center; padding:20px;">載入失敗。</p>';
-        }
+          container.appendChild(card);
+        });
+      } catch (error) {
+        console.error(error);
+        loading.style.display = "none";
+        container.innerHTML = '<p style="text-align:center; padding:20px;">載入失敗。</p>';
+      }
+    }
+
+    // === 🛒 全域變數：紀錄目前彈窗正在看哪一個商品 ===
+    let currentQsIndex = null;
+
+    // 1. 打開快速購物視窗
+    function openQuickShop(index) {
+      const product = allProductsData[index];
+      currentQsIndex = index; // 記住現在是誰
+
+      // 填入圖片
+      document.getElementById('qs-img').src = product.imgUrl;
+
+      // 填入標題
+      document.getElementById('qs-title').innerText = product.name;
+
+      // 填入副標題 (F欄)
+      const descEl = document.getElementById('qs-desc');
+      if (product.description) {
+        descEl.innerText = product.description;
+        descEl.style.display = 'block';
+      } else {
+        descEl.style.display = 'none';
       }
 
-      // === 暫時新增一個空的 openQuickShop 函式，防止點擊報錯 ===
-      function openQuickShop(index) {
-          alert("購物彈窗功能即將上線！目前點擊的是第 " + index + " 個商品");
-          // 下一步我們會在這裡寫真正的彈窗程式碼
+      // 填入價格 (處理 VIP 價)
+      // 這裡我們直接抓卡片上已經算好的價格顯示方式，比較簡單，或者重新判斷
+      // 簡單做法：重新判斷一次
+      const urlParams = new URLSearchParams(window.location.search);
+      const isVipMode = urlParams.get(VIP_KEY) === VIP_VALUE;
+
+      let priceHtml = '';
+      // 簡單解析原價
+      let rawPrice = product.price; // 這裡可能是 "1,200" 或 "NT$ 1,200" 
+      // 為了顯示漂亮，我們直接用 allProductsData 裡面的邏輯
+
+      // 如果是 VIP 模式且有 VIP 價... (這裡簡化邏輯，直接顯示 product.price)
+      // 因為 fetchProducts 已經幫我們把 product.price 算成「最終價格」了
+      // 但如果你想在彈窗顯示 "原價劃掉"，我們需要回到 fetchProducts 把 originalPrice 也存進 product 物件
+      // 目前先顯示最終價格即可：
+      document.getElementById('qs-price-box').innerText = 'NT$ ' + product.price;
+
+
+      // 填入禮物資訊 (I欄)
+      const giftCard = document.getElementById('qs-gift-card');
+      const giftText = document.getElementById('qs-gift-text');
+      if (product.giftDesc) {
+        giftText.innerHTML = product.giftDesc; // 支援 HTML <br>
+        giftCard.style.display = 'block';
+      } else {
+        giftCard.style.display = 'none';
       }
-      
+
+      // 產生規格選單
+      const select = document.getElementById('qs-variant-select');
+      select.innerHTML = ''; // 清空
+
+      if (product.variants.length > 0 && product.variants[0] !== "") {
+        product.variants.forEach(v => {
+          const opt = document.createElement('option');
+          opt.value = v;
+          opt.innerText = v;
+          if (v.includes('(缺)')) {
+            opt.disabled = true;
+            opt.innerText += ' (Sold Out)';
+          }
+          select.appendChild(opt);
+        });
+        // 顯示選單區塊
+        select.parentElement.style.display = 'block';
+      } else {
+        // 如果沒有規格 (ONE SIZE)，隱藏選單
+        select.parentElement.style.display = 'none';
+      }
+
+      // 重置數量
+      document.getElementById('qs-qty').value = 1;
+
+      // 顯示彈窗 (加一點動畫 class)
+      const modal = document.getElementById('quickShopModal');
+      modal.style.display = 'flex';
+      // 稍微延遲加 show class 讓 fade in 動畫生效
+      setTimeout(() => {
+        modal.classList.add('show');
+      }, 10);
+    }
+
+    // 2. 關閉彈窗
+    function closeQuickShop(e) {
+      if (e.target.classList.contains('quick-shop-overlay')) {
+        forceCloseQuickShop();
+      }
+    }
+
+    function forceCloseQuickShop() {
+      const modal = document.getElementById('quickShopModal');
+      modal.classList.remove('show');
+      setTimeout(() => {
+        modal.style.display = 'none';
+      }, 300); // 等動畫跑完
+    }
+
+    // 3. 數量加減
+    function updateQsQty(change) {
+      const input = document.getElementById('qs-qty');
+      let newVal = parseInt(input.value) + change;
+      if (newVal < 1) newVal = 1;
+      input.value = newVal;
+    }
+
+    // 4. 從彈窗加入購物車 (關鍵功能！)
+    function addToCartFromModal() {
+      if (currentQsIndex === null) return;
+      const product = allProductsData[currentQsIndex];
+
+      // 抓數量
+      const qty = parseInt(document.getElementById('qs-qty').value);
+
+      // 抓規格
+      let selectedSpec = "單一規格";
+      const select = document.getElementById('qs-variant-select');
+      // 如果選單有顯示，就抓選單的值
+      if (select.parentElement.style.display !== 'none') {
+        selectedSpec = select.value;
+      }
+
+      // 處理價格字串轉數字
+      let priceNum = parseInt(product.price.replace(/[^0-9]/g, ""));
+
+      // 加入購物車
+      const cartItem = {
+        name: product.name,
+        spec: selectedSpec,
+        price: priceNum,
+        qty: qty,
+      };
+
+      cart.push(cartItem);
+      saveCart();
+
+      // 按鈕回饋特效
+      const btn = document.getElementById('qs-add-btn');
+      const originalText = btn.innerText;
+      btn.innerText = "已加入！OK";
+      btn.style.background = "#6c757d"; // 變灰色提示
+
+      setTimeout(() => {
+        btn.innerText = originalText;
+        btn.style.background = "#d4a373"; // 變回金色
+        forceCloseQuickShop(); // 自動關閉視窗，讓客人繼續逛
+      }, 800);
+    }
+
     // ==========================================
     // 🟢 購物車功能區域
     // ==========================================
