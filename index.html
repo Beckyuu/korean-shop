@@ -412,30 +412,45 @@
         text-overflow: ellipsis;
       }
 
-      /* === 贈品文字 (I欄專用) === */
+      /* === 內容物專用 === */
       .gift-row {
         font-family: "Noto Sans TC", sans-serif;
-        font-size: 0.8rem;
-        color: #d65a5a;
-        /* 漂亮的莫蘭迪紅 */
+
+        /* 讓它變成垂直排列 (上下兩層) */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        /* 高度調整：因為變兩行了，高度要拉高一點點 */
+        /* 這樣沒東西的時候，也會佔住這個高度，保持對齊 */
+        min-height: 2.6em;
+
+        margin-bottom: 8px; /* 跟下面的規格框保持距離 */
+      }
+
+      /* 上層：標題 (例如：內容物) */
+      .gift-title {
+        font-size: 0.75rem;
+        color: #bfa092; /* 淺磚紅色，像標籤一樣 */
+        letter-spacing: 1px;
+        line-height: 1.2;
+        margin-bottom: 2px;
         font-weight: 500;
+      }
 
-        /* 固定高度，確保排版整齊 */
-        height: 1.5em;
-        line-height: 1.5;
-        margin-bottom: 10px;
-        /* 跟下面的規格框保持距離 */
+      /* 下層：妳填寫的資料 */
+      .gift-content {
+        font-size: 0.85rem;
+        color: #666;
+        font-weight: 400;
+        line-height: 1.3;
 
-        /* 單行限制，超過變 ... */
+        /* 限制一行，太多字變 ... (保持整齊) */
+        max-width: 100%;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-
-        /* 置中對齊 */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 4px;
       }
 
       /* === 規格容器 === */
@@ -535,16 +550,16 @@
       }
 
       /* === 6. 購買按鈕區 === */
-    .action-row {
+      .action-row {
         display: flex;
         justify-content: center;
         gap: 8px;
         align-items: center;
         flex-shrink: 0;
-        margin-top: 2px; 
+        margin-top: 2px;
 
         padding-bottom: 5px;
-    }
+      }
 
       select {
         background: transparent;
@@ -1847,13 +1862,27 @@
               descHtml = `<span class="desc-text mobile-hidden">&nbsp;</span>`;
             }
 
-            // 3. 準備 I欄 (贈品文字) HTML
+            // 3. 準備 I欄 (改造成：內容物清單)
             let giftHtml = "";
+
+            // 妳可以在這裡決定標題要顯示什麼，例如 "【 內容物 】" 或 "Contains"
+            const contentTitle = "【 內容物 】";
+
             if (product.giftDesc) {
-              giftHtml = `<div class="gift-row">🎁 ${product.giftDesc}</div>`;
+              giftHtml = `
+                    <div class="gift-row">
+                        <div class="gift-title">${contentTitle}</div>
+                        <div class="gift-content">${product.giftDesc}</div>
+                    </div>`;
             } else {
-              // 🌟 關鍵：沒字的時候也加上 mobile-hidden
-              giftHtml = `<div class="gift-row mobile-hidden" style="visibility:hidden;">Empty</div>`;
+              // 沒填資料時：
+              // 電腦版：保留空位 (visibility:hidden)，確保隔壁鄰居高度一樣
+              // 手機版：mobile-hidden 會讓它直接消失 (因為手機版不需要對齊高度)
+              giftHtml = `
+                    <div class="gift-row mobile-hidden" style="visibility:hidden;">
+                        <div class="gift-title">${contentTitle}</div>
+                        <div class="gift-content">Empty</div>
+                    </div>`;
             }
 
             // 4. 組裝卡片
