@@ -1687,6 +1687,62 @@
         font-size: 1.4rem;
       }
     }
+
+    /* === 📸 商品相簿樣式 === */
+
+    /* 修改原本的圖片盒：改成直向排列 (大圖在上，縮圖在下) */
+    .quick-shop-img-box {
+      flex-direction: column;
+      /* 變成直排 */
+      padding: 20px;
+      gap: 15px;
+      /* 大圖跟縮圖的距離 */
+    }
+
+    /* 大圖設定：關鍵魔法 object-fit */
+    .quick-shop-img-box img#qs-img {
+      width: 100%;
+      height: 350px;
+      /* 固定高度，讓版面不亂跳 */
+      object-fit: contain;
+      /* 🌟 關鍵！讓圖片完整顯示不裁切，自動留白 */
+      border-radius: 8px;
+      transition: opacity 0.3s;
+    }
+
+    /* 縮圖容器 */
+    .qs-gallery-container {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      /* 縮圖之間的空隙 */
+      width: 100%;
+      overflow-x: auto;
+      /* 如果圖太多，可以左右滑動 */
+    }
+
+    /* 小縮圖樣式 */
+    .qs-thumb {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      /* 縮圖可以裁切沒關係，整齊比較重要 */
+      border-radius: 6px;
+      border: 1px solid #eee;
+      cursor: pointer;
+      opacity: 0.6;
+      transition: all 0.2s;
+    }
+
+    /* 滑鼠移過去 或 被選中時 */
+    .qs-thumb:hover,
+    .qs-thumb.active {
+      opacity: 1;
+      border: 2px solid #d4a373;
+      /* 選中時出現金框 */
+      transform: translateY(-2px);
+      /* 微微浮起 */
+    }
   </style>
 </head>
 
@@ -1785,6 +1841,8 @@
       <div class="quick-shop-body">
         <div class="quick-shop-img-box">
           <img id="qs-img" src="" alt="Product Image">
+
+          <div id="qs-gallery-thumbs" class="qs-gallery-container"></div>
         </div>
 
         <div class="quick-shop-info-box">
@@ -2045,12 +2103,24 @@
             priceDisplayHtml = `<span class="price">NT$ ${originalPrice}</span>`;
           }
 
+          // map 用來修整網址，filter 用來過濾掉空欄位
+          const extraImgs = [
+            row[10], row[11], row[12], row[13], row[14]
+          ].map(url => url ? url.trim() : "").filter(url => url !== "");
+
+          // 2. 組合所有圖片：主圖 (D欄 row[3]) 放第一張，後面接 K~O 欄的圖
+          const allImages = [row[3] ? row[3].trim() : "", ...extraImgs].filter(url => url !== "");
+
           const product = {
             id: index,
             name: row[0] ? row[0].trim() : "Unnamed",
             variants: variants,
             price: finalPriceForCart,
             imgUrl: row[3] ? row[3].trim() : "",
+
+            // 🟢 新增：把整理好的相簿存起來，等等彈窗要用
+            gallery: allImages,
+
             detailImgUrl: row[4] ? row[4].trim() : "",
             description: row[5] ? row[5].trim() : "",
             tag: row[6] ? row[6].trim().toUpperCase() : "",
@@ -2111,7 +2181,43 @@
       currentQsIndex = index; // 記住現在是誰
 
       // 填入圖片
-      document.getElementById('qs-img').src = product.imgUrl;
+      // === 🟢 圖片相簿處理 (開始) ===
+      const mainImg = document.getElementById('qs-img');
+      const galleryContainer = document.getElementById('qs-gallery-thumbs');
+
+      // 1. 先顯示第一張圖 (主圖)
+      // 這裡加上 object-fit 設定，確保不管長寬都不會變形
+      mainImg.src = product.gallery[0];
+
+      // 2. 產生下方縮圖 (如果有超過 1 張圖的話)
+      galleryContainer.innerHTML = ''; // 清空舊的
+
+      if (product.gallery.length > 1) {
+        product.gallery.forEach((imgUrl, idx) => {
+          const thumb = document.createElement('img');
+          thumb.src = imgUrl;
+          thumb.className = 'qs-thumb';
+
+          // 第一張預設選中
+          if (idx === 0) thumb.classList.add('active');
+
+          // 點擊縮圖：換大圖 + 切換金框
+          thumb.onclick = function () {
+            mainImg.src = imgUrl;
+            // 移除其他人的 active
+            document.querySelectorAll('.qs-thumb').forEach(t => t.classList.remove('active'));
+            // 自己加上 active
+            this.classList.add('active');
+          };
+
+          galleryContainer.appendChild(thumb);
+        });
+        galleryContainer.style.display = 'flex';
+      } else {
+        // 如果只有一張圖，就不顯示縮圖列
+        galleryContainer.style.display = 'none';
+      }
+      // === 🟢 圖片相簿處理 (結束) ===
 
       // 填入標題
       document.getElementById('qs-title').innerHTML = product.name;
