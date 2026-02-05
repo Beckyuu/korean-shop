@@ -449,13 +449,25 @@
       white-space: nowrap;
     }
 
-    /* 內容文字 (STYLE 不變) */
+    /* ✅ 貼上這段新的 (讓文字置中但靠左對齊) */
     .content-info-text {
       font-family: 'Zen Maru Gothic', 'Noto Sans TC', sans-serif;
       font-size: 0.95rem;
       color: #555;
-      line-height: 1.8;
-      white-space: pre-wrap;
+
+      /* 行高加大，清單看起來更舒服 */
+      line-height: 2;
+
+      /* 關鍵 1：忽略 CSV 裡多餘的空格，讓 <br> 後面也能對齊 */
+      white-space: normal;
+
+      /* 關鍵 2：讓文字區塊縮小到剛好包住文字 */
+      display: inline-block;
+
+      /* 關鍵 3：區塊內的文字靠左對齊 */
+      text-align: left;
+
+      margin-top: 15px;
     }
 
     /* 🌟 修改 3：美化右上角關閉按鈕 (覆蓋舊設定) */
