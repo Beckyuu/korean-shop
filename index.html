@@ -2216,15 +2216,15 @@
         }
       }
 
-      function showDetails(index) {
+function showDetails(index) {
         const product = allProductsData[index];
         const modal = document.getElementById("detailModal");
         const titleEl = document.getElementById("modalTitle");
 
-        // 1. 隱藏標題
+        // 1. 隱藏標題 (因為我們想讓畫面乾淨點)
         titleEl.style.display = "none";
 
-        // 2. I欄內容：轉化為漂亮卡片
+        // 2. I欄內容：轉化為漂亮卡片 (內容物清單)
         let giftHtml = "";
         if (product.giftDesc) {
           giftHtml = `
@@ -2236,8 +2236,18 @@
                     </div>
                 `;
         }
+        
+        // 🌟 3. F欄內容：補回這段！(行銷短語或說明)
+        // 就算 F 欄是寫「今日特價」，在彈窗裡顯示出來也很合理
+        let fullDescHtml = '';
+        if (product.description) {
+             fullDescHtml = `
+                <div style="text-align: center; padding: 0 30px 20px; color: #555; font-family: 'Noto Sans TC', sans-serif; font-size: 1rem; line-height: 1.8; white-space: pre-wrap;">
+                    ${product.description}
+                </div>`;
+        }
 
-        // 3. 詳細圖片
+        // 4. 詳細圖片
         let imgContent = "";
         if (product.detailImgUrl) {
           const urls = product.detailImgUrl.split(",");
@@ -2247,17 +2257,19 @@
             }
           });
         } else {
-          imgContent =
-            '<p style="text-align:center; padding:20px;">尚無詳細圖片</p>';
+          // 如果連圖片都沒有，至少不要留白
+          if(!imgContent && !fullDescHtml && !giftHtml) {
+              imgContent = '<p style="text-align:center; padding:20px;">尚無詳細內容</p>';
+          }
         }
 
-        // 4. 組合內容
+        // 5. 組合內容 (現在 fullDescHtml 有定義了，不會報錯了！)
         document.getElementById("modalBody").innerHTML =
           giftHtml + fullDescHtml + imgContent;
 
         modal.style.display = "flex";
       }
-
+      
       function forceCloseModal() {
         document.getElementById("detailModal").style.display = "none";
       }
