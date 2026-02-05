@@ -1235,6 +1235,61 @@
             pointer-events: none;
             /* 禁止點擊 */
         }
+
+        /* === 🚑 手機版間 === */
+        @media (max-width: 768px) {
+            
+            /* 1. 讓內容往上靠，不要自動分散 */
+            .info {
+                justify-content: flex-start !important; /* 強制靠上 */
+                padding-top: 5px !important; /* 頂部空間縮小 */
+            }
+
+            /* 2. 縮減品名高度 (原本 3.8rem 太高了，改小) */
+            .name {
+                min-height: 2.5rem !important; /* 兩行字的高度就好 */
+                margin-bottom: 2px !important;
+                font-size: 0.9rem !important;
+            }
+
+            /* 3. 縮減說明與贈品的間距 */
+            .desc-text {
+                margin-bottom: 0px !important;
+                height: auto !important; /* 手機版拿掉固定高度，有字就顯示 */
+            }
+            .gift-row {
+                margin-bottom: 5px !important; /* 縮小與下方選單的距離 */
+                height: auto !important;
+            }
+
+            /* 4. 縮減規格選單的上下空白 */
+            .style-select, .style-select.readonly {
+                margin: 2px auto 8px !important; /* 上下都縮小 */
+                padding: 4px 15px 4px 10px !important; /* 內距也改扁一點 */
+            }
+
+            /* 5. 縮減價格間距 */
+            .price, .price-container {
+                margin-bottom: 8px !important;
+                margin-top: 0 !important;
+            }
+
+            /* 6. 讓按鈕區自動推到最底端 (關鍵！) */
+            /* 這樣字會全部緊密靠在上面，但按鈕會整齊地壓在卡片底部 */
+            .action-row {
+                margin-top: auto !important; 
+                padding-bottom: 5px !important;
+            }
+            
+            /* 修正按鈕大小 */
+            button.btn-add {
+                height: 32px !important; /* 手機版按鈕改矮一點 */
+                font-size: 0.75rem !important;
+            }
+            select {
+                height: 32px !important; /* 數量選單也跟著改矮 */
+            }
+        }
     </style>
 </head>
 
