@@ -1539,28 +1539,41 @@
       border-bottom: 1px solid #eee;
     }
 
-    /* 禮物小卡 (沿用之前的設計但縮小一點) */
+    /* === ✨ 新版：I 欄內容物 (極簡文字風格) === */
     .qs-gift-card {
-      background: #fffcf7;
-      border: 1px solid #e6d0c0;
-      border-radius: 8px;
-      padding: 25px 15px 15px;
-      margin-bottom: 25px;
-      position: relative;
-      text-align: center;
+      /* 拿掉背景色和邊框，回歸純淨 */
+      background: transparent;
+      border: none;
+      padding: 0;
+
+      /* 位置微調：緊貼標題下方，跟價格保持距離 */
+      margin-top: 5px;
+      margin-bottom: 20px;
+
+      text-align: left;
+      /* 靠左對齊，跟標題一致 */
     }
 
+    /* 內容文字 */
+    .qs-gift-text {
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size: 0.95rem;
+      /* 字不用太大，精緻為主 */
+      color: #666;
+      /* 質感深灰 */
+      line-height: 1.6;
+
+      /* 讓它能夠換行 */
+      white-space: pre-wrap;
+
+      /* 加個左邊框裝飾，更有設計感 (如果不喜歡可以拿掉 border-left 和 padding-left) */
+      border-left: 3px solid #d4a373;
+      padding-left: 12px;
+    }
+
+    /* 🔴 隱藏原本的浮動標籤 (以防 HTML 沒刪乾淨) */
     .qs-gift-tag {
-      position: absolute;
-      top: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #d4a373;
-      color: #fff;
-      font-size: 0.75rem;
-      padding: 2px 12px;
-      border-radius: 20px;
-      letter-spacing: 1px;
+      display: none !important;
     }
 
     .qs-gift-text {
@@ -1777,12 +1790,14 @@
         <div class="quick-shop-info-box">
           <div id="qs-tag-container"></div>
           <h2 id="qs-title">Product Name</h2>
-          <div id="qs-price-box">NT$ 0</div>
-
-          <div id="qs-desc" class="qs-subtitle"></div>
 
           <div id="qs-gift-card" class="qs-gift-card" style="display:none;">
-            <span class="qs-gift-tag">✦ WHAT'S INSIDE ✦</span>
+            <div id="qs-gift-text" class="qs-gift-text"></div>
+          </div>
+
+          <div id="qs-price-box">NT$ 0</div>
+
+          <div class="qs-section">
             <div id="qs-gift-text" class="qs-gift-text"></div>
           </div>
 
@@ -2101,42 +2116,26 @@
       // 填入標題
       document.getElementById('qs-title').innerHTML = product.name;
 
-      // 填入副標題 (F欄)
-      const descEl = document.getElementById('qs-desc');
-      if (product.description) {
-        descEl.innerText = product.description;
-        descEl.style.display = 'block';
-      } else {
-        descEl.style.display = 'none';
-      }
-
-      // 填入價格 (處理 VIP 價)
-      // 這裡我們直接抓卡片上已經算好的價格顯示方式，比較簡單，或者重新判斷
-      // 簡單做法：重新判斷一次
-      const urlParams = new URLSearchParams(window.location.search);
-      const isVipMode = urlParams.get(VIP_KEY) === VIP_VALUE;
-
-      let priceHtml = '';
-      // 簡單解析原價
-      let rawPrice = product.price; // 這裡可能是 "1,200" 或 "NT$ 1,200" 
-      // 為了顯示漂亮，我們直接用 allProductsData 裡面的邏輯
-
-      // 如果是 VIP 模式且有 VIP 價... (這裡簡化邏輯，直接顯示 product.price)
-      // 因為 fetchProducts 已經幫我們把 product.price 算成「最終價格」了
-      // 但如果你想在彈窗顯示 "原價劃掉"，我們需要回到 fetchProducts 把 originalPrice 也存進 product 物件
-      // 目前先顯示最終價格即可：
-      document.getElementById('qs-price-box').innerText = 'NT$ ' + product.price;
-
-
-      // 填入禮物資訊 (I欄)
+      // 🟢 1. 填入 I 欄 (內容物清單) - 現在移到最上面了！
       const giftCard = document.getElementById('qs-gift-card');
       const giftText = document.getElementById('qs-gift-text');
+
       if (product.giftDesc) {
         giftText.innerHTML = product.giftDesc; // 支援 HTML <br>
         giftCard.style.display = 'block';
       } else {
         giftCard.style.display = 'none';
       }
+
+      // 🟢 2. 填入價格
+      // 重新抓取網址參數判斷 VIP
+      const urlParams = new URLSearchParams(window.location.search);
+      // 這裡注意：你的變數名稱要對應，假設前面有用 const VIP_KEY = 'vip'
+      const isVipMode = urlParams.get('vip') === 'mina';
+
+      // 直接抓取資料表裡的價格顯示
+      // 因為我們已經在 fetchProducts 處理過價格邏輯，這裡直接顯示 product.price 最保險
+      document.getElementById('qs-price-box').innerText = 'NT$ ' + product.price;
 
       // 產生規格選單
       const select = document.getElementById('qs-variant-select');
