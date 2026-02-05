@@ -2234,17 +2234,14 @@ function showDetails(index) {
 
         // 2. I欄內容：轉化為漂亮卡片 (內容物清單)
         let giftHtml = "";
-        if (product.giftDesc) {
+if (product.giftDesc) {
           giftHtml = `
                     <div class="content-info-card">
                         <span class="content-info-tag">內容物清單</span>
-                        <div class="content-info-text">
-                            ${product.giftDesc}
-                        </div>
+                        <div class="content-info-text">${product.giftDesc}</div>
                     </div>
                 `;
-        }
-        
+        }        
         // 🌟 3. F欄內容：補回這段！(行銷短語或說明)
         // 就算 F 欄是寫「今日特價」，在彈窗裡顯示出來也很合理
         let fullDescHtml = '';
