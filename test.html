@@ -11,51 +11,104 @@
 
   <style>
     /* === 📸 商品相簿樣式 (補強修正版) === */
-      
-      /* 1. 確保大圖與縮圖是垂直排列 */
-      .quick-shop-img-box {
-          display: flex !important;
-          flex-direction: column !important; 
-          padding: 20px;
-          gap: 15px; 
-      }
 
-      /* 2. 限制大圖高度，讓它乖乖縮放 */
-      .quick-shop-img-box img#qs-img {
-          width: 100%;
-          height: 350px !important; /* 強制高度 */
-          object-fit: contain !important; /* 確保不裁切 */
-          border-radius: 8px;
-      }
+    /* 1. 確保大圖與縮圖是垂直排列 */
+    .quick-shop-img-box {
+      display: flex !important;
+      flex-direction: column !important;
+      padding: 20px;
+      gap: 15px;
+    }
 
-      /* 3. 縮圖容器 */
-      .qs-gallery-container {
-          display: flex !important;
-          justify-content: center;
-          gap: 8px;
-          width: 100%;
-          overflow-x: auto;
-      }
+    /* 2. 限制大圖高度，讓它乖乖縮放 */
+    .quick-shop-img-box img#qs-img {
+      width: 100%;
+      height: 350px !important;
+      /* 強制高度 */
+      object-fit: contain !important;
+      /* 確保不裁切 */
+      border-radius: 8px;
+    }
 
-      /* 4. 🌟 關鍵修正：縮圖一定要很小！ */
-      .qs-thumb {
-          width: 50px !important;  /* 強制縮小寬度 */
-          height: 50px !important; /* 強制縮小高度 */
-          min-width: 50px !important; /* 防止被擠扁 */
-          object-fit: cover !important;
-          border-radius: 6px;
-          border: 1px solid #eee;
-          cursor: pointer;
-          opacity: 0.6;
-      }
+    /* 3. 縮圖容器 */
+    .qs-gallery-container {
+      display: flex !important;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      overflow-x: auto;
+    }
 
-      /* 選中時的效果 */
-      .qs-thumb:hover,
-      .qs-thumb.active {
-          opacity: 1;
-          border: 2px solid #d4a373 !important;
-      }
-      
+    /* 4. 🌟 關鍵修正：縮圖一定要很小！ */
+    .qs-thumb {
+      width: 50px !important;
+      /* 強制縮小寬度 */
+      height: 50px !important;
+      /* 強制縮小高度 */
+      min-width: 50px !important;
+      /* 防止被擠扁 */
+      object-fit: cover !important;
+      border-radius: 6px;
+      border: 1px solid #eee;
+      cursor: pointer;
+      opacity: 0.6;
+    }
+
+    /* 選中時的效果 */
+    .qs-thumb:hover,
+    .qs-thumb.active {
+      opacity: 1;
+      border: 2px solid #d4a373 !important;
+    }
+
+    /* === 🔍 圖片放大鏡樣式 === */
+    .zoom-overlay {
+      display: none;
+      /* 平常隱藏 */
+      position: fixed;
+      z-index: 10000;
+      /* 🌟 關鍵：要比購物彈窗 (9999) 還高！ */
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      /* 90% 透明度的黑底 */
+      justify-content: center;
+      align-items: center;
+      cursor: zoom-out;
+      /* 滑鼠變縮小鏡頭 */
+      flex-direction: column;
+    }
+
+    /* 放大的圖片本體 */
+    .zoom-overlay img {
+      max-width: 95%;
+      /* 佔滿寬度 */
+      max-height: 90%;
+      /* 佔滿高度 */
+      object-fit: contain;
+      /* 保持比例 */
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      /* 微微發光 */
+      transform: scale(0.9);
+      transition: transform 0.3s;
+    }
+
+    /* 打開時的動畫 */
+    .zoom-overlay.show img {
+      transform: scale(1);
+    }
+
+    /* 提示文字 */
+    .zoom-hint {
+      color: #fff;
+      margin-top: 15px;
+      font-size: 0.9rem;
+      opacity: 0.7;
+      letter-spacing: 1px;
+    }
+
     :root {
       /* === 色票系統：韓系低飽和度 === */
       --bg-color: #f9f8f6;
@@ -2234,6 +2287,10 @@
       // 1. 先顯示第一張圖 (主圖)
       // 這裡加上 object-fit 設定，確保不管長寬都不會變形
       mainImg.src = product.gallery[0];
+      mainImg.style.cursor = "zoom-in"; // 滑鼠變放大鏡
+      mainImg.onclick = function () {
+        openZoom(this.src); // 呼叫放大功能，傳入目前的圖片
+      };
 
       // 2. 產生下方縮圖 (如果有超過 1 張圖的話)
       galleryContainer.innerHTML = ''; // 清空舊的
@@ -2344,6 +2401,24 @@
       let newVal = parseInt(input.value) + change;
       if (newVal < 1) newVal = 1;
       input.value = newVal;
+    }
+
+    // === 🔍 放大鏡功能 ===
+    function openZoom(imgSrc) {
+      const overlay = document.getElementById('zoomOverlay');
+      const img = document.getElementById('zoom-img-content');
+
+      img.src = imgSrc; // 把圖源傳過去
+      overlay.style.display = 'flex';
+
+      // 加一點動畫延遲
+      setTimeout(() => { overlay.classList.add('show'); }, 10);
+    }
+
+    function closeZoom() {
+      const overlay = document.getElementById('zoomOverlay');
+      overlay.classList.remove('show');
+      setTimeout(() => { overlay.style.display = 'none'; }, 300);
     }
 
     // 4. 從彈窗加入購物車 (關鍵功能！)
@@ -2746,6 +2821,12 @@
 
     fetchProducts();
   </script>
+
+  <div id="zoomOverlay" class="zoom-overlay" onclick="closeZoom()">
+    <img id="zoom-img-content" src="">
+    <div class="zoom-hint">點擊任意處關閉</div>
+  </div>
+
 </body>
 
 </html>
