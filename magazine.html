@@ -181,80 +181,90 @@
             color: #555;
         }
 
-        /* === ✨ 新版：韓網真實分析卡 === */
+        /* === ✨ 選項 A：社群對話風 === */
         .real-review-card {
-            background-color: #fff;
-            border: 2px solid #f0f0f0;
-            border-radius: 16px;
+            background-color: #f9f9f9;
+            /* 淺灰底，像手機介面 */
+            border-radius: 20px;
             padding: 25px;
             margin-bottom: 30px;
-            position: relative;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            border: none;
+            /* 不要邊框 */
         }
 
-        /* 標題區 */
         .review-header {
             display: flex;
             align-items: center;
             margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px dashed #eee;
         }
 
-        .review-icon {
-            font-size: 1.5rem;
-            margin-right: 10px;
+        .review-avatar {
+            width: 40px;
+            height: 40px;
+            background: #ddd;
+            border-radius: 50%;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
         }
 
-        .review-title {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: #333;
+        .review-title-box h3 {
             margin: 0;
+            font-size: 1rem;
+            color: #333;
         }
 
-        .review-source {
-            font-size: 0.8rem;
+        .review-title-box span {
+            font-size: 0.75rem;
             color: #999;
-            margin-left: auto;
-            background: #f5f5f5;
-            padding: 4px 8px;
-            border-radius: 4px;
         }
 
-        /* 評論摘要 */
-        .review-summary {
+        /* 對話氣泡 */
+        .chat-bubble {
+            background: #fff;
+            padding: 15px 18px;
+            border-radius: 0 16px 16px 16px;
+            /* 左上角尖尖的 */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+            margin-bottom: 12px;
             font-size: 0.95rem;
             color: #555;
             line-height: 1.6;
-            margin-bottom: 20px;
-            font-style: italic;
+            position: relative;
         }
 
-        /* 優缺點列表 */
-        .point-list {
-            margin-top: 15px;
+        /* 優點氣泡 (稍微帶一點粉色光暈) */
+        .bubble-good {
+            border-left: 4px solid #ff9a9e;
         }
 
-        .point-item {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 12px;
-            font-size: 0.9rem;
+        /* 缺點氣泡 (稍微帶一點灰色) */
+        .bubble-bad {
+            border-left: 4px solid #a18cd1;
+            background: #f4f4f4;
+            color: #666;
         }
 
-        /* 💖 蜜糖 (優點) */
-        .point-good .icon {
-            color: #ff6b6b;
-            margin-right: 8px;
+        .tag-pill {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
             font-weight: bold;
+            margin-right: 6px;
+            margin-bottom: 6px;
         }
 
-        /* 💔 毒藥 (缺點) */
-        .point-bad .icon {
-            color: #999;
-            margin-right: 8px;
-            font-weight: bold;
+        .tag-good {
+            background: #ff9a9e;
+            color: #fff;
+        }
+
+        .tag-bad {
+            background: #a18cd1;
+            color: #fff;
         }
 
         .cta-area {
@@ -371,36 +381,29 @@
             const cons = row[6] ? row[6].split('|') : [];
             const kReview = row[7];
 
-            // 🟢 新版：產生列表 (換成愛心跟心碎符號)
+            // 產生優點 (氣泡)
             let prosHtml = pros.map(p =>
-                `<div class="point-item point-good"><span class="icon">💖 喜歡：</span>${p}</div>`
+                `<div class="chat-bubble bubble-good"><span class="tag-pill tag-good">Good</span>${p}</div>`
             ).join('');
 
+            // 產生缺點 (氣泡)
             let consHtml = cons.map(c =>
-                `<div class="point-item point-bad"><span class="icon">💔 注意：</span>${c}</div>`
+                `<div class="chat-bubble bubble-bad"><span class="tag-pill tag-bad">Bad</span>${c}</div>`
             ).join('');
 
-            // 🟢 新版：組裝 HTML (整合型卡片)
+            // 組裝 HTML
             const articleHTML = `
-                <h1 class="article-title">${title}</h1>
-                <div class="article-sub">${sub}</div>
-                
-                <img src="${img}" style="width:100%; border-radius:8px; margin-bottom:20px;">
-
-                <div class="specs-grid">
-                    <div class="spec-item"><h4>✨ 主打功效</h4><p>${effect}</p></div>
-                    <div class="spec-item"><h4>🧪 關鍵成分</h4><p>${ingredient}</p></div>
-                </div>
-
                 <div class="real-review-card">
                     <div class="review-header">
-                        <span class="review-icon">🇰🇷</span>
-                        <h3 class="review-title">韓網真實回饋懶人包</h3>
-                        <span class="review-source">Data from 化解 App</span>
+                        <div class="review-avatar">👩‍💻</div> <div class="review-title-box">
+                            <h3>韓網真實回饋</h3>
+                            <span>Data from 化解 App</span>
+                        </div>
                     </div>
 
-                    <div class="review-summary">
+                    <div class="chat-bubble" style="border-radius: 16px 16px 16px 0; margin-left: auto; background: #e3f2fd; color: #333;">
                         " ${kReview} "
+                        <div style="text-align:right; font-size:0.7rem; color:#888; margin-top:5px;">剛剛</div>
                     </div>
 
                     <div class="point-list">
@@ -408,12 +411,7 @@
                         ${consHtml}
                     </div>
                 </div>
-
-                <div class="cta-area">
-                    🤔 看完解析想試試？<br>
-                    <a href="#" class="btn-join">加入 LINE 群組 🎬</a>
-                </div>
-            `;
+                `;
 
             document.getElementById('modal-content-area').innerHTML = articleHTML;
             document.getElementById('readerModal').style.display = 'flex';
