@@ -221,34 +221,41 @@
             line-height: 1.6;
         }
 
-        /* 成分列表優化：小卡片式 */
-        .ing-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+/* === 🆕 成分區塊改版：寬版雙欄樣式 === */
+        
+        /* 裝成分的外框：改成 Grid 網格系統 */
+        .ing-section-container {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            padding-top: 20px;
+            border-top: 1px dashed #eee; /* 上方加條線區隔 */
         }
 
-        /* 2. 優化成分卡片：讓字不要貼太近，背景色再淡一點 */
+        .ing-list {
+            display: grid;
+            /* ✨ 魔法語法：自動變兩欄，手機版自動變一欄 */
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 12px; /* 卡片之間的間距 */
+        }
+
         .ing-item {
-            background: #f0f7ff;
-            /* 更淡一點的藍色，看起來更輕盈 */
-            padding: 10px 14px;
-            /* 增加一點內部留白 */
+            background: #f4f8fb;
+            padding: 12px 15px; /* 內距大一點比較舒服 */
             border-radius: 8px;
             font-size: 0.9rem;
             color: #555;
             border-left: 4px solid #8ab6d6;
-            margin-bottom: 5px;
-            /* 卡片之間的距離 */
             line-height: 1.5;
-            /* 增加行高，閱讀不擁擠 */
+            /* 讓卡片高度一致，排版更整齊 */
+            height: 100%; 
+            box-sizing: border-box; 
         }
 
         .ing-item strong {
             color: #2c3e50;
             display: block;
-            /* 讓成分名稱獨立一行 */
-            margin-bottom: 2px;
+            margin-bottom: 4px;
+            font-size: 0.95rem;
         }
 
         /* 手機版：恢復成上下排列 */
@@ -426,7 +433,7 @@
             let prosHtml = pros.map(p => formatPoint(p, 'good')).join('');
             let consHtml = cons.map(c => formatPoint(c, 'bad')).join('');
 
-            // 4. 組裝新的 HTML 結構 (左圖右文)
+// 4. 組裝新的 HTML 結構
             const articleHTML = `
                 
                 <div class="modal-header-split">
@@ -440,10 +447,13 @@
 
                         <div class="section-label">✨ 主打功效</div>
                         <div class="effect-text">${effect}</div>
+                        
+                        </div>
+                </div>
 
-                        <div class="section-label">🧪 關鍵成分解析</div>
-                        ${ingredientHtml}
-                    </div>
+                <div class="ing-section-container">
+                    <div class="section-label" style="margin-bottom:15px;">🧪 關鍵成分解析</div>
+                    ${ingredientHtml}
                 </div>
 
                 <div class="review-columns">
@@ -463,7 +473,7 @@
                     <a href="#" class="btn-join">加入 LINE 群組 🎬</a>
                 </div>
             `;
-
+            
             document.getElementById('modal-content-area').innerHTML = articleHTML;
             document.getElementById('readerModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
