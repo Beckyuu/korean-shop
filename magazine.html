@@ -393,14 +393,13 @@
             });
         }
 
-        // 打開彈窗
+        // 打開文章彈窗
         function openArticle(index) {
             const row = allReviews[index];
             if (!row) return;
 
-            // 欄位對應：
-            // A[0]=名稱, B[1]=膚質, C[2]=圖片, D[3]=功效, E[4]=成分
-            // F[5]=優點, G[6]=缺點, H[7]=評論
+            // 欄位對應 (確認你的 CSV 欄位順序正確)
+            // A=0, B=1, C=2, D=3, E=4, F=5, G=6, H=7
             const title = row[0];
             const sub = row[1];
             const img = row[2];
@@ -411,35 +410,53 @@
             const cons = row[6] ? row[6].split('|') : [];
             const kReview = row[7];
 
-            // 產生列表 (簡單的清單)
-            let prosHtml = pros.map(p => `<div class="point-item">${p}</div>`).join('');
-            let consHtml = cons.map(c => `<div class="point-item">${c}</div>`).join('');
+            // 🟢 新風格：優點 (淡粉色塊)
+            let prosHtml = pros.map(p =>
+                `<div class="point-box point-good">
+                    <span class="point-label">GOOD</span> ${p}
+                 </div>`
+            ).join('');
 
-            // 組裝 HTML
+            // 🟢 新風格：缺點 (淡灰色塊)
+            let consHtml = cons.map(c =>
+                `<div class="point-box point-bad">
+                    <span class="point-label">NOTE</span> ${c}
+                 </div>`
+            ).join('');
+
+            // 🟢 這裡把消失的圖片跟成分都補回來了！
             const articleHTML = `
-                <div class="real-review-card">
-                    <div class="review-header">
-                        <div class="review-title">REVIEW REPORT</div>
-                        <div class="review-source">Data from Hwahae</div>
+                <h1 class="article-title">${title}</h1>
+                <div class="article-sub">${sub}</div>
+                
+                <img src="${img}" style="width:100%; border-radius:8px; margin-bottom:20px;">
+
+                <div class="specs-grid">
+                    <div class="spec-item"><h4>✨ 主打功效</h4><p>${effect}</p></div>
+                    <div class="spec-item"><h4>🧪 關鍵成分</h4><p>${ingredient}</p></div>
+                </div>
+
+                <div class="clean-review-card">
+                    <div class="review-head">
+                        <h3>🇰🇷 韓網真實分析</h3>
+                        <span>Source: Hwahae</span>
                     </div>
 
-                    <div class="review-summary">
-                        " ${kReview} "
+                    <div class="review-quote">
+                        "${kReview}"
                     </div>
 
-                    <div class="points-container">
-                        <div>
-                            <div class="point-col-title point-good-title">Pros / 優點</div>
-                            ${prosHtml}
-                        </div>
-                        <div>
-                            <div class="point-col-title point-bad-title">Cons / 注意</div>
-                            ${consHtml}
-                        </div>
+                    <div class="review-body">
+                        ${prosHtml}
+                        ${consHtml}
                     </div>
                 </div>
 
-                `;
+                <div class="cta-area">
+                    🤔 看完解析想試試？<br>
+                    <a href="#" class="btn-join">加入 LINE 群組 🎬</a>
+                </div>
+            `;
 
             document.getElementById('modal-content-area').innerHTML = articleHTML;
             document.getElementById('readerModal').style.display = 'flex';
