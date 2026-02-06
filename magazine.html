@@ -122,7 +122,8 @@
         .modal-container {
             background: #fff;
             width: 90%;
-            max-width: 800px; /* 稍微加寬一點讓左右欄好看 */
+            max-width: 800px;
+            /* 稍微加寬一點讓左右欄好看 */
             height: 90vh;
             border-radius: 12px;
             position: relative;
@@ -147,19 +148,21 @@
             padding: 40px;
         }
 
-/* === 🆕 2.0 版面重組樣式 === */
+        /* === 🆕 2.0 版面重組樣式 === */
 
         /* 上半部：左圖右文容器 */
         .modal-header-split {
             display: flex;
             gap: 30px;
             margin-bottom: 30px;
-            align-items: flex-start; /* 對齊頂部 */
+            align-items: flex-start;
+            /* 對齊頂部 */
         }
 
         /* 左邊：圖片區 */
         .header-left {
-            width: 40%; /* 圖片佔 40% 寬度 */
+            width: 40%;
+            /* 圖片佔 40% 寬度 */
             flex-shrink: 0;
         }
 
@@ -167,12 +170,12 @@
             width: 100%;
             border-radius: 8px;
             object-fit: cover;
-            border: 1px solid #eee;
         }
 
         /* 右邊：資訊區 */
         .header-right {
-            flex: 1; /* 剩下的空間都給文字 */
+            flex: 1;
+            /* 剩下的空間都給文字 */
         }
 
         .article-title {
@@ -199,7 +202,7 @@
             display: flex;
             align-items: center;
         }
-        
+
         .section-label::before {
             content: '';
             display: inline-block;
@@ -225,18 +228,26 @@
             gap: 8px;
         }
 
+        /* 2. 優化成分卡片：讓字不要貼太近，背景色再淡一點 */
         .ing-item {
-            background: #f4f8fb; /* 淡淡的藍灰色背景 */
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 0.85rem;
+            background: #f0f7ff;
+            /* 更淡一點的藍色，看起來更輕盈 */
+            padding: 10px 14px;
+            /* 增加一點內部留白 */
+            border-radius: 8px;
+            font-size: 0.9rem;
             color: #555;
-            border-left: 3px solid #8ab6d6; /* 左側裝飾線 */
+            border-left: 4px solid #8ab6d6;
+            margin-bottom: 5px;
+            /* 卡片之間的距離 */
+            line-height: 1.5;
+            /* 增加行高，閱讀不擁擠 */
         }
 
         .ing-item strong {
             color: #2c3e50;
-            display: block; /* 讓成分名稱獨立一行 */
+            display: block;
+            /* 讓成分名稱獨立一行 */
             margin-bottom: 2px;
         }
 
@@ -245,19 +256,23 @@
             .modal-header-split {
                 flex-direction: column;
             }
+
             .header-left {
                 width: 100%;
                 margin-bottom: 20px;
             }
         }
 
-        /* 評價欄位保持原本的 Flex 設定 */
+        /* 3. 優化分隔線 */
         .review-columns {
             display: flex;
             gap: 30px;
-            margin-top: 10px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
+            margin-top: 30px;
+            /* 距離拉大 */
+            padding-top: 30px;
+            /* 距離拉大 */
+            border-top: 1px dashed #ddd;
+            /* 變成虛線分隔，比較柔和 */
         }
 
         /* 底部按鈕區 */
@@ -281,7 +296,7 @@
             font-weight: bold;
             transition: background 0.3s;
         }
-        
+
         .btn-join:hover {
             background: #05b04b;
         }
@@ -352,7 +367,7 @@
             });
         }
 
-function openArticle(index) {
+        function openArticle(index) {
             const row = allReviews[index];
             if (!row) return;
 
@@ -361,23 +376,23 @@ function openArticle(index) {
             const sub = row[1];
             const img = row[2];
             const effect = row[3];
-            
+
             // 2. 處理成分 (現在也要用 | 切割了)
             // Google Sheet 寫法建議：成分A:說明A | 成分B:說明B
-            const rawIngredients = row[4]; 
+            const rawIngredients = row[4];
             let ingredientHtml = "";
 
             if (rawIngredients) {
                 // 如果有資料，就切割並產生 HTML
                 const ingList = rawIngredients.split('|');
-                ingredientHtml = `<div class="ing-list">` + 
+                ingredientHtml = `<div class="ing-list">` +
                     ingList.map(item => {
                         // 嘗試把 "成分: 說明" 切開
                         let parts = item.split(/[:：]/);
                         let name = parts[0].trim();
                         let desc = parts[1] ? parts[1].trim() : "";
                         return `<div class="ing-item"><strong>${name}</strong>${desc}</div>`;
-                    }).join('') + 
+                    }).join('') +
                     `</div>`;
             } else {
                 ingredientHtml = `<p style="color:#999; font-size:0.9rem;">暫無成分資料</p>`;
@@ -386,15 +401,15 @@ function openArticle(index) {
             // 3. 處理優缺點
             const pros = row[5] ? row[5].split('|') : [];
             const cons = row[6] ? row[6].split('|') : [];
-            
+
             // (注意：這裡刪除了 const kReview = row[7]; 因為你說不需要了)
 
             // 格式化優缺點的小函式
             function formatPoint(text, type) {
                 text = text || "";
-                let parts = text.split(/[:：]/); 
+                let parts = text.split(/[:：]/);
                 let head = parts[0];
-                let body = parts[1] ? parts[1] : ""; 
+                let body = parts[1] ? parts[1] : "";
                 let icon = type === 'good' ? '💖' : '🖤';
 
                 return `
@@ -453,7 +468,7 @@ function openArticle(index) {
             document.getElementById('readerModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
-        
+
         function closeArticle(eventOrForce) {
             const modal = document.getElementById('readerModal');
             // 如果傳入 true (強制關閉) 或 點擊的對象是遮罩本身
