@@ -1695,34 +1695,40 @@
       font-weight: 500;
     }
 
-    /* === 優化後的規格選單 (修正高度版) === */
-    .qs-select {
-      width: 100%;
-
-      /* 內距與邊框 */
-      padding: 10px 15px;
-      border: 1px solid #d4a373;
-      background-color: #fff;
-      border-radius: 8px;
-
-      /* 字體設定 */
-      font-size: 0.95rem;
-      color: #555;
-      outline: none;
-      cursor: pointer;
-
-      /* 🌟 關鍵修正：解除高度限制，字才不會被切到 */
-      height: auto;
-      line-height: 1.5;
-
-      /* 去除預設樣式並加上自訂箭頭 */
-      appearance: none;
-      -webkit-appearance: none;
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-      background-repeat: no-repeat;
-      background-position: right 15px center;
-      background-size: 12px;
-    }
+/* === 優化後的規格選單  === */
+.qs-select {
+    width: 100%;
+    
+    /* 🔴 修改 1：改用「固定高度」取代 padding 撐開 */
+    /* 這樣在手機上才不會因為預設樣式而跑版 */
+    height: 45px; 
+    line-height: 45px; /* 讓文字垂直置中 */
+    
+    /* 🔴 修改 2：內距設定 (上下設為 0，只留左右) */
+    /* 右邊留 40px 是為了避開我們畫的那個箭頭，避免字疊在一起 */
+    padding: 0 40px 0 15px; 
+    
+    /* 邊框與背景 (維持不變) */
+    border: 1px solid #d4a373; 
+    background-color: #fff;
+    border-radius: 8px; 
+    
+    /* 字體設定 */
+    font-size: 16px; /* 🌟 建議：手機版設 16px 可以防止 iPhone 自動放大畫面 */
+    color: #555;
+    outline: none;
+    cursor: pointer;
+    
+    /* 去除預設樣式 (維持不變) */
+    appearance: none; 
+    -webkit-appearance: none;
+    
+    /* 自訂箭頭 (維持不變) */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 15px center; 
+    background-size: 12px;
+}
 
     /* 數量加減 */
     .qs-qty-wrapper {
