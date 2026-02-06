@@ -10,6 +10,52 @@
     rel="stylesheet" />
 
   <style>
+    /* === 📸 商品相簿樣式 (補強修正版) === */
+      
+      /* 1. 確保大圖與縮圖是垂直排列 */
+      .quick-shop-img-box {
+          display: flex !important;
+          flex-direction: column !important; 
+          padding: 20px;
+          gap: 15px; 
+      }
+
+      /* 2. 限制大圖高度，讓它乖乖縮放 */
+      .quick-shop-img-box img#qs-img {
+          width: 100%;
+          height: 350px !important; /* 強制高度 */
+          object-fit: contain !important; /* 確保不裁切 */
+          border-radius: 8px;
+      }
+
+      /* 3. 縮圖容器 */
+      .qs-gallery-container {
+          display: flex !important;
+          justify-content: center;
+          gap: 8px;
+          width: 100%;
+          overflow-x: auto;
+      }
+
+      /* 4. 🌟 關鍵修正：縮圖一定要很小！ */
+      .qs-thumb {
+          width: 50px !important;  /* 強制縮小寬度 */
+          height: 50px !important; /* 強制縮小高度 */
+          min-width: 50px !important; /* 防止被擠扁 */
+          object-fit: cover !important;
+          border-radius: 6px;
+          border: 1px solid #eee;
+          cursor: pointer;
+          opacity: 0.6;
+      }
+
+      /* 選中時的效果 */
+      .qs-thumb:hover,
+      .qs-thumb.active {
+          opacity: 1;
+          border: 2px solid #d4a373 !important;
+      }
+      
     :root {
       /* === 色票系統：韓系低飽和度 === */
       --bg-color: #f9f8f6;
