@@ -1911,6 +1911,54 @@
         margin-top: 5px !important;
       }
     }
+
+    /* === 📱 手機版並排優化 (規格+數量) === */
+      
+      /* 1. 讓它們橫向排列 */
+      .qs-row-group {
+          display: flex;
+          gap: 15px; /* 中間的空隙 */
+          align-items: flex-end; /* 對齊底部 (讓輸入框對齊) */
+          margin-bottom: 12px;
+      }
+
+      /* 2. 左邊規格：自動長大，佔滿剩餘空間 */
+      .qs-col-grow {
+          flex: 1; /* 關鍵！吃掉剩下所有寬度 */
+          min-width: 0; /* 防止被超長文字撐爆 */
+          margin-bottom: 0 !important; /* 消除原本的下方留白 */
+      }
+
+      /* 3. 右邊數量：固定寬度 */
+      .qs-col-fixed {
+          width: 120px; /* 給數量一個固定的家 */
+          flex-shrink: 0; /* 不准縮小 */
+          margin-bottom: 0 !important;
+      }
+
+      /* 4. 數量選擇器樣式微調 */
+      .qs-qty-wrapper {
+          width: 100% !important; /* 填滿那個 120px */
+          height: 52px; /* 跟隔壁規格一樣高 */
+          display: flex;
+          align-items: center;
+          border: 1px solid #ddd;
+          border-radius: 8px; /* 圓角跟規格一致 */
+      }
+      .qs-qty-wrapper button {
+          width: 35px; height: 100%; border: none; background: transparent; cursor: pointer; font-size: 1.2rem;
+      }
+      .qs-qty-wrapper input {
+          flex: 1; width: 100%; border: none; text-align: center; font-size: 1rem; outline: none; background: transparent;
+      }
+
+      /* 5. 🛑 重要修正：手機版規格選單 */
+      /* 我們之前設 width: 65%，現在要改回 100% (因為它已經在 flex 框框裡了) */
+      @media (max-width: 768px) {
+          .qs-select {
+              width: 100% !important; /* 填滿左邊那個格子 */
+          }
+      }
   </style>
 </head>
 
@@ -2027,17 +2075,20 @@
             <div id="qs-gift-text" class="qs-gift-text"></div>
           </div>
 
-          <div class="qs-section">
-            <label class="qs-label">規格 / 款式</label>
-            <select id="qs-variant-select" class="qs-select"></select>
-          </div>
+          <div class="qs-row-group">
 
-          <div class="qs-section">
-            <label class="qs-label">數量</label>
-            <div class="qs-qty-wrapper">
-              <button onclick="updateQsQty(-1)">−</button>
-              <input type="number" id="qs-qty" value="1" min="1" readonly>
-              <button onclick="updateQsQty(1)">+</button>
+            <div class="qs-section qs-col-grow">
+              <label class="qs-label">規格 / 款式</label>
+              <select id="qs-variant-select" class="qs-select"></select>
+            </div>
+
+            <div class="qs-section qs-col-fixed">
+              <label class="qs-label">數量</label>
+              <div class="qs-qty-wrapper">
+                <button onclick="updateQsQty(-1)">−</button>
+                <input type="number" id="qs-qty" value="1" min="1" readonly>
+                <button onclick="updateQsQty(1)">+</button>
+              </div>
             </div>
           </div>
 
