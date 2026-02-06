@@ -74,7 +74,6 @@
             position: relative;
         }
 
-        /* 圖片高度稍微調高一點，因為沒有Tag遮擋 */
         .cover-img-box img {
             width: 100%;
             height: 100%;
@@ -123,7 +122,7 @@
         .modal-container {
             background: #fff;
             width: 90%;
-            max-width: 700px;
+            max-width: 800px; /* 稍微加寬一點讓左右欄好看 */
             height: 90vh;
             border-radius: 12px;
             position: relative;
@@ -181,150 +180,114 @@
             color: #555;
         }
 
-        /* === ✨ 選項 B：極簡雜誌風 === */
-        .real-review-card {
-            margin-bottom: 40px;
-            padding-top: 20px;
-            border-top: 2px solid #333;
-            /* 頂部粗黑線 */
-        }
-
-        .review-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 25px;
-        }
-
-        .review-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: #000;
-        }
-
-        .review-source {
-            font-size: 0.8rem;
-            color: #999;
-            font-family: sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* 總結區塊 */
-        .review-summary {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: #333;
-            margin-bottom: 30px;
+        /* === 🆕 修正後的詳細內容樣式 (對應 JavaScript) === */
+        
+        /* 韓網評價總結框 */
+        .review-summary-box {
+            background-color: #fcfcfc;
             padding: 20px;
-            background: #fcfaf7;
-            /* 米色底 */
-            border-left: 3px solid #d4a373;
-            /* 金色裝飾線 */
-            font-family: serif;
-            /* 襯線體更有書卷氣 */
-            font-style: italic;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--accent-color);
+            border: 1px solid #eee;
         }
 
-        /* 優缺點兩欄排版 */
-        .points-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-        }
-
-        .point-col-title {
-            font-size: 0.9rem;
+        .summary-tag {
+            font-size: 0.75rem;
+            background: #333;
+            color: #fff;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            display: inline-block;
             font-weight: bold;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-            text-transform: uppercase;
         }
 
-        .point-good-title {
-            color: #d64541;
+        /* 左右兩欄容器 */
+        .review-columns {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
         }
 
-        /* 紅色 */
-        .point-bad-title {
-            color: #888;
-        }
-
-        /* 灰色 */
-
-        .point-item {
-            margin-bottom: 12px;
-            font-size: 0.9rem;
-            color: #555;
-            position: relative;
-            padding-left: 15px;
-        }
-
-        .point-item::before {
-            content: "•";
-            position: absolute;
-            left: 0;
-            color: #ccc;
+        .col-half {
+            flex: 1;
+            padding: 0;
         }
 
         /* 手機版變單欄 */
         @media (max-width: 600px) {
-            .points-container {
-                grid-template-columns: 1fr;
+            .review-columns {
+                flex-direction: column;
                 gap: 20px;
+            }
+            .specs-grid {
+                grid-template-columns: 1fr;
+            }
+            .modal-body {
+                padding: 20px;
             }
         }
 
-        .tag-pill {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.75rem;
+        .col-title {
+            font-size: 1rem;
             font-weight: bold;
-            margin-right: 6px;
-            margin-bottom: 6px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: #333;
         }
 
-        .tag-good {
-            background: #ff9a9e;
-            color: #fff;
+        /* 優缺點細項 Row */
+        .point-row {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
         }
 
-        .tag-bad {
-            background: #a18cd1;
-            color: #fff;
+        .point-icon {
+            margin-right: 12px;
+            font-size: 1.1rem;
+            line-height: 1.4;
         }
 
+        .point-text {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .point-text strong {
+            display: block;
+            color: #000;
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+
+        /* 底部按鈕區 */
         .cta-area {
             background: #333;
             color: #fff;
             padding: 25px;
             border-radius: 12px;
             text-align: center;
-            margin-top: 30px;
+            margin-top: 40px;
         }
 
         .btn-join {
             display: inline-block;
             background: var(--line-green);
             color: #fff;
-            padding: 10px 25px;
+            padding: 10px 30px;
             border-radius: 50px;
             text-decoration: none;
-            margin-top: 10px;
+            margin-top: 15px;
             font-weight: bold;
+            transition: background 0.3s;
         }
-
-        @media (max-width: 600px) {
-            .specs-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .modal-body {
-                padding: 20px;
-            }
+        
+        .btn-join:hover {
+            background: #05b04b;
         }
     </style>
 </head>
@@ -336,7 +299,7 @@
     </nav>
 
     <div id="gallery-wall" class="gallery-container">
-        <div style="width:100%; text-align:center; color:#999;">載入中...</div>
+        <div style="width:100%; text-align:center; color:#999; margin-top:50px;">載入中...</div>
     </div>
 
     <div id="readerModal" class="modal-overlay" onclick="closeArticle(event)">
@@ -393,13 +356,11 @@
             });
         }
 
-        // 打開文章彈窗
         function openArticle(index) {
             const row = allReviews[index];
             if (!row) return;
 
-            // 欄位對應 (確認你的 CSV 欄位順序正確)
-            // A=0, B=1, C=2, D=3, E=4, F=5, G=6, H=7
+            // 欄位對應
             const title = row[0];
             const sub = row[1];
             const img = row[2];
@@ -410,21 +371,32 @@
             const cons = row[6] ? row[6].split('|') : [];
             const kReview = row[7];
 
-            // 🟢 新風格：優點 (淡粉色塊)
-            let prosHtml = pros.map(p =>
-                `<div class="point-box point-good">
-                    <span class="point-label">GOOD</span> ${p}
-                 </div>`
-            ).join('');
+            // ⚡ 魔法函式：幫你把 "標題：內文" 切開來排版
+            function formatPoint(text, type) {
+                // 防呆：確保 text 不是 undefined
+                text = text || "";
+                
+                let parts = text.split(/[:：]/); // 偵測全形或半形冒號
+                let head = parts[0];
+                let body = parts[1] ? parts[1] : ""; // 如果沒有冒號，就整句顯示
 
-            // 🟢 新風格：缺點 (淡灰色塊)
-            let consHtml = cons.map(c =>
-                `<div class="point-box point-bad">
-                    <span class="point-label">NOTE</span> ${c}
-                 </div>`
-            ).join('');
+                // 根據類型給不同的 icon
+                let icon = type === 'good' ? '💖' : '🖤';
 
-            // 🟢 這裡把消失的圖片跟成分都補回來了！
+                return `
+                    <div class="point-row">
+                        <div class="point-icon">${icon}</div>
+                        <div class="point-text">
+                            <strong>${head}</strong>
+                            <span>${body}</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            let prosHtml = pros.map(p => formatPoint(p, 'good')).join('');
+            let consHtml = cons.map(c => formatPoint(c, 'bad')).join('');
+
             const articleHTML = `
                 <h1 class="article-title">${title}</h1>
                 <div class="article-sub">${sub}</div>
@@ -436,19 +408,23 @@
                     <div class="spec-item"><h4>🧪 關鍵成分</h4><p>${ingredient}</p></div>
                 </div>
 
-                <div class="clean-review-card">
-                    <div class="review-head">
-                        <h3>🇰🇷 韓網真實分析</h3>
-                        <span>Source: Hwahae</span>
+                <div class="split-review-card">
+                    
+                    <div class="review-summary-box">
+                        <span class="summary-tag">🇰🇷 韓網評價總結</span>
+                        <p style="margin:0; line-height:1.6;">${kReview || "暫無評價"}</p>
                     </div>
 
-                    <div class="review-quote">
-                        "${kReview}"
-                    </div>
+                    <div class="review-columns">
+                        <div class="col-half col-good">
+                            <h4 class="col-title" style="color:#d45d5d;">👍 推薦入手的理由</h4>
+                            ${prosHtml}
+                        </div>
 
-                    <div class="review-body">
-                        ${prosHtml}
-                        ${consHtml}
+                        <div class="col-half col-bad">
+                            <h4 class="col-title" style="color:#666;">👎 購買前請注意</h4>
+                            ${consHtml}
+                        </div>
                     </div>
                 </div>
 
@@ -463,9 +439,10 @@
             document.body.style.overflow = 'hidden';
         }
 
-        function closeArticle(force) {
+        function closeArticle(eventOrForce) {
             const modal = document.getElementById('readerModal');
-            if (force === true || event.target === modal) {
+            // 如果傳入 true (強制關閉) 或 點擊的對象是遮罩本身
+            if (eventOrForce === true || event.target === modal) {
                 modal.style.display = 'none';
                 document.body.style.overflow = 'auto';
             }
