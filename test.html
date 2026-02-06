@@ -1695,40 +1695,42 @@
       font-weight: 500;
     }
 
-/* === 優化後的規格選單  === */
-.qs-select {
-    width: 100%;
-    
-    /* 🔴 修改 1：改用「固定高度」取代 padding 撐開 */
-    /* 這樣在手機上才不會因為預設樣式而跑版 */
-    height: 45px; 
-    line-height: 45px; /* 讓文字垂直置中 */
-    
-    /* 🔴 修改 2：內距設定 (上下設為 0，只留左右) */
-    /* 右邊留 40px 是為了避開我們畫的那個箭頭，避免字疊在一起 */
-    padding: 0 40px 0 15px; 
-    
-    /* 邊框與背景 (維持不變) */
-    border: 1px solid #d4a373; 
-    background-color: #fff;
-    border-radius: 8px; 
-    
-    /* 字體設定 */
-    font-size: 16px; /* 🌟 建議：手機版設 16px 可以防止 iPhone 自動放大畫面 */
-    color: #555;
-    outline: none;
-    cursor: pointer;
-    
-    /* 去除預設樣式 (維持不變) */
-    appearance: none; 
-    -webkit-appearance: none;
-    
-    /* 自訂箭頭 (維持不變) */
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 15px center; 
-    background-size: 12px;
-}
+    /* === 優化後的規格選單  === */
+    .qs-select {
+      width: 100%;
+
+      /* 🔴 修改 1：改用「固定高度」取代 padding 撐開 */
+      /* 這樣在手機上才不會因為預設樣式而跑版 */
+      height: 45px;
+      line-height: 45px;
+      /* 讓文字垂直置中 */
+
+      /* 🔴 修改 2：內距設定 (上下設為 0，只留左右) */
+      /* 右邊留 40px 是為了避開我們畫的那個箭頭，避免字疊在一起 */
+      padding: 0 40px 0 15px;
+
+      /* 邊框與背景 (維持不變) */
+      border: 1px solid #d4a373;
+      background-color: #fff;
+      border-radius: 8px;
+
+      /* 字體設定 */
+      font-size: 16px;
+      /* 🌟 建議：手機版設 16px 可以防止 iPhone 自動放大畫面 */
+      color: #555;
+      outline: none;
+      cursor: pointer;
+
+      /* 去除預設樣式 (維持不變) */
+      appearance: none;
+      -webkit-appearance: none;
+
+      /* 自訂箭頭 (維持不變) */
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 15px center;
+      background-size: 12px;
+    }
 
     /* 數量加減 */
     .qs-qty-wrapper {
@@ -1847,6 +1849,67 @@
       /* 選中時出現金框 */
       transform: translateY(-2px);
       /* 微微浮起 */
+    }
+
+    /* === 📱 手機版專屬優化 (緊湊模式) === */
+    @media (max-width: 768px) {
+
+      /* 1. 彈窗內距縮小 (讓空間變大) */
+      .quick-shop-info-box {
+        padding: 15px 20px !important;
+        /* 原本比較寬，改窄一點 */
+        gap: 0 !important;
+        /* 消除額外間隙 */
+      }
+
+      /* 2. 標題縮小 & 間距拉近 */
+      #qs-title {
+        font-size: 1.1rem !important;
+        /* 字變小 (原本 1.3) */
+        margin-bottom: 2px !important;
+        /* 緊貼下方 */
+        line-height: 1.3 !important;
+      }
+
+      /* 3. 價格區塊縮小 & 拉近 */
+      #qs-price-box {
+        font-size: 1.2rem !important;
+        margin-bottom: 12px !important;
+        /* 離下面規格近一點 */
+        padding-bottom: 8px !important;
+      }
+
+      /* 4. 內容物清單 (I欄) 微調 */
+      .qs-gift-card {
+        margin-bottom: 8px !important;
+        margin-top: 2px !important;
+      }
+
+      /* 5. 規格選單大改造：變胖 + 變短 */
+      .qs-select {
+        /* 變短：只佔 65% 寬度 (約少了 1/3) */
+        width: 65% !important;
+
+        /* 變胖：高度增加，手指好點 */
+        height: 52px !important;
+        line-height: 52px !important;
+        /* 確保文字垂直置中 */
+
+        font-size: 16px !important;
+      }
+
+      /* 6. 區塊間距縮小 */
+      .qs-section {
+        margin-bottom: 12px !important;
+        /* 每個區塊距離拉近 */
+      }
+
+      /* 7. 按鈕調整 */
+      .qs-add-btn {
+        padding: 12px !important;
+        /* 按鈕不用那麼厚 */
+        margin-top: 5px !important;
+      }
     }
   </style>
 </head>
