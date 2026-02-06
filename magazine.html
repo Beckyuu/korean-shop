@@ -147,121 +147,117 @@
             padding: 40px;
         }
 
-        /* 文章細節樣式 */
+/* === 🆕 2.0 版面重組樣式 === */
+
+        /* 上半部：左圖右文容器 */
+        .modal-header-split {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+            align-items: flex-start; /* 對齊頂部 */
+        }
+
+        /* 左邊：圖片區 */
+        .header-left {
+            width: 40%; /* 圖片佔 40% 寬度 */
+            flex-shrink: 0;
+        }
+
+        .header-left img {
+            width: 100%;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid #eee;
+        }
+
+        /* 右邊：資訊區 */
+        .header-right {
+            flex: 1; /* 剩下的空間都給文字 */
+        }
+
         .article-title {
-            font-size: 1.8rem;
-            margin-bottom: 5px;
+            font-size: 1.6rem;
+            margin: 0 0 5px;
             color: #333;
+            line-height: 1.3;
         }
 
         .article-sub {
             color: #999;
-            border-bottom: 1px dashed #ddd;
-            padding-bottom: 15px;
-            margin-bottom: 25px;
-        }
-
-        .specs-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .spec-item h4 {
-            color: var(--accent-color);
-            margin: 0 0 5px;
-            font-size: 1rem;
-        }
-
-        .spec-item p {
-            margin: 0;
             font-size: 0.9rem;
-            color: #555;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #ddd;
         }
 
-        /* === 🆕 修正後的詳細內容樣式 (對應 JavaScript) === */
-        
-        /* 韓網評價總結框 */
-        .review-summary-box {
-            background-color: #fcfcfc;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-            border-left: 4px solid var(--accent-color);
-            border: 1px solid #eee;
-        }
-
-        .summary-tag {
-            font-size: 0.75rem;
-            background: #333;
-            color: #fff;
-            padding: 3px 8px;
-            border-radius: 4px;
-            margin-bottom: 10px;
-            display: inline-block;
+        /* 功效與成分區塊標題 */
+        .section-label {
+            font-size: 0.9rem;
+            color: var(--accent-color);
             font-weight: bold;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-label::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            margin-right: 8px;
         }
 
-        /* 左右兩欄容器 */
+        /* 功效文字 */
+        .effect-text {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* 成分列表優化：小卡片式 */
+        .ing-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .ing-item {
+            background: #f4f8fb; /* 淡淡的藍灰色背景 */
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: #555;
+            border-left: 3px solid #8ab6d6; /* 左側裝飾線 */
+        }
+
+        .ing-item strong {
+            color: #2c3e50;
+            display: block; /* 讓成分名稱獨立一行 */
+            margin-bottom: 2px;
+        }
+
+        /* 手機版：恢復成上下排列 */
+        @media (max-width: 700px) {
+            .modal-header-split {
+                flex-direction: column;
+            }
+            .header-left {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+        }
+
+        /* 評價欄位保持原本的 Flex 設定 */
         .review-columns {
             display: flex;
             gap: 30px;
-            margin-top: 20px;
-        }
-
-        .col-half {
-            flex: 1;
-            padding: 0;
-        }
-
-        /* 手機版變單欄 */
-        @media (max-width: 600px) {
-            .review-columns {
-                flex-direction: column;
-                gap: 20px;
-            }
-            .specs-grid {
-                grid-template-columns: 1fr;
-            }
-            .modal-body {
-                padding: 20px;
-            }
-        }
-
-        .col-title {
-            font-size: 1rem;
-            font-weight: bold;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        /* 優缺點細項 Row */
-        .point-row {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 15px;
-        }
-
-        .point-icon {
-            margin-right: 12px;
-            font-size: 1.1rem;
-            line-height: 1.4;
-        }
-
-        .point-text {
-            font-size: 0.9rem;
-            line-height: 1.6;
-            color: #555;
-        }
-
-        .point-text strong {
-            display: block;
-            color: #000;
-            font-weight: bold;
-            margin-bottom: 2px;
+            margin-top: 10px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
         }
 
         /* 底部按鈕區 */
@@ -356,31 +352,49 @@
             });
         }
 
-        function openArticle(index) {
+function openArticle(index) {
             const row = allReviews[index];
             if (!row) return;
 
-            // 欄位對應
+            // 1. 讀取資料
             const title = row[0];
             const sub = row[1];
             const img = row[2];
             const effect = row[3];
-            const ingredient = row[4];
+            
+            // 2. 處理成分 (現在也要用 | 切割了)
+            // Google Sheet 寫法建議：成分A:說明A | 成分B:說明B
+            const rawIngredients = row[4]; 
+            let ingredientHtml = "";
 
+            if (rawIngredients) {
+                // 如果有資料，就切割並產生 HTML
+                const ingList = rawIngredients.split('|');
+                ingredientHtml = `<div class="ing-list">` + 
+                    ingList.map(item => {
+                        // 嘗試把 "成分: 說明" 切開
+                        let parts = item.split(/[:：]/);
+                        let name = parts[0].trim();
+                        let desc = parts[1] ? parts[1].trim() : "";
+                        return `<div class="ing-item"><strong>${name}</strong>${desc}</div>`;
+                    }).join('') + 
+                    `</div>`;
+            } else {
+                ingredientHtml = `<p style="color:#999; font-size:0.9rem;">暫無成分資料</p>`;
+            }
+
+            // 3. 處理優缺點
             const pros = row[5] ? row[5].split('|') : [];
             const cons = row[6] ? row[6].split('|') : [];
-            const kReview = row[7];
+            
+            // (注意：這裡刪除了 const kReview = row[7]; 因為你說不需要了)
 
-            // ⚡ 魔法函式：幫你把 "標題：內文" 切開來排版
+            // 格式化優缺點的小函式
             function formatPoint(text, type) {
-                // 防呆：確保 text 不是 undefined
                 text = text || "";
-                
-                let parts = text.split(/[:：]/); // 偵測全形或半形冒號
+                let parts = text.split(/[:：]/); 
                 let head = parts[0];
-                let body = parts[1] ? parts[1] : ""; // 如果沒有冒號，就整句顯示
-
-                // 根據類型給不同的 icon
+                let body = parts[1] ? parts[1] : ""; 
                 let icon = type === 'good' ? '💖' : '🖤';
 
                 return `
@@ -397,34 +411,35 @@
             let prosHtml = pros.map(p => formatPoint(p, 'good')).join('');
             let consHtml = cons.map(c => formatPoint(c, 'bad')).join('');
 
+            // 4. 組裝新的 HTML 結構 (左圖右文)
             const articleHTML = `
-                <h1 class="article-title">${title}</h1>
-                <div class="article-sub">${sub}</div>
                 
-                <img src="${img}" style="width:100%; border-radius:8px; margin-bottom:20px;">
-
-                <div class="specs-grid">
-                    <div class="spec-item"><h4>✨ 主打功效</h4><p>${effect}</p></div>
-                    <div class="spec-item"><h4>🧪 關鍵成分</h4><p>${ingredient}</p></div>
-                </div>
-
-                <div class="split-review-card">
-                    
-                    <div class="review-summary-box">
-                        <span class="summary-tag">🇰🇷 韓網評價總結</span>
-                        <p style="margin:0; line-height:1.6;">${kReview || "暫無評價"}</p>
+                <div class="modal-header-split">
+                    <div class="header-left">
+                         <img src="${img}" alt="${title}">
                     </div>
 
-                    <div class="review-columns">
-                        <div class="col-half col-good">
-                            <h4 class="col-title" style="color:#d45d5d;">👍 推薦入手的理由</h4>
-                            ${prosHtml}
-                        </div>
+                    <div class="header-right">
+                        <h1 class="article-title">${title}</h1>
+                        <div class="article-sub">${sub}</div>
 
-                        <div class="col-half col-bad">
-                            <h4 class="col-title" style="color:#666;">👎 購買前請注意</h4>
-                            ${consHtml}
-                        </div>
+                        <div class="section-label">✨ 主打功效</div>
+                        <div class="effect-text">${effect}</div>
+
+                        <div class="section-label">🧪 關鍵成分解析</div>
+                        ${ingredientHtml}
+                    </div>
+                </div>
+
+                <div class="review-columns">
+                    <div class="col-half col-good">
+                        <h4 class="col-title" style="color:#d45d5d;">👍 推薦入手的理由</h4>
+                        ${prosHtml}
+                    </div>
+
+                    <div class="col-half col-bad">
+                        <h4 class="col-title" style="color:#666;">👎 購買前請注意</h4>
+                        ${consHtml}
                     </div>
                 </div>
 
@@ -438,7 +453,7 @@
             document.getElementById('readerModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
-
+        
         function closeArticle(eventOrForce) {
             const modal = document.getElementById('readerModal');
             // 如果傳入 true (強制關閉) 或 點擊的對象是遮罩本身
