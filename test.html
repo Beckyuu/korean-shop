@@ -1580,19 +1580,57 @@
       flex-direction: column;
     }
 
-    /* 關閉按鈕 */
+/* === ❌ 商品彈窗關閉按鈕 (顯眼版) === */
     .quick-shop-close {
       position: absolute;
       top: 15px;
-      right: 20px;
-      background: transparent;
-      border: none;
-      font-size: 2rem;
-      color: #999;
+      right: 15px;
+      
+      /* 🌟 外觀：做成圓形按鈕，比較好點 */
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.9); /* 半透明白底 */
+      border: 1px solid #eee; /* 淡淡的邊框 */
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* 讓它浮起來 */
+      
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
-      z-index: 10;
+      z-index: 20; /* 確保它浮在最上面，不會被圖片蓋住 */
+      transition: all 0.2s;
     }
 
+    /* 裡面的叉叉符號 */
+    .quick-shop-close span {
+      font-size: 2rem;
+      color: #555; /* 深灰色，清楚可見 */
+      font-weight: 300;
+      line-height: 1;
+      margin-top: -2px; /* 微調垂直位置 */
+    }
+
+    /* 滑鼠移過去的效果 */
+    .quick-shop-close:hover {
+      background-color: #333; /* 變成深色背景 */
+      border-color: #333;
+    }
+    
+    .quick-shop-close:hover span {
+      color: #fff; /* 符號變白色 */
+    }
+
+    /* 手機版微調 */
+    @media (max-width: 768px) {
+      .quick-shop-close {
+        top: 10px;
+        right: 10px;
+        width: 36px; /* 手機版稍微小一點點，但還是很好按 */
+        height: 36px;
+      }
+    }
+    
     /* 內部文字樣式 */
     #qs-title {
       font-family: 'Zen Maru Gothic', sans-serif;
@@ -2177,7 +2215,7 @@
 
   <div id="quickShopModal" class="quick-shop-overlay" onclick="closeQuickShop(event)">
     <div class="quick-shop-content">
-      <button class="quick-shop-close" onclick="forceCloseQuickShop()">×</button>
+      <button class="quick-shop-close" onclick="forceCloseQuickShop()"><span>×</span></button>
 
       <div class="quick-shop-body">
         <div class="quick-shop-img-box">
