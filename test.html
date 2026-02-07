@@ -1571,25 +1571,6 @@
       flex-wrap: wrap;
     }
 
-    /* 左側圖片區 */
-    .quick-shop-img-box {
-      flex: 1;
-      min-width: 300px;
-      background: #f9f9f9;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .quick-shop-img-box img {
-      width: 100%;
-      max-width: 400px;
-      height: auto;
-      object-fit: contain;
-      border-radius: 8px;
-    }
-
     /* 右側資訊區 */
     .quick-shop-info-box {
       flex: 1;
@@ -1673,13 +1654,6 @@
     /* 🔴 隱藏原本的浮動標籤 (以防 HTML 沒刪乾淨) */
     .qs-gift-tag {
       display: none !important;
-    }
-
-    .qs-gift-text {
-      font-size: 0.9rem;
-      color: #666;
-      line-height: 1.8;
-      white-space: normal;
     }
 
     /* 表單元件 */
@@ -2070,10 +2044,6 @@
           </div>
 
           <div id="qs-price-box">NT$ 0</div>
-
-          <div class="qs-section">
-            <div id="qs-gift-text" class="qs-gift-text"></div>
-          </div>
 
           <div class="qs-row-group">
 
@@ -2602,62 +2572,6 @@
       }
     }
 
-    function addToCart(index) {
-      const product = allProductsData[index];
-      const qtySelect = document.getElementById(`qty-${index}`);
-      const qty = parseInt(qtySelect.value);
-
-      // 🔴 修改：從下拉選單抓取選中的值
-      let selectedSpec = null;
-      const selectEl = document.getElementById(`variant-select-${index}`);
-
-      if (selectEl) {
-        // 如果有選單，就看選了什麼
-        if (selectEl.tagName === "SELECT") {
-          selectedSpec = selectEl.value;
-          if (selectedSpec === "") {
-            alert("Please select a variant.\n請選擇一個款式喔！");
-            return;
-          }
-        } else {
-          // 如果是那種「單一規格」的文字 div (上面寫 style="border:none...")
-          selectedSpec = "單一規格";
-        }
-      } else {
-        // 防呆
-        selectedSpec = "單一規格";
-      }
-
-      // 2. 處理價格
-      let priceNum = parseInt(product.price.replace(/[^0-9]/g, ""));
-
-      // 3. 建立購物車項目
-      const cartItem = {
-        name: product.name,
-        spec: selectedSpec, // 使用剛剛抓到的值
-        price: priceNum,
-        qty: qty,
-      };
-
-      // ...後面維持一樣 (加入購物車 cart.push, saveCart, 按鈕變色特效...)
-      cart.push(cartItem);
-      saveCart();
-
-      // 按鈕變色特效 (維持原狀)
-      const btn = window.event ? (window.event.target.tagName === 'BUTTON' ? window.event.target : window.event.target.closest('button')) : null;
-      if (btn) {
-        const originalText = btn.innerText;
-        btn.innerText = "OK!";
-        btn.style.backgroundColor = "#d4a373";
-        btn.style.borderColor = "#d4a373";
-        setTimeout(() => {
-          btn.innerText = originalText;
-          btn.style.backgroundColor = "";
-          btn.style.borderColor = "";
-        }, 1000);
-      }
-    }
-
     function closeCart(e) {
       if (e.target.classList.contains("cart-modal"))
         document.getElementById("cartModal").classList.remove("show");
@@ -2676,6 +2590,7 @@
 
       let html = "";
       let total = 0;
+      let depositHtml = "";
       cart.forEach((item, idx) => {
         total += item.price * item.qty;
         html += `
@@ -2708,9 +2623,6 @@
                 `;
       }
       // --------------------------------
-
-      // 🟢 修改：定金計算邏輯 (滿 1000 元)
-      let depositHtml = "";
 
       if (total >= 1000) {
         let rawDeposit = total * 0.25;
