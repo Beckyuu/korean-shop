@@ -420,7 +420,7 @@
       box-shadow: 0px 0px 0px transparent; 
       transform: translate(3px, 3px); /* 位移填補陰影 */
     }
-    
+
     /* === 產品列表 === */
     .container {
       max-width: 1200px;
@@ -1979,6 +1979,30 @@
 
     /* === 📱 手機版並排優化 (規格+數量) === */
 
+    /* === 🚀 新增：無規格時，價格與數量併排專用樣式 === */
+    .price-qty-mixed-mode {
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      padding-bottom: 15px !important; /* 調整底線距離 */
+      gap: 10px;
+    }
+
+    /* 當數量跑到上面時，微調一下樣式 */
+    .price-qty-mixed-mode .qs-col-fixed {
+      margin: 0 !important; /* 拿掉外距 */
+      width: auto !important; /* 寬度自動 */
+    }
+
+    .price-qty-mixed-mode .qs-label {
+      display: none; /* 🌟 關鍵：並排時隱藏「數量」這兩個字，畫面更乾淨 */
+    }
+    
+    .price-qty-mixed-mode .qs-qty-wrapper {
+      height: 40px !important; /*稍微縮小高度配合價格 */
+      border-color: #d4a373 !important; /* 邊框清楚一點 */
+    }
+
     /* 1. 讓它們橫向排列 */
     .qs-row-group {
       display: flex;
@@ -2558,11 +2582,27 @@
       // 因為我們已經在 fetchProducts 處理過價格邏輯，這裡直接顯示 product.price 最保險
       document.getElementById('qs-price-box').innerText = 'NT$ ' + product.price;
 
-      // 產生規格選單
+// === 產生規格選單 與 版面動態調整 (新版) ===
       const select = document.getElementById('qs-variant-select');
-      select.innerHTML = ''; // 清空
+      const variantContainer = select.closest('.qs-col-grow'); // 規格的容器
+      const qtyContainer = document.querySelector('.qs-col-fixed'); // 數量的容器
+      const priceBox = document.getElementById('qs-price-box'); // 價格的容器
+      const rowGroup = document.querySelector('.qs-row-group'); // 原本的那一排
 
-      if (product.variants.length > 0 && product.variants[0] !== "") {
+      select.innerHTML = ''; // 清空選單
+
+      // 1. 先重置：把數量容器「搬回家」(搬回原本的 rowGroup 裡面)
+      if (!rowGroup.contains(qtyContainer)) {
+        rowGroup.appendChild(qtyContainer);
+      }
+      // 移除價格的並排模式樣式
+      priceBox.classList.remove('price-qty-mixed-mode');
+      
+      // 2. 判斷是否有規格
+      const hasVariants = product.variants.length > 0 && product.variants[0] !== "" && product.variants[0] !== "單一規格";
+
+      if (hasVariants) {
+        // [情況 A：有規格] -> 維持原樣 (規格左、數量右)
         product.variants.forEach(v => {
           const opt = document.createElement('option');
           opt.value = v;
@@ -2573,13 +2613,23 @@
           }
           select.appendChild(opt);
         });
-        // 顯示選單區塊
-        select.parentElement.style.display = 'block';
-      } else {
-        // 如果沒有規格 (ONE SIZE)，隱藏選單
-        select.parentElement.style.display = 'none';
-      }
+        
+        // 顯示規格選單
+        variantContainer.style.display = 'block'; 
 
+      } else {
+        // [情況 B：無規格/單一規格] -> 隱藏規格，把數量搬上去！
+        
+        // 1. 隱藏規格選單
+        variantContainer.style.display = 'none';
+
+        // 2. 搬家：把數量容器搬進價格盒子裡
+        priceBox.appendChild(qtyContainer);
+        
+        // 3. 加上並排專用的 CSS Class
+        priceBox.classList.add('price-qty-mixed-mode');
+      }
+      
       // 重置數量
       document.getElementById('qs-qty').value = 1;
 
