@@ -148,49 +148,106 @@
             padding: 40px;
         }
 
-        /* === 🆕 2.0 版面重組樣式 === */
-
-        /* 上半部：左圖右文容器 */
+/* === 🆕 3.0 雜誌封面風排版 === */
         .modal-header-split {
             display: flex;
-            gap: 30px;
-            margin-bottom: 30px;
-            align-items: flex-start;
-            /* 對齊頂部 */
+            gap: 40px; /* 圖片跟文字距離拉大，更有呼吸感 */
+            margin-bottom: 40px;
+            align-items: center; /* 垂直置中 */
         }
 
-        /* 左邊：圖片區 */
+        /* 左邊：圖片區 (拍立得風格) */
         .header-left {
-            width: 40%;
-            /* 圖片佔 40% 寬度 */
+            width: 42%; 
             flex-shrink: 0;
+            position: relative;
         }
 
         .header-left img {
             width: 100%;
-            border-radius: 8px;
+            border-radius: 12px; /* 圓角 */
             object-fit: cover;
+            /* 加一點影子讓它浮起來 */
+            box-shadow: 10px 10px 0px #f2efe9; 
+            border: 1px solid #eee;
         }
 
         /* 右邊：資訊區 */
         .header-right {
             flex: 1;
-            /* 剩下的空間都給文字 */
+        }
+
+        .brand-tag {
+            font-size: 0.9rem;
+            color: #999;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            display: block;
+            font-weight: 500;
         }
 
         .article-title {
-            font-size: 1.6rem;
-            margin: 0 0 5px;
+            font-size: 1.8rem; /* 標題加大 */
+            margin: 5px 0 15px;
             color: #333;
-            line-height: 1.3;
+            line-height: 1.4;
+            letter-spacing: 1px;
         }
 
-        .article-sub {
-            color: #999;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px dashed #ddd;
+        /* ✨ Hashtag 標籤區 */
+        .hashtag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+
+        .hashtag-pill {
+            background-color: #fff;
+            border: 1px solid #d4a373;
+            color: #d4a373;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            /* 讓它有點可愛 */
+            box-shadow: 2px 2px 0px rgba(212, 163, 115, 0.2); 
+        }
+
+        /* 💬 雜誌引言 (功效區) */
+        .effect-quote-box {
+            background: #fffcf5; /* 淺奶油底 */
+            border-left: 4px solid #d4a373; /* 左邊金線 */
+            padding: 15px 20px;
+            margin-top: 10px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .effect-quote-text {
+            font-size: 1rem;
+            color: #555;
+            line-height: 1.7;
+            font-style: italic; /* 斜體更有雜誌感 */
+        }
+        
+        /* 手機版適應 */
+        @media (max-width: 700px) {
+            .modal-header-split {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .header-left {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            .header-left img {
+                box-shadow: 5px 5px 0px #f2efe9; /* 手機版影子小一點 */
+            }
+            .article-title {
+                font-size: 1.5rem;
+            }
         }
 
         /* === 🆕 成分區塊：奶油小方塊風格 === */
@@ -466,7 +523,21 @@
             let prosHtml = pros.map(p => formatPoint(p, 'good')).join('');
             let consHtml = cons.map(c => formatPoint(c, 'bad')).join('');
 
-// 4. 組裝新的 HTML 結構 (雜誌風標題 - 韓網情報版)
+// === 處理 Hashtag (把副標題切成標籤) ===
+            // 如果 Excel 裡寫 "#保濕 #透亮"，我們會把它切開
+            let tagsHtml = "";
+            if (sub && sub.includes('#')) {
+                // 如果有 # 就切開
+                tagsHtml = sub.split('#')
+                    .filter(t => t.trim() !== "") // 過濾空字串
+                    .map(t => `<span class="hashtag-pill">#${t.trim()}</span>`)
+                    .join('');
+            } else if (sub) {
+                // 如果沒有 #，就把整句當作一個標籤，或者直接顯示文字
+                tagsHtml = `<span class="hashtag-pill">#${sub}</span>`;
+            }
+
+            // 4. 組裝新的 HTML 結構 (3.0 雜誌封面版)
             const articleHTML = `
                 
                 <div class="modal-header-split">
@@ -475,11 +546,19 @@
                     </div>
 
                     <div class="header-right">
+                        <span class="brand-tag">Beauty Pick</span>
+                        
                         <h1 class="article-title">${title}</h1>
-                        <div class="article-sub">${sub}</div>
+                        
+                        <div class="hashtag-container">
+                            ${tagsHtml}
+                        </div>
 
-                        <div class="section-label">✨ 主打功效</div>
-                        <div class="effect-text">${effect}</div>
+                        <div class="effect-quote-box">
+                            <div class="effect-quote-text">
+                                "${effect}"
+                            </div>
+                        </div>
                     </div>
                 </div>
 
