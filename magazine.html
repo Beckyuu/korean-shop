@@ -193,72 +193,105 @@
             border-bottom: 1px dashed #ddd;
         }
 
-        /* 功效與成分區塊標題 */
-        .section-label {
-            font-size: 0.9rem;
-            color: var(--accent-color);
-            font-weight: bold;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-        }
-
-        .section-label::before {
-            content: '';
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            background: var(--accent-color);
-            border-radius: 50%;
-            margin-right: 8px;
-        }
-
-        /* 功效文字 */
-        .effect-text {
-            font-size: 0.95rem;
-            color: #555;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-
-/* === 🆕 成分區塊改版：寬版雙欄樣式 === */
-        
-        /* 裝成分的外框：改成 Grid 網格系統 */
+        /* === 🆕 成分區塊：奶油小方塊風格 === */
         .ing-section-container {
-            margin-top: 20px;
-            margin-bottom: 20px;
-            padding-top: 20px;
-            border-top: 1px dashed #eee; /* 上方加條線區隔 */
+            margin-top: 25px;
+            margin-bottom: 30px;
         }
 
         .ing-list {
             display: grid;
-            /* ✨ 魔法語法：自動變兩欄，手機版自動變一欄 */
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
-            gap: 12px; /* 卡片之間的間距 */
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
         }
 
         .ing-item {
-            background: #f4f8fb;
-            padding: 12px 15px; /* 內距大一點比較舒服 */
-            border-radius: 8px;
+            /* 🎨 改成溫暖的奶油色背景 */
+            background: #fffcf5;
+            border: 1px solid #f3e9d2;
+            /* 淡淡的杏色邊框 */
+
+            padding: 15px 18px;
+            border-radius: 15px;
+            /* 圓角加大，比較可愛 */
             font-size: 0.9rem;
-            color: #555;
-            border-left: 4px solid #8ab6d6;
-            line-height: 1.5;
-            /* 讓卡片高度一致，排版更整齊 */
-            height: 100%; 
-            box-sizing: border-box; 
+            color: #666;
+            line-height: 1.6;
+
+            /* 陰影讓它浮起來 */
+            box-shadow: 0 4px 10px rgba(212, 163, 115, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .ing-item:hover {
+            transform: translateY(-3px);
+            /* 滑鼠移過去會跳一下 */
+            border-color: #d4a373;
         }
 
         .ing-item strong {
-            color: #2c3e50;
+            color: #d4a373;
+            /* 標題改成金棕色 */
             display: block;
-            margin-bottom: 4px;
-            font-size: 0.95rem;
+            margin-bottom: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
-        /* 手機版：恢復成上下排列 */
+        /* === ⚖️ 優缺點評比區：雜誌專欄風 === */
+        .review-columns {
+            display: flex;
+            gap: 40px;
+            /* 拉大間距 */
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px dashed #e0dcd0;
+            /* 虛線顏色變柔和 */
+        }
+
+        .col-half {
+            flex: 1;
+        }
+
+        .col-title {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+            /* 標題下加一條線 */
+            letter-spacing: 1px;
+        }
+
+        /* 優點清單樣式 */
+        .point-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 18px;
+            align-items: flex-start;
+        }
+
+        .point-icon {
+            font-size: 1.2rem;
+            margin-top: -2px;
+            /* 圖示位置微調 */
+            flex-shrink: 0;
+        }
+
+        .point-text strong {
+            display: block;
+            color: #333;
+            font-size: 0.95rem;
+            margin-bottom: 2px;
+        }
+
+        .point-text span {
+            color: #888;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        /* 手機版適應 */
         @media (max-width: 700px) {
             .modal-header-split {
                 flex-direction: column;
@@ -268,44 +301,44 @@
                 width: 100%;
                 margin-bottom: 20px;
             }
-        }
 
-        /* 3. 優化分隔線 */
-        .review-columns {
-            display: flex;
-            gap: 30px;
-            margin-top: 30px;
-            /* 距離拉大 */
-            padding-top: 30px;
-            /* 距離拉大 */
-            border-top: 1px dashed #ddd;
-            /* 變成虛線分隔，比較柔和 */
+            .review-columns {
+                flex-direction: column;
+                /* 手機版變成上下排 */
+                gap: 30px;
+            }
         }
 
         /* 底部按鈕區 */
         .cta-area {
-            background: #333;
-            color: #fff;
-            padding: 25px;
+            background: #f9f8f6;
+            /* 改成淺灰米色，比較優雅 */
+            color: #555;
+            padding: 30px;
             border-radius: 12px;
             text-align: center;
             margin-top: 40px;
+            border: 1px solid #eee;
         }
 
         .btn-join {
             display: inline-block;
-            background: var(--line-green);
+            background-color: #d4a373;
+            /* 按鈕改成金色 */
             color: #fff;
-            padding: 10px 30px;
+            padding: 10px 35px;
             border-radius: 50px;
             text-decoration: none;
             margin-top: 15px;
-            font-weight: bold;
-            transition: background 0.3s;
+            font-weight: 500;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(212, 163, 115, 0.3);
         }
 
         .btn-join:hover {
-            background: #05b04b;
+            background-color: #bfa092;
+            transform: translateY(-2px);
         }
     </style>
 </head>
@@ -417,7 +450,7 @@
                 let parts = text.split(/[:：]/);
                 let head = parts[0];
                 let body = parts[1] ? parts[1] : "";
-                let icon = type === 'good' ? '💖' : '🖤';
+                let icon = type === 'good' ? '💡' : '💭';
 
                 return `
                     <div class="point-row">
@@ -433,7 +466,7 @@
             let prosHtml = pros.map(p => formatPoint(p, 'good')).join('');
             let consHtml = cons.map(c => formatPoint(c, 'bad')).join('');
 
-// 4. 組裝新的 HTML 結構
+            // 4. 組裝新的 HTML 結構 (雜誌風標題)
             const articleHTML = `
                 
                 <div class="modal-header-split">
@@ -447,33 +480,33 @@
 
                         <div class="section-label">✨ 主打功效</div>
                         <div class="effect-text">${effect}</div>
-                        
-                        </div>
+                    </div>
                 </div>
 
                 <div class="ing-section-container">
-                    <div class="section-label" style="margin-bottom:15px;">🧪 關鍵成分解析</div>
+                    <div class="section-label" style="margin-bottom:15px; font-size:1.1rem;">🧪 關鍵成分解析</div>
                     ${ingredientHtml}
                 </div>
 
                 <div class="review-columns">
                     <div class="col-half col-good">
-                        <h4 class="col-title" style="color:#d45d5d;">👍 推薦入手的理由</h4>
+                        <h4 class="col-title" style="color:#d4a373; border-color:#d4a373;">Mina's Pick! 為什麼選它？</h4>
                         ${prosHtml}
                     </div>
 
                     <div class="col-half col-bad">
-                        <h4 class="col-title" style="color:#666;">👎 購買前請注意</h4>
+                        <h4 class="col-title" style="color:#999; border-color:#eee;">小提醒 / 誰要避雷？</h4>
                         ${consHtml}
                     </div>
                 </div>
 
                 <div class="cta-area">
-                    🤔 看完解析想試試？<br>
-                    <a href="#" class="btn-join">加入 LINE 群組 🎬</a>
+                    <div style="font-size:1.1rem; font-weight:500; margin-bottom:5px;">看完解析心動了嗎？</div>
+                    <div style="font-size:0.9rem; color:#888;">加入社群，不錯過任何一團優惠！</div>
+                    <a href="#" class="btn-join">加入 LINE 群組 ➝</a>
                 </div>
             `;
-            
+
             document.getElementById('modal-content-area').innerHTML = articleHTML;
             document.getElementById('readerModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
