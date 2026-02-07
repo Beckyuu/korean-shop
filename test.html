@@ -356,51 +356,52 @@
       }
     }
 
-    /* === 🏷️ 分類按鈕樣式 (韓系膠囊風) === */
+/* === 🏷️ 分類按鈕樣式 (新版：韓系方圓風格) === */
     .category-container {
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
-      /* 如果按鈕太多會自動換行 */
-      gap: 12px;
-      /* 按鈕之間的距離 */
+      gap: 12px; /* 按鈕間距 */
       margin: 0 auto 40px;
-      /* 下方留白 */
       max-width: 90%;
     }
 
     .category-btn {
       font-family: "Noto Sans TC", sans-serif;
-      font-size: 0.9rem;
-      padding: 8px 24px;
-      /* 膠囊形狀的關鍵 */
-
-      /* 預設狀態：透明底 + 金色框 */
-      background-color: transparent;
-      border: 1px solid #d4a373;
-      color: #d4a373;
-
-      border-radius: 50px;
-      /* 圓滾滾的邊角 */
+      font-size: 0.95rem; /* 字體稍微大一點 */
+      padding: 10px 24px; /* 稍微加高，更有份量感 */
+      
+      /* 預設狀態（未選中）：白底 + 淺灰框 + 深灰字 */
+      background-color: #fff;
+      border: 1px solid #e0e0e0; 
+      color: #666;
+      
+      border-radius: 12px; /* 關鍵修改：從 50px 改成 12px，變成方圓形 */
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* 加上微微的立體陰影 */
+      
       cursor: pointer;
-      transition: all 0.3s ease;
-      /* 平滑過渡動畫 */
-      letter-spacing: 1px;
+      transition: all 0.3s ease; /* 平滑過渡動畫 */
+      letter-spacing: 0.5px;
+      font-weight: 500; /* 字體稍微加粗一點點 */
     }
 
-    /* 滑鼠移過去 或 被選中(Active) 的狀態 */
-    .category-btn:hover,
+    /* 滑鼠移過去 (Hover) 的狀態 */
+    .category-btn:hover {
+      border-color: #d4a373; /* 邊框變主題色 */
+      color: #d4a373; /* 文字變主題色 */
+      box-shadow: 0 4px 10px rgba(212, 163, 115, 0.15); /* 陰影帶點金色光暈 */
+      transform: translateY(-1px); /* 微微浮起 */
+    }
+
+    /* 被選中 (Active) 的狀態 */
     .category-btn.active {
-      background-color: #d4a373;
-      /* 變成實心金 */
-      color: #fff;
-      /* 變成白字 */
-      box-shadow: 0 4px 10px rgba(212, 163, 115, 0.3);
-      /* 微微發光 */
-      transform: translateY(-2px);
-      /* 微微浮起 */
+      background-color: #d4a373; /* 背景變實心主題色 */
+      color: #fff; /* 文字變白色 */
+      border-color: #d4a373; /* 邊框同色 */
+      box-shadow: 0 4px 12px rgba(212, 163, 115, 0.3); /* 更明顯的金色發光陰影 */
+      transform: translateY(-1px); /* 保持浮起 */
     }
-
+    
     /* === 產品列表 === */
     .container {
       max-width: 1200px;
