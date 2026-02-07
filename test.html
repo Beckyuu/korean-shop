@@ -10,6 +10,105 @@
     rel="stylesheet" />
 
   <style>
+    /* === 📸 商品相簿樣式 (補強修正版) === */
+
+    /* 1. 確保大圖與縮圖是垂直排列 */
+    .quick-shop-img-box {
+      display: flex !important;
+      flex-direction: column !important;
+      padding: 20px;
+      gap: 15px;
+    }
+
+    /* 2. 限制大圖高度，讓它乖乖縮放 */
+    .quick-shop-img-box img#qs-img {
+      width: 100%;
+      height: 350px !important;
+      /* 強制高度 */
+      object-fit: contain !important;
+      /* 確保不裁切 */
+      border-radius: 8px;
+    }
+
+    /* 3. 縮圖容器 */
+    .qs-gallery-container {
+      display: flex !important;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    /* 4. 🌟 關鍵修正：縮圖一定要很小！ */
+    .qs-thumb {
+      width: 50px !important;
+      /* 強制縮小寬度 */
+      height: 50px !important;
+      /* 強制縮小高度 */
+      min-width: 50px !important;
+      /* 防止被擠扁 */
+      object-fit: cover !important;
+      border-radius: 6px;
+      border: 1px solid #eee;
+      cursor: pointer;
+      opacity: 0.6;
+    }
+
+    /* 選中時的效果 */
+    .qs-thumb:hover,
+    .qs-thumb.active {
+      opacity: 1;
+      border: 2px solid #d4a373 !important;
+    }
+
+    /* === 🔍 圖片放大鏡樣式 === */
+    .zoom-overlay {
+      display: none;
+      /* 平常隱藏 */
+      position: fixed;
+      z-index: 10000;
+      /* 🌟 關鍵：要比購物彈窗 (9999) 還高！ */
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      /* 90% 透明度的黑底 */
+      justify-content: center;
+      align-items: center;
+      cursor: zoom-out;
+      /* 滑鼠變縮小鏡頭 */
+      flex-direction: column;
+    }
+
+    /* 放大的圖片本體 */
+    .zoom-overlay img {
+      max-width: 95%;
+      /* 佔滿寬度 */
+      max-height: 90%;
+      /* 佔滿高度 */
+      object-fit: contain;
+      /* 保持比例 */
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      /* 微微發光 */
+      transform: scale(0.9);
+      transition: transform 0.3s;
+    }
+
+    /* 打開時的動畫 */
+    .zoom-overlay.show img {
+      transform: scale(1);
+    }
+
+    /* 提示文字 */
+    .zoom-hint {
+      color: #fff;
+      margin-top: 15px;
+      font-size: 0.9rem;
+      opacity: 0.7;
+      letter-spacing: 1px;
+    }
+
     :root {
       /* === 色票系統：韓系低飽和度 === */
       --bg-color: #f9f8f6;
@@ -229,6 +328,32 @@
 
       font-weight: bold;
       color: #d4a373;
+    }
+
+    /* 手機版設定 (舊的保留，新的在最下面) */
+    @media (max-width: 768px) {
+      .memo-list li {
+        white-space: normal;
+      }
+
+      /* 手機版允許換行 */
+      .memo-board {
+        display: table !important;
+        /* 關鍵！讓它像表格一樣，內容多寬、框就多寬 */
+        width: auto !important;
+        /* 自動寬度 */
+        max-width: 90% !important;
+        /* 還是要限制一下，不要超出螢幕 */
+
+        padding: 20px 25px !important;
+        /* 內距維持 */
+        margin: 0 auto 40px !important;
+        /* 上下左右自動置中 */
+
+        /* 確保背景色跟圓角還在 */
+        background: rgba(255, 255, 255, 0.4);
+        border-radius: 15px;
+      }
     }
 
     /* === 產品列表 === */
@@ -1201,6 +1326,96 @@
       letter-spacing: 2px;
     }
 
+    /* === 手機版專用設定：完美對齊版 === */
+    @media (max-width: 768px) {
+      .container {
+        /* 1. 強制平分兩欄 (1fr 1fr)，不管手機多窄都保證是兩個一排 */
+        grid-template-columns: 1fr 1fr !important;
+
+        /* 間距縮小，把空間留給商品 */
+        gap: 20px 10px !important;
+        padding: 0 12px 80px !important;
+      }
+
+      /* 修正手機版圖片大小不一的問題 */
+      .product-card {
+        /* 關鍵指令：防止卡片因為文字太長而被撐開 */
+        /* 告訴 Grid 每個格子嚴格遵守平分，不要管內容寬度 */
+        min-width: 0 !important;
+      }
+
+      /* 修正手機版標題 v3：黃金比例 (單行塞得下 + 版面整齊) */
+      .name {
+        /* 1. 字體稍微退一點，但還是比下方的 0.75rem 大很多 */
+        font-size: 0.95rem !important;
+
+        /* 2. 關鍵：把字距稍微拉緊，讓長英文可以塞進一行！ */
+        letter-spacing: -0.5px !important;
+
+        /* 3. 高度設定：配合兩行字的高度，確保隔壁商品對齊 */
+        min-height: 3.8rem !important;
+
+        line-height: 1.35 !important;
+
+        /* 顯示邏輯：維持最多顯示 3 行，超過變 ... */
+        display: -webkit-box !important;
+        -webkit-line-clamp: 3 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        white-space: normal !important;
+
+        /* 4. 斷行邏輯：保持單字完整 */
+        word-break: keep-all !important;
+
+        margin-bottom: 4px !important;
+        justify-content: flex-start !important;
+      }
+
+      /* 新增：手機版副標題/贈品文字稍微縮小，讓標題更突出 */
+      .desc-text {
+        font-size: 0.75rem !important;
+        /* 電腦版是 0.85，手機改小一點 */
+        margin-bottom: 6px !important;
+      }
+
+      /* 修正手機版價格 */
+      .price {
+        font-size: 1.1rem !important;
+        margin-bottom: 4px !important;
+      }
+
+      /* 修正手機版按鈕大小 */
+      button.btn-add {
+        padding: 4px 0 !important;
+        /* 左右不留白，避免按鈕被擠爆 */
+        width: 100% !important;
+        /* 按鈕寬度佔滿 */
+        font-size: 0.75rem !important;
+      }
+
+      /* 修正手機版規格按鈕 */
+      .variant-btn {
+        font-size: 0.7rem !important;
+        padding: 2px 6px !important;
+        margin-bottom: 2px !important;
+      }
+
+      /* === 手機版專用：縮小「看更多」按鈕 (維持您原本的要求) === */
+      .more-sticker {
+        padding: 3px 8px !important;
+        font-size: 0.6rem !important;
+        bottom: 5px !important;
+        right: 5px !important;
+        border-radius: 12px !important;
+        gap: 3px !important;
+      }
+
+      .more-sticker svg {
+        width: 10px !important;
+        height: 10px !important;
+      }
+    }
+
     /* === 缺貨專用樣式 (優雅隱藏版) === */
     .variant-btn.sold-out {
       color: #e0e0e0 !important;
@@ -1217,6 +1432,92 @@
       /* 滑鼠變禁止符號 */
       pointer-events: none;
       /* 禁止點擊 */
+    }
+
+    /* === 🚑 手機版間距急救包 (V3: 強制置中 + 消除隱形空隙) === */
+    @media (max-width: 768px) {
+
+      /* 1. 🌟 關鍵大絕招：把所有「隱藏佔位」的樓層直接變不見！ */
+      /* 這樣就算 JS 沒改到，也能強制消除空隙 */
+      .mobile-hidden,
+      div[style*="visibility:hidden"],
+      span[style*="visibility:hidden"] {
+        display: none !important;
+      }
+
+      /* 2. 讓內容版面往上收 */
+      .info {
+        justify-content: flex-start !important;
+        padding-top: 5px !important;
+      }
+
+      /* 3. 收單時間標籤：緊貼下方品名 */
+      .deadline-badge {
+        margin-bottom: 2px !important;
+      }
+
+      /* 4. 品名修正：強制置中 + 高度自動適應 */
+      .name {
+        /* 高度設定：改小一點，大概兩行字的高度 */
+        min-height: 2.4rem !important;
+        margin-bottom: 4px !important;
+        font-size: 0.95rem !important;
+
+        /* 🌟 修正左偏問題：強制置中！ */
+        display: flex !important;
+        justify-content: center !important;
+        /* 水平置中 */
+        align-items: center !important;
+        /* 垂直置中 */
+        text-align: center !important;
+
+        /* 重置內距 */
+        padding-top: 0 !important;
+      }
+
+      /* 5. 縮減說明與贈品的間距 (如果它們有出現的話) */
+      .desc-text {
+        margin-bottom: 2px !important;
+        height: auto !important;
+      }
+
+      .gift-row {
+        margin-bottom: 5px !important;
+        height: auto !important;
+      }
+
+      /* 6. 規格選單縮小間距 */
+      .style-select,
+      .style-select.readonly {
+        margin: 2px auto 8px !important;
+        padding: 4px 15px 4px 10px !important;
+      }
+
+      /* 7. 價格與按鈕區 */
+      .price,
+      .price-container {
+        margin-bottom: 8px !important;
+        margin-top: 0 !important;
+      }
+
+      .action-row {
+        margin-top: 2px !important;
+        padding-bottom: 5px !important;
+      }
+
+      button.btn-add {
+        height: 32px !important;
+        font-size: 0.75rem !important;
+      }
+
+      select {
+        height: 32px !important;
+      }
+
+      /* 🌟 關鍵：讓空的樓層在手機上直接消失，不要佔空間 */
+      .mobile-hidden {
+        display: none !important;
+      }
     }
 
     /* === 🛒 購物快速彈窗 (Quick Shop Modal) === */
@@ -1394,29 +1695,37 @@
       font-weight: 500;
     }
 
-    /* === 優化後的規格選單 (修正高度版) === */
+    /* === 優化後的規格選單  === */
     .qs-select {
       width: 100%;
 
-      /* 內距與邊框 */
-      padding: 10px 15px;
+      /* 🔴 修改 1：改用「固定高度」取代 padding 撐開 */
+      /* 這樣在手機上才不會因為預設樣式而跑版 */
+      height: 45px;
+      line-height: 45px;
+      /* 讓文字垂直置中 */
+
+      /* 🔴 修改 2：內距設定 (上下設為 0，只留左右) */
+      /* 右邊留 40px 是為了避開我們畫的那個箭頭，避免字疊在一起 */
+      padding: 0 40px 0 15px;
+
+      /* 邊框與背景 (維持不變) */
       border: 1px solid #d4a373;
       background-color: #fff;
       border-radius: 8px;
 
       /* 字體設定 */
-      font-size: 0.95rem;
+      font-size: 16px;
+      /* 🌟 建議：手機版設 16px 可以防止 iPhone 自動放大畫面 */
       color: #555;
       outline: none;
       cursor: pointer;
 
-      /* 🌟 關鍵修正：解除高度限制，字才不會被切到 */
-      height: auto;
-      line-height: 1.5;
-
-      /* 去除預設樣式並加上自訂箭頭 */
+      /* 去除預設樣式 (維持不變) */
       appearance: none;
       -webkit-appearance: none;
+
+      /* 自訂箭頭 (維持不變) */
       background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
       background-repeat: no-repeat;
       background-position: right 15px center;
@@ -1470,6 +1779,23 @@
       transform: translateY(-2px);
       box-shadow: 0 5px 15px rgba(212, 163, 115, 0.3);
     }
+
+    /* 手機版調整 */
+    @media (max-width: 768px) {
+      .quick-shop-info-box {
+        padding: 25px;
+      }
+
+      .quick-shop-img-box {
+        min-height: 250px;
+      }
+
+      #qs-title {
+        font-size: 1.4rem;
+      }
+    }
+
+    /* === 📸 商品相簿樣式 === */
 
     /* 修改原本的圖片盒：改成直向排列 (大圖在上，縮圖在下) */
     .quick-shop-img-box {
@@ -1525,166 +1851,114 @@
       /* 微微浮起 */
     }
 
-    /* ========================================= */
-    /* 📱 手機版專用設定 (已合併整理)             */
-    /* ========================================= */
+    /* === 📱 手機版專屬優化 (緊湊模式) === */
     @media (max-width: 768px) {
 
-      /* --- 1. 公告板與備註區 --- */
-      .memo-list li {
-        white-space: normal;
-      }
-
-      .memo-board {
-        display: table !important;
-        width: auto !important;
-        max-width: 90% !important;
-        padding: 20px 25px !important;
-        margin: 0 auto 40px !important;
-        background: rgba(255, 255, 255, 0.4);
-        border-radius: 15px;
-      }
-
-      /* --- 2. 商品列表排版 (完美對齊版) --- */
-      .container {
-        grid-template-columns: 1fr 1fr !important;
-        gap: 20px 10px !important;
-        padding: 0 12px 80px !important;
-      }
-
-      .product-card {
-        min-width: 0 !important;
-      }
-
-      /* --- 3. 字體與元件大小調整 --- */
-      .name {
-        font-size: 0.95rem !important;
-        letter-spacing: -0.5px !important;
-        min-height: 3.8rem !important;
-        line-height: 1.35 !important;
-        display: -webkit-box !important;
-        -webkit-line-clamp: 3 !important;
-        -webkit-box-orient: vertical !important;
-        overflow: hidden !important;
-        white-space: normal !important;
-        word-break: keep-all !important;
-        margin-bottom: 4px !important;
-        justify-content: flex-start !important;
-      }
-
-      .desc-text {
-        font-size: 0.75rem !important;
-        margin-bottom: 6px !important;
-      }
-
-      .price {
-        font-size: 1.1rem !important;
-        margin-bottom: 4px !important;
-      }
-
-      button.btn-add {
-        padding: 4px 0 !important;
-        width: 100% !important;
-        font-size: 0.75rem !important;
-      }
-
-      .variant-btn {
-        font-size: 0.7rem !important;
-        padding: 2px 6px !important;
-        margin-bottom: 2px !important;
-      }
-
-      .more-sticker {
-        padding: 3px 8px !important;
-        font-size: 0.6rem !important;
-        bottom: 5px !important;
-        right: 5px !important;
-        border-radius: 12px !important;
-        gap: 3px !important;
-      }
-
-      .more-sticker svg {
-        width: 10px !important;
-        height: 10px !important;
-      }
-
-      /* --- 4. 購物彈窗調整 --- */
+      /* 1. 彈窗內距縮小 (讓空間變大) */
       .quick-shop-info-box {
-        padding: 25px;
+        padding: 15px 20px !important;
+        /* 原本比較寬，改窄一點 */
+        gap: 0 !important;
+        /* 消除額外間隙 */
       }
 
-      .quick-shop-img-box {
-        min-height: 250px;
-      }
-
+      /* 2. 標題縮小 & 間距拉近 */
       #qs-title {
-        font-size: 1.4rem;
-      }
-
-      /* --- 5. 間距急救包 (強制修正區) --- */
-      .mobile-hidden,
-      div[style*="visibility:hidden"],
-      span[style*="visibility:hidden"] {
-        display: none !important;
-      }
-
-      .info {
-        justify-content: flex-start !important;
-        padding-top: 5px !important;
-      }
-
-      .deadline-badge {
+        font-size: 1.1rem !important;
+        /* 字變小 (原本 1.3) */
         margin-bottom: 2px !important;
+        /* 緊貼下方 */
+        line-height: 1.3 !important;
       }
 
-      /* 再次確保品名置中 */
-      .name {
-        min-height: 2.4rem !important;
-        margin-bottom: 4px !important;
-        font-size: 0.95rem !important;
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        text-align: center !important;
-        padding-top: 0 !important;
+      /* 3. 價格區塊縮小 & 拉近 */
+      #qs-price-box {
+        font-size: 1.2rem !important;
+        margin-bottom: 12px !important;
+        /* 離下面規格近一點 */
+        padding-bottom: 8px !important;
       }
 
-      .desc-text {
-        margin-bottom: 2px !important;
-        height: auto !important;
-      }
-
-      .gift-row {
-        margin-bottom: 5px !important;
-        height: auto !important;
-      }
-
-      .style-select,
-      .style-select.readonly {
-        margin: 2px auto 8px !important;
-        padding: 4px 15px 4px 10px !important;
-      }
-
-      .price,
-      .price-container {
+      /* 4. 內容物清單 (I欄) 微調 */
+      .qs-gift-card {
         margin-bottom: 8px !important;
-        margin-top: 0 !important;
-      }
-
-      .action-row {
         margin-top: 2px !important;
-        padding-bottom: 5px !important;
       }
 
-      button.btn-add {
-        height: 32px !important;
-        font-size: 0.75rem !important;
+      /* 5. 規格選單大改造：變胖 + 變短 */
+      .qs-select {
+        /* 變短：只佔 65% 寬度 (約少了 1/3) */
+        width: 65% !important;
+
+        /* 變胖：高度增加，手指好點 */
+        height: 52px !important;
+        line-height: 52px !important;
+        /* 確保文字垂直置中 */
+
+        font-size: 16px !important;
       }
 
-      select {
-        height: 32px !important;
+      /* 6. 區塊間距縮小 */
+      .qs-section {
+        margin-bottom: 12px !important;
+        /* 每個區塊距離拉近 */
+      }
+
+      /* 7. 按鈕調整 */
+      .qs-add-btn {
+        padding: 12px !important;
+        /* 按鈕不用那麼厚 */
+        margin-top: 5px !important;
       }
     }
+
+    /* === 📱 手機版並排優化 (規格+數量) === */
+      
+      /* 1. 讓它們橫向排列 */
+      .qs-row-group {
+          display: flex;
+          gap: 15px; /* 中間的空隙 */
+          align-items: flex-end; /* 對齊底部 (讓輸入框對齊) */
+          margin-bottom: 12px;
+      }
+
+      /* 2. 左邊規格：自動長大，佔滿剩餘空間 */
+      .qs-col-grow {
+          flex: 1; /* 關鍵！吃掉剩下所有寬度 */
+          min-width: 0; /* 防止被超長文字撐爆 */
+          margin-bottom: 0 !important; /* 消除原本的下方留白 */
+      }
+
+      /* 3. 右邊數量：固定寬度 */
+      .qs-col-fixed {
+          width: 120px; /* 給數量一個固定的家 */
+          flex-shrink: 0; /* 不准縮小 */
+          margin-bottom: 0 !important;
+      }
+
+      /* 4. 數量選擇器樣式微調 */
+      .qs-qty-wrapper {
+          width: 100% !important; /* 填滿那個 120px */
+          height: 52px; /* 跟隔壁規格一樣高 */
+          display: flex;
+          align-items: center;
+          border: 1px solid #ddd;
+          border-radius: 8px; /* 圓角跟規格一致 */
+      }
+      .qs-qty-wrapper button {
+          width: 35px; height: 100%; border: none; background: transparent; cursor: pointer; font-size: 1.2rem;
+      }
+      .qs-qty-wrapper input {
+          flex: 1; width: 100%; border: none; text-align: center; font-size: 1rem; outline: none; background: transparent;
+      }
+
+      /* 5. 🛑 重要修正：手機版規格選單 */
+      /* 我們之前設 width: 65%，現在要改回 100% (因為它已經在 flex 框框裡了) */
+      @media (max-width: 768px) {
+          .qs-select {
+              width: 100% !important; /* 填滿左邊那個格子 */
+          }
+      }
   </style>
 </head>
 
@@ -1801,17 +2075,20 @@
             <div id="qs-gift-text" class="qs-gift-text"></div>
           </div>
 
-          <div class="qs-section">
-            <label class="qs-label">規格 / 款式</label>
-            <select id="qs-variant-select" class="qs-select"></select>
-          </div>
+          <div class="qs-row-group">
 
-          <div class="qs-section">
-            <label class="qs-label">數量</label>
-            <div class="qs-qty-wrapper">
-              <button onclick="updateQsQty(-1)">−</button>
-              <input type="number" id="qs-qty" value="1" min="1" readonly>
-              <button onclick="updateQsQty(1)">+</button>
+            <div class="qs-section qs-col-grow">
+              <label class="qs-label">規格 / 款式</label>
+              <select id="qs-variant-select" class="qs-select"></select>
+            </div>
+
+            <div class="qs-section qs-col-fixed">
+              <label class="qs-label">數量</label>
+              <div class="qs-qty-wrapper">
+                <button onclick="updateQsQty(-1)">−</button>
+                <input type="number" id="qs-qty" value="1" min="1" readonly>
+                <button onclick="updateQsQty(1)">+</button>
+              </div>
             </div>
           </div>
 
@@ -2130,6 +2407,10 @@
       // 1. 先顯示第一張圖 (主圖)
       // 這裡加上 object-fit 設定，確保不管長寬都不會變形
       mainImg.src = product.gallery[0];
+      mainImg.style.cursor = "zoom-in"; // 滑鼠變放大鏡
+      mainImg.onclick = function () {
+        openZoom(this.src); // 呼叫放大功能，傳入目前的圖片
+      };
 
       // 2. 產生下方縮圖 (如果有超過 1 張圖的話)
       galleryContainer.innerHTML = ''; // 清空舊的
@@ -2179,7 +2460,7 @@
       // 重新抓取網址參數判斷 VIP
       const urlParams = new URLSearchParams(window.location.search);
       // 這裡注意：你的變數名稱要對應，假設前面有用 const VIP_KEY = 'vip'
-      const isVipMode = urlParams.get(VIP_KEY) === VIP_VALUE;
+      const isVipMode = urlParams.get('vip') === 'mina';
 
       // 直接抓取資料表裡的價格顯示
       // 因為我們已經在 fetchProducts 處理過價格邏輯，這裡直接顯示 product.price 最保險
@@ -2240,6 +2521,24 @@
       let newVal = parseInt(input.value) + change;
       if (newVal < 1) newVal = 1;
       input.value = newVal;
+    }
+
+    // === 🔍 放大鏡功能 ===
+    function openZoom(imgSrc) {
+      const overlay = document.getElementById('zoomOverlay');
+      const img = document.getElementById('zoom-img-content');
+
+      img.src = imgSrc; // 把圖源傳過去
+      overlay.style.display = 'flex';
+
+      // 加一點動畫延遲
+      setTimeout(() => { overlay.classList.add('show'); }, 10);
+    }
+
+    function closeZoom() {
+      const overlay = document.getElementById('zoomOverlay');
+      overlay.classList.remove('show');
+      setTimeout(() => { overlay.style.display = 'none'; }, 300);
     }
 
     // 4. 從彈窗加入購物車 (關鍵功能！)
@@ -2303,6 +2602,62 @@
       }
     }
 
+    function addToCart(index) {
+      const product = allProductsData[index];
+      const qtySelect = document.getElementById(`qty-${index}`);
+      const qty = parseInt(qtySelect.value);
+
+      // 🔴 修改：從下拉選單抓取選中的值
+      let selectedSpec = null;
+      const selectEl = document.getElementById(`variant-select-${index}`);
+
+      if (selectEl) {
+        // 如果有選單，就看選了什麼
+        if (selectEl.tagName === "SELECT") {
+          selectedSpec = selectEl.value;
+          if (selectedSpec === "") {
+            alert("Please select a variant.\n請選擇一個款式喔！");
+            return;
+          }
+        } else {
+          // 如果是那種「單一規格」的文字 div (上面寫 style="border:none...")
+          selectedSpec = "單一規格";
+        }
+      } else {
+        // 防呆
+        selectedSpec = "單一規格";
+      }
+
+      // 2. 處理價格
+      let priceNum = parseInt(product.price.replace(/[^0-9]/g, ""));
+
+      // 3. 建立購物車項目
+      const cartItem = {
+        name: product.name,
+        spec: selectedSpec, // 使用剛剛抓到的值
+        price: priceNum,
+        qty: qty,
+      };
+
+      // ...後面維持一樣 (加入購物車 cart.push, saveCart, 按鈕變色特效...)
+      cart.push(cartItem);
+      saveCart();
+
+      // 按鈕變色特效 (維持原狀)
+      const btn = window.event ? (window.event.target.tagName === 'BUTTON' ? window.event.target : window.event.target.closest('button')) : null;
+      if (btn) {
+        const originalText = btn.innerText;
+        btn.innerText = "OK!";
+        btn.style.backgroundColor = "#d4a373";
+        btn.style.borderColor = "#d4a373";
+        setTimeout(() => {
+          btn.innerText = originalText;
+          btn.style.backgroundColor = "";
+          btn.style.borderColor = "";
+        }, 1000);
+      }
+    }
+
     function closeCart(e) {
       if (e.target.classList.contains("cart-modal"))
         document.getElementById("cartModal").classList.remove("show");
@@ -2339,7 +2694,7 @@
       // 🔴 新增：VIP 專屬的暱稱輸入框
       // 這裡會檢查網址有沒有 ?vip=...
       const urlParams = new URLSearchParams(window.location.search);
-      const isVipMode = urlParams.get(VIP_KEY) === VIP_VALUE;
+      const isVipMode = urlParams.has("vip"); // 只要有 vip 參數就視為 VIP 模式
 
       if (isVipMode) {
         html += `
@@ -2586,6 +2941,12 @@
 
     fetchProducts();
   </script>
+
+  <div id="zoomOverlay" class="zoom-overlay" onclick="closeZoom()">
+    <img id="zoom-img-content" src="">
+    <div class="zoom-hint">點擊任意處關閉</div>
+  </div>
+
 </body>
 
 </html>
