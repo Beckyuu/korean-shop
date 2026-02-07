@@ -2683,15 +2683,14 @@
     function forceCloseQuickShop() {
       const modal = document.getElementById('quickShopModal');
       modal.classList.remove('show');
-
-      // 🌟 關鍵修正：這裡要把 setTimeout 存進變數裡！
-      // 這樣上面的 openQuickShop 才能抓到它並取消它
+      
+      // 🌟 關鍵修正：把計時器存入變數，讓 openQuickShop 可以抓到它
       modalCloseTimer = setTimeout(() => {
         modal.style.display = 'none';
         modalCloseTimer = null; // 執行完後歸零
       }, 300);
     }
-
+    
     // 3. 數量加減
     function updateQsQty(change) {
       const input = document.getElementById('qs-qty');
