@@ -356,79 +356,6 @@
       }
     }
 
-    /* === 🏷️ 分類按鈕樣式 (修正版：輕盈平衡) === */
-    .category-container {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      /* 按鈕間距 */
-      margin: 0 auto 40px;
-      max-width: 95%;
-      /* 讓它寬一點，盡量減少換行 */
-    }
-
-    .category-btn {
-      /* 1. 字體優化：改用圓體 (Zen Maru Gothic)，但不要太粗 */
-      font-family: "Zen Maru Gothic", "Noto Sans TC", sans-serif;
-      font-size: 0.95rem;
-      font-weight: 500;
-      /* 適中的粗細，不會有壓迫感 */
-      letter-spacing: 1px;
-
-      /* 2. 🌟 關鍵修正：加上最小寬度 */
-      /* 這樣字少的按鈕也會有份量，不會看起來大大小小差太多 */
-      min-width: 110px;
-      text-align: center;
-      /* 文字強制置中 */
-
-      padding: 8px 20px;
-
-      /* 3. 配色：白底 + 深灰字 (比純黑柔和) */
-      background-color: #fff;
-      color: #888;
-
-      /* 4. 邊框：改回 1px 細線，精緻感 */
-      border: 1px solid #d4a373;
-      border-radius: 50px;
-
-      /* 5. 陰影：改用「淺奶茶色」，而且縮小距離 */
-      /* 這樣保留了立體感，但不會覺得重 */
-      box-shadow: 3px 3px 0px #e6d0c0;
-
-      cursor: pointer;
-      transition: all 0.2s ease;
-
-      /* 讓按鈕乖乖待在原本位置 */
-      transform: translate(0, 0);
-    }
-
-    /* 滑鼠移過去：字變色，背景微微變暖 */
-    .category-btn:hover {
-      color: #d4a373;
-      background-color: #fffbf7;
-      transform: translate(-1px, -1px);
-      /* 輕微浮起 */
-      box-shadow: 4px 4px 0px #e6d0c0;
-    }
-
-    /* 被選中 (Active) 的狀態 */
-    .category-btn.active {
-      /* 背景變成極淡的金色，而不是實心重色，減輕視覺壓力 */
-      background-color: #fffbf0;
-
-      color: #d4a373;
-      /* 字變亮金 */
-      border-color: #d4a373;
-      font-weight: 700;
-      /* 選中時字加粗一點點強調就好 */
-
-      /* 按壓效果：陰影消失，變成平面 */
-      box-shadow: 0px 0px 0px transparent;
-      transform: translate(3px, 3px);
-      /* 位移填補陰影 */
-    }
-
     /* === 產品列表 === */
     .container {
       max-width: 1200px;
@@ -1644,25 +1571,6 @@
       flex-wrap: wrap;
     }
 
-    /* 左側圖片區 */
-    .quick-shop-img-box {
-      flex: 1;
-      min-width: 300px;
-      background: #f9f9f9;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .quick-shop-img-box img {
-      width: 100%;
-      max-width: 400px;
-      height: auto;
-      object-fit: contain;
-      border-radius: 8px;
-    }
-
     /* 右側資訊區 */
     .quick-shop-info-box {
       flex: 1;
@@ -1746,13 +1654,6 @@
     /* 🔴 隱藏原本的浮動標籤 (以防 HTML 沒刪乾淨) */
     .qs-gift-tag {
       display: none !important;
-    }
-
-    .qs-gift-text {
-      font-size: 0.9rem;
-      color: #666;
-      line-height: 1.8;
-      white-space: normal;
     }
 
     /* 表單元件 */
@@ -1986,121 +1887,140 @@
     }
 
     /* === 📱 手機版並排優化 (規格+數量) === */
-    /* === 🚀 (修正版) 無規格時，價格與數量併排專用樣式 === */
-    .price-qty-mixed-mode {
-      display: flex !important;
-      justify-content: space-between !important;
-      align-items: center !important;
-      padding-bottom: 15px !important;
-      gap: 15px;
-      /* 拉開一點距離 */
-      flex-wrap: nowrap !important;
-      /* 🌟 關鍵：禁止換行，強迫同一排 */
-    }
+      
+      /* 1. 讓它們橫向排列 */
+      .qs-row-group {
+          display: flex;
+          gap: 15px; /* 中間的空隙 */
+          align-items: flex-end; /* 對齊底部 (讓輸入框對齊) */
+          margin-bottom: 12px;
+      }
 
-    /* 當數量跑到上面時，微調一下樣式 */
-    .price-qty-mixed-mode .qs-col-fixed {
-      margin: 0 !important;
+      /* 2. 左邊規格：自動長大，佔滿剩餘空間 */
+      .qs-col-grow {
+          flex: 1; /* 關鍵！吃掉剩下所有寬度 */
+          min-width: 0; /* 防止被超長文字撐爆 */
+          margin-bottom: 0 !important; /* 消除原本的下方留白 */
+      }
 
-      /* 🌟 關鍵修正：限制寬度！不要用 auto 或 100% */
-      width: 120px !important;
-      flex-shrink: 0;
-      /* 確保它不會被擠扁 */
-    }
+      /* 3. 右邊數量：固定寬度 */
+      .qs-col-fixed {
+          width: 120px; /* 給數量一個固定的家 */
+          flex-shrink: 0; /* 不准縮小 */
+          margin-bottom: 0 !important;
+      }
 
-    .price-qty-mixed-mode .qs-label {
-      display: none;
-      /* 隱藏「數量」標題 */
-    }
+      /* 4. 數量選擇器樣式微調 */
+      .qs-qty-wrapper {
+          width: 100% !important; /* 填滿那個 120px */
+          height: 52px; /* 跟隔壁規格一樣高 */
+          display: flex;
+          align-items: center;
+          border: 1px solid #ddd;
+          border-radius: 8px; /* 圓角跟規格一致 */
+      }
+      .qs-qty-wrapper button {
+          width: 35px; height: 100%; border: none; background: transparent; cursor: pointer; font-size: 1.2rem;
+      }
+      .qs-qty-wrapper input {
+          flex: 1; width: 100%; border: none; text-align: center; font-size: 1rem; outline: none; background: transparent;
+      }
 
-    .price-qty-mixed-mode .qs-qty-wrapper {
-      height: 40px !important;
-      /* 配合價格的高度 */
-      border-color: #d4a373 !important;
-      width: 100% !important;
-      /* 填滿那 120px */
-    }
+      /* 5. 🛑 重要修正：手機版規格選單 */
+      /* 我們之前設 width: 65%，現在要改回 100% (因為它已經在 flex 框框裡了) */
+      @media (max-width: 768px) {
+          .qs-select {
+              width: 100% !important; /* 填滿左邊那個格子 */
+          }
+      }
 
-    /* 確保價格文字不會換行 */
-    .price-qty-mixed-mode #qs-price-box {
+/* === 🏷️ 分類選單樣式 (膠囊按鈕 + 橫向滑動 - 高級立體版) === */
+    .category-nav {
+      display: flex;
+      justify-content: center;
+      gap: 12px; /* 增加一點間距 */
+      padding: 15px 20px 25px; /* 增加下方 padding 讓陰影有空間顯示 */
+      margin-bottom: 10px;
+      overflow-x: auto;
       white-space: nowrap;
-      margin-bottom: 0 !important;
-      /* 拿掉下邊距，對齊數量框 */
-      padding-bottom: 0 !important;
-      border-bottom: none !important;
-      /* 拿掉底線 (因為外層有了) */
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      /* 增加一個很淺的背景色條，讓按鈕更突出 (可選) */
+      /* background: linear-gradient(to bottom, #fff, #fdfbf9); */
+    }
+    .category-nav::-webkit-scrollbar {
+      display: none;
     }
 
-    /* 1. 讓它們橫向排列 */
-    .qs-row-group {
-      display: flex;
-      gap: 15px;
-      /* 中間的空隙 */
-      align-items: flex-end;
-      /* 對齊底部 (讓輸入框對齊) */
-      margin-bottom: 12px;
-    }
-
-    /* 2. 左邊規格：自動長大，佔滿剩餘空間 */
-    .qs-col-grow {
-      flex: 1;
-      /* 關鍵！吃掉剩下所有寬度 */
-      min-width: 0;
-      /* 防止被超長文字撐爆 */
-      margin-bottom: 0 !important;
-      /* 消除原本的下方留白 */
-    }
-
-    /* 3. 右邊數量：固定寬度 */
-    .qs-col-fixed {
-      width: 120px;
-      /* 給數量一個固定的家 */
-      flex-shrink: 0;
-      /* 不准縮小 */
-      margin-bottom: 0 !important;
-    }
-
-    /* 4. 數量選擇器樣式微調 */
-    .qs-qty-wrapper {
-      width: 100% !important;
-      /* 填滿那個 120px */
-      height: 52px;
-      /* 跟隔壁規格一樣高 */
-      display: flex;
-      align-items: center;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      /* 圓角跟規格一致 */
-    }
-
-    .qs-qty-wrapper button {
-      width: 35px;
-      height: 100%;
-      border: none;
-      background: transparent;
+    /* 🟢 按鈕基礎設定 */
+    .category-btn {
+      display: inline-block;
+      padding: 10px 26px; /* 稍微加大一點按鈕 */
+      border-radius: 50px;
+      font-family: "Noto Sans TC", sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500; /* 字體稍微加粗增加份量感 */
       cursor: pointer;
-      font-size: 1.2rem;
+      transition: all 0.2s ease-out; /* 動畫速度調快一點點，感覺更俐落 */
+      letter-spacing: 1px;
+      position: relative; /* 為了做按壓位移效果 */
+      top: 0;
+
+      /* ⚪️ 預設狀態：立體白金風格 (浮起) */
+      /* 背景：微妙的米白漸層，模擬光線從上方照下，製造弧度 */
+      background: linear-gradient(to bottom, #ffffff 0%, #f9f5f0 100%);
+      /* 邊框：原本的金色 */
+      border: 1px solid #d4a373;
+      color: #d4a373;
+
+      /* 陰影大師：多層陰影製造浮起感 */
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.8), /* 1. 內部上方高光 (讓邊緣看起來圓潤) */
+        0 4px 8px rgba(212, 163, 115, 0.15), /* 2. 外部柔和金色陰影 (浮起感主體) */
+        0 1px 3px rgba(0,0,0,0.05);          /* 3. 底部深色小陰影 (增加貼地真實感) */
     }
 
-    .qs-qty-wrapper input {
-      flex: 1;
-      width: 100%;
-      border: none;
-      text-align: center;
-      font-size: 1rem;
-      outline: none;
-      background: transparent;
+    /* 👆 滑鼠懸停狀態：浮得更高 */
+    .category-btn:hover {
+      /* 背景變亮一點 */
+      background: linear-gradient(to bottom, #ffffff 0%, #fffefb 100%);
+      /* 陰影擴散、往下移，感覺浮起來了 */
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,1),
+        0 8px 16px rgba(212, 163, 115, 0.2), /* 陰影變大變模糊 */
+        0 3px 6px rgba(0,0,0,0.08);
+      
+      transform: translateY(-2px); /* 物理位置向上浮動 2px */
     }
 
-    /* 5. 🛑 重要修正：手機版規格選單 */
-    /* 我們之前設 width: 65%，現在要改回 100% (因為它已經在 flex 框框裡了) */
+    /* 🟡 選中狀態：立體黃金風格 (按壓凹陷感) */
+    .category-btn.active {
+      /* 背景：金色漸層，上方亮下方暗 */
+      background: linear-gradient(to bottom, #e8ba8a 0%, #d4a373 100%);
+      /* 邊框：稍微深一點的金色 */
+      border-color: #c99665;
+      color: #fff;
+      /* 文字加上一點點陰影，增加可讀性 */
+      text-shadow: 0 1px 1px rgba(0,0,0,0.15);
+
+      /* 陰影：改用 inset (內部陰影)，製造「按下去」的凹陷感 */
+      box-shadow:
+        inset 0 3px 8px rgba(0,0,0,0.15), /* 內部上方陰影，看起來凹下去 */
+        0 1px 2px rgba(212, 163, 115, 0.5); /* 外部保留一點點陰影，維持厚度感 */
+
+      /* 物理位置往下移，抵消上面的浮動，產生按壓感 */
+      transform: translateY(1px);
+    }
+
+    /* 手機版調整：靠左對齊 */
     @media (max-width: 768px) {
-      .qs-select {
-        width: 100% !important;
-        /* 填滿左邊那個格子 */
+      .category-nav {
+        justify-content: flex-start;
+        padding-left: 20px;
+        padding-right: 20px; /* 右邊也要加，不然滑到底會切到 */
       }
     }
-  </style>
+      </style>
 </head>
 
 <body>
@@ -2145,11 +2065,12 @@
     </ul>
   </div>
 
+  <div id="category-container" class="category-nav"></div>
+
   <div id="loading">
     <div class="loader-spinner"></div>
     <span class="loading-text">loading.....</span>
   </div>
-  <div id="category-menu" class="category-container"></div>
   <div class="container" id="product-list"></div>
 
   <footer>
@@ -2409,15 +2330,12 @@
     const VIP_KEY = "vip";
     const VIP_VALUE = "mina";
 
+// 1. 全新的資料讀取函式 (只負責讀資料 & 產生分類按鈕)
     async function fetchProducts() {
       const loading = document.getElementById("loading");
       const container = document.getElementById("product-list");
 
       try {
-        // 1. 判斷現在是不是 VIP 模式
-        const urlParams = new URLSearchParams(window.location.search);
-        const isVipMode = urlParams.get(VIP_KEY) === VIP_VALUE;
-
         // 強制更新資料
         const response = await fetch(
           GOOGLE_SHEET_CSV_URL + "&t=" + new Date().getTime(),
@@ -2428,11 +2346,9 @@
 
         loading.style.display = "none";
         allProductsData = [];
-        container.innerHTML = "";
 
-        rows.forEach((row) => {
+        rows.forEach((row, index) => {
           if (row.length < 4) return;
-          const realIndex = allProductsData.length;
 
           // --- 讀取基礎資料 ---
           const rawSpec = row[1] ? row[1].trim() : "";
@@ -2442,92 +2358,50 @@
               ? [rawSpec]
               : [];
 
-          // 價格處理
-          let originalPrice = row[2] ? row[2].trim() : "0";
-          let vipPrice = row[9] ? row[9].trim() : "";
-          let finalPriceForCart = originalPrice;
-          let priceDisplayHtml = "";
-
-          // VIP 價格邏輯
-          if (isVipMode && vipPrice !== "" && vipPrice !== originalPrice) {
-            finalPriceForCart = vipPrice;
-            priceDisplayHtml = `
-                    <div class="price-container">
-                        <span class="price-original">NT$ ${originalPrice}</span>
-                        <span class="price-vip">NT$ ${vipPrice}</span>
-                    </div>`;
-          } else {
-            finalPriceForCart = originalPrice;
-            priceDisplayHtml = `<span class="price">NT$ ${originalPrice}</span>`;
-          }
-
-          // map 用來修整網址，filter 用來過濾掉空欄位
+          // 圖片處理
           const extraImgs = [
             row[10], row[11], row[12], row[13], row[14]
           ].map(url => url ? url.trim() : "").filter(url => url !== "");
-
-          // 2. 組合所有圖片：主圖 (D欄 row[3]) 放第一張，後面接 K~O 欄的圖
           const allImages = [row[3] ? row[3].trim() : "", ...extraImgs].filter(url => url !== "");
 
-          const categoryRaw = row[15] ? row[15].trim() : "";
-
           const product = {
-            id: realIndex,
+            id: index,
             name: row[0] ? row[0].trim() : "Unnamed",
             variants: variants,
-            price: finalPriceForCart,
+            // 價格暫存原始字串，顯示時再處理
+            originalPriceStr: row[2] ? row[2].trim() : "0",
+            vipPriceStr: row[9] ? row[9].trim() : "",
+            
+            // 這裡會自動處理，讓其他地方用起來方便
+            price: row[2] ? row[2].trim() : "0", 
+
             imgUrl: row[3] ? row[3].trim() : "",
-
-            // 🟢 新增：把整理好的相簿存起來，等等彈窗要用
             gallery: allImages,
-
             detailImgUrl: row[4] ? row[4].trim() : "",
-            description: row[5] ? row[5].trim() : "",
+            
+            // 這裡加上了我們剛剛修好的去空格功能
+            description: row[5] ? row[5].trim().replace(/\s*<br\s*\/?>\s*/gi, '<br>') : "",
+            
             tag: row[6] ? row[6].trim().toUpperCase() : "",
             deadline: row[7] ? row[7].trim() : "",
-            giftDesc: row[8] ? row[8].trim() : "",
-            category: categoryRaw
+            
+            // 這裡也加上了去空格功能
+            giftDesc: row[8] ? row[8].trim().replace(/\s*<br\s*\/?>\s*/gi, '<br>') : "",
+            
+            // 🟢 新增：讀取 P 欄 (第 15 欄) 作為分類
+            category: row[15] ? row[15].trim() : "其他", 
           };
 
           // 處理規格預設值
           if (product.variants.length === 1) product.selectedVariant = product.variants[0];
-          else if (product.variants.length === 0) product.selectedVariant = "單一款式";
+          else if (product.variants.length === 0) product.selectedVariant = "單一規格";
 
           allProductsData.push(product);
-
-          // --- 建立極簡卡片 HTML (test.html 專用) ---
-          const card = document.createElement("div");
-          card.className = "product-card";
-          card.dataset.category = product.category;
-
-          // 1. 標籤邏輯
-          let badgeHtml = "";
-          if (product.tag === "NEW") badgeHtml = `<div class="badge new">NEW</div>`;
-          else if (product.tag === "HOT") badgeHtml = `<div class="badge hot">HOT</div>`;
-          else if (product.tag === "SALE") badgeHtml = `<div class="badge sale">SALE</div>`;
-
-          // 2. 組裝 HTML (點擊圖片或按鈕都會觸發 openQuickShop)
-          card.innerHTML = `
-                <div class="img-wrapper" style="cursor:pointer;" onclick="openQuickShop(${realIndex})">
-            ${badgeHtml}
-            <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
-        </div>
-        
-        <div class="info">
-            <h3 class="name" style="cursor:pointer;" onclick="openQuickShop(${realIndex})">${product.name}</h3>
-            
-            ${priceDisplayHtml}
-            
-            <div class="action-row" style="margin-top: 10px; justify-content: center;">
-                <button class="btn-add" onclick="openQuickShop(${realIndex})" style="width: 100%; max-width: 200px;">
-                    加入購物車
-                </button>
-            </div>
-        </div>
-    `;
-          container.appendChild(card);
         });
-        initCategoryFilter();
+
+        // 資料讀完後，先產生分類按鈕，再顯示全部商品
+        initCategoryButtons();
+        renderProducts(allProductsData);
 
       } catch (error) {
         console.error(error);
@@ -2536,146 +2410,210 @@
       }
     }
 
-    // === 🛒 全域變數：紀錄目前彈窗正在看哪一個商品 ===
-    let currentQsIndex = null;
-    
-    let modalCloseTimer = null; // 🌟 新增：用來管理關閉動畫的計時器，防止誤殺新視窗
+    // 2. 🟢 新增：自動產生分類按鈕
+    function initCategoryButtons() {
+        const categoryContainer = document.getElementById("category-container");
+        
+        // 抓出所有不重複的分類
+        // 如果 P 欄是空的，我們就暫時不理它，或是你可以把它歸類為「其他」
+        const categories = ["全部", ...new Set(allProductsData.map(p => p.category).filter(c => c && c !== "其他"))];
 
-    // 1. 打開快速購物視窗 (終極修復版)
-    function openQuickShop(index) {
-      // 🌟 第一步：先檢查有沒有正在倒數的「關閉計時器」
-      // 如果有，代表上一個視窗還沒關乾淨，我們要立刻取消那個倒數！
-      if (modalCloseTimer) {
-        clearTimeout(modalCloseTimer);
-        modalCloseTimer = null;
-      }
+        let html = "";
+        categories.forEach(cat => {
+            // 預設「全部」按鈕是亮起的 (active)
+            const activeClass = cat === "全部" ? "active" : "";
+            html += `<button class="category-btn ${activeClass}" onclick="filterCategory('${cat}', this)">${cat}</button>`;
+        });
 
-      try {
-        const product = allProductsData[index];
-        if (!product) throw new Error("找不到商品資料");
-
-        currentQsIndex = index;
-
-        // --- 圖片處理 ---
-        const mainImg = document.getElementById('qs-img');
-        const galleryContainer = document.getElementById('qs-gallery-thumbs');
-
-        // 防呆：如果沒圖就給預設圖
-        const imgSrc = (product.gallery && product.gallery.length > 0) ? product.gallery[0] : 'https://placehold.co/400?text=No+Image';
-
-        if (mainImg) {
-          mainImg.src = imgSrc;
-          mainImg.style.cursor = "zoom-in";
-          mainImg.onclick = function () { openZoom(this.src); };
-        }
-
-        if (galleryContainer) {
-          galleryContainer.innerHTML = '';
-          if (product.gallery && product.gallery.length > 1) {
-            product.gallery.forEach((imgUrl, idx) => {
-              const thumb = document.createElement('img');
-              thumb.src = imgUrl;
-              thumb.className = 'qs-thumb';
-              if (idx === 0) thumb.classList.add('active');
-              thumb.onclick = function () {
-                mainImg.src = imgUrl;
-                document.querySelectorAll('.qs-thumb').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-              };
-              galleryContainer.appendChild(thumb);
-            });
-            galleryContainer.style.display = 'flex';
-          } else {
-            galleryContainer.style.display = 'none';
-          }
-        }
-
-        // --- 標題與價格 ---
-        const titleEl = document.getElementById('qs-title');
-        if (titleEl) titleEl.innerHTML = product.name;
-
-        const priceBox = document.getElementById('qs-price-box');
-        if (priceBox) priceBox.innerText = 'NT$ ' + product.price;
-
-        // --- 贈品/說明 (I欄) ---
-        const giftCard = document.getElementById('qs-gift-card');
-        const giftText = document.getElementById('qs-gift-text');
-        if (giftCard && giftText) {
-          if (product.giftDesc) {
-            giftText.innerHTML = product.giftDesc;
-            giftCard.style.display = 'block';
-          } else {
-            giftCard.style.display = 'none';
-          }
-        }
-
-        // === 關鍵修正：規格與數量的搬家邏輯 ===
-        const select = document.getElementById('qs-variant-select');
-        // 這裡加個保護，怕找不到 closest
-        const variantContainer = select ? select.closest('.qs-col-grow') : null;
-        const qtyContainer = document.querySelector('.qs-col-fixed');
-        const rowGroup = document.querySelector('.qs-row-group');
-
-        // 安全檢查：如果網頁結構有缺，就停止執行以免報錯
-        if (!select || !variantContainer || !qtyContainer || !rowGroup || !priceBox) {
-          console.error("網頁結構異常，找不到必要的元素。");
-          return;
-        }
-
-        select.innerHTML = '';
-
-        // 1. 強制重置：不管數量格子現在在哪裡，直接把它「抓回」原本的 rowGroup
-        rowGroup.appendChild(qtyContainer);
-
-        // 移除價格區塊的特殊樣式 (回復原狀)
-        priceBox.classList.remove('price-qty-mixed-mode');
-
-        // 2. 判斷是否有規格
-        const hasVariants = product.variants && product.variants.length > 0 && product.variants[0] !== "" && product.variants[0] !== "單一規格";
-
-        if (hasVariants) {
-          // [情況 A：有規格] -> 顯示規格選單，數量格子維持在下面
-          product.variants.forEach(v => {
-            const opt = document.createElement('option');
-            opt.value = v;
-            opt.innerText = v;
-            if (v.includes('(缺)')) {
-              opt.disabled = true;
-              opt.innerText += ' (Sold Out)';
-            }
-            select.appendChild(opt);
-          });
-          variantContainer.style.display = 'block';
-
-        } else {
-          // [情況 B：無規格] -> 隱藏規格選單，把數量格子搬上去！
-          variantContainer.style.display = 'none';
-
-          // 搬家：把數量容器搬進價格盒子裡
-          priceBox.appendChild(qtyContainer);
-          // 加上並排樣式
-          priceBox.classList.add('price-qty-mixed-mode');
-        }
-
-        // 重置數量為 1
-        const qtyInput = document.getElementById('qs-qty');
-        if (qtyInput) qtyInput.value = 1;
-
-        // 顯示彈窗
-        const modal = document.getElementById('quickShopModal');
-        if (modal) {
-          modal.style.display = 'flex';
-          setTimeout(() => {
-            modal.classList.add('show');
-          }, 10);
-        }
-
-      } catch (e) {
-        console.error("Quick Shop Error:", e);
-      }
+        categoryContainer.innerHTML = html;
     }
 
-    // 2. 關閉彈窗 (這裡也要換！不然抓不到計時器)
+    // 3. 🟢 新增：點擊按鈕後的篩選功能
+    function filterCategory(category, btnElement) {
+        // 1. 處理按鈕亮燈
+        document.querySelectorAll(".category-btn").forEach(btn => btn.classList.remove("active"));
+        btnElement.classList.add("active");
+
+        // 2. 篩選資料
+        if (category === "全部") {
+            renderProducts(allProductsData);
+        } else {
+            const filtered = allProductsData.filter(p => p.category === category);
+            renderProducts(filtered);
+        }
+    }
+
+    // 4. 🟢 新增：負責把商品畫在螢幕上的函式 (從原本的 fetchProducts 拆出來的)
+    function renderProducts(products) {
+        const container = document.getElementById("product-list");
+        container.innerHTML = ""; // 先清空畫面
+
+        // 判斷 VIP 模式 (因為每次重畫都要判斷一次)
+        const urlParams = new URLSearchParams(window.location.search);
+        const isVipMode = urlParams.get(VIP_KEY) === VIP_VALUE;
+
+        if (products.length === 0) {
+            container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:40px; color:#999;">此分類暫無商品</div>`;
+            return;
+        }
+
+        products.forEach((product) => {
+             // VIP 價格邏輯
+             let finalPriceDisplay = product.originalPriceStr;
+             let priceHtml = `<span class="price">NT$ ${product.originalPriceStr}</span>`;
+
+             if (isVipMode && product.vipPriceStr && product.vipPriceStr !== product.originalPriceStr) {
+                // 更新物件裡的價格，讓加入購物車時能抓到對的錢
+                product.price = product.vipPriceStr; 
+                priceHtml = `
+                    <div class="price-container">
+                        <span class="price-original">NT$ ${product.originalPriceStr}</span>
+                        <span class="price-vip">NT$ ${product.vipPriceStr}</span>
+                    </div>`;
+             } else {
+                product.price = product.originalPriceStr;
+             }
+
+            // 標籤邏輯
+            let badgeHtml = "";
+            if (product.tag === "NEW") badgeHtml = `<div class="badge new">NEW</div>`;
+            else if (product.tag === "HOT") badgeHtml = `<div class="badge hot">HOT</div>`;
+            else if (product.tag === "SALE") badgeHtml = `<div class="badge sale">SALE</div>`;
+
+            const card = document.createElement("div");
+            card.className = "product-card";
+            card.innerHTML = `
+                <div class="img-wrapper" style="cursor:pointer;" onclick="openQuickShop(${product.id})">
+                    ${badgeHtml}
+                    <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
+                </div>
+                
+                <div class="info">
+                    <h3 class="name" style="cursor:pointer;" onclick="openQuickShop(${product.id})">${product.name}</h3>
+                    
+                    ${priceHtml}
+                    
+                    <div class="action-row" style="margin-top: 10px; justify-content: center;">
+                        <button class="btn-add" onclick="openQuickShop(${product.id})" style="width: 100%; max-width: 200px;">
+                            加入購物車
+                        </button>
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    // === 🛒 全域變數：紀錄目前彈窗正在看哪一個商品 ===
+    let currentQsIndex = null;
+
+    // 1. 打開快速購物視窗
+    function openQuickShop(index) {
+      const product = allProductsData[index];
+      currentQsIndex = index; // 記住現在是誰
+
+      // 填入圖片
+      // === 🟢 圖片相簿處理 (開始) ===
+      const mainImg = document.getElementById('qs-img');
+      const galleryContainer = document.getElementById('qs-gallery-thumbs');
+
+      // 1. 先顯示第一張圖 (主圖)
+      // 這裡加上 object-fit 設定，確保不管長寬都不會變形
+      mainImg.src = product.gallery[0];
+      mainImg.style.cursor = "zoom-in"; // 滑鼠變放大鏡
+      mainImg.onclick = function () {
+        openZoom(this.src); // 呼叫放大功能，傳入目前的圖片
+      };
+
+      // 2. 產生下方縮圖 (如果有超過 1 張圖的話)
+      galleryContainer.innerHTML = ''; // 清空舊的
+
+      if (product.gallery.length > 1) {
+        product.gallery.forEach((imgUrl, idx) => {
+          const thumb = document.createElement('img');
+          thumb.src = imgUrl;
+          thumb.className = 'qs-thumb';
+
+          // 第一張預設選中
+          if (idx === 0) thumb.classList.add('active');
+
+          // 點擊縮圖：換大圖 + 切換金框
+          thumb.onclick = function () {
+            mainImg.src = imgUrl;
+            // 移除其他人的 active
+            document.querySelectorAll('.qs-thumb').forEach(t => t.classList.remove('active'));
+            // 自己加上 active
+            this.classList.add('active');
+          };
+
+          galleryContainer.appendChild(thumb);
+        });
+        galleryContainer.style.display = 'flex';
+      } else {
+        // 如果只有一張圖，就不顯示縮圖列
+        galleryContainer.style.display = 'none';
+      }
+      // === 🟢 圖片相簿處理 (結束) ===
+
+      // 填入標題
+      document.getElementById('qs-title').innerHTML = product.name;
+
+      // 🟢 1. 填入 I 欄 (內容物清單) - 現在移到最上面了！
+      const giftCard = document.getElementById('qs-gift-card');
+      const giftText = document.getElementById('qs-gift-text');
+
+      if (product.giftDesc) {
+        giftText.innerHTML = product.giftDesc; // 支援 HTML <br>
+        giftCard.style.display = 'block';
+      } else {
+        giftCard.style.display = 'none';
+      }
+
+      // 🟢 2. 填入價格
+      // 重新抓取網址參數判斷 VIP
+      const urlParams = new URLSearchParams(window.location.search);
+      // 這裡注意：你的變數名稱要對應，假設前面有用 const VIP_KEY = 'vip'
+      const isVipMode = urlParams.get('vip') === 'mina';
+
+      // 直接抓取資料表裡的價格顯示
+      // 因為我們已經在 fetchProducts 處理過價格邏輯，這裡直接顯示 product.price 最保險
+      document.getElementById('qs-price-box').innerText = 'NT$ ' + product.price;
+
+      // 產生規格選單
+      const select = document.getElementById('qs-variant-select');
+      select.innerHTML = ''; // 清空
+
+      if (product.variants.length > 0 && product.variants[0] !== "") {
+        product.variants.forEach(v => {
+          const opt = document.createElement('option');
+          opt.value = v;
+          opt.innerText = v;
+          if (v.includes('(缺)')) {
+            opt.disabled = true;
+            opt.innerText += ' (Sold Out)';
+          }
+          select.appendChild(opt);
+        });
+        // 顯示選單區塊
+        select.parentElement.style.display = 'block';
+      } else {
+        // 如果沒有規格 (ONE SIZE)，隱藏選單
+        select.parentElement.style.display = 'none';
+      }
+
+      // 重置數量
+      document.getElementById('qs-qty').value = 1;
+
+      // 顯示彈窗 (加一點動畫 class)
+      const modal = document.getElementById('quickShopModal');
+      modal.style.display = 'flex';
+      // 稍微延遲加 show class 讓 fade in 動畫生效
+      setTimeout(() => {
+        modal.classList.add('show');
+      }, 10);
+    }
+
+    // 2. 關閉彈窗
     function closeQuickShop(e) {
       if (e.target.classList.contains('quick-shop-overlay')) {
         forceCloseQuickShop();
@@ -2685,13 +2623,9 @@
     function forceCloseQuickShop() {
       const modal = document.getElementById('quickShopModal');
       modal.classList.remove('show');
-      
-      // 🌟 修正重點：加上 modalCloseTimer = ...
-      // 這樣上面的 openQuickShop 才能抓到它並取消它
-      modalCloseTimer = setTimeout(() => {
+      setTimeout(() => {
         modal.style.display = 'none';
-        modalCloseTimer = null; // 執行完後歸零
-      }, 300);
+      }, 300); // 等動畫跑完
     }
 
     // 3. 數量加減
@@ -2781,62 +2715,6 @@
       }
     }
 
-    function addToCart(index) {
-      const product = allProductsData[index];
-      const qtySelect = document.getElementById(`qty-${index}`);
-      const qty = parseInt(qtySelect.value);
-
-      // 🔴 修改：從下拉選單抓取選中的值
-      let selectedSpec = null;
-      const selectEl = document.getElementById(`variant-select-${index}`);
-
-      if (selectEl) {
-        // 如果有選單，就看選了什麼
-        if (selectEl.tagName === "SELECT") {
-          selectedSpec = selectEl.value;
-          if (selectedSpec === "") {
-            alert("Please select a variant.\n請選擇一個款式喔！");
-            return;
-          }
-        } else {
-          // 如果是那種「單一規格」的文字 div (上面寫 style="border:none...")
-          selectedSpec = "單一規格";
-        }
-      } else {
-        // 防呆
-        selectedSpec = "單一規格";
-      }
-
-      // 2. 處理價格
-      let priceNum = parseInt(product.price.replace(/[^0-9]/g, ""));
-
-      // 3. 建立購物車項目
-      const cartItem = {
-        name: product.name,
-        spec: selectedSpec, // 使用剛剛抓到的值
-        price: priceNum,
-        qty: qty,
-      };
-
-      // ...後面維持一樣 (加入購物車 cart.push, saveCart, 按鈕變色特效...)
-      cart.push(cartItem);
-      saveCart();
-
-      // 按鈕變色特效 (維持原狀)
-      const btn = window.event ? (window.event.target.tagName === 'BUTTON' ? window.event.target : window.event.target.closest('button')) : null;
-      if (btn) {
-        const originalText = btn.innerText;
-        btn.innerText = "OK!";
-        btn.style.backgroundColor = "#d4a373";
-        btn.style.borderColor = "#d4a373";
-        setTimeout(() => {
-          btn.innerText = originalText;
-          btn.style.backgroundColor = "";
-          btn.style.borderColor = "";
-        }, 1000);
-      }
-    }
-
     function closeCart(e) {
       if (e.target.classList.contains("cart-modal"))
         document.getElementById("cartModal").classList.remove("show");
@@ -2855,6 +2733,7 @@
 
       let html = "";
       let total = 0;
+      let depositHtml = "";
       cart.forEach((item, idx) => {
         total += item.price * item.qty;
         html += `
@@ -2887,9 +2766,6 @@
                 `;
       }
       // --------------------------------
-
-      // 🟢 修改：定金計算邏輯 (滿 1000 元)
-      let depositHtml = "";
 
       if (total >= 1000) {
         let rawDeposit = total * 0.25;
@@ -3110,66 +2986,6 @@
       }
     }
 
-    // === 🏷️ 分類篩選功能 ===
-    function initCategoryFilter() {
-      const container = document.getElementById('category-menu');
-      container.innerHTML = ''; // 清空舊按鈕
-
-      // 1. 蒐集所有出現過的分類
-      const categories = new Set();
-      allProductsData.forEach(p => {
-        if (p.category) {
-          // 如果格子裡有逗號 (例如 "彩妝,新品")，就拆開來算
-          p.category.split(/[,，]/).forEach(c => categories.add(c.trim()));
-        }
-      });
-
-      // 如果沒有任何分類資料，就隱藏按鈕區塊，不要佔位子
-      if (categories.size === 0) {
-        container.style.display = 'none';
-        return;
-      }
-
-      // 2. 建立「全部商品」按鈕 (預設選中)
-      const allBtn = document.createElement('button');
-      allBtn.className = 'category-btn active'; // 預設亮起
-      allBtn.innerText = '全部商品';
-      allBtn.onclick = () => filterByCategory('all', allBtn);
-      container.appendChild(allBtn);
-
-      // 3. 建立其他分類按鈕
-      categories.forEach(cat => {
-        if (!cat) return; // 略過空白
-        const btn = document.createElement('button');
-        btn.className = 'category-btn';
-        btn.innerText = cat;
-        btn.onclick = () => filterByCategory(cat, btn);
-        container.appendChild(btn);
-      });
-    }
-
-    function filterByCategory(targetCategory, clickedBtn) {
-      // 1. 按鈕變色處理
-      // 先把所有按鈕的 active 拿掉
-      document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
-      // 再把被點的這顆按鈕亮起來
-      clickedBtn.classList.add('active');
-
-      // 2. 篩選商品卡片
-      const cards = document.querySelectorAll('.product-card');
-
-      cards.forEach(card => {
-        const productCats = card.dataset.category || ""; // 取得這張卡片的分類字串
-
-        // 邏輯：如果是 'all' 或者 卡片分類裡包含目標分類，就顯示
-        if (targetCategory === 'all' || productCats.includes(targetCategory)) {
-          card.style.display = 'flex'; // 顯示 (維持 flex 排版)
-        } else {
-          card.style.display = 'none'; // 隱藏
-        }
-      });
-    }
-
     // 動畫：簡單的星星閃爍
     const style = document.createElement("style");
     style.innerHTML = `@keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }`;
@@ -3189,3 +3005,4 @@
 </body>
 
 </html>
+
