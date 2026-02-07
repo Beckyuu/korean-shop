@@ -2396,7 +2396,7 @@
           // 2. 組合所有圖片：主圖 (D欄 row[3]) 放第一張，後面接 K~O 欄的圖
           const allImages = [row[3] ? row[3].trim() : "", ...extraImgs].filter(url => url !== "");
 
-          onst categoryRaw = row[15] ? row[15].trim() : "";
+          const categoryRaw = row[15] ? row[15].trim() : "";
 
           const product = {
             id: index,
