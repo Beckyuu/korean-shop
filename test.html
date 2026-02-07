@@ -1934,61 +1934,93 @@
           }
       }
 
-      /* === 🏷️ 分類選單樣式 (膠囊按鈕 + 橫向滑動) === */
+/* === 🏷️ 分類選單樣式 (膠囊按鈕 + 橫向滑動 - 高級立體版) === */
     .category-nav {
       display: flex;
-      justify-content: center; /* 電腦版置中 */
-      gap: 10px; /* 按鈕之間的距離 */
-      padding: 10px 20px 20px;
-      margin-bottom: 20px;
-      
-      /* 讓手機版可以橫向滑動 */
+      justify-content: center;
+      gap: 12px; /* 增加一點間距 */
+      padding: 15px 20px 25px; /* 增加下方 padding 讓陰影有空間顯示 */
+      margin-bottom: 10px;
       overflow-x: auto;
       white-space: nowrap;
-      -webkit-overflow-scrolling: touch; /* 滑動更順暢 */
-      
-      /* 隱藏捲軸 (美觀) */
-      scrollbar-width: none; /* Firefox */
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      /* 增加一個很淺的背景色條，讓按鈕更突出 (可選) */
+      /* background: linear-gradient(to bottom, #fff, #fdfbf9); */
     }
     .category-nav::-webkit-scrollbar {
-      display: none; /* Chrome/Safari */
+      display: none;
     }
 
+    /* 🟢 按鈕基礎設定 */
     .category-btn {
       display: inline-block;
-      padding: 8px 24px;
-      border-radius: 50px; /* 圓圓的膠囊形狀 */
+      padding: 10px 26px; /* 稍微加大一點按鈕 */
+      border-radius: 50px;
       font-family: "Noto Sans TC", sans-serif;
       font-size: 0.95rem;
+      font-weight: 500; /* 字體稍微加粗增加份量感 */
       cursor: pointer;
-      transition: all 0.3s;
-      
-      /* 預設樣式：透明底 + 金框 */
-      background: transparent;
+      transition: all 0.2s ease-out; /* 動畫速度調快一點點，感覺更俐落 */
+      letter-spacing: 1px;
+      position: relative; /* 為了做按壓位移效果 */
+      top: 0;
+
+      /* ⚪️ 預設狀態：立體白金風格 (浮起) */
+      /* 背景：微妙的米白漸層，模擬光線從上方照下，製造弧度 */
+      background: linear-gradient(to bottom, #ffffff 0%, #f9f5f0 100%);
+      /* 邊框：原本的金色 */
       border: 1px solid #d4a373;
       color: #d4a373;
-      letter-spacing: 1px;
+
+      /* 陰影大師：多層陰影製造浮起感 */
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.8), /* 1. 內部上方高光 (讓邊緣看起來圓潤) */
+        0 4px 8px rgba(212, 163, 115, 0.15), /* 2. 外部柔和金色陰影 (浮起感主體) */
+        0 1px 3px rgba(0,0,0,0.05);          /* 3. 底部深色小陰影 (增加貼地真實感) */
     }
 
+    /* 👆 滑鼠懸停狀態：浮得更高 */
     .category-btn:hover {
-      background: #fdfbf7;
+      /* 背景變亮一點 */
+      background: linear-gradient(to bottom, #ffffff 0%, #fffefb 100%);
+      /* 陰影擴散、往下移，感覺浮起來了 */
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,1),
+        0 8px 16px rgba(212, 163, 115, 0.2), /* 陰影變大變模糊 */
+        0 3px 6px rgba(0,0,0,0.08);
+      
+      transform: translateY(-2px); /* 物理位置向上浮動 2px */
     }
 
-    /* 選中狀態：實心金底 + 白字 */
+    /* 🟡 選中狀態：立體黃金風格 (按壓凹陷感) */
     .category-btn.active {
-      background: #d4a373;
+      /* 背景：金色漸層，上方亮下方暗 */
+      background: linear-gradient(to bottom, #e8ba8a 0%, #d4a373 100%);
+      /* 邊框：稍微深一點的金色 */
+      border-color: #c99665;
       color: #fff;
-      box-shadow: 0 4px 10px rgba(212, 163, 115, 0.3);
+      /* 文字加上一點點陰影，增加可讀性 */
+      text-shadow: 0 1px 1px rgba(0,0,0,0.15);
+
+      /* 陰影：改用 inset (內部陰影)，製造「按下去」的凹陷感 */
+      box-shadow:
+        inset 0 3px 8px rgba(0,0,0,0.15), /* 內部上方陰影，看起來凹下去 */
+        0 1px 2px rgba(212, 163, 115, 0.5); /* 外部保留一點點陰影，維持厚度感 */
+
+      /* 物理位置往下移，抵消上面的浮動，產生按壓感 */
+      transform: translateY(1px);
     }
 
-    /* 手機版調整：靠左對齊，讓滑動更直覺 */
+    /* 手機版調整：靠左對齊 */
     @media (max-width: 768px) {
       .category-nav {
-        justify-content: flex-start; /* 靠左 */
-        padding-left: 20px; /* 左邊留白 */
+        justify-content: flex-start;
+        padding-left: 20px;
+        padding-right: 20px; /* 右邊也要加，不然滑到底會切到 */
       }
     }
-  </style>
+      </style>
 </head>
 
 <body>
@@ -2471,7 +2503,7 @@
             container.appendChild(card);
         });
     }
-    
+
     // === 🛒 全域變數：紀錄目前彈窗正在看哪一個商品 ===
     let currentQsIndex = null;
 
