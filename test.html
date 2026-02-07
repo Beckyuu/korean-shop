@@ -356,52 +356,72 @@
       }
     }
 
-/* === 🏷️ 分類按鈕樣式 (新版：韓系方圓風格) === */
+    /* === 🏷️ 分類按鈕樣式 (韓系立體貼紙風 - 修正版) === */
     .category-container {
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
-      gap: 12px; /* 按鈕間距 */
+      gap: 16px;
+      /* 增加間距，因為有立體陰影需要空間 */
       margin: 0 auto 40px;
       max-width: 90%;
     }
 
     .category-btn {
-      font-family: "Noto Sans TC", sans-serif;
-      font-size: 0.95rem; /* 字體稍微大一點 */
-      padding: 10px 24px; /* 稍微加高，更有份量感 */
-      
-      /* 預設狀態（未選中）：白底 + 淺灰框 + 深灰字 */
+      font-family: "Fredoka", "Noto Sans TC", sans-serif;
+      /* 換成可愛一點的圓體英文 */
+      font-size: 1rem;
+      padding: 8px 28px;
+      /* 按鈕胖一點比較可愛 */
+
+      /* 1. 配色：白底 + 金棕色字 */
       background-color: #fff;
-      border: 1px solid #e0e0e0; 
-      color: #666;
-      
-      border-radius: 12px; /* 關鍵修改：從 50px 改成 12px，變成方圓形 */
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* 加上微微的立體陰影 */
-      
+      color: #d4a373;
+
+      /* 2. 邊框：加粗實線 (2px)，模仿貼紙邊框 */
+      border: 2px solid #d4a373;
+      border-radius: 50px;
+      /* 圓潤膠囊 */
+
+      /* 3. 🌟 靈魂所在：實心硬陰影 (不模糊) */
+      /* 這裡用你的「磚紅色」做陰影，製造撞色設計感 */
+      box-shadow: 4px 4px 0px #bfa092;
+
       cursor: pointer;
-      transition: all 0.3s ease; /* 平滑過渡動畫 */
-      letter-spacing: 0.5px;
-      font-weight: 500; /* 字體稍微加粗一點點 */
+      transition: all 0.1s ease;
+      /* 動畫要快，才有「喀擦」的按鍵感 */
+      letter-spacing: 1px;
+      font-weight: 600;
+      /* 字體加粗才撐得起邊框 */
+
+      /* 讓按鈕預設就在原本的位置 */
+      transform: translate(0, 0);
     }
 
-    /* 滑鼠移過去 (Hover) 的狀態 */
+    /* 滑鼠移過去：按鈕稍微往左上浮，陰影變長 (看起來更立體) */
     .category-btn:hover {
-      border-color: #d4a373; /* 邊框變主題色 */
-      color: #d4a373; /* 文字變主題色 */
-      box-shadow: 0 4px 10px rgba(212, 163, 115, 0.15); /* 陰影帶點金色光暈 */
-      transform: translateY(-1px); /* 微微浮起 */
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px #bfa092;
+      background-color: #fffbf5;
+      /* 微微變暖 */
     }
 
-    /* 被選中 (Active) 的狀態 */
+    /* 被選中 (Active) 的狀態：變成實心，且被「壓平」 */
     .category-btn.active {
-      background-color: #d4a373; /* 背景變實心主題色 */
-      color: #fff; /* 文字變白色 */
-      border-color: #d4a373; /* 邊框同色 */
-      box-shadow: 0 4px 12px rgba(212, 163, 115, 0.3); /* 更明顯的金色發光陰影 */
-      transform: translateY(-1px); /* 保持浮起 */
+      background-color: #d4a373;
+      /* 變成實心金 */
+      color: #fff;
+      /* 白字 */
+
+      /* 邊框顏色要跟著變，才不會突兀 */
+      border-color: #d4a373;
+
+      /* 🌟 按壓效果：陰影消失 (或變很小)，按鈕往右下移 */
+      box-shadow: 0px 0px 0px transparent;
+      transform: translate(4px, 4px);
+      /* 真的位移 4px 去填補陰影原本的位置 */
     }
-    
+
     /* === 產品列表 === */
     .container {
       max-width: 1200px;
