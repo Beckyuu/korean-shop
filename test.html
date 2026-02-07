@@ -2020,6 +2020,24 @@
         padding-right: 20px; /* 右邊也要加，不然滑到底會切到 */
       }
     }
+
+    /* === 🛒 購物車專用關閉按鈕 (強制變大) === */
+    .cart-close-btn {
+      cursor: pointer;
+      font-size: 2.8rem; /* 字體放大 */
+      color: #333;       /* 深灰色 */
+      font-weight: 300;  /* 細體比較時尚 */
+      line-height: 1;
+      padding: 5px 15px; /* 增加手指點擊範圍 */
+      
+      /* 讓它在手機上容易被按到 */
+      display: inline-block; 
+      transition: transform 0.2s;
+    }
+    
+    .cart-close-btn:active {
+      transform: scale(0.9); /* 手機按下去會有縮小效果 */
+    }
       </style>
 </head>
 
@@ -2186,7 +2204,7 @@
             ">
           購物清單
         </h3>
-        <span onclick="toggleCart()" style="cursor: pointer; font-size: 2.5rem; color: #2c2c2c; font-weight: 300; line-height: 1; padding: 0 10px;">×</span>
+        <span class="cart-close-btn" onclick="toggleCart()">×</span>
       </div>
 
       <div style="flex-grow: 1; overflow-y: auto" id="cartItems"></div>
@@ -2611,7 +2629,10 @@
       setTimeout(() => {
         modal.classList.add('show');
       }, 10);
+      // 🔴 改成這樣：連 html 一起鎖，手機才聽話
       document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+      document.documentElement.style.height = "100%"; // 這一行對 iOS 很重要
     }
 
     // 2. 關閉彈窗
@@ -2625,6 +2646,8 @@
       const modal = document.getElementById('quickShopModal');
       modal.classList.remove('show');
       document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+      document.documentElement.style.height = "";
       setTimeout(() => {
         modal.style.display = 'none';
       }, 300); // 等動畫跑完
