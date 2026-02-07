@@ -2186,7 +2186,7 @@
             ">
           購物清單
         </h3>
-        <span onclick="toggleCart()" style="cursor: pointer; font-size: 1.5rem; opacity: 0.5">×</span>
+        <span onclick="toggleCart()" style="cursor: pointer; font-size: 2.5rem; color: #2c2c2c; font-weight: 300; line-height: 1; padding: 0 10px;">×</span>
       </div>
 
       <div style="flex-grow: 1; overflow-y: auto" id="cartItems"></div>
@@ -2611,6 +2611,7 @@
       setTimeout(() => {
         modal.classList.add('show');
       }, 10);
+      document.body.style.overflow = "hidden";
     }
 
     // 2. 關閉彈窗
@@ -2623,6 +2624,7 @@
     function forceCloseQuickShop() {
       const modal = document.getElementById('quickShopModal');
       modal.classList.remove('show');
+      document.body.style.overflow = "";
       setTimeout(() => {
         modal.style.display = 'none';
       }, 300); // 等動畫跑完
@@ -2710,8 +2712,10 @@
       if (!modal.classList.contains("show")) {
         renderCartItems();
         modal.classList.add("show");
+        document.body.style.overflow = "hidden";
       } else {
         modal.classList.remove("show");
+        document.body.style.overflow = "";
       }
     }
 
@@ -3005,3 +3009,4 @@
 </body>
 
 </html>
+
