@@ -356,6 +356,51 @@
       }
     }
 
+    /* === 🏷️ 分類按鈕樣式 (韓系膠囊風) === */
+    .category-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      /* 如果按鈕太多會自動換行 */
+      gap: 12px;
+      /* 按鈕之間的距離 */
+      margin: 0 auto 40px;
+      /* 下方留白 */
+      max-width: 90%;
+    }
+
+    .category-btn {
+      font-family: "Noto Sans TC", sans-serif;
+      font-size: 0.9rem;
+      padding: 8px 24px;
+      /* 膠囊形狀的關鍵 */
+
+      /* 預設狀態：透明底 + 金色框 */
+      background-color: transparent;
+      border: 1px solid #d4a373;
+      color: #d4a373;
+
+      border-radius: 50px;
+      /* 圓滾滾的邊角 */
+      cursor: pointer;
+      transition: all 0.3s ease;
+      /* 平滑過渡動畫 */
+      letter-spacing: 1px;
+    }
+
+    /* 滑鼠移過去 或 被選中(Active) 的狀態 */
+    .category-btn:hover,
+    .category-btn.active {
+      background-color: #d4a373;
+      /* 變成實心金 */
+      color: #fff;
+      /* 變成白字 */
+      box-shadow: 0 4px 10px rgba(212, 163, 115, 0.3);
+      /* 微微發光 */
+      transform: translateY(-2px);
+      /* 微微浮起 */
+    }
+
     /* === 產品列表 === */
     .container {
       max-width: 1200px;
@@ -1913,52 +1958,76 @@
     }
 
     /* === 📱 手機版並排優化 (規格+數量) === */
-      
-      /* 1. 讓它們橫向排列 */
-      .qs-row-group {
-          display: flex;
-          gap: 15px; /* 中間的空隙 */
-          align-items: flex-end; /* 對齊底部 (讓輸入框對齊) */
-          margin-bottom: 12px;
-      }
 
-      /* 2. 左邊規格：自動長大，佔滿剩餘空間 */
-      .qs-col-grow {
-          flex: 1; /* 關鍵！吃掉剩下所有寬度 */
-          min-width: 0; /* 防止被超長文字撐爆 */
-          margin-bottom: 0 !important; /* 消除原本的下方留白 */
-      }
+    /* 1. 讓它們橫向排列 */
+    .qs-row-group {
+      display: flex;
+      gap: 15px;
+      /* 中間的空隙 */
+      align-items: flex-end;
+      /* 對齊底部 (讓輸入框對齊) */
+      margin-bottom: 12px;
+    }
 
-      /* 3. 右邊數量：固定寬度 */
-      .qs-col-fixed {
-          width: 120px; /* 給數量一個固定的家 */
-          flex-shrink: 0; /* 不准縮小 */
-          margin-bottom: 0 !important;
-      }
+    /* 2. 左邊規格：自動長大，佔滿剩餘空間 */
+    .qs-col-grow {
+      flex: 1;
+      /* 關鍵！吃掉剩下所有寬度 */
+      min-width: 0;
+      /* 防止被超長文字撐爆 */
+      margin-bottom: 0 !important;
+      /* 消除原本的下方留白 */
+    }
 
-      /* 4. 數量選擇器樣式微調 */
-      .qs-qty-wrapper {
-          width: 100% !important; /* 填滿那個 120px */
-          height: 52px; /* 跟隔壁規格一樣高 */
-          display: flex;
-          align-items: center;
-          border: 1px solid #ddd;
-          border-radius: 8px; /* 圓角跟規格一致 */
-      }
-      .qs-qty-wrapper button {
-          width: 35px; height: 100%; border: none; background: transparent; cursor: pointer; font-size: 1.2rem;
-      }
-      .qs-qty-wrapper input {
-          flex: 1; width: 100%; border: none; text-align: center; font-size: 1rem; outline: none; background: transparent;
-      }
+    /* 3. 右邊數量：固定寬度 */
+    .qs-col-fixed {
+      width: 120px;
+      /* 給數量一個固定的家 */
+      flex-shrink: 0;
+      /* 不准縮小 */
+      margin-bottom: 0 !important;
+    }
 
-      /* 5. 🛑 重要修正：手機版規格選單 */
-      /* 我們之前設 width: 65%，現在要改回 100% (因為它已經在 flex 框框裡了) */
-      @media (max-width: 768px) {
-          .qs-select {
-              width: 100% !important; /* 填滿左邊那個格子 */
-          }
+    /* 4. 數量選擇器樣式微調 */
+    .qs-qty-wrapper {
+      width: 100% !important;
+      /* 填滿那個 120px */
+      height: 52px;
+      /* 跟隔壁規格一樣高 */
+      display: flex;
+      align-items: center;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      /* 圓角跟規格一致 */
+    }
+
+    .qs-qty-wrapper button {
+      width: 35px;
+      height: 100%;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+
+    .qs-qty-wrapper input {
+      flex: 1;
+      width: 100%;
+      border: none;
+      text-align: center;
+      font-size: 1rem;
+      outline: none;
+      background: transparent;
+    }
+
+    /* 5. 🛑 重要修正：手機版規格選單 */
+    /* 我們之前設 width: 65%，現在要改回 100% (因為它已經在 flex 框框裡了) */
+    @media (max-width: 768px) {
+      .qs-select {
+        width: 100% !important;
+        /* 填滿左邊那個格子 */
       }
+    }
   </style>
 </head>
 
@@ -2008,6 +2077,7 @@
     <div class="loader-spinner"></div>
     <span class="loading-text">loading.....</span>
   </div>
+  <div id="category-menu" class="category-container"></div>
   <div class="container" id="product-list"></div>
 
   <footer>
@@ -2326,6 +2396,8 @@
           // 2. 組合所有圖片：主圖 (D欄 row[3]) 放第一張，後面接 K~O 欄的圖
           const allImages = [row[3] ? row[3].trim() : "", ...extraImgs].filter(url => url !== "");
 
+          onst categoryRaw = row[15] ? row[15].trim() : "";
+
           const product = {
             id: index,
             name: row[0] ? row[0].trim() : "Unnamed",
@@ -2341,6 +2413,7 @@
             tag: row[6] ? row[6].trim().toUpperCase() : "",
             deadline: row[7] ? row[7].trim() : "",
             giftDesc: row[8] ? row[8].trim() : "",
+            category: categoryRaw
           };
 
           // 處理規格預設值
@@ -2352,6 +2425,7 @@
           // --- 建立極簡卡片 HTML (test.html 專用) ---
           const card = document.createElement("div");
           card.className = "product-card";
+          card.dataset.category = product.category;
 
           // 1. 標籤邏輯
           let badgeHtml = "";
@@ -2380,6 +2454,8 @@
             `;
           container.appendChild(card);
         });
+        initCategoryFilter();
+
       } catch (error) {
         console.error(error);
         loading.style.display = "none";
@@ -2925,6 +3001,66 @@
       if (event.target.classList.contains("modal-overlay")) {
         document.getElementById("detailModal").style.display = "none";
       }
+    }
+
+    // === 🏷️ 分類篩選功能 ===
+    function initCategoryFilter() {
+      const container = document.getElementById('category-menu');
+      container.innerHTML = ''; // 清空舊按鈕
+
+      // 1. 蒐集所有出現過的分類
+      const categories = new Set();
+      allProductsData.forEach(p => {
+        if (p.category) {
+          // 如果格子裡有逗號 (例如 "彩妝,新品")，就拆開來算
+          p.category.split(/[,，]/).forEach(c => categories.add(c.trim()));
+        }
+      });
+
+      // 如果沒有任何分類資料，就隱藏按鈕區塊，不要佔位子
+      if (categories.size === 0) {
+        container.style.display = 'none';
+        return;
+      }
+
+      // 2. 建立「全部商品」按鈕 (預設選中)
+      const allBtn = document.createElement('button');
+      allBtn.className = 'category-btn active'; // 預設亮起
+      allBtn.innerText = '全部商品';
+      allBtn.onclick = () => filterByCategory('all', allBtn);
+      container.appendChild(allBtn);
+
+      // 3. 建立其他分類按鈕
+      categories.forEach(cat => {
+        if (!cat) return; // 略過空白
+        const btn = document.createElement('button');
+        btn.className = 'category-btn';
+        btn.innerText = cat;
+        btn.onclick = () => filterByCategory(cat, btn);
+        container.appendChild(btn);
+      });
+    }
+
+    function filterByCategory(targetCategory, clickedBtn) {
+      // 1. 按鈕變色處理
+      // 先把所有按鈕的 active 拿掉
+      document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+      // 再把被點的這顆按鈕亮起來
+      clickedBtn.classList.add('active');
+
+      // 2. 篩選商品卡片
+      const cards = document.querySelectorAll('.product-card');
+
+      cards.forEach(card => {
+        const productCats = card.dataset.category || ""; // 取得這張卡片的分類字串
+
+        // 邏輯：如果是 'all' 或者 卡片分類裡包含目標分類，就顯示
+        if (targetCategory === 'all' || productCats.includes(targetCategory)) {
+          card.style.display = 'flex'; // 顯示 (維持 flex 排版)
+        } else {
+          card.style.display = 'none'; // 隱藏
+        }
+      });
     }
 
     // 動畫：簡單的星星閃爍
