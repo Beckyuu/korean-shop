@@ -2538,6 +2538,7 @@
 
     // === 🛒 全域變數：紀錄目前彈窗正在看哪一個商品 ===
     let currentQsIndex = null;
+    
     let modalCloseTimer = null; // 🌟 新增：用來管理關閉動畫的計時器，防止誤殺新視窗
 
     // 1. 打開快速購物視窗 (終極修復版)
@@ -2685,7 +2686,8 @@
       const modal = document.getElementById('quickShopModal');
       modal.classList.remove('show');
       
-      // 🌟 關鍵修正：把計時器存入變數，讓 openQuickShop 可以抓到它
+      // 🌟 修正重點：加上 modalCloseTimer = ...
+      // 這樣上面的 openQuickShop 才能抓到它並取消它
       modalCloseTimer = setTimeout(() => {
         modal.style.display = 'none';
         modalCloseTimer = null; // 執行完後歸零
