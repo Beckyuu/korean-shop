@@ -2535,87 +2535,100 @@
       }
     }
 
-    // === 🛒 全域變數：紀錄目前彈窗正在看哪一個商品 ===
-    // === 🛒 全域變數 ===
+// === 🛒 全域變數 ===
     let currentQsIndex = null;
-    let modalCloseTimer = null; // 🌟 新增：用來管理關閉動畫的計時器
+    let modalCloseTimer = null; 
 
-    // 1. 打開快速購物視窗 (安全修正版)
+    // 1. 打開快速購物視窗 (終極修復版)
     function openQuickShop(index) {
-      // 🌟 關鍵 1：如果正在執行關閉動畫，立刻取消它！防止視窗被誤關
-      if (modalCloseTimer) {
-        clearTimeout(modalCloseTimer);
-        modalCloseTimer = null;
-      }
+      // 防止舊的關閉動畫干擾
+      if (modalCloseTimer) { clearTimeout(modalCloseTimer); modalCloseTimer = null; }
 
       try {
         const product = allProductsData[index];
+        if (!product) throw new Error("找不到商品資料");
+
         currentQsIndex = index;
 
-        // --- 圖片處理 ---
+        // --- 圖片處理 (增加防呆，防止沒有圖片時報錯) ---
         const mainImg = document.getElementById('qs-img');
         const galleryContainer = document.getElementById('qs-gallery-thumbs');
-        mainImg.src = product.gallery[0];
-        mainImg.style.cursor = "zoom-in";
-        mainImg.onclick = function() { openZoom(this.src); };
+        
+        // 如果該商品完全沒圖，就給一張預設圖，防止變空白
+        const imgSrc = (product.gallery && product.gallery.length > 0) ? product.gallery[0] : 'https://placehold.co/400?text=No+Image';
+        
+        if (mainImg) {
+            mainImg.src = imgSrc;
+            mainImg.style.cursor = "zoom-in";
+            mainImg.onclick = function() { openZoom(this.src); };
+        }
 
-        galleryContainer.innerHTML = '';
-        if (product.gallery.length > 1) {
-          product.gallery.forEach((imgUrl, idx) => {
-            const thumb = document.createElement('img');
-            thumb.src = imgUrl;
-            thumb.className = 'qs-thumb';
-            if (idx === 0) thumb.classList.add('active');
-            thumb.onclick = function() {
-              mainImg.src = imgUrl;
-              document.querySelectorAll('.qs-thumb').forEach(t => t.classList.remove('active'));
-              this.classList.add('active');
-            };
-            galleryContainer.appendChild(thumb);
-          });
-          galleryContainer.style.display = 'flex';
-        } else {
-          galleryContainer.style.display = 'none';
+        if (galleryContainer) {
+            galleryContainer.innerHTML = '';
+            if (product.gallery && product.gallery.length > 1) {
+                product.gallery.forEach((imgUrl, idx) => {
+                    const thumb = document.createElement('img');
+                    thumb.src = imgUrl;
+                    thumb.className = 'qs-thumb';
+                    if (idx === 0) thumb.classList.add('active');
+                    thumb.onclick = function() {
+                        mainImg.src = imgUrl;
+                        document.querySelectorAll('.qs-thumb').forEach(t => t.classList.remove('active'));
+                        this.classList.add('active');
+                    };
+                    galleryContainer.appendChild(thumb);
+                });
+                galleryContainer.style.display = 'flex';
+            } else {
+                galleryContainer.style.display = 'none';
+            }
         }
 
         // --- 標題與價格 ---
-        document.getElementById('qs-title').innerHTML = product.name;
+        const titleEl = document.getElementById('qs-title');
+        if (titleEl) titleEl.innerHTML = product.name;
         
         const priceBox = document.getElementById('qs-price-box');
-        priceBox.innerText = 'NT$ ' + product.price;
+        if (priceBox) priceBox.innerText = 'NT$ ' + product.price;
 
         // --- 贈品/說明 (I欄) ---
         const giftCard = document.getElementById('qs-gift-card');
         const giftText = document.getElementById('qs-gift-text');
-        if (product.giftDesc) {
-          giftText.innerHTML = product.giftDesc;
-          giftCard.style.display = 'block';
-        } else {
-          giftCard.style.display = 'none';
+        if (giftCard && giftText) {
+            if (product.giftDesc) {
+                giftText.innerHTML = product.giftDesc;
+                giftCard.style.display = 'block';
+            } else {
+                giftCard.style.display = 'none';
+            }
         }
 
-        // === 產生規格選單 與 版面動態調整 ===
+        // === 關鍵修正：規格與數量的搬家邏輯 ===
         const select = document.getElementById('qs-variant-select');
-        const variantContainer = select.closest('.qs-col-grow');
-        const qtyContainer = document.querySelector('.qs-col-fixed');
+        const variantContainer = select ? select.closest('.qs-col-grow') : null;
+        const qtyContainer = document.querySelector('.qs-col-fixed'); 
         const rowGroup = document.querySelector('.qs-row-group');
-
-        select.innerHTML = ''; // 清空選單
-
-        // 🌟 關鍵 2：先檢查並重置位置 (防止 DOM 迷路)
-        // 只有當數量容器不在原本的家 (rowGroup) 時，才把它搬回來
-        if (rowGroup && qtyContainer && !rowGroup.contains(qtyContainer)) {
-            rowGroup.appendChild(qtyContainer);
+        
+        // 🔴 安全檢查：如果網頁結構有缺，就報錯但不當機
+        if (!select || !variantContainer || !qtyContainer || !rowGroup || !priceBox) {
+            console.error("網頁結構異常，找不到必要的元素。", { select, variantContainer, qtyContainer, rowGroup, priceBox });
+            throw new Error("網頁元件遺失，請重新整理");
         }
 
-        // 移除價格的並排模式樣式
+        select.innerHTML = ''; 
+
+        // 1. 強制重置：不管數量格子現在在哪裡，直接把它「抓回」原本的 rowGroup
+        // 這是最安全的做法，不用檢查 contains，直接 append 就對了
+        rowGroup.appendChild(qtyContainer);
+
+        // 移除價格區塊的特殊樣式 (回復原狀)
         priceBox.classList.remove('price-qty-mixed-mode');
         
-        // 判斷是否有規格
-        const hasVariants = product.variants.length > 0 && product.variants[0] !== "" && product.variants[0] !== "單一規格";
+        // 2. 判斷是否有規格
+        const hasVariants = product.variants && product.variants.length > 0 && product.variants[0] !== "" && product.variants[0] !== "單一規格";
 
         if (hasVariants) {
-          // [情況 A：有規格] -> 維持原樣
+          // [情況 A：有規格] -> 顯示規格選單，數量格子維持在下面
           product.variants.forEach(v => {
             const opt = document.createElement('option');
             opt.value = v;
@@ -2629,31 +2642,35 @@
           variantContainer.style.display = 'block'; 
 
         } else {
-          // [情況 B：無規格] -> 把數量搬上去
+          // [情況 B：無規格] -> 隱藏規格選單，把數量格子搬上去！
           variantContainer.style.display = 'none';
           
           // 搬家：把數量容器搬進價格盒子裡
           priceBox.appendChild(qtyContainer);
+          // 加上並排樣式
           priceBox.classList.add('price-qty-mixed-mode');
         }
         
-        // 重置數量
-        document.getElementById('qs-qty').value = 1;
+        // 重置數量為 1
+        const qtyInput = document.getElementById('qs-qty');
+        if (qtyInput) qtyInput.value = 1;
 
         // 顯示彈窗
         const modal = document.getElementById('quickShopModal');
-        modal.style.display = 'flex';
-        // 稍微延遲加 show class 讓 fade in 動畫生效
-        setTimeout(() => {
-          modal.classList.add('show');
-        }, 10);
+        if (modal) {
+            modal.style.display = 'flex';
+            setTimeout(() => {
+              modal.classList.add('show');
+            }, 10);
+        }
 
       } catch (e) {
         console.error("Quick Shop Error:", e);
-        alert("開啟商品時發生錯誤，請重新整理頁面試試看。");
+        // 只有在真的出錯時才跳視窗，避免嚇到客人
+        alert("開啟商品時發生錯誤，請重新整理頁面試試看。\n錯誤代碼: " + (e.message || "Unknown"));
       }
     }
-
+    
     // 2. 關閉彈窗 (修正版)
     function closeQuickShop(e) {
       if (e.target.classList.contains('quick-shop-overlay')) {
