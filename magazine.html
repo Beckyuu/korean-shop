@@ -466,7 +466,7 @@
             let prosHtml = pros.map(p => formatPoint(p, 'good')).join('');
             let consHtml = cons.map(c => formatPoint(c, 'bad')).join('');
 
-            // 4. 組裝新的 HTML 結構 (雜誌風標題)
+// 4. 組裝新的 HTML 結構 (雜誌風標題 - 韓網情報版)
             const articleHTML = `
                 
                 <div class="modal-header-split">
@@ -490,12 +490,12 @@
 
                 <div class="review-columns">
                     <div class="col-half col-good">
-                        <h4 class="col-title" style="color:#d4a373; border-color:#d4a373;">Mina's Pick! 為什麼選它？</h4>
+                        <h4 class="col-title" style="color:#d4a373; border-color:#d4a373;">韓國網友都在誇什麼？</h4>
                         ${prosHtml}
                     </div>
 
                     <div class="col-half col-bad">
-                        <h4 class="col-title" style="color:#999; border-color:#eee;">小提醒 / 誰要避雷？</h4>
+                        <h4 class="col-title" style="color:#999; border-color:#eee;">醜話說前頭！妳可能會介意...</h4>
                         ${consHtml}
                     </div>
                 </div>
@@ -506,7 +506,7 @@
                     <a href="#" class="btn-join">加入 LINE 群組 ➝</a>
                 </div>
             `;
-
+            
             document.getElementById('modal-content-area').innerHTML = articleHTML;
             document.getElementById('readerModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
