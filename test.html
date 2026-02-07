@@ -1887,59 +1887,85 @@
     }
 
     /* === 📱 手機版並排優化 (規格+數量) === */
-      
-      /* 1. 讓它們橫向排列 */
-      .qs-row-group {
-          display: flex;
-          gap: 15px; /* 中間的空隙 */
-          align-items: flex-end; /* 對齊底部 (讓輸入框對齊) */
-          margin-bottom: 12px;
-      }
 
-      /* 2. 左邊規格：自動長大，佔滿剩餘空間 */
-      .qs-col-grow {
-          flex: 1; /* 關鍵！吃掉剩下所有寬度 */
-          min-width: 0; /* 防止被超長文字撐爆 */
-          margin-bottom: 0 !important; /* 消除原本的下方留白 */
-      }
+    /* 1. 讓它們橫向排列 */
+    .qs-row-group {
+      display: flex;
+      gap: 15px;
+      /* 中間的空隙 */
+      align-items: flex-end;
+      /* 對齊底部 (讓輸入框對齊) */
+      margin-bottom: 12px;
+    }
 
-      /* 3. 右邊數量：固定寬度 */
-      .qs-col-fixed {
-          width: 120px; /* 給數量一個固定的家 */
-          flex-shrink: 0; /* 不准縮小 */
-          margin-bottom: 0 !important;
-      }
+    /* 2. 左邊規格：自動長大，佔滿剩餘空間 */
+    .qs-col-grow {
+      flex: 1;
+      /* 關鍵！吃掉剩下所有寬度 */
+      min-width: 0;
+      /* 防止被超長文字撐爆 */
+      margin-bottom: 0 !important;
+      /* 消除原本的下方留白 */
+    }
 
-      /* 4. 數量選擇器樣式微調 */
-      .qs-qty-wrapper {
-          width: 100% !important; /* 填滿那個 120px */
-          height: 52px; /* 跟隔壁規格一樣高 */
-          display: flex;
-          align-items: center;
-          border: 1px solid #ddd;
-          border-radius: 8px; /* 圓角跟規格一致 */
-      }
-      .qs-qty-wrapper button {
-          width: 35px; height: 100%; border: none; background: transparent; cursor: pointer; font-size: 1.2rem;
-      }
-      .qs-qty-wrapper input {
-          flex: 1; width: 100%; border: none; text-align: center; font-size: 1rem; outline: none; background: transparent;
-      }
+    /* 3. 右邊數量：固定寬度 */
+    .qs-col-fixed {
+      width: 120px;
+      /* 給數量一個固定的家 */
+      flex-shrink: 0;
+      /* 不准縮小 */
+      margin-bottom: 0 !important;
+    }
 
-      /* 5. 🛑 重要修正：手機版規格選單 */
-      /* 我們之前設 width: 65%，現在要改回 100% (因為它已經在 flex 框框裡了) */
-      @media (max-width: 768px) {
-          .qs-select {
-              width: 100% !important; /* 填滿左邊那個格子 */
-          }
-      }
+    /* 4. 數量選擇器樣式微調 */
+    .qs-qty-wrapper {
+      width: 100% !important;
+      /* 填滿那個 120px */
+      height: 52px;
+      /* 跟隔壁規格一樣高 */
+      display: flex;
+      align-items: center;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      /* 圓角跟規格一致 */
+    }
 
-/* === 🏷️ 分類選單樣式 (膠囊按鈕 + 橫向滑動 - 高級立體版) === */
+    .qs-qty-wrapper button {
+      width: 35px;
+      height: 100%;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+
+    .qs-qty-wrapper input {
+      flex: 1;
+      width: 100%;
+      border: none;
+      text-align: center;
+      font-size: 1rem;
+      outline: none;
+      background: transparent;
+    }
+
+    /* 5. 🛑 重要修正：手機版規格選單 */
+    /* 我們之前設 width: 65%，現在要改回 100% (因為它已經在 flex 框框裡了) */
+    @media (max-width: 768px) {
+      .qs-select {
+        width: 100% !important;
+        /* 填滿左邊那個格子 */
+      }
+    }
+
+    /* === 🏷️ 分類選單樣式 (膠囊按鈕 + 橫向滑動 - 高級立體版) === */
     .category-nav {
       display: flex;
       justify-content: center;
-      gap: 12px; /* 增加一點間距 */
-      padding: 15px 20px 25px; /* 增加下方 padding 讓陰影有空間顯示 */
+      gap: 12px;
+      /* 增加一點間距 */
+      padding: 15px 20px 25px;
+      /* 增加下方 padding 讓陰影有空間顯示 */
       margin-bottom: 10px;
       overflow-x: auto;
       white-space: nowrap;
@@ -1948,6 +1974,7 @@
       /* 增加一個很淺的背景色條，讓按鈕更突出 (可選) */
       /* background: linear-gradient(to bottom, #fff, #fdfbf9); */
     }
+
     .category-nav::-webkit-scrollbar {
       display: none;
     }
@@ -1955,15 +1982,19 @@
     /* 🟢 按鈕基礎設定 */
     .category-btn {
       display: inline-block;
-      padding: 10px 26px; /* 稍微加大一點按鈕 */
+      padding: 10px 26px;
+      /* 稍微加大一點按鈕 */
       border-radius: 50px;
       font-family: "Noto Sans TC", sans-serif;
       font-size: 0.95rem;
-      font-weight: 500; /* 字體稍微加粗增加份量感 */
+      font-weight: 500;
+      /* 字體稍微加粗增加份量感 */
       cursor: pointer;
-      transition: all 0.2s ease-out; /* 動畫速度調快一點點，感覺更俐落 */
+      transition: all 0.2s ease-out;
+      /* 動畫速度調快一點點，感覺更俐落 */
       letter-spacing: 1px;
-      position: relative; /* 為了做按壓位移效果 */
+      position: relative;
+      /* 為了做按壓位移效果 */
       top: 0;
 
       /* ⚪️ 預設狀態：立體白金風格 (浮起) */
@@ -1975,9 +2006,12 @@
 
       /* 陰影大師：多層陰影製造浮起感 */
       box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.8), /* 1. 內部上方高光 (讓邊緣看起來圓潤) */
-        0 4px 8px rgba(212, 163, 115, 0.15), /* 2. 外部柔和金色陰影 (浮起感主體) */
-        0 1px 3px rgba(0,0,0,0.05);          /* 3. 底部深色小陰影 (增加貼地真實感) */
+        inset 0 1px 0 rgba(255, 255, 255, 0.8),
+        /* 1. 內部上方高光 (讓邊緣看起來圓潤) */
+        0 4px 8px rgba(212, 163, 115, 0.15),
+        /* 2. 外部柔和金色陰影 (浮起感主體) */
+        0 1px 3px rgba(0, 0, 0, 0.05);
+      /* 3. 底部深色小陰影 (增加貼地真實感) */
     }
 
     /* 👆 滑鼠懸停狀態：浮得更高 */
@@ -1986,11 +2020,13 @@
       background: linear-gradient(to bottom, #ffffff 0%, #fffefb 100%);
       /* 陰影擴散、往下移，感覺浮起來了 */
       box-shadow:
-        inset 0 1px 0 rgba(255,255,255,1),
-        0 8px 16px rgba(212, 163, 115, 0.2), /* 陰影變大變模糊 */
-        0 3px 6px rgba(0,0,0,0.08);
-      
-      transform: translateY(-2px); /* 物理位置向上浮動 2px */
+        inset 0 1px 0 rgba(255, 255, 255, 1),
+        0 8px 16px rgba(212, 163, 115, 0.2),
+        /* 陰影變大變模糊 */
+        0 3px 6px rgba(0, 0, 0, 0.08);
+
+      transform: translateY(-2px);
+      /* 物理位置向上浮動 2px */
     }
 
     /* 🟡 選中狀態：立體黃金風格 (按壓凹陷感) */
@@ -2001,12 +2037,14 @@
       border-color: #c99665;
       color: #fff;
       /* 文字加上一點點陰影，增加可讀性 */
-      text-shadow: 0 1px 1px rgba(0,0,0,0.15);
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
 
       /* 陰影：改用 inset (內部陰影)，製造「按下去」的凹陷感 */
       box-shadow:
-        inset 0 3px 8px rgba(0,0,0,0.15), /* 內部上方陰影，看起來凹下去 */
-        0 1px 2px rgba(212, 163, 115, 0.5); /* 外部保留一點點陰影，維持厚度感 */
+        inset 0 3px 8px rgba(0, 0, 0, 0.15),
+        /* 內部上方陰影，看起來凹下去 */
+        0 1px 2px rgba(212, 163, 115, 0.5);
+      /* 外部保留一點點陰影，維持厚度感 */
 
       /* 物理位置往下移，抵消上面的浮動，產生按壓感 */
       transform: translateY(1px);
@@ -2017,28 +2055,34 @@
       .category-nav {
         justify-content: flex-start;
         padding-left: 20px;
-        padding-right: 20px; /* 右邊也要加，不然滑到底會切到 */
+        padding-right: 20px;
+        /* 右邊也要加，不然滑到底會切到 */
       }
     }
 
     /* === 🛒 購物車專用關閉按鈕 (強制變大) === */
     .cart-close-btn {
       cursor: pointer;
-      font-size: 2.8rem; /* 字體放大 */
-      color: #333;       /* 深灰色 */
-      font-weight: 300;  /* 細體比較時尚 */
+      font-size: 2.8rem;
+      /* 字體放大 */
+      color: #333;
+      /* 深灰色 */
+      font-weight: 300;
+      /* 細體比較時尚 */
       line-height: 1;
-      padding: 5px 15px; /* 增加手指點擊範圍 */
-      
+      padding: 5px 15px;
+      /* 增加手指點擊範圍 */
+
       /* 讓它在手機上容易被按到 */
-      display: inline-block; 
+      display: inline-block;
       transition: transform 0.2s;
     }
-    
+
     .cart-close-btn:active {
-      transform: scale(0.9); /* 手機按下去會有縮小效果 */
+      transform: scale(0.9);
+      /* 手機按下去會有縮小效果 */
     }
-      </style>
+  </style>
 </head>
 
 <body>
@@ -2293,6 +2337,32 @@
   </div>
 
   <script>
+    // === 🔒 手機版背景鎖定大神器 ===
+    let savedScrollPosition = 0; // 用來記住客人滑到哪裡
+
+    function freezeBackground() {
+      // 1. 記住現在滑到哪
+      savedScrollPosition = window.scrollY;
+
+      // 2. 把網頁「釘」在那個位置，強制變成 100% 寬度
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${savedScrollPosition}px`;
+      document.body.style.width = '100%';
+      document.body.style.overflow = 'hidden'; // 隱藏滑軌
+    }
+
+    function unfreezeBackground() {
+      // 1. 解除釘選
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
+
+      // 2. 瞬間跳回原本的位置 (讓客人感覺不到變化)
+      window.scrollTo(0, savedScrollPosition);
+    }
+    // ===========================================
+
     const GOOGLE_SHEET_CSV_URL =
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vS_Cy5OSihu86kbG6c2iGLRUFSSVNnYuG_yanPRNuIF65KtJ_K9r-kXuz1IdWAbxnwfmvAWvWDjlywe/pub?output=csv";
     // 🟢 新增這段：用來正確解析 CSV 的工具函式
@@ -2348,7 +2418,7 @@
     const VIP_KEY = "vip";
     const VIP_VALUE = "mina";
 
-// 1. 全新的資料讀取函式 (只負責讀資料 & 產生分類按鈕)
+    // 1. 全新的資料讀取函式 (只負責讀資料 & 產生分類按鈕)
     async function fetchProducts() {
       const loading = document.getElementById("loading");
       const container = document.getElementById("product-list");
@@ -2389,25 +2459,25 @@
             // 價格暫存原始字串，顯示時再處理
             originalPriceStr: row[2] ? row[2].trim() : "0",
             vipPriceStr: row[9] ? row[9].trim() : "",
-            
+
             // 這裡會自動處理，讓其他地方用起來方便
-            price: row[2] ? row[2].trim() : "0", 
+            price: row[2] ? row[2].trim() : "0",
 
             imgUrl: row[3] ? row[3].trim() : "",
             gallery: allImages,
             detailImgUrl: row[4] ? row[4].trim() : "",
-            
+
             // 這裡加上了我們剛剛修好的去空格功能
             description: row[5] ? row[5].trim().replace(/\s*<br\s*\/?>\s*/gi, '<br>') : "",
-            
+
             tag: row[6] ? row[6].trim().toUpperCase() : "",
             deadline: row[7] ? row[7].trim() : "",
-            
+
             // 這裡也加上了去空格功能
             giftDesc: row[8] ? row[8].trim().replace(/\s*<br\s*\/?>\s*/gi, '<br>') : "",
-            
+
             // 🟢 新增：讀取 P 欄 (第 15 欄) 作為分類
-            category: row[15] ? row[15].trim() : "其他", 
+            category: row[15] ? row[15].trim() : "其他",
           };
 
           // 處理規格預設值
@@ -2430,77 +2500,77 @@
 
     // 2. 🟢 新增：自動產生分類按鈕
     function initCategoryButtons() {
-        const categoryContainer = document.getElementById("category-container");
-        
-        // 抓出所有不重複的分類
-        // 如果 P 欄是空的，我們就暫時不理它，或是你可以把它歸類為「其他」
-        const categories = ["全部", ...new Set(allProductsData.map(p => p.category).filter(c => c && c !== "其他"))];
+      const categoryContainer = document.getElementById("category-container");
 
-        let html = "";
-        categories.forEach(cat => {
-            // 預設「全部」按鈕是亮起的 (active)
-            const activeClass = cat === "全部" ? "active" : "";
-            html += `<button class="category-btn ${activeClass}" onclick="filterCategory('${cat}', this)">${cat}</button>`;
-        });
+      // 抓出所有不重複的分類
+      // 如果 P 欄是空的，我們就暫時不理它，或是你可以把它歸類為「其他」
+      const categories = ["全部", ...new Set(allProductsData.map(p => p.category).filter(c => c && c !== "其他"))];
 
-        categoryContainer.innerHTML = html;
+      let html = "";
+      categories.forEach(cat => {
+        // 預設「全部」按鈕是亮起的 (active)
+        const activeClass = cat === "全部" ? "active" : "";
+        html += `<button class="category-btn ${activeClass}" onclick="filterCategory('${cat}', this)">${cat}</button>`;
+      });
+
+      categoryContainer.innerHTML = html;
     }
 
     // 3. 🟢 新增：點擊按鈕後的篩選功能
     function filterCategory(category, btnElement) {
-        // 1. 處理按鈕亮燈
-        document.querySelectorAll(".category-btn").forEach(btn => btn.classList.remove("active"));
-        btnElement.classList.add("active");
+      // 1. 處理按鈕亮燈
+      document.querySelectorAll(".category-btn").forEach(btn => btn.classList.remove("active"));
+      btnElement.classList.add("active");
 
-        // 2. 篩選資料
-        if (category === "全部") {
-            renderProducts(allProductsData);
-        } else {
-            const filtered = allProductsData.filter(p => p.category === category);
-            renderProducts(filtered);
-        }
+      // 2. 篩選資料
+      if (category === "全部") {
+        renderProducts(allProductsData);
+      } else {
+        const filtered = allProductsData.filter(p => p.category === category);
+        renderProducts(filtered);
+      }
     }
 
     // 4. 🟢 新增：負責把商品畫在螢幕上的函式 (從原本的 fetchProducts 拆出來的)
     function renderProducts(products) {
-        const container = document.getElementById("product-list");
-        container.innerHTML = ""; // 先清空畫面
+      const container = document.getElementById("product-list");
+      container.innerHTML = ""; // 先清空畫面
 
-        // 判斷 VIP 模式 (因為每次重畫都要判斷一次)
-        const urlParams = new URLSearchParams(window.location.search);
-        const isVipMode = urlParams.get(VIP_KEY) === VIP_VALUE;
+      // 判斷 VIP 模式 (因為每次重畫都要判斷一次)
+      const urlParams = new URLSearchParams(window.location.search);
+      const isVipMode = urlParams.get(VIP_KEY) === VIP_VALUE;
 
-        if (products.length === 0) {
-            container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:40px; color:#999;">此分類暫無商品</div>`;
-            return;
-        }
+      if (products.length === 0) {
+        container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:40px; color:#999;">此分類暫無商品</div>`;
+        return;
+      }
 
-        products.forEach((product) => {
-             // VIP 價格邏輯
-             let finalPriceDisplay = product.originalPriceStr;
-             let priceHtml = `<span class="price">NT$ ${product.originalPriceStr}</span>`;
+      products.forEach((product) => {
+        // VIP 價格邏輯
+        let finalPriceDisplay = product.originalPriceStr;
+        let priceHtml = `<span class="price">NT$ ${product.originalPriceStr}</span>`;
 
-             if (isVipMode && product.vipPriceStr && product.vipPriceStr !== product.originalPriceStr) {
-                // 更新物件裡的價格，讓加入購物車時能抓到對的錢
-                product.price = product.vipPriceStr; 
-                priceHtml = `
+        if (isVipMode && product.vipPriceStr && product.vipPriceStr !== product.originalPriceStr) {
+          // 更新物件裡的價格，讓加入購物車時能抓到對的錢
+          product.price = product.vipPriceStr;
+          priceHtml = `
                     <div class="price-container">
                         <span class="price-original">NT$ ${product.originalPriceStr}</span>
                         <span class="price-vip">NT$ ${product.vipPriceStr}</span>
                     </div>`;
-             } else {
-                product.price = product.originalPriceStr;
-             }
+        } else {
+          product.price = product.originalPriceStr;
+        }
 
-            // 標籤邏輯
-            let badgeHtml = "";
-            if (product.tag === "NEW") badgeHtml = `<div class="badge new">NEW</div>`;
-            else if (product.tag === "HOT") badgeHtml = `<div class="badge hot">HOT</div>`;
-            else if (product.tag === "SALE") badgeHtml = `<div class="badge sale">SALE</div>`;
+        // 標籤邏輯
+        let badgeHtml = "";
+        if (product.tag === "NEW") badgeHtml = `<div class="badge new">NEW</div>`;
+        else if (product.tag === "HOT") badgeHtml = `<div class="badge hot">HOT</div>`;
+        else if (product.tag === "SALE") badgeHtml = `<div class="badge sale">SALE</div>`;
 
-            const card = document.createElement("div");
-            card.className = "product-card";
-            card.innerHTML = `
+        const card = document.createElement("div");
+        card.className = "product-card";
+        card.innerHTML = `
                 <div class="img-wrapper" style="cursor:pointer;" onclick="openQuickShop(${product.id})">
                     ${badgeHtml}
                     <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
@@ -2518,8 +2588,8 @@
                     </div>
                 </div>
             `;
-            container.appendChild(card);
-        });
+        container.appendChild(card);
+      });
     }
 
     // === 🛒 全域變數：紀錄目前彈窗正在看哪一個商品 ===
@@ -2629,25 +2699,20 @@
       setTimeout(() => {
         modal.classList.add('show');
       }, 10);
-      // 🔴 改成這樣：連 html 一起鎖，手機才聽話
-      document.body.style.overflow = "hidden";
-      document.documentElement.style.overflow = "hidden";
-      document.documentElement.style.height = "100%"; // 這一行對 iOS 很重要
+      freezeBackground();
     }
 
     // 2. 關閉彈窗
     function closeQuickShop(e) {
       if (e.target.classList.contains('quick-shop-overlay')) {
-        forceCloseQuickShop();
+        unfreezeBackground();
       }
     }
 
     function forceCloseQuickShop() {
       const modal = document.getElementById('quickShopModal');
       modal.classList.remove('show');
-      document.body.style.overflow = "";
-      document.documentElement.style.overflow = "";
-      document.documentElement.style.height = "";
+      unfreezeBackground();
       setTimeout(() => {
         modal.style.display = 'none';
       }, 300); // 等動畫跑完
@@ -2735,10 +2800,10 @@
       if (!modal.classList.contains("show")) {
         renderCartItems();
         modal.classList.add("show");
-        document.body.style.overflow = "hidden";
+        freezeBackground();
       } else {
         modal.classList.remove("show");
-        document.body.style.overflow = "";
+        unfreezeBackground();
       }
     }
 
@@ -3032,4 +3097,3 @@
 </body>
 
 </html>
-
