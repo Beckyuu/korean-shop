@@ -2314,7 +2314,7 @@
             description: row[5] ? row[5].trim() : "",
             tag: row[6] ? row[6].trim().toUpperCase() : "",
             deadline: row[7] ? row[7].trim() : "",
-            giftDesc: row[8] ? row[8].trim() : "",
+            giftDesc: row[8] ? row[8].trim().replace(/\s*<br\s*\/?>\s*/gi, '<br>') : "",
           };
 
           // 處理規格預設值
