@@ -2622,12 +2622,17 @@
                     ${badgeHtml}
                     <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
                 </div>
-                
-                <div class="info">
-                    <h3 class="name" style="cursor:pointer;" onclick="openQuickShop(${product.id})">${product.name}</h3>
-                    
-                    ${priceHtml}
-                    
+                // 在 card.innerHTML 裡面
+
+<div class="info">
+    <h3 class="name" ...>${product.name}</h3>
+
+    <span class="deadline-badge ${product.deadline ? '' : 'empty'}">
+        ${product.deadline || "空格佔位"}
+    </span>
+    
+    ${priceHtml}
+      
                     <div class="action-row" style="margin-top: 10px; justify-content: center;">
                         <button class="btn-add" onclick="openQuickShop(${product.id})" style="width: 100%; max-width: 200px;">
                             加入購物車
