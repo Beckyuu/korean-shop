@@ -2514,8 +2514,9 @@
             gallery: allImages,
             detailImgUrl: row[4] ? row[4].trim() : "",
 
-            // 這裡加上了我們剛剛修好的去空格功能
-            description: row[5] ? row[5].trim().replace(/\s*<br\s*\/?>\s*/gi, '<br>') : "",
+            // 🔴 修改 1：原本 F 欄是 description，現在要讓位給分類，所以這裡先改成空字串
+            // (如果不改，網頁可能會把「美妝」這兩個字當成副標題顯示在價格上方)
+            description: "", 
 
             tag: row[6] ? row[6].trim().toUpperCase() : "",
             deadline: row[7] ? row[7].trim() : "",
@@ -2523,10 +2524,11 @@
             // 這裡也加上了去空格功能
             giftDesc: row[8] ? row[8].trim().replace(/\s*<br\s*\/?>\s*/gi, '<br>') : "",
 
-            // 🟢 新增：讀取 P 欄 (第 15 欄) 作為分類
-            category: row[15] ? row[15].trim() : "其他",
+            // 🔴 修改 2：關鍵！分類改成讀取 row[5] (也就是 F 欄)
+            // 原本是: category: row[15] ? row[15].trim() : "其他",
+            category: row[5] ? row[5].trim() : "其他",
           };
-
+          
           // 處理規格預設值
           if (product.variants.length === 1) product.selectedVariant = product.variants[0];
           else if (product.variants.length === 0) product.selectedVariant = "單一規格";
@@ -2622,7 +2624,7 @@
                     ${badgeHtml}
                     <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
                 </div>
-                
+
 <div class="info">
     <h3 class="name" ...>${product.name}</h3>
 
