@@ -148,27 +148,30 @@
             padding: 40px;
         }
 
-/* === 🆕 3.0 雜誌封面風排版 === */
+        /* === 🆕 3.0 雜誌封面風排版 === */
         .modal-header-split {
             display: flex;
-            gap: 30px; /* 圖片跟文字距離拉大，更有呼吸感 */
+            gap: 30px;
+            /* 圖片跟文字距離拉大，更有呼吸感 */
             margin-bottom: 40px;
-            align-items: center; /* 垂直置中 */
+            align-items: center;
+            /* 垂直置中 */
         }
 
         /* 左邊：圖片區 (拍立得風格) */
         .header-left {
-            width: 50%; 
+            width: 50%;
             flex-shrink: 0;
             position: relative;
         }
 
         .header-left img {
             width: 100%;
-            border-radius: 12px; /* 圓角 */
+            border-radius: 12px;
+            /* 圓角 */
             object-fit: cover;
             /* 加一點影子讓它浮起來 */
-            box-shadow: 10px 10px 0px #f2efe9; 
+            box-shadow: 10px 10px 0px #f2efe9;
             border: 1px solid #eee;
         }
 
@@ -188,7 +191,8 @@
         }
 
         .article-title {
-            font-size: 1.8rem; /* 標題加大 */
+            font-size: 1.8rem;
+            /* 標題加大 */
             margin: 5px 0 15px;
             color: #333;
             line-height: 1.4;
@@ -213,13 +217,44 @@
             font-weight: 500;
             letter-spacing: 0.5px;
             /* 讓它有點可愛 */
-            box-shadow: 2px 2px 0px rgba(212, 163, 115, 0.2); 
+            box-shadow: 2px 2px 0px rgba(212, 163, 115, 0.2);
+        }
+
+        /* === 🆕 新增：適用族群標籤 === */
+        .suitable-box {
+            margin: 15px 0 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .suitable-tag {
+            background-color: #eef5e5;
+            /* 淡淡的綠色背景 */
+            color: #4a6d4a;
+            /* 深綠色文字 */
+            padding: 6px 12px;
+            border-radius: 6px;
+            /* 方圓角 */
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .suitable-tag::before {
+            content: '✔';
+            /* 前面加個打勾符號 */
+            margin-right: 6px;
+            font-size: 0.8rem;
         }
 
         /* 💬 雜誌引言 (功效區) */
         .effect-quote-box {
-            background: #fffcf5; /* 淺奶油底 */
-            border-left: 4px solid #d4a373; /* 左邊金線 */
+            background: #fffcf5;
+            /* 淺奶油底 */
+            border-left: 4px solid #d4a373;
+            /* 左邊金線 */
             padding: 15px 20px;
             margin-top: 10px;
             border-radius: 0 8px 8px 0;
@@ -229,22 +264,27 @@
             font-size: 1rem;
             color: #555;
             line-height: 1.7;
-            font-style: italic; /* 斜體更有雜誌感 */
+            font-style: italic;
+            /* 斜體更有雜誌感 */
         }
-        
+
         /* 手機版適應 */
         @media (max-width: 700px) {
             .modal-header-split {
                 flex-direction: column;
                 gap: 20px;
             }
+
             .header-left {
                 width: 100%;
                 margin-bottom: 10px;
             }
+
             .header-left img {
-                box-shadow: 5px 5px 0px #f2efe9; /* 手機版影子小一點 */
+                box-shadow: 5px 5px 0px #f2efe9;
+                /* 手機版影子小一點 */
             }
+
             .article-title {
                 font-size: 1.5rem;
             }
@@ -434,20 +474,24 @@
             }
         });
 
-        // 產生封面牆
+// 產生封面牆
         function renderGallery(data) {
             const wall = document.getElementById('gallery-wall');
             wall.innerHTML = "";
 
             data.forEach((row, index) => {
-                if (!row[0]) return; // 如果沒有名稱就跳過
+                if (!row[0]) return; 
 
-                // 簡化後的欄位對應：
-                // A[0]=名稱, B[1]=膚質, C[2]=圖片
+                // === 欄位對應修正 (假設B欄已刪除) ===
+                // 新 A[0] = 名稱
+                // 新 B[1] = 圖片 (原本是C)
+                // 新 C[2] = 適用族群 (原本是D)
+                
                 const title = row[0];
-                const sub = row[1];
-                const img = row[2];
+                const img = row[1];     // 圖片變成了第 2 欄
+                const suitable = row[2]; // 適用族群變成了第 3 欄
 
+                // 這裡把原本的 sub 換成 suitable，讓封面直接顯示適用對象
                 const cardHTML = `
                     <div class="cover-card" onclick="openArticle(${index})">
                         <div class="cover-img-box">
@@ -455,7 +499,7 @@
                         </div>
                         <div class="cover-info">
                             <h3 class="cover-title">${title}</h3>
-                            <p class="cover-desc">${sub}</p>
+                            <p class="cover-desc" style="color:#d4a373;">${suitable || ''}</p>
                             <span class="read-more">點擊閱讀完整解析 →</span>
                         </div>
                     </div>
@@ -464,27 +508,36 @@
             });
         }
 
-        function openArticle(index) {
+function openArticle(index) {
             const row = allReviews[index];
             if (!row) return;
 
-            // 1. 讀取資料
-            const title = row[0];
-            const sub = row[1];
-            const img = row[2];
-            const effect = row[3];
+            // === 1. 讀取資料 (配合欄位刪減後的順序) ===
+            const title = row[0];       // A欄: 名稱
+            const img = row[1];         // B欄: 圖片
+            const suitableRaw = row[2]; // C欄: 適用族群 (例如: 時常熬夜 肌膚蠟黃)
+            const ingredients = row[3]; // D欄: 成分
+            const prosRaw = row[4];     // E欄: 優點
+            const consRaw = row[5];     // F欄: 缺點
+            // 注意：原本的 effect (功效引言) 被你改成適用族群了，所以原本的 quote 區塊我們下面會調整
 
-            // 2. 處理成分 (現在也要用 | 切割了)
-            // Google Sheet 寫法建議：成分A:說明A | 成分B:說明B
-            const rawIngredients = row[4];
+            // === 2. 處理「適用族群」標籤 ===
+            // 假設你在 Excel 裡是用空白或是逗號隔開 (例如: "熬夜 蠟黃")
+            let suitableHtml = "";
+            if (suitableRaw) {
+                // 用空白或逗號切割字串
+                const tags = suitableRaw.split(/[ ,，]+/); 
+                suitableHtml = `<div class="suitable-box">` +
+                    tags.map(t => t.trim() ? `<div class="suitable-tag">${t.trim()}</div>` : '').join('') +
+                    `</div>`;
+            }
+
+            // === 3. 處理成分 (維持原樣) ===
             let ingredientHtml = "";
-
-            if (rawIngredients) {
-                // 如果有資料，就切割並產生 HTML
-                const ingList = rawIngredients.split('|');
+            if (ingredients) {
+                const ingList = ingredients.split('|');
                 ingredientHtml = `<div class="ing-list">` +
                     ingList.map(item => {
-                        // 嘗試把 "成分: 說明" 切開
                         let parts = item.split(/[:：]/);
                         let name = parts[0].trim();
                         let desc = parts[1] ? parts[1].trim() : "";
@@ -495,20 +548,16 @@
                 ingredientHtml = `<p style="color:#999; font-size:0.9rem;">暫無成分資料</p>`;
             }
 
-            // 3. 處理優缺點
-            const pros = row[5] ? row[5].split('|') : [];
-            const cons = row[6] ? row[6].split('|') : [];
+            // === 4. 處理優缺點 (維持原樣) ===
+            const pros = prosRaw ? prosRaw.split('|') : [];
+            const cons = consRaw ? consRaw.split('|') : [];
 
-            // (注意：這裡刪除了 const kReview = row[7]; 因為你說不需要了)
-
-            // 格式化優缺點的小函式
             function formatPoint(text, type) {
                 text = text || "";
                 let parts = text.split(/[:：]/);
                 let head = parts[0];
                 let body = parts[1] ? parts[1] : "";
                 let icon = type === 'good' ? '💡' : '💭';
-
                 return `
                     <div class="point-row">
                         <div class="point-icon">${icon}</div>
@@ -523,21 +572,8 @@
             let prosHtml = pros.map(p => formatPoint(p, 'good')).join('');
             let consHtml = cons.map(c => formatPoint(c, 'bad')).join('');
 
-// === 處理 Hashtag (把副標題切成標籤) ===
-            // 如果 Excel 裡寫 "#保濕 #透亮"，我們會把它切開
-            let tagsHtml = "";
-            if (sub && sub.includes('#')) {
-                // 如果有 # 就切開
-                tagsHtml = sub.split('#')
-                    .filter(t => t.trim() !== "") // 過濾空字串
-                    .map(t => `<span class="hashtag-pill">#${t.trim()}</span>`)
-                    .join('');
-            } else if (sub) {
-                // 如果沒有 #，就把整句當作一個標籤，或者直接顯示文字
-                tagsHtml = `<span class="hashtag-pill">#${sub}</span>`;
-            }
 
-            // 4. 組裝新的 HTML 結構 (3.0 雜誌封面版)
+            // === 5. 組裝 HTML (移除 LINE 按鈕，加入適用標籤) ===
             const articleHTML = `
                 
                 <div class="modal-header-split">
@@ -547,19 +583,12 @@
 
                     <div class="header-right">
                         <span class="brand-tag">Beauty Pick</span>
-                        
                         <h1 class="article-title">${title}</h1>
                         
-                        <div class="hashtag-container">
-                            ${tagsHtml}
-                        </div>
+                        <div style="font-size:0.9rem; color:#888; margin-bottom:5px;">推薦給這樣的妳：</div>
+                        ${suitableHtml}
 
-                        <div class="effect-quote-box">
-                            <div class="effect-quote-text">
-                                "${effect}"
-                            </div>
                         </div>
-                    </div>
                 </div>
 
                 <div class="ing-section-container">
@@ -579,18 +608,14 @@
                     </div>
                 </div>
 
-                <div class="cta-area">
-                    <div style="font-size:1.1rem; font-weight:500; margin-bottom:5px;">看完解析心動了嗎？</div>
-                    <div style="font-size:0.9rem; color:#888;">加入社群，不錯過任何一團優惠！</div>
-                    <a href="#" class="btn-join">加入 LINE 群組 ➝</a>
-                </div>
+                <div style="height:50px;"></div> 
             `;
             
             document.getElementById('modal-content-area').innerHTML = articleHTML;
             document.getElementById('readerModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
-
+        
         function closeArticle(eventOrForce) {
             const modal = document.getElementById('readerModal');
             // 如果傳入 true (強制關閉) 或 點擊的對象是遮罩本身
