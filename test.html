@@ -2519,8 +2519,10 @@
     }
 
     function closeCart(e) {
-      if (e.target.classList.contains("cart-modal"))
+      if (e.target.classList.contains("cart-modal")) {
         document.getElementById("cartModal").classList.remove("show");
+        unfreezeBackground();
+      }
     }
 
     function renderCartItems() {
