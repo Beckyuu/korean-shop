@@ -1095,6 +1095,7 @@
         /* 按鈕寬度佔滿 */
         font-size: 0.75rem !important;
       }
+    }
 
     /* === 🚑 手機版間距急救包 (V3: 強制置中 + 消除隱形空隙) === */
     @media (max-width: 768px) {
@@ -1785,10 +1786,19 @@
       /* 手機按下去會有縮小效果 */
     }
 
-    @keyframes twinkle { 
-  0%, 100% { opacity: 0.3; transform: scale(0.8); } 
-  50% { opacity: 1; transform: scale(1.2); } 
-}
+    @keyframes twinkle {
+
+      0%,
+      100% {
+        opacity: 0.3;
+        transform: scale(0.8);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.2);
+      }
+    }
   </style>
 </head>
 
@@ -2703,25 +2713,25 @@
       if (isMobile) {
         window.location.href = lineUrl;
       } else {
-        const modal = document.getElementById("detailModal");
-        const title = document.getElementById("modalTitle");
-        const body = document.getElementById("modalBody");
-        title.style.display = "block";
+        // 電腦版顯示 QR Code
+        const modal = document.getElementById("qrModal");
+        const title = document.getElementById("qrTitle");
+        const body = document.getElementById("qrBody");
+
         const qrImgUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(lineUrl)}`;
-        title.innerText = "請使用手機掃描下單";
+
         body.innerHTML = `
-                    <div style="text-align:center; padding: 20px 0;">
-                        <p style="margin-bottom:20px; color:#666;">拿起手機掃描 QR Code<br>訂單將自動帶入對話框！</p>
-                        <img src="${qrImgUrl}" alt="Order QR Code" style="width:200px; height:200px; border:1px solid #eee; padding:10px;">
-                    </div>`;
-        modal.style.display = "flex";
+            <p style="margin-bottom:20px; color:#666; font-size:0.9rem;">拿起手機掃描 QR Code<br>訂單將自動帶入對話框！</p>
+            <img src="${qrImgUrl}" alt="Order QR Code" style="width:200px; height:200px; border:1px solid #eee; padding:10px; border-radius: 8px;">`;
+
+        modal.classList.add("show");
       }
     }
 
-    // 🟢 讓點擊背景也能關閉詳情視窗
-    function closeModal(event) {
-      if (event.target.classList.contains("modal-overlay")) {
-        document.getElementById("detailModal").style.display = "none";
+    // 🟢 讓點擊背景也能關閉 QR Code 視窗
+    function closeQrModal(event) {
+      if (event.target.id === "qrModal") {
+        document.getElementById("qrModal").classList.remove("show");
       }
     }
 
@@ -2734,6 +2744,17 @@
   <div id="zoomOverlay" class="zoom-overlay" onclick="closeZoom()">
     <img id="zoom-img-content" src="">
     <div class="zoom-hint">點擊任意處關閉</div>
+  </div>
+
+  <div id="qrModal" class="quick-shop-overlay" onclick="closeQrModal(event)" style="z-index: 3000;">
+    <div class="quick-shop-content" style="max-width: 350px; padding: 30px; text-align: center;">
+      <span onclick="document.getElementById('qrModal').classList.remove('show')"
+        style="position: absolute; top: 10px; right: 15px; cursor: pointer; font-size: 1.8rem; color: #888;">&times;</span>
+      <h3 id="qrTitle"
+        style="font-family: 'Noto Sans TC', sans-serif; font-size: 1.2rem; color: #333; margin-bottom: 15px;">請使用手機掃描下單
+      </h3>
+      <div id="qrBody"></div>
+    </div>
   </div>
 
 </body>
