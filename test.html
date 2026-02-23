@@ -2245,6 +2245,30 @@
           allProductsData.push(product);
         });
 
+// === 自動排序邏輯：1.看標籤 2.同品牌聚攏 ===
+        allProductsData.sort((a, b) => {
+          // 規則一：設定標籤的優先級 (數字越小排越前面)
+          const getPriority = (tag) => {
+            // 你可以在這裡增減你要置頂的標籤關鍵字
+            if (tag.includes("NEW") || tag.includes("特價")) return 1;
+            if (tag.includes("HOT")) return 2;
+            if (tag.includes("SALE")) return 3;
+            return 4; // 沒有標籤的商品，統一歸到最後這層
+          };
+
+          const priorityA = getPriority(a.tag);
+          const priorityB = getPriority(b.tag);
+
+          // 如果兩個商品的標籤優先級不同，就讓數字小的排前面
+          if (priorityA !== priorityB) {
+            return priorityA - priorityB;
+          }
+
+          // 規則二：如果標籤一樣（例如兩個都是一般商品），就依照「品名」的英文字母或筆畫排序
+          // 只要你的品名開頭是品牌名 (例如 CLIO)，它們就會自動排在一起
+          return a.name.localeCompare(b.name, 'zh-TW');
+        });
+
         renderProducts(allProductsData);
 
       } catch (error) {
