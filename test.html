@@ -2514,8 +2514,8 @@
     }
 
     // 定義通關密語 (您可以改成自己喜歡的)
-    const VIP_KEY = "vip";
-    const VIP_VALUE = "mina";
+    const VIP_KEY = "from";
+const VIP_VALUE = "line";
 
     // 1. 全新的資料讀取函式 (只負責讀資料 & 產生分類按鈕)
     async function fetchProducts() {
@@ -2587,7 +2587,7 @@
 
           allProductsData.push(product);
         });
-        
+
         renderProducts(allProductsData);
 
       } catch (error) {
@@ -2915,13 +2915,13 @@ function renderCartItems() {
       });
 
       const urlParams = new URLSearchParams(window.location.search);
-      const isVipMode = urlParams.has("vip"); 
+      const isVipMode = urlParams.has("from"); 
 
       if (isVipMode) {
         html += `
                     <div style="margin-top: 25px; background: #fff0f5; padding: 15px; border-radius: 8px; border: 1px dashed #e5989b;">
                         <label style="display:block; font-size:0.9rem; color:#d65a5a; margin-bottom:8px; font-weight:bold;">
-                            ★ 社群 VIP 核對用
+                            ★ LINE社群成員核對
                         </label>
                         <input type="text" id="vip-nickname" placeholder="請問您在社群內的暱稱是？" 
                             style="width:100%; padding:10px; border:1px solid #e5989b; border-radius:4px; font-size:0.9rem; outline:none;">
@@ -3037,7 +3037,7 @@ function renderCartItems() {
       }
 
       const urlParams = new URLSearchParams(window.location.search);
-      const isVipMode = urlParams.has("vip");
+      const isVipMode = urlParams.has("from");
       let vipNickname = "";
 
       if (isVipMode) {
@@ -3045,7 +3045,7 @@ function renderCartItems() {
         if (nicknameInput) {
           vipNickname = nicknameInput.value.trim();
           if (vipNickname === "") {
-            alert("⚠️ 為了核對 VIP 資格，請務必填寫您的「社群暱稱」喔！");
+            alert("⚠️ 為了核對社群成員身分，請務必填寫您的「社群暱稱」喔！");
             nicknameInput.focus();
             return; 
           }
@@ -3055,7 +3055,7 @@ function renderCartItems() {
       const now = new Date();
       const dateStr = `${now.getMonth() + 1}月${now.getDate()}日`;
 
-      const titleTag = isVipMode ? " ★社群VIP單★" : "";
+      const titleTag = isVipMode ? " ★LINE社群專屬單★" : "";
 
       let message = `您好，這是我的訂購清單 (${dateStr})${titleTag}：\n`;
 
