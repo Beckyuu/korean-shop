@@ -2657,8 +2657,8 @@
       let finalTotal = total - currentDiscount;
       if (finalTotal < 0) finalTotal = 0;
 
-      if (finalTotal >= 1000) {
-        let rawDeposit = finalTotal * 0.25;
+      if (finalTotal >= 1500) {
+        let rawDeposit = finalTotal * 0.20;
         let finalDeposit = Math.round(rawDeposit / 100) * 100;
 
         depositHtml = `
@@ -2771,10 +2771,10 @@
         message += `總金額: NT$ ${total}\n`;
       }
 
-      if (finalTotal >= 1000) {
-        let rawDeposit = finalTotal * 0.25;
+      if (finalTotal >= 1500) {
+        let rawDeposit = finalTotal * 0.20;
         let finalDeposit = Math.round(rawDeposit / 100) * 100;
-        message += `(含 25% 定金: NT$ ${finalDeposit})\n`;
+        message += `(含 20% 定金: NT$ ${finalDeposit})\n`;
       }
 
       message += `下單平台: ${selectedShipping}`;
