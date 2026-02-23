@@ -609,102 +609,6 @@
       gap: 4px;
     }
 
-    /* === 規格容器 === */
-    .variant-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 6px;
-
-      margin-bottom: 2px;
-
-      flex-grow: 1;
-      align-content: center;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-
-    /* === 米粒按鈕 (預設就是金色質感) === */
-    .variant-btn {
-      font-family: "Noto Sans TC", sans-serif;
-      font-size: 0.8rem;
-
-      /* 🔴 修改 1：預設文字就是金色 */
-      color: #d4a373;
-
-      background: #fff;
-
-      /* 🔴 修改 2：預設邊框就是金色 */
-      border: 1px solid #d4a373;
-
-      border-radius: 15px;
-      padding: 4px 12px;
-
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    /* 滑鼠移過去 (變成實心，給點預覽感) */
-    .variant-btn:hover {
-      background: #fdfbf7;
-      /* 極淡米色 */
-      /* 邊框和文字維持金色 */
-    }
-
-    /* 被選中的狀態 (變成實心金 + 白字) */
-    .variant-btn.selected {
-      background: #d4a373;
-      color: #fff;
-      border-color: #d4a373;
-      box-shadow: 0 2px 5px rgba(212, 163, 115, 0.3);
-    }
-
-    /* === 單一規格專用：輕盈鏤空風格 === */
-    .variant-btn.single-mode {
-      background-color: #fff;
-      /* 背景改回白色 */
-      color: #d4a373;
-      /* 文字維持金色 */
-      border: 1px solid #d4a373;
-      /* 邊框維持金色 */
-
-      cursor: default;
-      /* 滑鼠游標改回箭頭 */
-      pointer-events: none;
-      /* 讓它不能被點選 */
-
-      font-weight: 500;
-      /* 字稍微加重一點點，提升質感 */
-      padding: 4px 16px;
-      /* 稍微寬一點點 */
-      box-shadow: none;
-      /* 拿掉陰影，讓它扁平化 */
-
-      /* 如果覺得純白太單調，可以試試看極淡的米色背景，把上面那行改成： */
-      /* background-color: #fdf6f0; */
-    }
-
-    /* === 單一規格文字 (美化版) === */
-    .single-variant-text {
-      /* 關鍵：強制用黑體，才不會變成新細明體！ */
-      font-family: "Noto Sans TC", sans-serif;
-      font-size: 0.9rem;
-      color: #d4a373;
-      /* 金色 */
-      letter-spacing: 2px;
-      /* 字距拉開一點，更有呼吸感 */
-
-      display: block;
-      width: 100%;
-      /* 確保佔滿寬度，才能置中 */
-      text-align: center;
-      /* 文字置中 */
-
-      /* 調整距離：跟上面的副標題拉開一點 */
-      margin-top: 8px;
-      margin-bottom: 5px;
-    }
-
     /* === 6. 購買按鈕區 === */
     .action-row {
       display: flex;
@@ -1125,207 +1029,6 @@
       }
     }
 
-    /* 彈窗樣式微調 */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(5px);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal-content {
-      background: #fff;
-      width: 90%;
-      max-width: 500px;
-      max-height: 85vh;
-      overflow-y: auto;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
-      position: relative;
-      border: 1px solid #eee;
-    }
-
-    .modal-close-btn {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      border: none;
-      background: transparent;
-      font-size: 2rem;
-      cursor: pointer;
-      color: #333;
-    }
-
-    .modal-title {
-      /* 修改這裡：換成跟商品大標題一樣的圓體 */
-      font-family: "Zen Maru Gothic", "Noto Sans TC", sans-serif;
-
-      font-size: 1.5rem;
-      padding: 30px 30px 10px;
-      text-align: center;
-
-      /* 加一點粗細讓它更像標題 */
-      font-weight: 500;
-    }
-
-    .modal-body p {
-      padding: 0 30px 30px;
-      color: #666;
-      line-height: 1.8;
-      font-size: 0.95rem;
-    }
-
-    /* === 7. 詳情按鈕 (最終版：極簡圓形放大鏡) === */
-    .more-sticker {
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-      z-index: 5;
-
-      /* 🌟 外觀：實心白底小圓圈 */
-      background-color: #ffffff;
-      width: 36px;
-      /* 小巧的尺寸 */
-      height: 36px;
-      border-radius: 50%;
-      /* 變成正圓形 */
-
-      /* 讓裡面的放大鏡置中 */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      /* 陰影：讓它浮起來，才不會像貼在圖片上 */
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    /* 滑鼠移過去：微微放大 + 變色 */
-    .more-sticker:hover {
-      transform: scale(1.1);
-      /* 變大一點點 */
-      background-color: #d4a373;
-      /* 背景變金色 */
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-    }
-
-    /* 圖示設定 */
-    .more-sticker svg {
-      stroke: #d4a373;
-      /* 預設是金色線條 */
-      width: 18px;
-      /* 圖示大小 */
-      height: 18px;
-      stroke-width: 2;
-      transition: all 0.3s;
-    }
-
-    /* 滑鼠移過去時，圖示變白色 */
-    .more-sticker:hover svg {
-      stroke: #ffffff;
-    }
-
-    /* === 新增：時尚下拉選單 (更新：橢圓膠囊版) === */
-    .style-select {
-      appearance: none;
-      -webkit-appearance: none;
-
-      width: 100%;
-      max-width: 200px;
-      /* 稍微縮窄一點點更精緻 */
-      margin: 5px auto 10px;
-      display: block;
-
-      /* 🌟 風格：金棕色細框 */
-      background-color: transparent;
-      border: 1px solid #d4a373;
-      color: #d4a373;
-
-      /* 🌟 形狀：改成 50px 做成完美的橢圓形 */
-      border-radius: 50px;
-
-      /* 內距調整：因為變圓了，左右要留多一點空間才不會切到字 */
-      padding: 6px 35px 6px 20px;
-
-      font-family: "Noto Sans TC", sans-serif;
-      font-size: 0.85rem;
-      text-align: center;
-      text-align-last: center;
-      cursor: pointer;
-      outline: none;
-      transition: all 0.3s;
-
-      /* 箭頭位置微調 */
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-      background-repeat: no-repeat;
-      background-position: right 12px center;
-      /* 箭頭往內縮一點 */
-      background-size: 11px;
-    }
-
-    .style-select:hover {
-      background-color: #fffbf5;
-      /* 淺淺的米色背景 */
-    }
-
-    /* 缺貨選項的樣式 */
-    .style-select option:disabled {
-      color: #ccc;
-      font-style: italic;
-    }
-
-    /* === 單一規格專用 (長得像選單，但不能點) === */
-    .style-select.readonly {
-      background-image: none;
-      /* 拿掉箭頭 */
-      padding: 6px 20px;
-      /* 左右平衡 */
-      cursor: default;
-      /* 滑鼠變回箭頭 */
-      color: #bfa092;
-      /* 字體顏色稍微柔和一點點，區分「不可選」 */
-      border-color: #e6d0c0;
-      /* 邊框也稍微淡一點點 */
-    }
-
-    /* === 贈品專用樣式 (I欄) === */
-    .gift-note {
-      /* 粉嫩背景 + 虛線邊框 */
-      background-color: #fff0f5;
-      border: 1px dashed #e5989b;
-      border-radius: 10px;
-
-      /* 文字設定 */
-      color: #d65a5a;
-      font-family: "Zen Maru Gothic", sans-serif;
-      font-size: 0.95rem;
-      line-height: 1.6;
-      font-weight: 500;
-
-      /* 位置：跟上下拉開一點距離 */
-      margin: 10px 30px 25px;
-      padding: 15px;
-      text-align: center;
-    }
-
-    /* 上面的 BONUS 小標籤 */
-    .gift-icon {
-      display: block;
-      font-size: 0.8rem;
-      font-weight: bold;
-      color: #e5989b;
-      margin-bottom: 5px;
-      letter-spacing: 2px;
-    }
-
     /* === 手機版專用設定：完美對齊版 === */
     @media (max-width: 768px) {
       .container {
@@ -1393,47 +1096,6 @@
         font-size: 0.75rem !important;
       }
 
-      /* 修正手機版規格按鈕 */
-      .variant-btn {
-        font-size: 0.7rem !important;
-        padding: 2px 6px !important;
-        margin-bottom: 2px !important;
-      }
-
-      /* === 手機版專用：縮小「看更多」按鈕 (維持您原本的要求) === */
-      .more-sticker {
-        padding: 3px 8px !important;
-        font-size: 0.6rem !important;
-        bottom: 5px !important;
-        right: 5px !important;
-        border-radius: 12px !important;
-        gap: 3px !important;
-      }
-
-      .more-sticker svg {
-        width: 10px !important;
-        height: 10px !important;
-      }
-    }
-
-    /* === 缺貨專用樣式 (優雅隱藏版) === */
-    .variant-btn.sold-out {
-      color: #e0e0e0 !important;
-      /* 字體變成很淡很淡的灰色 */
-      border-color: #f0f0f0 !important;
-      /* 邊框幾乎看不見 */
-      background-color: #fff !important;
-      /* 背景保持純白 */
-
-      /* 拿掉刪除線 */
-      text-decoration: none !important;
-
-      cursor: not-allowed;
-      /* 滑鼠變禁止符號 */
-      pointer-events: none;
-      /* 禁止點擊 */
-    }
-
     /* === 🚑 手機版間距急救包 (V3: 強制置中 + 消除隱形空隙) === */
     @media (max-width: 768px) {
 
@@ -1484,13 +1146,6 @@
       .gift-row {
         margin-bottom: 5px !important;
         height: auto !important;
-      }
-
-      /* 6. 規格選單縮小間距 */
-      .style-select,
-      .style-select.readonly {
-        margin: 2px auto 8px !important;
-        padding: 4px 15px 4px 10px !important;
       }
 
       /* 7. 價格與按鈕區 */
@@ -2129,6 +1784,11 @@
       transform: scale(0.9);
       /* 手機按下去會有縮小效果 */
     }
+
+    @keyframes twinkle { 
+  0%, 100% { opacity: 0.3; transform: scale(0.8); } 
+  50% { opacity: 1; transform: scale(1.2); } 
+}
   </style>
 </head>
 
@@ -2369,15 +2029,6 @@
       <button class="btn-checkout" onclick="checkoutViaLine()">
         傳送至 LINE官方帳號
       </button>
-    </div>
-  </div>
-
-  <div id="detailModal" class="modal-overlay" onclick="closeModal(event)">
-    <div class="modal-content">
-      <button class="modal-close-btn" onclick="forceCloseModal()">×</button>
-
-      <h3 class="modal-title" id="modalTitle">Product Name</h3>
-      <div class="modal-body" id="modalBody"></div>
     </div>
   </div>
 
@@ -3067,67 +2718,12 @@
       }
     }
 
-    function showDetails(index) {
-      const product = allProductsData[index];
-      const modal = document.getElementById("detailModal");
-      const titleEl = document.getElementById("modalTitle");
-
-      // 1. 隱藏標題 (維持畫面乾淨)
-      titleEl.style.display = "none";
-
-      // 2. 準備「內容物清單」 HTML 
-      // 🔴 修改來源：改成讀取 I 欄 (giftDesc)
-      let contentCardHtml = "";
-
-      // 只要 I 欄 (giftDesc) 有資料，就顯示這張卡
-      if (product.giftDesc && product.giftDesc !== "") {
-        contentCardHtml = `
-      <div class="content-info-card">
-          <span class="content-info-tag">✦ WHAT'S INSIDE ✦</span>
-          
-          <div class="content-info-text">
-              ${product.giftDesc}
-          </div>
-      </div>
-    `;
-      }
-
-      // 3. 詳細圖片 (讀取 detailImgUrl)
-      let imgContent = "";
-      if (product.detailImgUrl) {
-        const urls = product.detailImgUrl.split(",");
-        urls.forEach((url) => {
-          if (url.trim()) {
-            imgContent += `<img src="${url.trim()}" style="width:100%; display:block; margin-bottom:10px;">`;
-          }
-        });
-      }
-
-      // 防呆：如果什麼都沒有，至少顯示個提示
-      if (!contentCardHtml && !imgContent) {
-        imgContent = '<p style="text-align:center; padding:20px; color:#999;">尚無詳細內容</p>';
-      }
-
-      // 4. 組合並顯示 (內容卡片放上面，圖片放下面)
-      document.getElementById("modalBody").innerHTML = contentCardHtml + imgContent;
-      modal.style.display = "flex";
-    }
-
-    function forceCloseModal() {
-      document.getElementById("detailModal").style.display = "none";
-    }
-
     // 🟢 讓點擊背景也能關閉詳情視窗
     function closeModal(event) {
       if (event.target.classList.contains("modal-overlay")) {
         document.getElementById("detailModal").style.display = "none";
       }
     }
-
-    // 動畫：簡單的星星閃爍
-    const style = document.createElement("style");
-    style.innerHTML = `@keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }`;
-    document.head.appendChild(style);
 
     // 🔴 新增：先讀取購物車紀錄
     loadCart();
