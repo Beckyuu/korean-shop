@@ -1844,6 +1844,8 @@
     </ul>
   </div>
 
+<div id="category-container" class="category-nav" style="display: none;"></div>
+
   <div id="loading">
     <div class="loader-spinner"></div>
     <span class="loading-text">loading.....</span>
@@ -2106,6 +2108,50 @@
     let cart = [];
     let currentPromoCode = ""; // 紀錄目前使用的折扣碼
     let currentDiscount = 0;   // 紀錄折抵金額
+
+    // === 🏷️ 分類設定區 ===
+    const categoryMap = {
+      "all": "全部商品",   // 這是「重置鍵」，建議保留
+      "a": "新品上架",     // 暫定
+      "b": "限時折扣",     // 暫定
+      "c": "獨家選品"      // 暫定
+    };
+    let currentCategory = "all"; 
+
+    // 1. 產生按鈕
+    function renderCategoryButtons() {
+      const container = document.getElementById("category-container");
+      container.innerHTML = ""; 
+
+      Object.keys(categoryMap).forEach(key => {
+        const btn = document.createElement("div");
+        // 如果是當前選中的分類，就加上 active 讓它變色
+        btn.className = `category-btn ${currentCategory === key ? 'active' : ''}`;
+        btn.innerText = categoryMap[key]; 
+        btn.onclick = () => switchCategory(key);
+        container.appendChild(btn);
+      });
+    }
+
+    // 2. 切換分類
+    function switchCategory(key) {
+      currentCategory = key;
+      renderCategoryButtons(); // 更新按鈕顏色
+
+      if (key === "all") {
+        // 如果選全部，就顯示所有資料
+        renderProducts(allProductsData);
+        renderCategoryButtons();
+      } else {
+        // 如果選特定分類，就檢查商品的 category 欄位有沒有包含該代號
+        const filtered = allProductsData.filter(p => {
+            // 避免有些商品沒填分類會報錯，加個防護
+            const productCat = p.category ? p.category.toLowerCase() : "";
+            return productCat.includes(key); 
+        });
+        renderProducts(filtered);
+      }
+    }
 
     // === 🎁 折扣碼功能 ===
     function applyPromoCode() {
