@@ -2450,7 +2450,7 @@
     function applyPromoCode() {
       const input = document.getElementById("promo-code-input").value.trim().toUpperCase();
       const msgEl = document.getElementById("promo-message");
-      
+
       // 計算目前總金額
       let subtotal = 0;
       cart.forEach(item => subtotal += item.price * item.qty);
@@ -2470,7 +2470,7 @@
       const now = new Date();
       const startTime = new Date("2026-02-23T00:00:00");
       const endTime = new Date("2026-03-06T23:59:59");
-      
+
       if (now < startTime) {
         msgEl.innerText = "活動將於 2/28 開始喔！敬請期待";
         return;
@@ -2512,10 +2512,6 @@
       localStorage.setItem("minaShopCart", JSON.stringify(cart));
       updateCartIcon();
     }
-
-    // 定義通關密語 (您可以改成自己喜歡的)
-    const VIP_KEY = "from";
-const VIP_VALUE = "line";
 
     // 1. 全新的資料讀取函式 (只負責讀資料 & 產生分類按鈕)
     async function fetchProducts() {
@@ -2568,7 +2564,7 @@ const VIP_VALUE = "line";
 
             // 🔴 修改 1：原本 F 欄是 description，現在要讓位給分類，所以這裡先改成空字串
             // (如果不改，網頁可能會把「美妝」這兩個字當成副標題顯示在價格上方)
-            description: "", 
+            description: "",
 
             tag: row[6] ? row[6].trim().toUpperCase() : "",
             deadline: row[7] ? row[7].trim() : "",
@@ -2580,7 +2576,7 @@ const VIP_VALUE = "line";
             // 原本是: category: row[15] ? row[15].trim() : "其他",
             category: row[5] ? row[5].trim() : "其他",
           };
-          
+
           // 處理規格預設值
           if (product.variants.length === 1) product.selectedVariant = product.variants[0];
           else if (product.variants.length === 0) product.selectedVariant = "單一規格";
@@ -2602,31 +2598,15 @@ const VIP_VALUE = "line";
       const container = document.getElementById("product-list");
       container.innerHTML = ""; // 先清空畫面
 
-      // 判斷 VIP 模式 (因為每次重畫都要判斷一次)
-      const urlParams = new URLSearchParams(window.location.search);
-      const isVipMode = urlParams.get(VIP_KEY) === VIP_VALUE;
-
       if (products.length === 0) {
         container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:40px; color:#999;">此分類暫無商品</div>`;
         return;
       }
 
       products.forEach((product) => {
-        // VIP 價格邏輯
+        product.price = product.originalPriceStr;
         let finalPriceDisplay = product.originalPriceStr;
         let priceHtml = `<span class="price">NT$ ${product.originalPriceStr}</span>`;
-
-        if (isVipMode && product.vipPriceStr && product.vipPriceStr !== product.originalPriceStr) {
-          // 更新物件裡的價格，讓加入購物車時能抓到對的錢
-          product.price = product.vipPriceStr;
-          priceHtml = `
-                    <div class="price-container">
-                        <span class="price-original">NT$ ${product.originalPriceStr}</span>
-                        <span class="price-vip">NT$ ${product.vipPriceStr}</span>
-                    </div>`;
-        } else {
-          product.price = product.originalPriceStr;
-        }
 
         // 標籤邏輯
         let badgeHtml = "";
@@ -2882,7 +2862,7 @@ const VIP_VALUE = "line";
         document.getElementById("cartModal").classList.remove("show");
     }
 
-function renderCartItems() {
+    function renderCartItems() {
       const container = document.getElementById("cartItems");
       const totalEl = document.getElementById("cartTotal");
 
@@ -2913,21 +2893,6 @@ function renderCartItems() {
                     </div>
                 </div>`;
       });
-
-      const urlParams = new URLSearchParams(window.location.search);
-      const isVipMode = urlParams.has("from"); 
-
-      if (isVipMode) {
-        html += `
-                    <div style="margin-top: 25px; background: #fff0f5; padding: 15px; border-radius: 8px; border: 1px dashed #e5989b;">
-                        <label style="display:block; font-size:0.9rem; color:#d65a5a; margin-bottom:8px; font-weight:bold;">
-                            ★ LINE社群成員核對
-                        </label>
-                        <input type="text" id="vip-nickname" placeholder="請問您在社群內的暱稱是？" 
-                            style="width:100%; padding:10px; border:1px solid #e5989b; border-radius:4px; font-size:0.9rem; outline:none;">
-                    </div>
-                `;
-      }
 
       // --- 折扣碼 UI 區塊開始 ---
       // 動態檢查：如果刪減商品後金額低於 500，自動拔除折扣碼
@@ -2992,7 +2957,7 @@ function renderCartItems() {
 
       container.innerHTML = html;
       totalEl.style.fontFamily = "'Noto Sans TC', sans-serif";
-      
+
       // 更新總金額顯示方式
       if (currentDiscount > 0) {
         totalEl.innerHTML = `
@@ -3010,7 +2975,7 @@ function renderCartItems() {
         let div = document.createElement("div");
         div.id = "deposit-display";
         div.innerHTML = depositHtml;
-        totalEl.after(div); 
+        totalEl.after(div);
       }
     }
 
@@ -3036,34 +3001,11 @@ function renderCartItems() {
         return;
       }
 
-      const urlParams = new URLSearchParams(window.location.search);
-      const isVipMode = urlParams.has("from");
-      let vipNickname = "";
-
-      if (isVipMode) {
-        const nicknameInput = document.getElementById("vip-nickname");
-        if (nicknameInput) {
-          vipNickname = nicknameInput.value.trim();
-          if (vipNickname === "") {
-            alert("⚠️ 為了核對社群成員身分，請務必填寫您的「社群暱稱」喔！");
-            nicknameInput.focus();
-            return; 
-          }
-        }
-      }
-
       const now = new Date();
       const dateStr = `${now.getMonth() + 1}月${now.getDate()}日`;
-
-      const titleTag = isVipMode ? " ★LINE社群專屬單★" : "";
+      const titleTag = "";
 
       let message = `您好，這是我的訂購清單 (${dateStr})${titleTag}：\n`;
-
-      if (vipNickname) {
-        message += `🙋‍♀️ 社群暱稱：${vipNickname}\n`;
-      }
-      message += `\n`; 
-
       let total = 0;
       cart.forEach((item, index) => {
         total += item.price * item.qty;
@@ -3083,7 +3025,7 @@ function renderCartItems() {
       });
 
       message += "-----------------------------\n";
-      
+
       // 計算最終結帳金額
       let finalTotal = total - currentDiscount;
       if (finalTotal < 0) finalTotal = 0;
