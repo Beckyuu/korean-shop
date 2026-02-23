@@ -2245,7 +2245,7 @@
           allProductsData.push(product);
         });
 
-// === 自動排序邏輯：1.看標籤 2.同品牌聚攏 ===
+        // === 自動排序邏輯：1.看標籤 2.同品牌聚攏 ===
         allProductsData.sort((a, b) => {
           // 規則一：設定標籤的優先級 (數字越小排越前面)
           const getPriority = (tag) => {
@@ -2302,10 +2302,10 @@
         const card = document.createElement("div");
         card.className = "product-card";
         card.innerHTML = `
-                <div class="img-wrapper" style="cursor:pointer;" onclick="openQuickShop(${idx})"
-                    ${badgeHtml}
-                    <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
-                </div>
+                <div class="img-wrapper" style="cursor:pointer;" onclick="openQuickShop(${idx})">
+    ${badgeHtml}
+    <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
+</div>
 
 <div class="info">
     <h3 class="name">${product.name}</h3>
