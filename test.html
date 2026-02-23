@@ -2174,8 +2174,6 @@
     </ul>
   </div>
 
-  <div id="category-container" class="category-nav"></div>
-
   <div id="loading">
     <div class="loader-spinner"></div>
     <span class="loading-text">loading.....</span>
@@ -2589,48 +2587,13 @@
 
           allProductsData.push(product);
         });
-
-        // 資料讀完後，先產生分類按鈕，再顯示全部商品
-        initCategoryButtons();
+        
         renderProducts(allProductsData);
 
       } catch (error) {
         console.error(error);
         loading.style.display = "none";
         container.innerHTML = '<p style="text-align:center; padding:20px;">載入失敗。</p>';
-      }
-    }
-
-    // 2. 🟢 新增：自動產生分類按鈕
-    function initCategoryButtons() {
-      const categoryContainer = document.getElementById("category-container");
-
-      // 抓出所有不重複的分類
-      // 如果 P 欄是空的，我們就暫時不理它，或是你可以把它歸類為「其他」
-      const categories = ["全部", ...new Set(allProductsData.map(p => p.category).filter(c => c && c !== "其他"))];
-
-      let html = "";
-      categories.forEach(cat => {
-        // 預設「全部」按鈕是亮起的 (active)
-        const activeClass = cat === "全部" ? "active" : "";
-        html += `<button class="category-btn ${activeClass}" onclick="filterCategory('${cat}', this)">${cat}</button>`;
-      });
-
-      categoryContainer.innerHTML = html;
-    }
-
-    // 3. 🟢 新增：點擊按鈕後的篩選功能
-    function filterCategory(category, btnElement) {
-      // 1. 處理按鈕亮燈
-      document.querySelectorAll(".category-btn").forEach(btn => btn.classList.remove("active"));
-      btnElement.classList.add("active");
-
-      // 2. 篩選資料
-      if (category === "全部") {
-        renderProducts(allProductsData);
-      } else {
-        const filtered = allProductsData.filter(p => p.category === category);
-        renderProducts(filtered);
       }
     }
 
