@@ -2470,7 +2470,7 @@
 
       // 檢查活動時間 (2026/02/28 ~ 2026/03/06)
       const now = new Date();
-      const startTime = new Date("2026-02-28T00:00:00");
+      const startTime = new Date("2026-02-23T00:00:00");
       const endTime = new Date("2026-03-06T23:59:59");
       
       if (now < startTime) {
@@ -3161,7 +3161,7 @@ function renderCartItems() {
         modal.style.display = "flex";
       }
     }
-    
+
     function showDetails(index) {
       const product = allProductsData[index];
       const modal = document.getElementById("detailModal");
