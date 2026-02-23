@@ -1580,45 +1580,53 @@
       flex-direction: column;
     }
 
-/* === ❌ 商品彈窗關閉按鈕 (顯眼版) === */
+    /* === ❌ 商品彈窗關閉按鈕 (顯眼版) === */
     .quick-shop-close {
       position: absolute;
       top: 15px;
       right: 15px;
-      
+
       /* 🌟 外觀：做成圓形按鈕，比較好點 */
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background-color: rgba(255, 255, 255, 0.9); /* 半透明白底 */
-      border: 1px solid #eee; /* 淡淡的邊框 */
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* 讓它浮起來 */
-      
+      background-color: rgba(255, 255, 255, 0.9);
+      /* 半透明白底 */
+      border: 1px solid #eee;
+      /* 淡淡的邊框 */
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      /* 讓它浮起來 */
+
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      z-index: 20; /* 確保它浮在最上面，不會被圖片蓋住 */
+      z-index: 20;
+      /* 確保它浮在最上面，不會被圖片蓋住 */
       transition: all 0.2s;
     }
 
     /* 裡面的叉叉符號 */
     .quick-shop-close span {
       font-size: 2rem;
-      color: #555; /* 深灰色，清楚可見 */
+      color: #555;
+      /* 深灰色，清楚可見 */
       font-weight: 300;
       line-height: 1;
-      margin-top: -2px; /* 微調垂直位置 */
+      margin-top: -2px;
+      /* 微調垂直位置 */
     }
 
     /* 滑鼠移過去的效果 */
     .quick-shop-close:hover {
-      background-color: #333; /* 變成深色背景 */
+      background-color: #333;
+      /* 變成深色背景 */
       border-color: #333;
     }
-    
+
     .quick-shop-close:hover span {
-      color: #fff; /* 符號變白色 */
+      color: #fff;
+      /* 符號變白色 */
     }
 
     /* 手機版微調 */
@@ -1626,11 +1634,12 @@
       .quick-shop-close {
         top: 10px;
         right: 10px;
-        width: 36px; /* 手機版稍微小一點點，但還是很好按 */
+        width: 36px;
+        /* 手機版稍微小一點點，但還是很好按 */
         height: 36px;
       }
     }
-    
+
     /* 內部文字樣式 */
     #qs-title {
       font-family: 'Zen Maru Gothic', sans-serif;
@@ -2436,6 +2445,60 @@
 
     let allProductsData = [];
     let cart = [];
+    let currentPromoCode = ""; // 紀錄目前使用的折扣碼
+    let currentDiscount = 0;   // 紀錄折抵金額
+
+    // === 🎁 折扣碼功能 ===
+    function applyPromoCode() {
+      const input = document.getElementById("promo-code-input").value.trim().toUpperCase();
+      const msgEl = document.getElementById("promo-message");
+      
+      // 計算目前總金額
+      let subtotal = 0;
+      cart.forEach(item => subtotal += item.price * item.qty);
+
+      if (input === "") {
+        msgEl.innerText = "請輸入折扣碼";
+        return;
+      }
+
+      // 🛑 這裡可以修改你要的折扣碼文字！
+      if (input !== "OYNEW50") {
+        msgEl.innerText = "無效的折扣碼";
+        return;
+      }
+
+      // 檢查活動時間 (2026/02/28 ~ 2026/03/06)
+      const now = new Date();
+      const startTime = new Date("2026-02-28T00:00:00");
+      const endTime = new Date("2026-03-06T23:59:59");
+      
+      if (now < startTime) {
+        msgEl.innerText = "活動將於 2/28 開始喔！敬請期待";
+        return;
+      }
+      if (now > endTime) {
+        msgEl.innerText = "此折扣碼活動已結束囉！";
+        return;
+      }
+
+      // 檢查滿額門檻
+      if (subtotal < 500) {
+        msgEl.innerText = `需滿 NT$500 才可使用 (目前差 NT$${500 - subtotal})`;
+        return;
+      }
+
+      // 套用成功
+      currentPromoCode = input;
+      currentDiscount = 50; // 🛑 這裡可以改折抵的金額
+      renderCartItems(); // 重新整理購物車畫面
+    }
+
+    function removePromoCode() {
+      currentPromoCode = "";
+      currentDiscount = 0;
+      renderCartItems();
+    }
 
     // 🟢 新增 1：讀取舊的購物車資料 (網頁一打開就執行)
     function loadCart() {
@@ -2505,8 +2568,9 @@
             gallery: allImages,
             detailImgUrl: row[4] ? row[4].trim() : "",
 
-            // 這裡加上了我們剛剛修好的去空格功能
-            description: row[5] ? row[5].trim().replace(/\s*<br\s*\/?>\s*/gi, '<br>') : "",
+            // 🔴 修改 1：原本 F 欄是 description，現在要讓位給分類，所以這裡先改成空字串
+            // (如果不改，網頁可能會把「美妝」這兩個字當成副標題顯示在價格上方)
+            description: "", 
 
             tag: row[6] ? row[6].trim().toUpperCase() : "",
             deadline: row[7] ? row[7].trim() : "",
@@ -2514,10 +2578,11 @@
             // 這裡也加上了去空格功能
             giftDesc: row[8] ? row[8].trim().replace(/\s*<br\s*\/?>\s*/gi, '<br>') : "",
 
-            // 🟢 新增：讀取 P 欄 (第 15 欄) 作為分類
-            category: row[15] ? row[15].trim() : "其他",
+            // 🔴 修改 2：關鍵！分類改成讀取 row[5] (也就是 F 欄)
+            // 原本是: category: row[15] ? row[15].trim() : "其他",
+            category: row[5] ? row[5].trim() : "其他",
           };
-
+          
           // 處理規格預設值
           if (product.variants.length === 1) product.selectedVariant = product.variants[0];
           else if (product.variants.length === 0) product.selectedVariant = "單一規格";
@@ -2613,12 +2678,16 @@
                     ${badgeHtml}
                     <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
                 </div>
-                
-                <div class="info">
-                    <h3 class="name" style="cursor:pointer;" onclick="openQuickShop(${product.id})">${product.name}</h3>
-                    
-                    ${priceHtml}
-                    
+
+<div class="info">
+    <h3 class="name">${product.name}</h3>
+
+    <span class="deadline-badge ${product.deadline ? '' : 'empty'}">
+        ${product.deadline || "空格佔位"}
+    </span>
+    
+    ${priceHtml}
+      
                     <div class="action-row" style="margin-top: 10px; justify-content: center;">
                         <button class="btn-add" onclick="openQuickShop(${product.id})" style="width: 100%; max-width: 200px;">
                             加入購物車
@@ -2850,7 +2919,7 @@
         document.getElementById("cartModal").classList.remove("show");
     }
 
-    function renderCartItems() {
+function renderCartItems() {
       const container = document.getElementById("cartItems");
       const totalEl = document.getElementById("cartTotal");
 
@@ -2858,6 +2927,9 @@
         container.innerHTML =
           "<p style=\"text-align:center; color:#999; margin-top:40px; font-family:'Noto Sans TC', sans-serif;\">購物車目前是空的</p>";
         totalEl.innerText = "總金額: NT$ 0";
+        // 如果購物車清空，順便把折扣碼也清掉
+        currentPromoCode = "";
+        currentDiscount = 0;
         return;
       }
 
@@ -2879,10 +2951,8 @@
                 </div>`;
       });
 
-      // 🔴 新增：VIP 專屬的暱稱輸入框
-      // 這裡會檢查網址有沒有 ?vip=...
       const urlParams = new URLSearchParams(window.location.search);
-      const isVipMode = urlParams.has("vip"); // 只要有 vip 參數就視為 VIP 模式
+      const isVipMode = urlParams.has("vip"); 
 
       if (isVipMode) {
         html += `
@@ -2895,14 +2965,41 @@
                     </div>
                 `;
       }
-      // --------------------------------
 
-      if (total >= 1000) {
-        let rawDeposit = total * 0.25;
+      // --- 折扣碼 UI 區塊開始 ---
+      // 動態檢查：如果刪減商品後金額低於 500，自動拔除折扣碼
+      if (total < 500) {
+        currentPromoCode = "";
+        currentDiscount = 0;
+      }
+
+      if (currentDiscount === 0) {
+        html += `
+          <div style="margin-top: 15px; border-top: 1px dashed #eee; padding-top: 15px;">
+              <div style="display: flex; gap: 8px;">
+                  <input type="text" id="promo-code-input" placeholder="輸入社群專屬折扣碼" style="flex:1; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem; outline: none; font-family: 'Noto Sans TC', sans-serif;">
+                  <button onclick="applyPromoCode()" style="background: #2c2c2c; color: #fff; border: none; padding: 0 15px; border-radius: 4px; cursor: pointer; font-family: 'Noto Sans TC', sans-serif;">套用</button>
+              </div>
+              <div id="promo-message" style="font-size: 0.8rem; margin-top: 6px; color: #d65a5a; font-family: 'Noto Sans TC', sans-serif;"></div>
+          </div>
+        `;
+      } else {
+        html += `
+          <div style="margin-top: 15px; border-top: 1px dashed #eee; padding-top: 15px; display: flex; justify-content: space-between; align-items: center; background: #fdfbf7; padding: 12px; border-radius: 6px;">
+              <span style="font-size: 0.9rem; color: #d4a373; font-weight: 600; font-family: 'Noto Sans TC', sans-serif;">✓ 已套用折扣碼：${currentPromoCode} (-NT$50)</span>
+              <button onclick="removePromoCode()" style="background: transparent; color: #999; border: none; text-decoration: underline; cursor: pointer; font-size: 0.8rem; font-family: 'Noto Sans TC', sans-serif;">移除</button>
+          </div>
+        `;
+      }
+      // --- 折扣碼 UI 區塊結束 ---
+
+      let finalTotal = total - currentDiscount;
+      if (finalTotal < 0) finalTotal = 0;
+
+      if (finalTotal >= 1000) {
+        let rawDeposit = finalTotal * 0.25;
         let finalDeposit = Math.round(rawDeposit / 100) * 100;
 
-        // 1. 靠右對齊，跟總金額連在一起，像帳單一樣自然
-        // 2. 顏色用淺灰配金棕色，降低壓迫感
         depositHtml = `
                 <div style="
                     margin-top: 8px;
@@ -2921,7 +3018,7 @@
                     </span>
                     <span style="
                         font-size: 1.1rem; 
-                        color: #bfa092; /* 溫柔的顏色 */
+                        color: #bfa092;
                         font-weight: 500;
                     ">
                         NT$ ${finalDeposit}
@@ -2932,20 +3029,25 @@
 
       container.innerHTML = html;
       totalEl.style.fontFamily = "'Noto Sans TC', sans-serif";
-      totalEl.innerText = `總金額: NT$ ${total}`;
+      
+      // 更新總金額顯示方式
+      if (currentDiscount > 0) {
+        totalEl.innerHTML = `
+          <div style="font-size: 0.9rem; color: #999; text-decoration: line-through; margin-bottom: 4px; font-weight: normal;">小計: NT$ ${total}</div>
+          <div style="color: #d65a5a; font-weight: 600;">結帳總金額: NT$ ${finalTotal}</div>
+        `;
+      } else {
+        totalEl.innerText = `總金額: NT$ ${total}`;
+      }
 
-      // 🟢 把定金顯示在總金額下面 (使用 insertAdjacentHTML 比較安全)
-      // 先清空舊的定金 (如果有的話)，避免重複
       const oldDeposit = document.getElementById("deposit-display");
       if (oldDeposit) oldDeposit.remove();
 
-      // 如果有定金，就加進去
       if (depositHtml) {
-        // 建立一個有 ID 的 div 包住它，方便下次刪除
         let div = document.createElement("div");
         div.id = "deposit-display";
         div.innerHTML = depositHtml;
-        totalEl.after(div); // 放在總金額 (totalEl) 的正下方
+        totalEl.after(div); 
       }
     }
 
@@ -2958,7 +3060,6 @@
     function checkoutViaLine() {
       if (cart.length === 0) return;
 
-      // 1. 檢查下單平台
       const shippingRadios = document.getElementsByName("shipping");
       let selectedShipping = null;
       for (const radio of shippingRadios) {
@@ -2972,9 +3073,7 @@
         return;
       }
 
-      // 2. VIP 暱稱檢查與讀取
       const urlParams = new URLSearchParams(window.location.search);
-      // 這裡為了方便，只要網址有 ?vip 就啟動檢查
       const isVipMode = urlParams.has("vip");
       let vipNickname = "";
 
@@ -2984,27 +3083,23 @@
           vipNickname = nicknameInput.value.trim();
           if (vipNickname === "") {
             alert("⚠️ 為了核對 VIP 資格，請務必填寫您的「社群暱稱」喔！");
-            // 自動幫客人把游標移到輸入框，方便他打字
             nicknameInput.focus();
-            return; // 阻止結帳
+            return; 
           }
         }
       }
 
-      // 3. 準備訂單內容
       const now = new Date();
-      const dateStr = `${now.getMonth() + 1}/${now.getDate()}`;
+      const dateStr = `${now.getMonth() + 1}月${now.getDate()}日`;
 
-      // 標題判斷
       const titleTag = isVipMode ? " ★社群VIP單★" : "";
 
       let message = `您好，這是我的訂購清單 (${dateStr})${titleTag}：\n`;
 
-      // 🔴 如果有暱稱，顯示在最上面
       if (vipNickname) {
         message += `🙋‍♀️ 社群暱稱：${vipNickname}\n`;
       }
-      message += `\n`; // 空一行
+      message += `\n`; 
 
       let total = 0;
       cart.forEach((item, index) => {
@@ -3017,27 +3112,35 @@
 
         message += `${num}. ${cleanName}\n`;
         if (cleanSpec) {
-          message += `   └ ${cleanSpec}  x${item.qty}\n`;
+          message += `   └ ${cleanSpec} ($${item.price}) x${item.qty}\n`;
         } else {
-          message += `   └ 單一規格  x${item.qty}\n`;
+          message += `   └ 單一規格 ($${item.price}) x${item.qty}\n`;
         }
         message += `\n`;
       });
 
       message += "-----------------------------\n";
-      message += `總金額: NT$ ${total}\n`;
+      
+      // 計算最終結帳金額
+      let finalTotal = total - currentDiscount;
+      if (finalTotal < 0) finalTotal = 0;
 
-      if (total >= 1000) {
-        let rawDeposit = total * 0.25;
+      if (currentDiscount > 0) {
+        message += `商品小計: NT$ ${total}\n`;
+        message += `🎁 使用折扣碼 [${currentPromoCode}]: 折抵 -$${currentDiscount}\n`;
+        message += `結帳總金額: NT$ ${finalTotal}\n`;
+      } else {
+        message += `總金額: NT$ ${total}\n`;
+      }
+
+      if (finalTotal >= 1000) {
+        let rawDeposit = finalTotal * 0.25;
         let finalDeposit = Math.round(rawDeposit / 100) * 100;
-
-        // 改成這樣寫，更清楚：
         message += `(含 25% 定金: NT$ ${finalDeposit})\n`;
       }
 
       message += `下單平台: ${selectedShipping}`;
 
-      // 4. 傳送
       const lineUrl = `https://line.me/R/oaMessage/@139gqqwy/?${encodeURIComponent(message)}`;
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
@@ -3058,7 +3161,7 @@
         modal.style.display = "flex";
       }
     }
-
+    
     function showDetails(index) {
       const product = allProductsData[index];
       const modal = document.getElementById("detailModal");
