@@ -2241,12 +2241,12 @@
       }
 
       // 🛑 這裡可以修改你要的折扣碼文字！
-      if (input !== "hello50") {
+      if (input !== "HELLO50") {
         msgEl.innerText = "無效的折扣碼";
         return;
       }
 
-      // 檢查活動時間 (2026/02/28 ~ 2026/03/06)
+      // 檢查活動時間
       const now = new Date();
       const startTime = new Date("2026-02-24T00:00:00");
       const endTime = new Date("2026-03-06T23:59:59");
