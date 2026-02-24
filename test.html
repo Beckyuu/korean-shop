@@ -2920,56 +2920,47 @@
       const dateStr = `${now.getMonth() + 1}月${now.getDate()}日`;
       const titleTag = "";
 
-// 1. 開頭增加一行空行，讓清單不要緊貼著開場白
+// 1. 極簡開頭
       let message = `您好，這是我的訂購清單 (${dateStr})${titleTag}：\n\n`;
       
       let total = 0;
       cart.forEach((item, index) => {
         total += item.price * item.qty;
         let cleanName = item.name.replace(/<br\s*\/?>/gi, " ");
-        let cleanSpec = item.spec
-          ? item.spec.replace(/<br\s*\/?>/gi, " ")
-          : "";
+        let cleanSpec = item.spec ? item.spec.replace(/<br\s*\/?>/gi, " ") : "單一規格";
         let num = (index + 1).toString().padStart(2, "0");
 
-        // 2. 每個商品前面加上小點綴，讓標題更突出
-        message += `🔸 ${num}. ${cleanName}\n`;
-        
-        if (cleanSpec) {
-          message += `    └ 規格：${cleanSpec}  ($${item.price} x ${item.qty})\n`;
-        } else {
-          message += `    └ 規格：單一規格  ($${item.price} x ${item.qty})\n`;
-        }
-        
-        // 3. 每個商品結尾都加一個空行，強制把它們推開
-        message += `\n`;
+        // 2. 拿掉圖示，改用簡潔的括號標註編號
+        message += `[${num}] ${cleanName}\n`;
+        // 3. 規格與價格拆成兩行，絕對不會被擠到換行
+        message += `- 規格: ${cleanSpec}\n`;
+        message += `- 數量: ${item.qty} ($${item.price})\n\n`;
       });
 
-      // 4. 分隔線上下一樣保留空位
-      message += `========================\n\n`;
+      // 4. 使用較短的虛線，避免手機螢幕不夠寬被切斷
+      message += `-------------\n`;
 
       // 計算最終結帳金額
       let finalTotal = total - currentDiscount;
       if (finalTotal < 0) finalTotal = 0;
 
-      // 5. 總計區塊也調整間距
+      // 5. 縮短標題文字 (例如：把「結帳總金額」改成「總金額」)，確保數字能待在同一行
       if (currentDiscount > 0) {
-        message += `🛒 商品小計：NT$ ${total}\n`;
-        message += `🎁 折扣碼 [${currentPromoCode}]： -$${currentDiscount}\n`;
-        message += `------------------------\n`; // 小分隔線
-        message += `✨ 結帳總金額：NT$ ${finalTotal}\n\n`; // 總金額後面加空行
+        message += `小計: NT$ ${total}\n`;
+        message += `折扣 [${currentPromoCode}]: -$${currentDiscount}\n`;
+        message += `總金額: NT$ ${finalTotal}\n\n`;
       } else {
-        message += `✨ 結帳總金額：NT$ ${total}\n\n`;
+        message += `總金額: NT$ ${total}\n\n`;
       }
 
       if (finalTotal >= 1500) {
         let rawDeposit = finalTotal * 0.20;
         let finalDeposit = Math.round(rawDeposit / 100) * 100;
-        message += `⚠️ (含 20% 定金：NT$ ${finalDeposit})\n\n`;
+        message += `(含20%定金: NT$ ${finalDeposit})\n\n`;
       }
 
-      message += `📦 下單平台：${selectedShipping}`;
-
+      message += `平台: ${selectedShipping}`;
+      
       const lineUrl = `https://line.me/R/oaMessage/@139gqqwy/?${encodeURIComponent(message)}`;
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
