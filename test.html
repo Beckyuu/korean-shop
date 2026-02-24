@@ -1800,16 +1800,64 @@
       }
     }
 
-    /* === 📱 手機版購物車空間優化 (讓商品列表變長) === */
+    /* === 📱 手機版購物車空間極限優化 (讓商品列表變很長！) === */
     @media (max-width: 768px) {
+
+      /* 1. 把整個白框的內距縮到最小，爭取最大空間 */
       .cart-content {
-        /* 1. 內距縮小：原本是 40px，改成 20px，上下左右瞬間多出 40px 空間 */
-        padding: 20px !important; 
+        padding: 15px !important;
+        /* 原本 40px -> 改 15px，瞬間多出很多空間 */
       }
 
-      /* 2. 標題距離縮小：原本離商品列表很遠，現在拉近一點 */
-      .cart-content > div:first-child {
-        margin-bottom: 15px !important;
+      /* 2. 標題「購物清單」往上收 */
+      .cart-content>div:first-child {
+        margin-bottom: 10px !important;
+      }
+
+      /* 3. 壓縮「選擇下單平台」區塊 (這是接在商品列表下面的那塊) */
+      #cartItems+div {
+        padding-top: 10px !important;
+        /* 分隔線上方留白減少 */
+        margin-bottom: 10px !important;
+        /* 跟折扣碼的距離減少 */
+      }
+
+      /* 讓裡面的選項緊湊一點 */
+      #cartItems+div p {
+        margin-bottom: 5px !important;
+      }
+
+      #cartItems+div label {
+        margin-bottom: 2px !important;
+      }
+
+      /* 4. 壓縮「折扣碼」區塊 */
+      #promo-box {
+        margin-bottom: 8px !important;
+      }
+
+      /* 讓輸入框稍微矮一點，不用那麼肥 */
+      #promo-code-input,
+      #promo-box button {
+        height: 38px !important;
+      }
+
+      /* 5. 壓縮「總金額」與「按鈕」 */
+      #cartTotal {
+        margin-bottom: 5px !important;
+      }
+
+      /* 提醒小字 (訂單成立那行) */
+      .cart-content>p {
+        margin: 5px 0 !important;
+      }
+
+      /* 綠色結帳按鈕 */
+      .btn-checkout {
+        margin-top: 5px !important;
+        /* 離上面近一點 */
+        padding: 12px !important;
+        /* 按鈕變矮一點 */
       }
     }
   </style>
@@ -1857,7 +1905,7 @@
     </ul>
   </div>
 
-<div id="category-container" class="category-nav" style="display: none;"></div>
+  <div id="category-container" class="category-nav" style="display: none;"></div>
 
   <div id="loading">
     <div class="loader-spinner"></div>
@@ -2130,18 +2178,18 @@
       "b": "限時折扣",     // 暫定
       "c": "獨家選品"      // 暫定
     };
-    let currentCategory = "all"; 
+    let currentCategory = "all";
 
     // 1. 產生按鈕
     function renderCategoryButtons() {
       const container = document.getElementById("category-container");
-      container.innerHTML = ""; 
+      container.innerHTML = "";
 
       Object.keys(categoryMap).forEach(key => {
         const btn = document.createElement("div");
         // 如果是當前選中的分類，就加上 active 讓它變色
         btn.className = `category-btn ${currentCategory === key ? 'active' : ''}`;
-        btn.innerText = categoryMap[key]; 
+        btn.innerText = categoryMap[key];
         btn.onclick = () => switchCategory(key);
         container.appendChild(btn);
       });
@@ -2159,9 +2207,9 @@
       } else {
         // 如果選特定分類，就檢查商品的 category 欄位有沒有包含該代號
         const filtered = allProductsData.filter(p => {
-            // 避免有些商品沒填分類會報錯，加個防護
-            const productCat = p.category ? p.category.toLowerCase() : "";
-            return productCat.includes(key); 
+          // 避免有些商品沒填分類會報錯，加個防護
+          const productCat = p.category ? p.category.toLowerCase() : "";
+          return productCat.includes(key);
         });
         renderProducts(filtered);
       }
@@ -2641,7 +2689,7 @@
                 </div>`;
       });
 
-// --- 折扣碼 UI 區塊開始 (新版：韓系質感優惠券) ---
+      // --- 折扣碼 UI 區塊開始 (新版：韓系質感優惠券) ---
       if (total < 500) {
         currentPromoCode = "";
         currentDiscount = 0;
@@ -2649,7 +2697,7 @@
 
       let promoHtml = "";
 
-if (currentDiscount === 0) {
+      if (currentDiscount === 0) {
         // 1. 未輸入狀態：極簡膠囊風格 (拿掉大外框)
         promoHtml = `
           <div style="margin-bottom: 15px;">
@@ -2702,7 +2750,7 @@ if (currentDiscount === 0) {
           </div>
         `;
       } else {
-                // 2. 已套用狀態：淡金色實心卡片
+        // 2. 已套用狀態：淡金色實心卡片
         promoHtml = `
           <div style="
               background: #fdfbf7; 
@@ -2755,9 +2803,9 @@ if (currentDiscount === 0) {
           </div>
         `;
       }
-      
+
       const promoBox = document.getElementById("promo-box");
-      if(promoBox) promoBox.innerHTML = promoHtml;
+      if (promoBox) promoBox.innerHTML = promoHtml;
       // --- 折扣碼 UI 區塊結束 ---
 
       let finalTotal = total - currentDiscount;
