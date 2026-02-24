@@ -2123,7 +2123,7 @@
   </div>
 
   <div id="qrModal" class="quick-shop-overlay" onclick="closeQrModal(event)" style="z-index: 3000;">
-    <div class="quick-shop-content" style="max-width: 350px; padding: 30px; text-align: center;">
+    <div class="quick-shop-content" style="max-width: 400px; padding: 30px; text-align: center;">
       <span onclick="document.getElementById('qrModal').classList.remove('show')"
         style="position: absolute; top: 10px; right: 15px; cursor: pointer; font-size: 1.8rem; color: #888;">&times;</span>
       <h3 id="qrTitle"
@@ -2969,7 +2969,7 @@
       }
 
       message += `📦 下單平台：${selectedShipping}`;
-      
+
       const lineUrl = `https://line.me/R/oaMessage/@139gqqwy/?${encodeURIComponent(message)}`;
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
@@ -2981,11 +2981,11 @@
         const title = document.getElementById("qrTitle");
         const body = document.getElementById("qrBody");
 
-        const qrImgUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(lineUrl)}`;
+        const qrImgUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(lineUrl)}`;
 
         body.innerHTML = `
             <p style="margin-bottom:20px; color:#666; font-size:0.9rem;">拿起手機掃描 QR Code<br>訂單將自動帶入對話框！</p>
-            <img src="${qrImgUrl}" alt="Order QR Code" style="width:200px; height:200px; border:1px solid #eee; padding:10px; border-radius: 8px;">`;
+            <img src="${qrImgUrl}" alt="Order QR Code" style="width:280px; height:280px; border:1px solid #eee; padding:10px; border-radius: 8px;">`;
 
         modal.classList.add("show");
       }
