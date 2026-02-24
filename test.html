@@ -2922,6 +2922,19 @@ if (currentDiscount === 0) {
     </div>
   </div>
 
+  /* === 📱 手機版購物車空間優化 (讓商品列表變長) === */
+    @media (max-width: 768px) {
+      .cart-content {
+        /* 1. 內距縮小：原本是 40px，改成 20px，上下左右瞬間多出 40px 空間 */
+        padding: 20px !important; 
+      }
+
+      /* 2. 標題距離縮小：原本離商品列表很遠，現在拉近一點 */
+      .cart-content > div:first-child {
+        margin-bottom: 15px !important;
+      }
+    }
+
 </body>
 
 </html>
