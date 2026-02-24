@@ -2628,43 +2628,142 @@
                 </div>`;
       });
 
-// --- 折扣碼 UI 區塊開始 (新版：獨立位置) ---
-      // 動態檢查：如果刪減商品後金額低於 500，自動拔除折扣碼
+// --- 折扣碼 UI 區塊開始 (新版：韓系質感優惠券) ---
       if (total < 500) {
         currentPromoCode = "";
         currentDiscount = 0;
       }
 
-      let promoHtml = ""; // 準備一個新變數來裝 HTML
+      let promoHtml = "";
 
       if (currentDiscount === 0) {
-        // 未輸入時的樣子 (把原本的 margin-top 拿掉，因為已經換位置了，不需要那麼多間距)
+        // 1. 未輸入狀態：虛線邊框小卡風格
         promoHtml = `
-          <div style="padding-top: 5px;">
-              <div style="display: flex; gap: 8px;">
-                  <input type="text" id="promo-code-input" placeholder="輸入折扣碼" style="flex:1; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem; outline: none; font-family: 'Noto Sans TC', sans-serif;">
-                  <button onclick="applyPromoCode()" style="background: #2c2c2c; color: #fff; border: none; padding: 0 15px; border-radius: 4px; cursor: pointer; font-family: 'Noto Sans TC', sans-serif;">套用</button>
+          <div style="
+              background: #fffcf9; 
+              padding: 15px; 
+              border: 1px dashed #d4a373; 
+              border-radius: 8px; 
+              margin-bottom: 15px;
+              position: relative;
+          ">
+              <div style="
+                  font-size: 0.85rem; 
+                  color: #888; 
+                  margin-bottom: 10px; 
+                  font-family: 'Noto Sans TC', sans-serif; 
+                  display: flex; 
+                  align-items: center; 
+                  gap: 6px;
+              ">
+                  <span style="color: #d4a373;">🎟️</span> 是否有折扣碼？
               </div>
-              <div id="promo-message" style="font-size: 0.8rem; margin-top: 6px; color: #d65a5a; font-family: 'Noto Sans TC', sans-serif;"></div>
+              
+              <div style="display: flex; gap: 8px;">
+                  <input type="text" id="promo-code-input" placeholder="輸入優惠代碼 (ex: OYNEW50)" 
+                      style="
+                          flex: 1; 
+                          padding: 10px 12px; 
+                          border: 1px solid #eee; 
+                          background: #fff; 
+                          border-radius: 4px; 
+                          font-size: 0.9rem; 
+                          outline: none; 
+                          color: #555; 
+                          font-family: 'Fredoka', 'Noto Sans TC', sans-serif;
+                          letter-spacing: 0.5px;
+                          transition: border 0.3s;
+                      "
+                      onfocus="this.style.borderColor='#d4a373'" 
+                      onblur="this.style.borderColor='#eee'"
+                  >
+                  <button onclick="applyPromoCode()" 
+                      style="
+                          background: #2c2c2c; 
+                          color: #fff; 
+                          border: none; 
+                          padding: 0 20px; 
+                          border-radius: 4px; 
+                          cursor: pointer; 
+                          font-family: 'Noto Sans TC', sans-serif; 
+                          font-size: 0.85rem; 
+                          letter-spacing: 1px;
+                          transition: opacity 0.2s;
+                      "
+                      onmouseover="this.style.opacity='0.9'"
+                      onmouseout="this.style.opacity='1'"
+                  >
+                      套用
+                  </button>
+              </div>
+              <div id="promo-message" style="
+                  font-size: 0.8rem; 
+                  margin-top: 8px; 
+                  color: #d65a5a; 
+                  font-family: 'Noto Sans TC', sans-serif; 
+                  min-height: 1.2em;
+              "></div>
           </div>
         `;
       } else {
-        // 已套用時的樣子
+        // 2. 已套用狀態：淡金色實心卡片
         promoHtml = `
-          <div style="display: flex; justify-content: space-between; align-items: center; background: #fdfbf7; padding: 10px; border-radius: 6px; border: 1px solid #f0e6d2;">
-              <span style="font-size: 0.9rem; color: #d4a373; font-weight: 600; font-family: 'Noto Sans TC', sans-serif;">✓ 已折抵：${currentPromoCode} (-$50)</span>
-              <button onclick="removePromoCode()" style="background: transparent; color: #999; border: none; text-decoration: underline; cursor: pointer; font-size: 0.8rem; font-family: 'Noto Sans TC', sans-serif;">移除</button>
+          <div style="
+              background: #fdfbf7; 
+              padding: 15px; 
+              border: 1px solid #e6d0c0; 
+              border-radius: 8px; 
+              display: flex; 
+              align-items: center; 
+              justify-content: space-between; 
+              margin-bottom: 15px;
+              box-shadow: 0 2px 8px rgba(212, 163, 115, 0.1);
+          ">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                  <div style="
+                      width: 24px; 
+                      height: 24px; 
+                      background: #d4a373; 
+                      color: white; 
+                      border-radius: 50%; 
+                      display: flex; 
+                      justify-content: center; 
+                      align-items: center; 
+                      font-size: 0.85rem;
+                  ">✓</div>
+                  <div style="font-family: 'Noto Sans TC', sans-serif;">
+                      <div style="color: #d4a373; font-weight: 600; font-size: 0.95rem; letter-spacing: 1px;">
+                          ${currentPromoCode}
+                      </div>
+                      <div style="color: #999; font-size: 0.8rem; margin-top: 2px;">
+                          已成功折抵 <span style="color: #d65a5a; font-weight:500;">-$${currentDiscount}</span>
+                      </div>
+                  </div>
+              </div>
+              <button onclick="removePromoCode()" style="
+                  background: #fff; 
+                  border: 1px solid #ddd; 
+                  color: #999; 
+                  padding: 5px 12px; 
+                  border-radius: 20px; 
+                  font-size: 0.75rem; 
+                  cursor: pointer; 
+                  font-family: 'Noto Sans TC', sans-serif;
+                  transition: all 0.2s;
+              "
+              onmouseover="this.style.borderColor='#999'; this.style.color='#666'"
+              onmouseout="this.style.borderColor='#ddd'; this.style.color='#999'"
+              >
+                  移除
+              </button>
           </div>
         `;
       }
       
-      // 關鍵動作：把做好的 HTML 塞進我們剛剛蓋的新家 #promo-box
-      // (記得先確認元素存在，避免報錯)
       const promoBox = document.getElementById("promo-box");
       if(promoBox) promoBox.innerHTML = promoHtml;
-
       // --- 折扣碼 UI 區塊結束 ---
-      
+            
       let finalTotal = total - currentDiscount;
       if (finalTotal < 0) finalTotal = 0;
 
