@@ -1916,7 +1916,7 @@
     </ul>
   </div>
 
-  <div id="category-container" class="category-nav" style="display: none;"></div>
+  <div id="category-container" class="category-nav"></div>
 
   <div id="loading">
     <div class="loader-spinner"></div>
@@ -2117,7 +2117,7 @@
     </div>
   </div>
 
-    <div id="zoomOverlay" class="zoom-overlay" onclick="closeZoom()">
+  <div id="zoomOverlay" class="zoom-overlay" onclick="closeZoom()">
     <img id="zoom-img-content" src="">
     <div class="zoom-hint">點擊任意處關閉</div>
   </div>
@@ -2203,8 +2203,8 @@
     const categoryMap = {
       "all": "全部商品",   // 這是「重置鍵」，建議保留
       "a": "新品上架",     // 暫定
-      "b": "限時折扣",     // 暫定
-      "c": "獨家選品"      // 暫定
+      "b": "一日限時折扣",     // 暫定
+      "c": "私房選品團購"      // 暫定
     };
     let currentCategory = "all";
 
@@ -2404,7 +2404,7 @@
           // 只要你的品名開頭是品牌名 (例如 CLIO)，它們就會自動排在一起
           return a.name.localeCompare(b.name, 'zh-TW');
         });
-
+        renderCategoryButtons();
         renderProducts(allProductsData);
 
       } catch (error) {
@@ -2920,9 +2920,9 @@
       const dateStr = `${now.getMonth() + 1}月${now.getDate()}日`;
       const titleTag = "";
 
-// 1. 極簡開頭
+      // 1. 極簡開頭
       let message = `您好，這是我的訂購清單 (${dateStr})${titleTag}：\n\n`;
-      
+
       let total = 0;
       cart.forEach((item, index) => {
         total += item.price * item.qty;
@@ -2960,7 +2960,7 @@
       }
 
       message += `平台: ${selectedShipping}`;
-      
+
       const lineUrl = `https://line.me/R/oaMessage/@139gqqwy/?${encodeURIComponent(message)}`;
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
