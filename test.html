@@ -2018,6 +2018,7 @@
           iOPEN Mall
         </label>
       </div>
+      <div id="promo-box" style="margin-bottom: 15px;"></div>
       <div id="cartTotal" style="
             font-family: &quot;Noto Sans TC&quot;, sans-serif;
             font-size: 1.2rem;
@@ -2627,33 +2628,43 @@
                 </div>`;
       });
 
-      // --- 折扣碼 UI 區塊開始 ---
+// --- 折扣碼 UI 區塊開始 (新版：獨立位置) ---
       // 動態檢查：如果刪減商品後金額低於 500，自動拔除折扣碼
       if (total < 500) {
         currentPromoCode = "";
         currentDiscount = 0;
       }
 
+      let promoHtml = ""; // 準備一個新變數來裝 HTML
+
       if (currentDiscount === 0) {
-        html += `
-          <div style="margin-top: 15px; border-top: 1px dashed #eee; padding-top: 15px;">
+        // 未輸入時的樣子 (把原本的 margin-top 拿掉，因為已經換位置了，不需要那麼多間距)
+        promoHtml = `
+          <div style="padding-top: 5px;">
               <div style="display: flex; gap: 8px;">
-                  <input type="text" id="promo-code-input" placeholder="輸入社群專屬折扣碼" style="flex:1; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem; outline: none; font-family: 'Noto Sans TC', sans-serif;">
+                  <input type="text" id="promo-code-input" placeholder="輸入折扣碼" style="flex:1; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem; outline: none; font-family: 'Noto Sans TC', sans-serif;">
                   <button onclick="applyPromoCode()" style="background: #2c2c2c; color: #fff; border: none; padding: 0 15px; border-radius: 4px; cursor: pointer; font-family: 'Noto Sans TC', sans-serif;">套用</button>
               </div>
               <div id="promo-message" style="font-size: 0.8rem; margin-top: 6px; color: #d65a5a; font-family: 'Noto Sans TC', sans-serif;"></div>
           </div>
         `;
       } else {
-        html += `
-          <div style="margin-top: 15px; border-top: 1px dashed #eee; padding-top: 15px; display: flex; justify-content: space-between; align-items: center; background: #fdfbf7; padding: 12px; border-radius: 6px;">
-              <span style="font-size: 0.9rem; color: #d4a373; font-weight: 600; font-family: 'Noto Sans TC', sans-serif;">✓ 已套用折扣碼：${currentPromoCode} (-NT$50)</span>
+        // 已套用時的樣子
+        promoHtml = `
+          <div style="display: flex; justify-content: space-between; align-items: center; background: #fdfbf7; padding: 10px; border-radius: 6px; border: 1px solid #f0e6d2;">
+              <span style="font-size: 0.9rem; color: #d4a373; font-weight: 600; font-family: 'Noto Sans TC', sans-serif;">✓ 已折抵：${currentPromoCode} (-$50)</span>
               <button onclick="removePromoCode()" style="background: transparent; color: #999; border: none; text-decoration: underline; cursor: pointer; font-size: 0.8rem; font-family: 'Noto Sans TC', sans-serif;">移除</button>
           </div>
         `;
       }
-      // --- 折扣碼 UI 區塊結束 ---
+      
+      // 關鍵動作：把做好的 HTML 塞進我們剛剛蓋的新家 #promo-box
+      // (記得先確認元素存在，避免報錯)
+      const promoBox = document.getElementById("promo-box");
+      if(promoBox) promoBox.innerHTML = promoHtml;
 
+      // --- 折扣碼 UI 區塊結束 ---
+      
       let finalTotal = total - currentDiscount;
       if (finalTotal < 0) finalTotal = 0;
 
