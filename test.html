@@ -672,21 +672,32 @@
       background-size: 10px;
     }
 
-    /* === 收單時間提醒 === */
+    /* === 收單時間提醒 (修正版：短標籤) === */
     .deadline-badge {
+      /* 1. 讓它像便利貼一樣，字多少、框就多寬 */
       display: inline-block;
+
       background-color: #f4e3e3;
-      /* 很淡的紅底 */
       color: #c97c7c;
-      /* 莫蘭迪紅色字 */
+
       font-family: "Noto Sans TC", sans-serif;
       font-size: 0.8rem;
       font-weight: 500;
-      padding: 2px 10px;
+
+      /* 2. 內距改小一點，看起來比較精緻 */
+      padding: 2px 8px;
+
       border-radius: 4px;
       margin-bottom: 8px;
-      /* 跟下方價格保持距離 */
       letter-spacing: 1px;
+
+      /* 3. 關鍵限制：不讓它超過 90% 寬，避免手機版撐爆 */
+      max-width: 90%;
+
+      /* 4. 如果字真的太長，變成 ... */
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     /* 這是新的：隱藏版收單時間 (用來佔位子) */
