@@ -2636,58 +2636,41 @@
 
       let promoHtml = "";
 
-      if (currentDiscount === 0) {
-        // 1. 未輸入狀態：虛線邊框小卡風格
+if (currentDiscount === 0) {
+        // 1. 未輸入狀態：極簡膠囊風格 (拿掉大外框)
         promoHtml = `
-          <div style="
-              background: #fffcf9; 
-              padding: 15px; 
-              border: 1px dashed #d4a373; 
-              border-radius: 8px; 
-              margin-bottom: 15px;
-              position: relative;
-          ">
-              <div style="
-                  font-size: 0.85rem; 
-                  color: #888; 
-                  margin-bottom: 10px; 
-                  font-family: 'Noto Sans TC', sans-serif; 
-                  display: flex; 
-                  align-items: center; 
-                  gap: 6px;
-              ">
-                  <span style="color: #d4a373;">🎟️</span> 是否有折扣碼？
-              </div>
-              
-              <div style="display: flex; gap: 8px;">
-                  <input type="text" id="promo-code-input" placeholder="輸入優惠代碼 (ex: OYNEW50)" 
+          <div style="margin-bottom: 15px;">
+              <div style="display: flex; gap: 8px; align-items: center;">
+                  <input type="text" id="promo-code-input" placeholder="輸入優惠代碼" 
                       style="
                           flex: 1; 
-                          padding: 10px 12px; 
-                          border: 1px solid #eee; 
-                          background: #fff; 
-                          border-radius: 4px; 
+                          height: 42px; /* 增加高度，手指好點 */
+                          padding: 0 15px; 
+                          border: 1px solid #e0e0e0; 
+                          background: #f9f9f9; /* 微微的灰底，更有質感 */
+                          border-radius: 50px; /* 全圓角膠囊 */
                           font-size: 0.9rem; 
                           outline: none; 
-                          color: #555; 
+                          color: #333;
                           font-family: 'Fredoka', 'Noto Sans TC', sans-serif;
-                          letter-spacing: 0.5px;
-                          transition: border 0.3s;
+                          transition: all 0.3s;
                       "
-                      onfocus="this.style.borderColor='#d4a373'" 
-                      onblur="this.style.borderColor='#eee'"
+                      onfocus="this.style.borderColor='#d4a373'; this.style.background='#fff'" 
+                      onblur="this.style.borderColor='#e0e0e0'; this.style.background='#f9f9f9'"
                   >
                   <button onclick="applyPromoCode()" 
                       style="
-                          background: #2c2c2c; 
+                          height: 42px;
+                          background: #2c2c2c; /* 深灰黑 */
                           color: #fff; 
                           border: none; 
-                          padding: 0 20px; 
-                          border-radius: 4px; 
+                          padding: 0 24px; 
+                          border-radius: 50px; /* 跟輸入框一樣的圓角 */
                           cursor: pointer; 
                           font-family: 'Noto Sans TC', sans-serif; 
-                          font-size: 0.85rem; 
+                          font-size: 0.9rem; 
                           letter-spacing: 1px;
+                          white-space: nowrap;
                           transition: opacity 0.2s;
                       "
                       onmouseover="this.style.opacity='0.9'"
@@ -2698,15 +2681,15 @@
               </div>
               <div id="promo-message" style="
                   font-size: 0.8rem; 
-                  margin-top: 8px; 
+                  margin-top: 6px; 
+                  padding-left: 10px; /* 稍微往內縮，對齊文字 */
                   color: #d65a5a; 
                   font-family: 'Noto Sans TC', sans-serif; 
-                  min-height: 1.2em;
               "></div>
           </div>
         `;
       } else {
-        // 2. 已套用狀態：淡金色實心卡片
+                // 2. 已套用狀態：淡金色實心卡片
         promoHtml = `
           <div style="
               background: #fdfbf7; 
@@ -2763,7 +2746,7 @@
       const promoBox = document.getElementById("promo-box");
       if(promoBox) promoBox.innerHTML = promoHtml;
       // --- 折扣碼 UI 區塊結束 ---
-            
+
       let finalTotal = total - currentDiscount;
       if (finalTotal < 0) finalTotal = 0;
 
