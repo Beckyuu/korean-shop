@@ -2320,6 +2320,7 @@
 
     // 4. 🟢 新增：負責把商品畫在螢幕上的函式 (從原本的 fetchProducts 拆出來的)
     function renderProducts(products) {
+      const container = document.getElementById("product-list"); // 🌟 補上這行告訴它 container 是誰
       container.innerHTML = ""; // 先清空畫面
 
       if (products.length === 0) {
