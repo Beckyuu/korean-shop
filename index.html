@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>│Mina．妝日子│</title>
+  <link rel="icon" href="https://ik.imagekit.io/mina09/OliveYoung/%E5%9C%96%E7%89%873.png" type="image/png" />
   <link
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Fredoka:wght@400;500;600&family=Noto+Sans+TC:wght@300;400;500&family=Zen+Maru+Gothic:wght@300;400;500;700&display=swap"
     rel="stylesheet" />
@@ -403,15 +404,6 @@
       transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
     }
 
-    /* 移除滑鼠懸停時的圖片移動與放大效果 */
-    .product-card:hover {
-      /* transform: translateY(-8px); */
-    }
-
-    .product-card:hover .img-wrapper img {
-      /* transform: scale(1.05); */
-    }
-
     /* === 優化後的標籤 Badge (韓系絲帶感) === */
     .badge {
       position: absolute;
@@ -609,102 +601,6 @@
       gap: 4px;
     }
 
-    /* === 規格容器 === */
-    .variant-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 6px;
-
-      margin-bottom: 2px;
-
-      flex-grow: 1;
-      align-content: center;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-
-    /* === 米粒按鈕 (預設就是金色質感) === */
-    .variant-btn {
-      font-family: "Noto Sans TC", sans-serif;
-      font-size: 0.8rem;
-
-      /* 🔴 修改 1：預設文字就是金色 */
-      color: #d4a373;
-
-      background: #fff;
-
-      /* 🔴 修改 2：預設邊框就是金色 */
-      border: 1px solid #d4a373;
-
-      border-radius: 15px;
-      padding: 4px 12px;
-
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    /* 滑鼠移過去 (變成實心，給點預覽感) */
-    .variant-btn:hover {
-      background: #fdfbf7;
-      /* 極淡米色 */
-      /* 邊框和文字維持金色 */
-    }
-
-    /* 被選中的狀態 (變成實心金 + 白字) */
-    .variant-btn.selected {
-      background: #d4a373;
-      color: #fff;
-      border-color: #d4a373;
-      box-shadow: 0 2px 5px rgba(212, 163, 115, 0.3);
-    }
-
-    /* === 單一規格專用：輕盈鏤空風格 === */
-    .variant-btn.single-mode {
-      background-color: #fff;
-      /* 背景改回白色 */
-      color: #d4a373;
-      /* 文字維持金色 */
-      border: 1px solid #d4a373;
-      /* 邊框維持金色 */
-
-      cursor: default;
-      /* 滑鼠游標改回箭頭 */
-      pointer-events: none;
-      /* 讓它不能被點選 */
-
-      font-weight: 500;
-      /* 字稍微加重一點點，提升質感 */
-      padding: 4px 16px;
-      /* 稍微寬一點點 */
-      box-shadow: none;
-      /* 拿掉陰影，讓它扁平化 */
-
-      /* 如果覺得純白太單調，可以試試看極淡的米色背景，把上面那行改成： */
-      /* background-color: #fdf6f0; */
-    }
-
-    /* === 單一規格文字 (美化版) === */
-    .single-variant-text {
-      /* 關鍵：強制用黑體，才不會變成新細明體！ */
-      font-family: "Noto Sans TC", sans-serif;
-      font-size: 0.9rem;
-      color: #d4a373;
-      /* 金色 */
-      letter-spacing: 2px;
-      /* 字距拉開一點，更有呼吸感 */
-
-      display: block;
-      width: 100%;
-      /* 確保佔滿寬度，才能置中 */
-      text-align: center;
-      /* 文字置中 */
-
-      /* 調整距離：跟上面的副標題拉開一點 */
-      margin-top: 8px;
-      margin-bottom: 5px;
-    }
-
     /* === 6. 購買按鈕區 === */
     .action-row {
       display: flex;
@@ -768,21 +664,32 @@
       background-size: 10px;
     }
 
-    /* === 收單時間提醒 === */
+    /* === 收單時間提醒 (修正版：短標籤) === */
     .deadline-badge {
+      /* 1. 讓它像便利貼一樣，字多少、框就多寬 */
       display: inline-block;
+
       background-color: #f4e3e3;
-      /* 很淡的紅底 */
       color: #c97c7c;
-      /* 莫蘭迪紅色字 */
+
       font-family: "Noto Sans TC", sans-serif;
       font-size: 0.8rem;
       font-weight: 500;
-      padding: 2px 10px;
+
+      /* 2. 內距改小一點，看起來比較精緻 */
+      padding: 2px 8px;
+
       border-radius: 4px;
       margin-bottom: 8px;
-      /* 跟下方價格保持距離 */
       letter-spacing: 1px;
+
+      /* 3. 關鍵限制：不讓它超過 90% 寬，避免手機版撐爆 */
+      max-width: 90%;
+
+      /* 4. 如果字真的太長，變成 ... */
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     /* 這是新的：隱藏版收單時間 (用來佔位子) */
@@ -1125,358 +1032,55 @@
       }
     }
 
-    /* 彈窗樣式微調 */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(5px);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal-content {
-      background: #fff;
-      width: 90%;
-      max-width: 500px;
-      max-height: 85vh;
-      overflow-y: auto;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
-      position: relative;
-      border: 1px solid #eee;
-    }
-
-    .modal-close-btn {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      border: none;
-      background: transparent;
-      font-size: 2rem;
-      cursor: pointer;
-      color: #333;
-    }
-
-    .modal-title {
-      /* 修改這裡：換成跟商品大標題一樣的圓體 */
-      font-family: "Zen Maru Gothic", "Noto Sans TC", sans-serif;
-
-      font-size: 1.5rem;
-      padding: 30px 30px 10px;
-      text-align: center;
-
-      /* 加一點粗細讓它更像標題 */
-      font-weight: 500;
-    }
-
-    .modal-body p {
-      padding: 0 30px 30px;
-      color: #666;
-      line-height: 1.8;
-      font-size: 0.95rem;
-    }
-
-    /* === 7. 詳情按鈕 (最終版：極簡圓形放大鏡) === */
-    .more-sticker {
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-      z-index: 5;
-
-      /* 🌟 外觀：實心白底小圓圈 */
-      background-color: #ffffff;
-      width: 36px;
-      /* 小巧的尺寸 */
-      height: 36px;
-      border-radius: 50%;
-      /* 變成正圓形 */
-
-      /* 讓裡面的放大鏡置中 */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      /* 陰影：讓它浮起來，才不會像貼在圖片上 */
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    /* 滑鼠移過去：微微放大 + 變色 */
-    .more-sticker:hover {
-      transform: scale(1.1);
-      /* 變大一點點 */
-      background-color: #d4a373;
-      /* 背景變金色 */
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-    }
-
-    /* 圖示設定 */
-    .more-sticker svg {
-      stroke: #d4a373;
-      /* 預設是金色線條 */
-      width: 18px;
-      /* 圖示大小 */
-      height: 18px;
-      stroke-width: 2;
-      transition: all 0.3s;
-    }
-
-    /* 滑鼠移過去時，圖示變白色 */
-    .more-sticker:hover svg {
-      stroke: #ffffff;
-    }
-
-    /* === 新增：時尚下拉選單 (更新：橢圓膠囊版) === */
-    .style-select {
-      appearance: none;
-      -webkit-appearance: none;
-
-      width: 100%;
-      max-width: 200px;
-      /* 稍微縮窄一點點更精緻 */
-      margin: 5px auto 10px;
-      display: block;
-
-      /* 🌟 風格：金棕色細框 */
-      background-color: transparent;
-      border: 1px solid #d4a373;
-      color: #d4a373;
-
-      /* 🌟 形狀：改成 50px 做成完美的橢圓形 */
-      border-radius: 50px;
-
-      /* 內距調整：因為變圓了，左右要留多一點空間才不會切到字 */
-      padding: 6px 35px 6px 20px;
-
-      font-family: "Noto Sans TC", sans-serif;
-      font-size: 0.85rem;
-      text-align: center;
-      text-align-last: center;
-      cursor: pointer;
-      outline: none;
-      transition: all 0.3s;
-
-      /* 箭頭位置微調 */
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-      background-repeat: no-repeat;
-      background-position: right 12px center;
-      /* 箭頭往內縮一點 */
-      background-size: 11px;
-    }
-
-    .style-select:hover {
-      background-color: #fffbf5;
-      /* 淺淺的米色背景 */
-    }
-
-    /* 缺貨選項的樣式 */
-    .style-select option:disabled {
-      color: #ccc;
-      font-style: italic;
-    }
-
-    /* === 單一規格專用 (長得像選單，但不能點) === */
-    .style-select.readonly {
-      background-image: none;
-      /* 拿掉箭頭 */
-      padding: 6px 20px;
-      /* 左右平衡 */
-      cursor: default;
-      /* 滑鼠變回箭頭 */
-      color: #bfa092;
-      /* 字體顏色稍微柔和一點點，區分「不可選」 */
-      border-color: #e6d0c0;
-      /* 邊框也稍微淡一點點 */
-    }
-
-    /* === 贈品專用樣式 (I欄) === */
-    .gift-note {
-      /* 粉嫩背景 + 虛線邊框 */
-      background-color: #fff0f5;
-      border: 1px dashed #e5989b;
-      border-radius: 10px;
-
-      /* 文字設定 */
-      color: #d65a5a;
-      font-family: "Zen Maru Gothic", sans-serif;
-      font-size: 0.95rem;
-      line-height: 1.6;
-      font-weight: 500;
-
-      /* 位置：跟上下拉開一點距離 */
-      margin: 10px 30px 25px;
-      padding: 15px;
-      text-align: center;
-    }
-
-    /* 上面的 BONUS 小標籤 */
-    .gift-icon {
-      display: block;
-      font-size: 0.8rem;
-      font-weight: bold;
-      color: #e5989b;
-      margin-bottom: 5px;
-      letter-spacing: 2px;
-    }
-
-    /* === 手機版專用設定：完美對齊版 === */
-    @media (max-width: 768px) {
-      .container {
-        /* 1. 強制平分兩欄 (1fr 1fr)，不管手機多窄都保證是兩個一排 */
-        grid-template-columns: 1fr 1fr !important;
-
-        /* 間距縮小，把空間留給商品 */
-        gap: 20px 10px !important;
-        padding: 0 12px 80px !important;
-      }
-
-      /* 修正手機版圖片大小不一的問題 */
-      .product-card {
-        /* 關鍵指令：防止卡片因為文字太長而被撐開 */
-        /* 告訴 Grid 每個格子嚴格遵守平分，不要管內容寬度 */
-        min-width: 0 !important;
-      }
-
-      /* 修正手機版標題 v3：黃金比例 (單行塞得下 + 版面整齊) */
-      .name {
-        /* 1. 字體稍微退一點，但還是比下方的 0.75rem 大很多 */
-        font-size: 0.95rem !important;
-
-        /* 2. 關鍵：把字距稍微拉緊，讓長英文可以塞進一行！ */
-        letter-spacing: -0.5px !important;
-
-        /* 3. 高度設定：配合兩行字的高度，確保隔壁商品對齊 */
-        min-height: 3.8rem !important;
-
-        line-height: 1.35 !important;
-
-        /* 顯示邏輯：維持最多顯示 3 行，超過變 ... */
-        display: -webkit-box !important;
-        -webkit-line-clamp: 3 !important;
-        -webkit-box-orient: vertical !important;
-        overflow: hidden !important;
-        white-space: normal !important;
-
-        /* 4. 斷行邏輯：保持單字完整 */
-        word-break: keep-all !important;
-
-        margin-bottom: 4px !important;
-        justify-content: flex-start !important;
-      }
-
-      /* 新增：手機版副標題/贈品文字稍微縮小，讓標題更突出 */
-      .desc-text {
-        font-size: 0.75rem !important;
-        /* 電腦版是 0.85，手機改小一點 */
-        margin-bottom: 6px !important;
-      }
-
-      /* 修正手機版價格 */
-      .price {
-        font-size: 1.1rem !important;
-        margin-bottom: 4px !important;
-      }
-
-      /* 修正手機版按鈕大小 */
-      button.btn-add {
-        padding: 4px 0 !important;
-        /* 左右不留白，避免按鈕被擠爆 */
-        width: 100% !important;
-        /* 按鈕寬度佔滿 */
-        font-size: 0.75rem !important;
-      }
-
-      /* 修正手機版規格按鈕 */
-      .variant-btn {
-        font-size: 0.7rem !important;
-        padding: 2px 6px !important;
-        margin-bottom: 2px !important;
-      }
-
-      /* === 手機版專用：縮小「看更多」按鈕 (維持您原本的要求) === */
-      .more-sticker {
-        padding: 3px 8px !important;
-        font-size: 0.6rem !important;
-        bottom: 5px !important;
-        right: 5px !important;
-        border-radius: 12px !important;
-        gap: 3px !important;
-      }
-
-      .more-sticker svg {
-        width: 10px !important;
-        height: 10px !important;
-      }
-    }
-
-    /* === 缺貨專用樣式 (優雅隱藏版) === */
-    .variant-btn.sold-out {
-      color: #e0e0e0 !important;
-      /* 字體變成很淡很淡的灰色 */
-      border-color: #f0f0f0 !important;
-      /* 邊框幾乎看不見 */
-      background-color: #fff !important;
-      /* 背景保持純白 */
-
-      /* 拿掉刪除線 */
-      text-decoration: none !important;
-
-      cursor: not-allowed;
-      /* 滑鼠變禁止符號 */
-      pointer-events: none;
-      /* 禁止點擊 */
-    }
-
-    /* === 🚑 手機版間距急救包 (V3: 強制置中 + 消除隱形空隙) === */
+    /* === 手機版專屬設定 (商品列表整合版) === */
     @media (max-width: 768px) {
 
-      /* 1. 🌟 關鍵大絕招：把所有「隱藏佔位」的樓層直接變不見！ */
-      /* 這樣就算 JS 沒改到，也能強制消除空隙 */
+      /* 1. 隱藏不必要的佔位元素，消除空隙 */
       .mobile-hidden,
       div[style*="visibility:hidden"],
       span[style*="visibility:hidden"] {
         display: none !important;
       }
 
-      /* 2. 讓內容版面往上收 */
+      /* 2. 商品列表排版：強制平分兩欄 */
+      .container {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 20px 10px !important;
+        padding: 0 12px 80px !important;
+      }
+
+      .product-card {
+        min-width: 0 !important;
+      }
+
+      /* 3. 資訊區與品名對齊 */
       .info {
         justify-content: flex-start !important;
         padding-top: 5px !important;
       }
 
-      /* 3. 收單時間標籤：緊貼下方品名 */
+      .name {
+        font-size: 0.95rem !important;
+        letter-spacing: -0.5px !important;
+        min-height: 2.4rem !important;
+        line-height: 1.35 !important;
+        margin-bottom: 4px !important;
+        padding-top: 0 !important;
+
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        text-align: center !important;
+        word-break: keep-all !important;
+      }
+
+      /* 4. 其他文字與標籤間距微調 */
       .deadline-badge {
         margin-bottom: 2px !important;
       }
 
-      /* 4. 品名修正：強制置中 + 高度自動適應 */
-      .name {
-        /* 高度設定：改小一點，大概兩行字的高度 */
-        min-height: 2.4rem !important;
-        margin-bottom: 4px !important;
-        font-size: 0.95rem !important;
-
-        /* 🌟 修正左偏問題：強制置中！ */
-        display: flex !important;
-        justify-content: center !important;
-        /* 水平置中 */
-        align-items: center !important;
-        /* 垂直置中 */
-        text-align: center !important;
-
-        /* 重置內距 */
-        padding-top: 0 !important;
-      }
-
-      /* 5. 縮減說明與贈品的間距 (如果它們有出現的話) */
       .desc-text {
+        font-size: 0.75rem !important;
         margin-bottom: 2px !important;
         height: auto !important;
       }
@@ -1486,16 +1090,10 @@
         height: auto !important;
       }
 
-      /* 6. 規格選單縮小間距 */
-      .style-select,
-      .style-select.readonly {
-        margin: 2px auto 8px !important;
-        padding: 4px 15px 4px 10px !important;
-      }
-
-      /* 7. 價格與按鈕區 */
+      /* 5. 價格與購買按鈕 */
       .price,
       .price-container {
+        font-size: 1.1rem !important;
         margin-bottom: 8px !important;
         margin-top: 0 !important;
       }
@@ -1506,17 +1104,14 @@
       }
 
       button.btn-add {
+        width: 100% !important;
         height: 32px !important;
+        padding: 4px 0 !important;
         font-size: 0.75rem !important;
       }
 
       select {
         height: 32px !important;
-      }
-
-      /* 🌟 關鍵：讓空的樓層在手機上直接消失，不要佔空間 */
-      .mobile-hidden {
-        display: none !important;
       }
     }
 
@@ -1696,11 +1291,6 @@
       /* 加個左邊框裝飾，更有設計感 (如果不喜歡可以拿掉 border-left 和 padding-left) */
       border-left: 3px solid #d4a373;
       padding-left: 12px;
-    }
-
-    /* 🔴 隱藏原本的浮動標籤 (以防 HTML 沒刪乾淨) */
-    .qs-gift-tag {
-      display: none !important;
     }
 
     /* 表單元件 */
@@ -2027,74 +1617,56 @@
     }
 
     /* 🟢 按鈕基礎設定 */
+    /* 🟢 雜誌質感底線風 */
     .category-btn {
       display: inline-block;
-      padding: 10px 26px;
-      /* 稍微加大一點按鈕 */
-      border-radius: 50px;
+      padding: 5px 15px;
+      /* 內距縮小，因為沒有框了 */
       font-family: "Noto Sans TC", sans-serif;
       font-size: 0.95rem;
-      font-weight: 500;
-      /* 字體稍微加粗增加份量感 */
+      font-weight: 400;
       cursor: pointer;
-      transition: all 0.2s ease-out;
-      /* 動畫速度調快一點點，感覺更俐落 */
-      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      letter-spacing: 2px;
+
+      /* 平常的狀態：完全透明背景 */
+      background: transparent;
+      color: #999;
+      border: none;
       position: relative;
-      /* 為了做按壓位移效果 */
-      top: 0;
-
-      /* ⚪️ 預設狀態：立體白金風格 (浮起) */
-      /* 背景：微妙的米白漸層，模擬光線從上方照下，製造弧度 */
-      background: linear-gradient(to bottom, #ffffff 0%, #f9f5f0 100%);
-      /* 邊框：原本的金色 */
-      border: 1px solid #d4a373;
-      color: #d4a373;
-
-      /* 陰影大師：多層陰影製造浮起感 */
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.8),
-        /* 1. 內部上方高光 (讓邊緣看起來圓潤) */
-        0 4px 8px rgba(212, 163, 115, 0.15),
-        /* 2. 外部柔和金色陰影 (浮起感主體) */
-        0 1px 3px rgba(0, 0, 0, 0.05);
-      /* 3. 底部深色小陰影 (增加貼地真實感) */
+      /* 為了畫底線做準備 */
     }
 
-    /* 👆 滑鼠懸停狀態：浮得更高 */
+    /* 隱形的底線 */
+    .category-btn::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      /* 預設沒有寬度 */
+      height: 1px;
+      /* 極細的線 */
+      background-color: #d4a373;
+      transition: width 0.3s ease;
+      /* 變寬的動畫 */
+    }
+
+    /* 👆 滑鼠懸停狀態 */
     .category-btn:hover {
-      /* 背景變亮一點 */
-      background: linear-gradient(to bottom, #ffffff 0%, #fffefb 100%);
-      /* 陰影擴散、往下移，感覺浮起來了 */
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 1),
-        0 8px 16px rgba(212, 163, 115, 0.2),
-        /* 陰影變大變模糊 */
-        0 3px 6px rgba(0, 0, 0, 0.08);
-
-      transform: translateY(-2px);
-      /* 物理位置向上浮動 2px */
+      color: #666;
     }
 
-    /* 🟡 選中狀態：立體黃金風格 (按壓凹陷感) */
+    /* 🟡 選中狀態：字變深，底線長出來 */
     .category-btn.active {
-      /* 背景：金色漸層，上方亮下方暗 */
-      background: linear-gradient(to bottom, #e8ba8a 0%, #d4a373 100%);
-      /* 邊框：稍微深一點的金色 */
-      border-color: #c99665;
-      color: #fff;
-      /* 文字加上一點點陰影，增加可讀性 */
-      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+      color: #2c2c2c;
+      font-weight: 500;
+    }
 
-      /* 陰影：改用 inset (內部陰影)，製造「按下去」的凹陷感 */
-      box-shadow:
-        inset 0 3px 8px rgba(0, 0, 0, 0.15),
-        /* 內部上方陰影，看起來凹下去 */
-        0 1px 2px rgba(212, 163, 115, 0.5);
-      /* 外部保留一點點陰影，維持厚度感 */
-
-      /* 物理位置往下移，抵消上面的浮動，產生按壓感 */
-      transform: translateY(1px);
+    .category-btn.active::after {
+      width: 60%;
+      /* 底線長出來，只佔字體的 60% 最優雅 */
     }
 
     /* 手機版調整：靠左對齊 */
@@ -2128,6 +1700,81 @@
     .cart-close-btn:active {
       transform: scale(0.9);
       /* 手機按下去會有縮小效果 */
+    }
+
+    @keyframes twinkle {
+
+      0%,
+      100% {
+        opacity: 0.3;
+        transform: scale(0.8);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.2);
+      }
+    }
+
+    /* === 📱 手機版購物車空間極限優化 (讓商品列表變很長！) === */
+    @media (max-width: 768px) {
+
+      /* 1. 把整個白框的內距縮到最小，爭取最大空間 */
+      .cart-content {
+        padding: 15px !important;
+        /* 原本 40px -> 改 15px，瞬間多出很多空間 */
+      }
+
+      /* 2. 標題「購物清單」往上收 */
+      .cart-content>div:first-child {
+        margin-bottom: 10px !important;
+      }
+
+      /* 3. 壓縮「選擇下單平台」區塊 (這是接在商品列表下面的那塊) */
+      #cartItems+div {
+        padding-top: 10px !important;
+        /* 分隔線上方留白減少 */
+        margin-bottom: 10px !important;
+        /* 跟折扣碼的距離減少 */
+      }
+
+      /* 讓裡面的選項緊湊一點 */
+      #cartItems+div p {
+        margin-bottom: 5px !important;
+      }
+
+      #cartItems+div label {
+        margin-bottom: 2px !important;
+      }
+
+      /* 4. 壓縮「折扣碼」區塊 */
+      #promo-box {
+        margin-bottom: 8px !important;
+      }
+
+      /* 讓輸入框稍微矮一點，不用那麼肥 */
+      #promo-code-input,
+      #promo-box button {
+        height: 38px !important;
+      }
+
+      /* 5. 壓縮「總金額」與「按鈕」 */
+      #cartTotal {
+        margin-bottom: 5px !important;
+      }
+
+      /* 提醒小字 (訂單成立那行) */
+      .cart-content>p {
+        margin: 5px 0 !important;
+      }
+
+      /* 綠色結帳按鈕 */
+      .btn-checkout {
+        margin-top: 5px !important;
+        /* 離上面近一點 */
+        padding: 12px !important;
+        /* 按鈕變矮一點 */
+      }
     }
   </style>
 </head>
@@ -2234,7 +1881,6 @@
         </div>
 
         <div class="quick-shop-info-box">
-          <div id="qs-tag-container"></div>
           <h2 id="qs-title">Product Name</h2>
 
           <div id="qs-gift-card" class="qs-gift-card" style="display:none;">
@@ -2374,14 +2020,22 @@
     </div>
   </div>
 
-  <div id="detailModal" class="modal-overlay" onclick="closeModal(event)">
-    <div class="modal-content">
-      <button class="modal-close-btn" onclick="forceCloseModal()">×</button>
+  <div id="zoomOverlay" class="zoom-overlay" onclick="closeZoom()">
+    <img id="zoom-img-content" src="">
+    <div class="zoom-hint">點擊任意處關閉</div>
+  </div>
 
-      <h3 class="modal-title" id="modalTitle">Product Name</h3>
-      <div class="modal-body" id="modalBody"></div>
+  <div id="qrModal" class="quick-shop-overlay" onclick="closeQrModal(event)" style="z-index: 3000;">
+    <div class="quick-shop-content" style="max-width: 400px; padding: 30px; text-align: center;">
+      <span onclick="document.getElementById('qrModal').classList.remove('show')"
+        style="position: absolute; top: 10px; right: 15px; cursor: pointer; font-size: 1.8rem; color: #888;">&times;</span>
+      <h3 id="qrTitle"
+        style="font-family: 'Noto Sans TC', sans-serif; font-size: 1.2rem; color: #333; margin-bottom: 15px;">請使用手機掃描下單
+      </h3>
+      <div id="qrBody"></div>
     </div>
   </div>
+
 
   <script>
     // === 🔒 手機版背景鎖定大神器 ===
@@ -2445,6 +2099,104 @@
 
     let allProductsData = [];
     let cart = [];
+    let currentPromoCode = ""; // 紀錄目前使用的折扣碼
+    let currentDiscount = 0;   // 紀錄折抵金額
+
+    // === 🏷️ 分類設定區 ===
+    const categoryMap = {
+      "all": "全部商品",         // 這個保留不要動
+      "新品上架": "新品上架",      // 左邊是判斷用的代號，右邊是顯示的文字
+      "限時優惠": "限時優惠",
+      "OY熱銷商品": "OY熱銷商品"
+    };
+    let currentCategory = "all";
+
+    // 1. 產生按鈕
+    function renderCategoryButtons() {
+      const container = document.getElementById("category-container");
+      container.innerHTML = "";
+
+      Object.keys(categoryMap).forEach(key => {
+        const btn = document.createElement("div");
+        // 如果是當前選中的分類，就加上 active 讓它變色
+        btn.className = `category-btn ${currentCategory === key ? 'active' : ''}`;
+        btn.innerText = categoryMap[key];
+        btn.onclick = () => switchCategory(key);
+        container.appendChild(btn);
+      });
+    }
+
+    // 2. 切換分類
+    function switchCategory(key) {
+      currentCategory = key;
+      renderCategoryButtons(); // 更新按鈕顏色
+
+      if (key === "all") {
+        // 如果選全部，就顯示所有資料
+        renderProducts(allProductsData);
+        renderCategoryButtons();
+      } else {
+        // 如果選特定分類，就檢查商品的 category 欄位有沒有包含該代號
+        const filtered = allProductsData.filter(p => {
+          // 避免有些商品沒填分類會報錯，加個防護
+          const productCat = p.category ? p.category.toLowerCase() : "";
+          return productCat.includes(key);
+        });
+        renderProducts(filtered);
+      }
+    }
+
+    // === 🎁 折扣碼功能 ===
+    function applyPromoCode() {
+      const input = document.getElementById("promo-code-input").value.trim().toUpperCase();
+      const msgEl = document.getElementById("promo-message");
+
+      // 計算目前總金額
+      let subtotal = 0;
+      cart.forEach(item => subtotal += item.price * item.qty);
+
+      if (input === "") {
+        msgEl.innerText = "請輸入折扣碼";
+        return;
+      }
+
+      // 🛑 這裡可以修改你要的折扣碼文字！
+      if (input !== "HELLO50") {
+        msgEl.innerText = "無效的折扣碼";
+        return;
+      }
+
+      // 檢查活動時間
+      const now = new Date();
+      const startTime = new Date("2026-02-24T00:00:00");
+      const endTime = new Date("2026-03-06T23:59:59");
+
+      if (now < startTime) {
+        msgEl.innerText = "活動將於 2/28 開始喔！敬請期待";
+        return;
+      }
+      if (now > endTime) {
+        msgEl.innerText = "此折扣碼活動已結束囉！";
+        return;
+      }
+
+      // 檢查滿額門檻
+      if (subtotal < 500) {
+        msgEl.innerText = `需滿 NT$500 才可使用 (目前差 NT$${500 - subtotal})`;
+        return;
+      }
+
+      // 套用成功
+      currentPromoCode = input;
+      currentDiscount = 50; // 🛑 這裡可以改折抵的金額
+      renderCartItems(); // 重新整理購物車畫面
+    }
+
+    function removePromoCode() {
+      currentPromoCode = "";
+      currentDiscount = 0;
+      renderCartItems();
+    }
 
     // 🟢 新增 1：讀取舊的購物車資料 (網頁一打開就執行)
     function loadCart() {
@@ -2460,10 +2212,6 @@
       localStorage.setItem("minaShopCart", JSON.stringify(cart));
       updateCartIcon();
     }
-
-    // 定義通關密語 (您可以改成自己喜歡的)
-    const VIP_KEY = "vip";
-    const VIP_VALUE = "mina";
 
     // 1. 全新的資料讀取函式 (只負責讀資料 & 產生分類按鈕)
     async function fetchProducts() {
@@ -2516,7 +2264,7 @@
 
             // 🔴 修改 1：原本 F 欄是 description，現在要讓位給分類，所以這裡先改成空字串
             // (如果不改，網頁可能會把「美妝」這兩個字當成副標題顯示在價格上方)
-            description: "", 
+            description: "",
 
             tag: row[6] ? row[6].trim().toUpperCase() : "",
             deadline: row[7] ? row[7].trim() : "",
@@ -2528,7 +2276,7 @@
             // 原本是: category: row[15] ? row[15].trim() : "其他",
             category: row[5] ? row[5].trim() : "其他",
           };
-          
+
           // 處理規格預設值
           if (product.variants.length === 1) product.selectedVariant = product.variants[0];
           else if (product.variants.length === 0) product.selectedVariant = "單一規格";
@@ -2536,8 +2284,30 @@
           allProductsData.push(product);
         });
 
-        // 資料讀完後，先產生分類按鈕，再顯示全部商品
-        initCategoryButtons();
+        // === 自動排序邏輯：1.看標籤 2.同品牌聚攏 ===
+        allProductsData.sort((a, b) => {
+          // 規則一：設定標籤的優先級 (數字越小排越前面)
+          const getPriority = (tag) => {
+            // 你可以在這裡增減你要置頂的標籤關鍵字
+            if (tag.includes("NEW") || tag.includes("特價")) return 1;
+            if (tag.includes("HOT")) return 2;
+            if (tag.includes("SALE")) return 3;
+            return 4; // 沒有標籤的商品，統一歸到最後這層
+          };
+
+          const priorityA = getPriority(a.tag);
+          const priorityB = getPriority(b.tag);
+
+          // 如果兩個商品的標籤優先級不同，就讓數字小的排前面
+          if (priorityA !== priorityB) {
+            return priorityA - priorityB;
+          }
+
+          // 規則二：如果標籤一樣（例如兩個都是一般商品），就依照「品名」的英文字母或筆畫排序
+          // 只要你的品名開頭是品牌名 (例如 CLIO)，它們就會自動排在一起
+          return a.name.localeCompare(b.name, 'zh-TW');
+        });
+        renderCategoryButtons();
         renderProducts(allProductsData);
 
       } catch (error) {
@@ -2547,69 +2317,20 @@
       }
     }
 
-    // 2. 🟢 新增：自動產生分類按鈕
-    function initCategoryButtons() {
-      const categoryContainer = document.getElementById("category-container");
-
-      // 抓出所有不重複的分類
-      // 如果 P 欄是空的，我們就暫時不理它，或是你可以把它歸類為「其他」
-      const categories = ["全部", ...new Set(allProductsData.map(p => p.category).filter(c => c && c !== "其他"))];
-
-      let html = "";
-      categories.forEach(cat => {
-        // 預設「全部」按鈕是亮起的 (active)
-        const activeClass = cat === "全部" ? "active" : "";
-        html += `<button class="category-btn ${activeClass}" onclick="filterCategory('${cat}', this)">${cat}</button>`;
-      });
-
-      categoryContainer.innerHTML = html;
-    }
-
-    // 3. 🟢 新增：點擊按鈕後的篩選功能
-    function filterCategory(category, btnElement) {
-      // 1. 處理按鈕亮燈
-      document.querySelectorAll(".category-btn").forEach(btn => btn.classList.remove("active"));
-      btnElement.classList.add("active");
-
-      // 2. 篩選資料
-      if (category === "全部") {
-        renderProducts(allProductsData);
-      } else {
-        const filtered = allProductsData.filter(p => p.category === category);
-        renderProducts(filtered);
-      }
-    }
-
     // 4. 🟢 新增：負責把商品畫在螢幕上的函式 (從原本的 fetchProducts 拆出來的)
     function renderProducts(products) {
-      const container = document.getElementById("product-list");
+      const container = document.getElementById("product-list"); // 🌟 補上這行告訴它 container 是誰
       container.innerHTML = ""; // 先清空畫面
-
-      // 判斷 VIP 模式 (因為每次重畫都要判斷一次)
-      const urlParams = new URLSearchParams(window.location.search);
-      const isVipMode = urlParams.get(VIP_KEY) === VIP_VALUE;
 
       if (products.length === 0) {
         container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:40px; color:#999;">此分類暫無商品</div>`;
         return;
       }
 
-      products.forEach((product) => {
-        // VIP 價格邏輯
+      products.forEach((product, idx) => {
+        product.price = product.originalPriceStr;
         let finalPriceDisplay = product.originalPriceStr;
         let priceHtml = `<span class="price">NT$ ${product.originalPriceStr}</span>`;
-
-        if (isVipMode && product.vipPriceStr && product.vipPriceStr !== product.originalPriceStr) {
-          // 更新物件裡的價格，讓加入購物車時能抓到對的錢
-          product.price = product.vipPriceStr;
-          priceHtml = `
-                    <div class="price-container">
-                        <span class="price-original">NT$ ${product.originalPriceStr}</span>
-                        <span class="price-vip">NT$ ${product.vipPriceStr}</span>
-                    </div>`;
-        } else {
-          product.price = product.originalPriceStr;
-        }
 
         // 標籤邏輯
         let badgeHtml = "";
@@ -2620,13 +2341,13 @@
         const card = document.createElement("div");
         card.className = "product-card";
         card.innerHTML = `
-                <div class="img-wrapper" style="cursor:pointer;" onclick="openQuickShop(${product.id})">
-                    ${badgeHtml}
-                    <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
-                </div>
+                <div class="img-wrapper" style="cursor:pointer;" onclick="openQuickShop(${idx})">
+    ${badgeHtml}
+    <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
+</div>
 
 <div class="info">
-    <h3 class="name" ...>${product.name}</h3>
+    <h3 class="name">${product.name}</h3>
 
     <span class="deadline-badge ${product.deadline ? '' : 'empty'}">
         ${product.deadline || "空格佔位"}
@@ -2635,7 +2356,7 @@
     ${priceHtml}
       
                     <div class="action-row" style="margin-top: 10px; justify-content: center;">
-                        <button class="btn-add" onclick="openQuickShop(${product.id})" style="width: 100%; max-width: 200px;">
+                        <button class="btn-add" onclick="openQuickShop(${idx})" style="max-width: 200px;">
                             加入購物車
                         </button>
                     </div>
@@ -2861,8 +2582,10 @@
     }
 
     function closeCart(e) {
-      if (e.target.classList.contains("cart-modal"))
+      if (e.target.classList.contains("cart-modal")) {
         document.getElementById("cartModal").classList.remove("show");
+        unfreezeBackground();
+      }
     }
 
     function renderCartItems() {
@@ -2873,6 +2596,9 @@
         container.innerHTML =
           "<p style=\"text-align:center; color:#999; margin-top:40px; font-family:'Noto Sans TC', sans-serif;\">購物車目前是空的</p>";
         totalEl.innerText = "總金額: NT$ 0";
+        // 如果購物車清空，順便把折扣碼也清掉
+        currentPromoCode = "";
+        currentDiscount = 0;
         return;
       }
 
@@ -2894,30 +2620,13 @@
                 </div>`;
       });
 
-      // 🔴 新增：VIP 專屬的暱稱輸入框
-      // 這裡會檢查網址有沒有 ?vip=...
-      const urlParams = new URLSearchParams(window.location.search);
-      const isVipMode = urlParams.has("vip"); // 只要有 vip 參數就視為 VIP 模式
+      let finalTotal = total - currentDiscount;
+      if (finalTotal < 0) finalTotal = 0;
 
-      if (isVipMode) {
-        html += `
-                    <div style="margin-top: 25px; background: #fff0f5; padding: 15px; border-radius: 8px; border: 1px dashed #e5989b;">
-                        <label style="display:block; font-size:0.9rem; color:#d65a5a; margin-bottom:8px; font-weight:bold;">
-                            ★ 社群 VIP 核對用
-                        </label>
-                        <input type="text" id="vip-nickname" placeholder="請問您在社群內的暱稱是？" 
-                            style="width:100%; padding:10px; border:1px solid #e5989b; border-radius:4px; font-size:0.9rem; outline:none;">
-                    </div>
-                `;
-      }
-      // --------------------------------
-
-      if (total >= 1000) {
-        let rawDeposit = total * 0.25;
+      if (finalTotal >= 1500) {
+        let rawDeposit = finalTotal * 0.20;
         let finalDeposit = Math.round(rawDeposit / 100) * 100;
 
-        // 1. 靠右對齊，跟總金額連在一起，像帳單一樣自然
-        // 2. 顏色用淺灰配金棕色，降低壓迫感
         depositHtml = `
                 <div style="
                     margin-top: 8px;
@@ -2932,11 +2641,11 @@
                         border-radius: 4px;
                         margin-right: 8px;
                     ">
-                        需預付定金 (25%)
+                        需預付定金 (20%)
                     </span>
                     <span style="
                         font-size: 1.1rem; 
-                        color: #bfa092; /* 溫柔的顏色 */
+                        color: #bfa092;
                         font-weight: 500;
                     ">
                         NT$ ${finalDeposit}
@@ -2947,20 +2656,25 @@
 
       container.innerHTML = html;
       totalEl.style.fontFamily = "'Noto Sans TC', sans-serif";
-      totalEl.innerText = `總金額: NT$ ${total}`;
 
-      // 🟢 把定金顯示在總金額下面 (使用 insertAdjacentHTML 比較安全)
-      // 先清空舊的定金 (如果有的話)，避免重複
+      // 更新總金額顯示方式
+      if (currentDiscount > 0) {
+        totalEl.innerHTML = `
+          <div style="font-size: 0.9rem; color: #999; text-decoration: line-through; margin-bottom: 4px; font-weight: normal;">小計: NT$ ${total}</div>
+          <div style="color: #d65a5a; font-weight: 600;">結帳總金額: NT$ ${finalTotal}</div>
+        `;
+      } else {
+        totalEl.innerText = `總金額: NT$ ${total}`;
+      }
+
       const oldDeposit = document.getElementById("deposit-display");
       if (oldDeposit) oldDeposit.remove();
 
-      // 如果有定金，就加進去
       if (depositHtml) {
-        // 建立一個有 ID 的 div 包住它，方便下次刪除
         let div = document.createElement("div");
         div.id = "deposit-display";
         div.innerHTML = depositHtml;
-        totalEl.after(div); // 放在總金額 (totalEl) 的正下方
+        totalEl.after(div);
       }
     }
 
@@ -2973,7 +2687,6 @@
     function checkoutViaLine() {
       if (cart.length === 0) return;
 
-      // 1. 檢查下單平台
       const shippingRadios = document.getElementsByName("shipping");
       let selectedShipping = null;
       for (const radio of shippingRadios) {
@@ -2987,154 +2700,78 @@
         return;
       }
 
-      // 2. VIP 暱稱檢查與讀取
-      const urlParams = new URLSearchParams(window.location.search);
-      // 這裡為了方便，只要網址有 ?vip 就啟動檢查
-      const isVipMode = urlParams.has("vip");
-      let vipNickname = "";
-
-      if (isVipMode) {
-        const nicknameInput = document.getElementById("vip-nickname");
-        if (nicknameInput) {
-          vipNickname = nicknameInput.value.trim();
-          if (vipNickname === "") {
-            alert("⚠️ 為了核對 VIP 資格，請務必填寫您的「社群暱稱」喔！");
-            // 自動幫客人把游標移到輸入框，方便他打字
-            nicknameInput.focus();
-            return; // 阻止結帳
-          }
-        }
-      }
-
-      // 3. 準備訂單內容
       const now = new Date();
       const dateStr = `${now.getMonth() + 1}月${now.getDate()}日`;
+      const titleTag = "";
 
-      // 標題判斷
-      const titleTag = isVipMode ? " ★社群VIP單★" : "";
-
-      let message = `您好，這是我的訂購清單 (${dateStr})${titleTag}：\n`;
-
-      // 🔴 如果有暱稱，顯示在最上面
-      if (vipNickname) {
-        message += `🙋‍♀️ 社群暱稱：${vipNickname}\n`;
-      }
-      message += `\n`; // 空一行
+      // 1. 極簡開頭
+      let message = `您好，這是我的訂購清單 (${dateStr})${titleTag}：\n\n`;
 
       let total = 0;
       cart.forEach((item, index) => {
         total += item.price * item.qty;
         let cleanName = item.name.replace(/<br\s*\/?>/gi, " ");
-        let cleanSpec = item.spec
-          ? item.spec.replace(/<br\s*\/?>/gi, " ")
-          : "";
+        let cleanSpec = item.spec ? item.spec.replace(/<br\s*\/?>/gi, " ") : "單一規格";
         let num = (index + 1).toString().padStart(2, "0");
 
-        message += `${num}. ${cleanName}\n`;
-        if (cleanSpec) {
-          message += `   └ ${cleanSpec} ($${item.price}) x${item.qty}\n`;
-        } else {
-          message += `   └ 單一規格 ($${item.price}) x${item.qty}\n`;
-        }
-        message += `\n`;
+        // 2. 拿掉圖示，改用簡潔的括號標註編號
+        message += `[${num}] ${cleanName}\n`;
+        // 3. 規格與價格拆成兩行，絕對不會被擠到換行
+        message += `- 規格: ${cleanSpec}\n`;
+        message += `- 數量: ${item.qty} ($${item.price})\n\n`;
       });
 
-      message += "-----------------------------\n";
-      message += `總金額: NT$ ${total}\n`;
+      // 4. 使用較短的虛線，避免手機螢幕不夠寬被切斷
+      message += `-------------\n`;
 
-      if (total >= 1000) {
-        let rawDeposit = total * 0.25;
-        let finalDeposit = Math.round(rawDeposit / 100) * 100;
+      // 計算最終結帳金額
+      let finalTotal = total - currentDiscount;
+      if (finalTotal < 0) finalTotal = 0;
 
-        // 改成這樣寫，更清楚：
-        message += `(含 25% 定金: NT$ ${finalDeposit})\n`;
+      // 5. 縮短標題文字 (例如：把「結帳總金額」改成「總金額」)，確保數字能待在同一行
+      if (currentDiscount > 0) {
+        message += `小計: NT$ ${total}\n`;
+        message += `折扣 [${currentPromoCode}]: -$${currentDiscount}\n`;
+        message += `總金額: NT$ ${finalTotal}\n\n`;
+      } else {
+        message += `總金額: NT$ ${total}\n\n`;
       }
 
-      message += `下單平台: ${selectedShipping}`;
+      if (finalTotal >= 1500) {
+        let rawDeposit = finalTotal * 0.20;
+        let finalDeposit = Math.round(rawDeposit / 100) * 100;
+        message += `(預付20%定金: NT$ ${finalDeposit})\n\n`;
+      }
 
-      // 4. 傳送
+      message += `平台: ${selectedShipping}`;
+
       const lineUrl = `https://line.me/R/oaMessage/@139gqqwy/?${encodeURIComponent(message)}`;
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
       if (isMobile) {
         window.location.href = lineUrl;
       } else {
-        const modal = document.getElementById("detailModal");
-        const title = document.getElementById("modalTitle");
-        const body = document.getElementById("modalBody");
-        title.style.display = "block";
-        const qrImgUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(lineUrl)}`;
-        title.innerText = "請使用手機掃描下單";
+        // 電腦版顯示 QR Code
+        const modal = document.getElementById("qrModal");
+        const title = document.getElementById("qrTitle");
+        const body = document.getElementById("qrBody");
+
+        const qrImgUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(lineUrl)}`;
+
         body.innerHTML = `
-                    <div style="text-align:center; padding: 20px 0;">
-                        <p style="margin-bottom:20px; color:#666;">拿起手機掃描 QR Code<br>訂單將自動帶入對話框！</p>
-                        <img src="${qrImgUrl}" alt="Order QR Code" style="width:200px; height:200px; border:1px solid #eee; padding:10px;">
-                    </div>`;
-        modal.style.display = "flex";
+            <p style="margin-bottom:20px; color:#666; font-size:0.9rem;">拿起手機掃描 QR Code<br>訂單將自動帶入對話框！</p>
+            <img src="${qrImgUrl}" alt="Order QR Code" style="width:280px; height:280px; border:1px solid #eee; padding:10px; border-radius: 8px;">`;
+
+        modal.classList.add("show");
       }
     }
 
-    function showDetails(index) {
-      const product = allProductsData[index];
-      const modal = document.getElementById("detailModal");
-      const titleEl = document.getElementById("modalTitle");
-
-      // 1. 隱藏標題 (維持畫面乾淨)
-      titleEl.style.display = "none";
-
-      // 2. 準備「內容物清單」 HTML 
-      // 🔴 修改來源：改成讀取 I 欄 (giftDesc)
-      let contentCardHtml = "";
-
-      // 只要 I 欄 (giftDesc) 有資料，就顯示這張卡
-      if (product.giftDesc && product.giftDesc !== "") {
-        contentCardHtml = `
-      <div class="content-info-card">
-          <span class="content-info-tag">✦ WHAT'S INSIDE ✦</span>
-          
-          <div class="content-info-text">
-              ${product.giftDesc}
-          </div>
-      </div>
-    `;
-      }
-
-      // 3. 詳細圖片 (讀取 detailImgUrl)
-      let imgContent = "";
-      if (product.detailImgUrl) {
-        const urls = product.detailImgUrl.split(",");
-        urls.forEach((url) => {
-          if (url.trim()) {
-            imgContent += `<img src="${url.trim()}" style="width:100%; display:block; margin-bottom:10px;">`;
-          }
-        });
-      }
-
-      // 防呆：如果什麼都沒有，至少顯示個提示
-      if (!contentCardHtml && !imgContent) {
-        imgContent = '<p style="text-align:center; padding:20px; color:#999;">尚無詳細內容</p>';
-      }
-
-      // 4. 組合並顯示 (內容卡片放上面，圖片放下面)
-      document.getElementById("modalBody").innerHTML = contentCardHtml + imgContent;
-      modal.style.display = "flex";
-    }
-
-    function forceCloseModal() {
-      document.getElementById("detailModal").style.display = "none";
-    }
-
-    // 🟢 讓點擊背景也能關閉詳情視窗
-    function closeModal(event) {
-      if (event.target.classList.contains("modal-overlay")) {
-        document.getElementById("detailModal").style.display = "none";
+    // 🟢 讓點擊背景也能關閉 QR Code 視窗
+    function closeQrModal(event) {
+      if (event.target.id === "qrModal") {
+        document.getElementById("qrModal").classList.remove("show");
       }
     }
-
-    // 動畫：簡單的星星閃爍
-    const style = document.createElement("style");
-    style.innerHTML = `@keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }`;
-    document.head.appendChild(style);
 
     // 🔴 新增：先讀取購物車紀錄
     loadCart();
@@ -3142,11 +2779,7 @@
     fetchProducts();
   </script>
 
-  <div id="zoomOverlay" class="zoom-overlay" onclick="closeZoom()">
-    <img id="zoom-img-content" src="">
-    <div class="zoom-hint">點擊任意處關閉</div>
-  </div>
-
 </body>
 
 </html>
+
