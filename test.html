@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>│Mina．妝日子│</title>
-<link rel="icon" href="https://ik.imagekit.io/mina09/OliveYoung/%E5%9C%96%E7%89%873.png" type="image/png" />
+  <link rel="icon" href="https://ik.imagekit.io/mina09/OliveYoung/%E5%9C%96%E7%89%873.png" type="image/png" />
   <link
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Fredoka:wght@400;500;600&family=Noto+Sans+TC:wght@300;400;500&family=Zen+Maru+Gothic:wght@300;400;500;700&display=swap"
     rel="stylesheet" />
@@ -402,15 +402,6 @@
       height: 100%;
       object-fit: cover;
       transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
-    }
-
-    /* 移除滑鼠懸停時的圖片移動與放大效果 */
-    .product-card:hover {
-      /* transform: translateY(-8px); */
-    }
-
-    .product-card:hover .img-wrapper img {
-      /* transform: scale(1.05); */
     }
 
     /* === 優化後的標籤 Badge (韓系絲帶感) === */
@@ -1041,117 +1032,55 @@
       }
     }
 
-    /* === 手機版專用設定：完美對齊版 === */
-    @media (max-width: 768px) {
-      .container {
-        /* 1. 強制平分兩欄 (1fr 1fr)，不管手機多窄都保證是兩個一排 */
-        grid-template-columns: 1fr 1fr !important;
-
-        /* 間距縮小，把空間留給商品 */
-        gap: 20px 10px !important;
-        padding: 0 12px 80px !important;
-      }
-
-      /* 修正手機版圖片大小不一的問題 */
-      .product-card {
-        /* 關鍵指令：防止卡片因為文字太長而被撐開 */
-        /* 告訴 Grid 每個格子嚴格遵守平分，不要管內容寬度 */
-        min-width: 0 !important;
-      }
-
-      /* 修正手機版標題 v3：黃金比例 (單行塞得下 + 版面整齊) */
-      .name {
-        /* 1. 字體稍微退一點，但還是比下方的 0.75rem 大很多 */
-        font-size: 0.95rem !important;
-
-        /* 2. 關鍵：把字距稍微拉緊，讓長英文可以塞進一行！ */
-        letter-spacing: -0.5px !important;
-
-        /* 3. 高度設定：配合兩行字的高度，確保隔壁商品對齊 */
-        min-height: 3.8rem !important;
-
-        line-height: 1.35 !important;
-
-        /* 顯示邏輯：維持最多顯示 3 行，超過變 ... */
-        display: -webkit-box !important;
-        -webkit-line-clamp: 3 !important;
-        -webkit-box-orient: vertical !important;
-        overflow: hidden !important;
-        white-space: normal !important;
-
-        /* 4. 斷行邏輯：保持單字完整 */
-        word-break: keep-all !important;
-
-        margin-bottom: 4px !important;
-        justify-content: flex-start !important;
-      }
-
-      /* 新增：手機版副標題/贈品文字稍微縮小，讓標題更突出 */
-      .desc-text {
-        font-size: 0.75rem !important;
-        /* 電腦版是 0.85，手機改小一點 */
-        margin-bottom: 6px !important;
-      }
-
-      /* 修正手機版價格 */
-      .price {
-        font-size: 1.1rem !important;
-        margin-bottom: 4px !important;
-      }
-
-      /* 修正手機版按鈕大小 */
-      button.btn-add {
-        padding: 4px 0 !important;
-        /* 左右不留白，避免按鈕被擠爆 */
-        width: 100% !important;
-        /* 按鈕寬度佔滿 */
-        font-size: 0.75rem !important;
-      }
-    }
-
-    /* === 🚑 手機版間距急救包 (V3: 強制置中 + 消除隱形空隙) === */
+    /* === 手機版專屬設定 (商品列表整合版) === */
     @media (max-width: 768px) {
 
-      /* 1. 🌟 關鍵大絕招：把所有「隱藏佔位」的樓層直接變不見！ */
-      /* 這樣就算 JS 沒改到，也能強制消除空隙 */
+      /* 1. 隱藏不必要的佔位元素，消除空隙 */
       .mobile-hidden,
       div[style*="visibility:hidden"],
       span[style*="visibility:hidden"] {
         display: none !important;
       }
 
-      /* 2. 讓內容版面往上收 */
+      /* 2. 商品列表排版：強制平分兩欄 */
+      .container {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 20px 10px !important;
+        padding: 0 12px 80px !important;
+      }
+
+      .product-card {
+        min-width: 0 !important;
+      }
+
+      /* 3. 資訊區與品名對齊 */
       .info {
         justify-content: flex-start !important;
         padding-top: 5px !important;
       }
 
-      /* 3. 收單時間標籤：緊貼下方品名 */
+      .name {
+        font-size: 0.95rem !important;
+        letter-spacing: -0.5px !important;
+        min-height: 2.4rem !important;
+        line-height: 1.35 !important;
+        margin-bottom: 4px !important;
+        padding-top: 0 !important;
+
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        text-align: center !important;
+        word-break: keep-all !important;
+      }
+
+      /* 4. 其他文字與標籤間距微調 */
       .deadline-badge {
         margin-bottom: 2px !important;
       }
 
-      /* 4. 品名修正：強制置中 + 高度自動適應 */
-      .name {
-        /* 高度設定：改小一點，大概兩行字的高度 */
-        min-height: 2.4rem !important;
-        margin-bottom: 4px !important;
-        font-size: 0.95rem !important;
-
-        /* 🌟 修正左偏問題：強制置中！ */
-        display: flex !important;
-        justify-content: center !important;
-        /* 水平置中 */
-        align-items: center !important;
-        /* 垂直置中 */
-        text-align: center !important;
-
-        /* 重置內距 */
-        padding-top: 0 !important;
-      }
-
-      /* 5. 縮減說明與贈品的間距 (如果它們有出現的話) */
       .desc-text {
+        font-size: 0.75rem !important;
         margin-bottom: 2px !important;
         height: auto !important;
       }
@@ -1161,9 +1090,10 @@
         height: auto !important;
       }
 
-      /* 7. 價格與按鈕區 */
+      /* 5. 價格與購買按鈕 */
       .price,
       .price-container {
+        font-size: 1.1rem !important;
         margin-bottom: 8px !important;
         margin-top: 0 !important;
       }
@@ -1174,17 +1104,14 @@
       }
 
       button.btn-add {
+        width: 100% !important;
         height: 32px !important;
+        padding: 4px 0 !important;
         font-size: 0.75rem !important;
       }
 
       select {
         height: 32px !important;
-      }
-
-      /* 🌟 關鍵：讓空的樓層在手機上直接消失，不要佔空間 */
-      .mobile-hidden {
-        display: none !important;
       }
     }
 
@@ -1364,11 +1291,6 @@
       /* 加個左邊框裝飾，更有設計感 (如果不喜歡可以拿掉 border-left 和 padding-left) */
       border-left: 3px solid #d4a373;
       padding-left: 12px;
-    }
-
-    /* 🔴 隱藏原本的浮動標籤 (以防 HTML 沒刪乾淨) */
-    .qs-gift-tag {
-      display: none !important;
     }
 
     /* 表單元件 */
@@ -1698,19 +1620,21 @@
     /* 🟢 雜誌質感底線風 */
     .category-btn {
       display: inline-block;
-      padding: 5px 15px; /* 內距縮小，因為沒有框了 */
+      padding: 5px 15px;
+      /* 內距縮小，因為沒有框了 */
       font-family: "Noto Sans TC", sans-serif;
       font-size: 0.95rem;
       font-weight: 400;
       cursor: pointer;
       transition: all 0.3s ease;
       letter-spacing: 2px;
-      
+
       /* 平常的狀態：完全透明背景 */
       background: transparent;
       color: #999;
       border: none;
-      position: relative; /* 為了畫底線做準備 */
+      position: relative;
+      /* 為了畫底線做準備 */
     }
 
     /* 隱形的底線 */
@@ -1720,10 +1644,13 @@
       bottom: 0;
       left: 50%;
       transform: translateX(-50%);
-      width: 0; /* 預設沒有寬度 */
-      height: 1px; /* 極細的線 */
+      width: 0;
+      /* 預設沒有寬度 */
+      height: 1px;
+      /* 極細的線 */
       background-color: #d4a373;
-      transition: width 0.3s ease; /* 變寬的動畫 */
+      transition: width 0.3s ease;
+      /* 變寬的動畫 */
     }
 
     /* 👆 滑鼠懸停狀態 */
@@ -1738,7 +1665,8 @@
     }
 
     .category-btn.active::after {
-      width: 60%; /* 底線長出來，只佔字體的 60% 最優雅 */
+      width: 60%;
+      /* 底線長出來，只佔字體的 60% 最優雅 */
     }
 
     /* 手機版調整：靠左對齊 */
@@ -1953,7 +1881,6 @@
         </div>
 
         <div class="quick-shop-info-box">
-          <div id="qs-tag-container"></div>
           <h2 id="qs-title">Product Name</h2>
 
           <div id="qs-gift-card" class="qs-gift-card" style="display:none;">
@@ -2178,12 +2105,12 @@
 
     // === 🏷️ 分類設定區 ===
     const categoryMap = {
-   "all": "全部商品",         // 這個保留不要動
-   "新品上架": "新品上架",      // 左邊是判斷用的代號，右邊是顯示的文字
-   "限時優惠": "限時優惠",
-   "OY熱銷商品": "OY熱銷商品"
- };
-     let currentCategory = "all";
+      "all": "全部商品",         // 這個保留不要動
+      "新品上架": "新品上架",      // 左邊是判斷用的代號，右邊是顯示的文字
+      "限時優惠": "限時優惠",
+      "OY熱銷商品": "OY熱銷商品"
+    };
+    let currentCategory = "all";
 
     // 1. 產生按鈕
     function renderCategoryButtons() {
@@ -2393,7 +2320,6 @@
 
     // 4. 🟢 新增：負責把商品畫在螢幕上的函式 (從原本的 fetchProducts 拆出來的)
     function renderProducts(products) {
-      const container = document.getElementById("product-list");
       container.innerHTML = ""; // 先清空畫面
 
       if (products.length === 0) {
