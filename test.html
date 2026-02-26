@@ -1994,7 +1994,6 @@
           iOPEN Mall
         </label>
       </div>
-      <div id="promo-box" style="margin-bottom: 15px;"></div>
       <div id="cartTotal" style="
             font-family: &quot;Noto Sans TC&quot;, sans-serif;
             font-size: 1.2rem;
@@ -2620,125 +2619,6 @@
                     </div>
                 </div>`;
       });
-
-      // --- 折扣碼 UI 區塊開始 (新版：韓系質感優惠券) ---
-      if (total < 500) {
-        currentPromoCode = "";
-        currentDiscount = 0;
-      }
-
-      let promoHtml = "";
-
-      if (currentDiscount === 0) {
-        // 1. 未輸入狀態：極簡膠囊風格 (拿掉大外框)
-        promoHtml = `
-          <div style="margin-bottom: 15px;">
-              <div style="display: flex; gap: 8px; align-items: center;">
-                  <input type="text" id="promo-code-input" placeholder="輸入社群專屬折扣碼" 
-                      style="
-                          flex: 1; 
-                          height: 42px; /* 增加高度，手指好點 */
-                          padding: 0 15px; 
-                          border: 1px solid #e0e0e0; 
-                          background: #f9f9f9; /* 微微的灰底，更有質感 */
-                          border-radius: 50px; /* 全圓角膠囊 */
-                          font-size: 0.9rem; 
-                          outline: none; 
-                          color: #333;
-                          font-family: 'Fredoka', 'Noto Sans TC', sans-serif;
-                          transition: all 0.3s;
-                      "
-                      onfocus="this.style.borderColor='#d4a373'; this.style.background='#fff'" 
-                      onblur="this.style.borderColor='#e0e0e0'; this.style.background='#f9f9f9'"
-                  >
-                  <button onclick="applyPromoCode()" 
-                      style="
-                          height: 42px;
-                          background: #2c2c2c; /* 深灰黑 */
-                          color: #fff; 
-                          border: none; 
-                          padding: 0 24px; 
-                          border-radius: 50px; /* 跟輸入框一樣的圓角 */
-                          cursor: pointer; 
-                          font-family: 'Noto Sans TC', sans-serif; 
-                          font-size: 0.9rem; 
-                          letter-spacing: 1px;
-                          white-space: nowrap;
-                          transition: opacity 0.2s;
-                      "
-                      onmouseover="this.style.opacity='0.9'"
-                      onmouseout="this.style.opacity='1'"
-                  >
-                      套用
-                  </button>
-              </div>
-              <div id="promo-message" style="
-                  font-size: 0.8rem; 
-                  margin-top: 6px; 
-                  padding-left: 10px; /* 稍微往內縮，對齊文字 */
-                  color: #d65a5a; 
-                  font-family: 'Noto Sans TC', sans-serif; 
-              "></div>
-          </div>
-        `;
-      } else {
-        // 2. 已套用狀態：淡金色實心卡片
-        promoHtml = `
-          <div style="
-              background: #fdfbf7; 
-              padding: 15px; 
-              border: 1px solid #e6d0c0; 
-              border-radius: 8px; 
-              display: flex; 
-              align-items: center; 
-              justify-content: space-between; 
-              margin-bottom: 15px;
-              box-shadow: 0 2px 8px rgba(212, 163, 115, 0.1);
-          ">
-              <div style="display: flex; align-items: center; gap: 12px;">
-                  <div style="
-                      width: 24px; 
-                      height: 24px; 
-                      background: #d4a373; 
-                      color: white; 
-                      border-radius: 50%; 
-                      display: flex; 
-                      justify-content: center; 
-                      align-items: center; 
-                      font-size: 0.85rem;
-                  ">✓</div>
-                  <div style="font-family: 'Noto Sans TC', sans-serif;">
-                      <div style="color: #d4a373; font-weight: 600; font-size: 0.95rem; letter-spacing: 1px;">
-                          ${currentPromoCode}
-                      </div>
-                      <div style="color: #999; font-size: 0.8rem; margin-top: 2px;">
-                          已成功折抵 <span style="color: #d65a5a; font-weight:500;">-$${currentDiscount}</span>
-                      </div>
-                  </div>
-              </div>
-              <button onclick="removePromoCode()" style="
-                  background: #fff; 
-                  border: 1px solid #ddd; 
-                  color: #999; 
-                  padding: 5px 12px; 
-                  border-radius: 20px; 
-                  font-size: 0.75rem; 
-                  cursor: pointer; 
-                  font-family: 'Noto Sans TC', sans-serif;
-                  transition: all 0.2s;
-              "
-              onmouseover="this.style.borderColor='#999'; this.style.color='#666'"
-              onmouseout="this.style.borderColor='#ddd'; this.style.color='#999'"
-              >
-                  移除
-              </button>
-          </div>
-        `;
-      }
-
-      const promoBox = document.getElementById("promo-box");
-      if (promoBox) promoBox.innerHTML = promoHtml;
-      // --- 折扣碼 UI 區塊結束 ---
 
       let finalTotal = total - currentDiscount;
       if (finalTotal < 0) finalTotal = 0;
