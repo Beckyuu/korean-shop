@@ -1,1967 +1,2025 @@
 <!doctype html>
 <html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>│Mina．妝日子│</title>
+    <link
+      rel="icon"
+      href="https://ik.imagekit.io/mina09/OliveYoung/%E5%9C%96%E7%89%873.png"
+      type="image/png"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Fredoka:wght@400;500;600&family=Noto+Sans+TC:wght@300;400;500&family=Zen+Maru+Gothic:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>│Mina．妝日子│</title>
-  <link rel="icon" href="https://ik.imagekit.io/mina09/OliveYoung/%E5%9C%96%E7%89%873.png" type="image/png" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Fredoka:wght@400;500;600&family=Noto+Sans+TC:wght@300;400;500&family=Zen+Maru+Gothic:wght@300;400;500;700&display=swap"
-    rel="stylesheet" />
+    <style>
+      /* === 📸 商品相簿樣式 (補強修正版) === */
 
-  <style>
-    /* === 📸 商品相簿樣式 (補強修正版) === */
-
-    /* 1. 確保大圖與縮圖是垂直排列 */
-    .quick-shop-img-box {
-      display: flex !important;
-      flex-direction: column !important;
-      padding: 20px;
-      gap: 15px;
-    }
-
-    /* 2. 限制大圖高度，讓它乖乖縮放 */
-    .quick-shop-img-box img#qs-img {
-      width: 100%;
-      height: 350px !important;
-      /* 強制高度 */
-      object-fit: contain !important;
-      /* 確保不裁切 */
-      border-radius: 8px;
-    }
-
-    /* 3. 縮圖容器 */
-    .qs-gallery-container {
-      display: flex !important;
-      justify-content: center;
-      gap: 8px;
-      width: 100%;
-      overflow-x: auto;
-    }
-
-    /* 4. 🌟 關鍵修正：縮圖一定要很小！ */
-    .qs-thumb {
-      width: 50px !important;
-      /* 強制縮小寬度 */
-      height: 50px !important;
-      /* 強制縮小高度 */
-      min-width: 50px !important;
-      /* 防止被擠扁 */
-      object-fit: cover !important;
-      border-radius: 6px;
-      border: 1px solid #eee;
-      cursor: pointer;
-      opacity: 0.6;
-    }
-
-    /* 選中時的效果 */
-    .qs-thumb:hover,
-    .qs-thumb.active {
-      opacity: 1;
-      border: 2px solid #d4a373 !important;
-    }
-
-    /* === 🔍 圖片放大鏡樣式 === */
-    .zoom-overlay {
-      display: none;
-      /* 平常隱藏 */
-      position: fixed;
-      z-index: 10000;
-      /* 🌟 關鍵：要比購物彈窗 (9999) 還高！ */
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.9);
-      /* 90% 透明度的黑底 */
-      justify-content: center;
-      align-items: center;
-      cursor: zoom-out;
-      /* 滑鼠變縮小鏡頭 */
-      flex-direction: column;
-    }
-
-    /* 放大的圖片本體 */
-    .zoom-overlay img {
-      max-width: 95%;
-      /* 佔滿寬度 */
-      max-height: 90%;
-      /* 佔滿高度 */
-      object-fit: contain;
-      /* 保持比例 */
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-      /* 微微發光 */
-      transform: scale(0.9);
-      transition: transform 0.3s;
-    }
-
-    /* 打開時的動畫 */
-    .zoom-overlay.show img {
-      transform: scale(1);
-    }
-
-    /* 提示文字 */
-    .zoom-hint {
-      color: #fff;
-      margin-top: 15px;
-      font-size: 0.9rem;
-      opacity: 0.7;
-      letter-spacing: 1px;
-    }
-
-    :root {
-      /* === 色票系統：韓系低飽和度 === */
-      --bg-color: #f9f8f6;
-      /* 米灰白背景 */
-      --text-main: #2c2c2c;
-      /* 深灰黑 (比純黑更柔和) */
-      --text-sub: #666666;
-      /* 次要文字 */
-      --accent: #d4a373;
-      /* 質感金棕色 (取代原本的粉紅，更成熟) */
-      --accent-light: #faeadd;
-      /* 淺杏色 (用於背景點綴) */
-      --price-color: #bfa092;
-      /* 莫蘭迪磚紅 */
-      --white: #ffffff;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: "Cormorant Garamond", "Noto Sans TC", sans-serif;
-
-      /* === 選項一：流動光暈 === */
-      background-color: #fdfbf7;
-      /* 溫暖的米白底 */
-
-      /* 這裡用了三個顏色的漸層光球，交疊出豐富感 */
-      background-image:
-        radial-gradient(at 40% 20%,
-          rgba(212, 163, 115, 0.15) 0px,
-          transparent 50%),
-        radial-gradient(at 80% 0%,
-          rgba(181, 131, 141, 0.1) 0px,
-          transparent 50%),
-        radial-gradient(at 0% 50%,
-          rgba(229, 152, 155, 0.1) 0px,
-          transparent 50%);
-
-      background-attachment: fixed;
-      /* 這行很重要！讓背景固定住，滑動時有層次感 */
-      background-size: 100% 100%;
-
-      color: var(--text-main);
-      line-height: 1.7;
-      padding-bottom: 0;
-    }
-
-    /* === Header: 雜誌封面感 (更新版) === */
-    header {
-      text-align: center;
-      padding: 80px 20px 40px;
-      /* 底部留白稍微縮小，讓視覺集中 */
-      position: relative;
-    }
-
-    h1 {
-      /* 必須是 Cormorant Garamond 才會像你圖片那樣 */
-      font-family: "Cormorant Garamond", serif;
-
-      font-weight: 600;
-      font-size: 3.8rem;
-
-      /* 關鍵：要加上斜體，才會有手寫的高級感 */
-      font-style: italic;
-
-      color: var(--text-main);
-      margin-bottom: 5px;
-      line-height: 1.2;
-    }
-
-    /* 店名樣式 */
-    .brand-name {
-      font-family: "Noto Sans TC", sans-serif;
-      font-size: 1.1rem;
-      letter-spacing: 6px;
-      /* 字距拉開，高級感關鍵 */
-      color: var(--text-main);
-      margin: 15px 0;
-      font-weight: 400;
-    }
-
-    /* === 業務說明：精緻備註風格 (修正版) === */
-    .service-info {
-      font-family: "Noto Sans TC", sans-serif;
-
-      /* 1. 字體縮小：原本 0.9rem -> 改成 0.75rem (約 12px)，看起來才像備註 */
-      font-size: 0.75rem;
-
-      /* 2. 顏色變淡：改成淺灰色，不搶標題風采 */
-      color: #999;
-
-      /* 3. 字距微調：稍微寬一點點就好，比較優雅 */
-      letter-spacing: 1px;
-
-      margin-top: 12px;
-      /* 離上面店名近一點，強調從屬關係 */
-      text-align: center;
-
-      /* 4. 關鍵：游標設為預設箭頭，這樣滑過去不會以為可以點 */
-      cursor: default;
-
-      /* 讓它維持一行，不換行 */
-      white-space: nowrap;
-    }
-
-    /* 分隔線樣式 */
-    .service-info .divider {
-      color: #d4a373;
-      /* 金棕色，呼應主題 */
-      opacity: 0.5;
-      /* 半透明，讓它不要太搶眼 */
-      margin: 0 12px;
-      /* 控制文字之間的距離 */
-      font-weight: 100;
-      /* 線條極細 */
-      font-size: 0.8rem;
-      /* 分隔線稍微小一點 */
-    }
-
-    .brand-subtitle {
-      font-family: "Noto Sans TC", sans-serif;
-      font-size: 0.95rem;
-      letter-spacing: 4px;
-      color: var(--text-sub);
-      text-transform: uppercase;
-      position: relative;
-      display: inline-block;
-      margin-top: 10px;
-    }
-
-    .brand-subtitle::after {
-      content: "";
-      display: block;
-      width: 40px;
-      height: 1px;
-      background: var(--text-main);
-      margin: 15px auto 0;
-    }
-
-    /* === 最終版：隱形質感公告區 (縮小、透明) === */
-    .memo-board {
-      /* 寬度：維持自動縮放，但最大寬度縮小，讓它不要佔滿螢幕 */
-      width: fit-content;
-      max-width: 85%;
-
-      margin: 0 auto 40px;
-      /* 下方留白也縮小 */
-
-      /* 關鍵修改：背景變得非常透 (0.3)，讓它融入背景色 */
-      background: rgba(255, 255, 255, 0.4);
-
-      /* 拿掉邊框，改成更柔和的圓角 */
-      border: none;
-      border-radius: 15px;
-
-      /* 內距大幅縮小，讓框框變得很扁 */
-      padding: 20px 30px;
-
-      text-align: left;
-
-      /* 陰影幾乎拿掉，只剩一點點立體感 */
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
-    }
-
-    .memo-title {
-      font-family: "Cormorant Garamond", serif;
-      /* 標題縮小 */
-      font-size: 1.1rem;
-      font-style: italic;
-      color: #888;
-      /* 顏色變淡，不搶眼 */
-      display: block;
-      text-align: center;
-      margin-bottom: 10px;
-      /* 標題跟內容距離拉近 */
-      letter-spacing: 1px;
-    }
-
-    .memo-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    /* 每一行的樣式 (修正換行版) */
-    .memo-list li {
-      position: relative;
-      margin-bottom: 8px;
-      /* 行距微調 */
-
-      /* 圓點與文字的距離 (保留你剛剛覺得不錯的距離) */
-      padding-left: 25px;
-
-      font-family: "Noto Sans TC", sans-serif;
-      font-size: 0.8rem;
-      color: #666;
-      line-height: 1.6;
-      /* 行高設定 1.6，這樣兩行字之間才不會太擠 */
-
-      /* 修改這裡：原本是 nowrap (不換行)，改成 normal (允許換行) */
-      white-space: normal;
-    }
-
-    /* 圓點設定 (確保它對齊第一行) */
-    .memo-list li::before {
-      content: "·";
-      position: absolute;
-      left: 5px;
-
-      /* 修改這裡：原本是 top: 0，改成 top: 0px 搭配 line-height 對齊 */
-      /* 這樣圓點會對齊第一行文字，而不是跑去兩行中間 */
-      top: 0px;
-
-      font-weight: bold;
-      color: #d4a373;
-    }
-
-    /* 手機版設定 (舊的保留，新的在最下面) */
-    @media (max-width: 768px) {
-      .memo-list li {
-        white-space: normal;
+      /* 1. 確保大圖與縮圖是垂直排列 */
+      .quick-shop-img-box {
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 20px;
+        gap: 15px;
       }
 
-      /* 手機版允許換行 */
-      .memo-board {
-        display: table !important;
-        /* 關鍵！讓它像表格一樣，內容多寬、框就多寬 */
-        width: auto !important;
-        /* 自動寬度 */
-        max-width: 90% !important;
-        /* 還是要限制一下，不要超出螢幕 */
-
-        padding: 20px 25px !important;
-        /* 內距維持 */
-        margin: 0 auto 40px !important;
-        /* 上下左右自動置中 */
-
-        /* 確保背景色跟圓角還在 */
-        background: rgba(255, 255, 255, 0.4);
-        border-radius: 15px;
-      }
-    }
-
-    /* === 產品列表 === */
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 30px 80px;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 50px 30px;
-      /* 上下間距大一點，比較透氣 */
-    }
-
-    .product-card {
-      background: transparent;
-      position: relative;
-      transition: all 0.4s ease;
-      /* 改回 Flexbox，這是最穩定的排版 */
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      /* 確保卡片拉長 */
-      padding-bottom: 10px;
-      /* 底部留點空間 */
-    }
-
-    /* 圖片區域 */
-    .img-wrapper {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      background: #fff;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
-      /* 極淡陰影 */
-      transition: box-shadow 0.3s ease;
-    }
-
-    .product-card:hover .img-wrapper {
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
-    }
-
-    .img-wrapper img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
-    }
-
-    /* === 優化後的標籤 Badge (韓系絲帶感) === */
-    .badge {
-      position: absolute;
-      top: 0;
-      left: 15px;
-      /* 稍微往內縮一點 */
-      padding: 6px 10px 8px;
-      /* 下方留長一點 */
-      font-size: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 1px;
-      z-index: 2;
-      color: #fff;
-
-      /* 做成下方有缺口的絲帶形狀 */
-      clip-path: polygon(0% 0%, 100% 0%, 100% 85%, 50% 100%, 0% 85%);
-
-      /* 加上微微的陰影，更有層次 */
-      filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
-    }
-
-    /* NEW: 質感霧金 (呼應你的主題色) */
-    .badge.new {
-      background-color: #d4a373;
-    }
-
-    /* HOT: 溫柔磚紅 */
-    .badge.hot {
-      background-color: #bfa092;
-    }
-
-    /* SALE: 顯眼的紅色 (備用) */
-    .badge.sale {
-      background-color: #c97c7c;
-    }
-
-    /* === 2. 資訊區域 (負責對齊) === */
-    .info {
-      padding: 15px 5px 0;
-      text-align: center;
-      /* 讓資訊區佔滿剩下空間 */
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .name {
-      font-family: "Zen Maru Gothic", "Noto Sans TC", sans-serif;
-      font-size: 1.1rem;
-      font-weight: 500;
-      color: var(--text-main);
-
-      /* 🔴 關鍵修改：設定固定高度 (兩行字高) */
-      height: 3.2rem;
-
-      /* 讓文字垂直置中 */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      /* 超出隱藏 */
-      overflow: hidden;
-
-      margin-bottom: 4px;
-      line-height: 1.4;
-      letter-spacing: 0.5px;
-    }
-
-    /* ✅ 貼上這段新的 (時尚副標題樣式) */
-    .desc-text {
-      display: block;
-      /* 讓它自己佔一行 */
-
-      /* 字體設定：小巧精緻 */
-      font-family: "Noto Sans TC", sans-serif;
-      font-size: 0.85rem;
-      color: #999;
-      /* 淺灰色，不搶眼 */
-      letter-spacing: 1px;
-      /* 字距微寬 */
-
-      /* 版面位置：置中 */
-      text-align: center;
-      margin-top: 4px;
-      /* 離品名近一點 */
-      margin-bottom: 8px;
-      /* 離按鈕遠一點 */
-
-      /* 高度控制 (避免沒填寫時版面亂跳) */
-      height: 1.5em;
-      line-height: 1.5;
-      white-space: nowrap;
-      /* 不換行 */
-      overflow: hidden;
-      /* 超出隱藏 */
-      text-overflow: ellipsis;
-      /* 變成 ... */
-    }
-
-    /* === ✨ 新版：時尚內容物清單小卡 (完整修正版) ✨ === */
-    .content-info-card {
-      background-color: #fffcf7;
-      border: 1px solid #e6d0c0;
-      border-radius: 8px;
-      padding: 30px 20px 20px;
-
-      /* 🌟 修改 1：加大上方距離，避開右上角按鈕 */
-      margin: 60px 30px 25px;
-
-      position: relative;
-
-      /* 🌟 修改 2：強制置中設定 */
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      /* 水平置中 */
-      justify-content: center;
-      /* 垂直置中 */
-      text-align: center;
-      /* 文字內容置中 */
-    }
-
-    /* 上方的懸浮標籤 (STYLE 不變，但要補回來以免被刪掉) */
-    .content-info-tag {
-      position: absolute;
-      top: -12px;
-      left: 50%;
-      transform: translateX(-50%);
-
-      background-color: #d4a373;
-      color: #fff;
-
-      font-family: 'Noto Sans TC', sans-serif;
-      font-size: 0.8rem;
-      letter-spacing: 2px;
-      font-weight: 500;
-
-      padding: 4px 15px;
-      border-radius: 50px;
-      box-shadow: 0 2px 5px rgba(212, 163, 115, 0.2);
-      white-space: nowrap;
-    }
-
-    /* ✅ 貼上這段新的 (讓文字置中但靠左對齊) */
-    .content-info-text {
-      font-family: 'Zen Maru Gothic', 'Noto Sans TC', sans-serif;
-      font-size: 0.95rem;
-      color: #555;
-
-      /* 行高加大，清單看起來更舒服 */
-      line-height: 2;
-
-      /* 關鍵 1：忽略 CSV 裡多餘的空格，讓 <br> 後面也能對齊 */
-      white-space: normal;
-
-      /* 關鍵 2：讓文字區塊縮小到剛好包住文字 */
-      display: inline-block;
-
-      /* 關鍵 3：區塊內的文字靠左對齊 */
-      text-align: left;
-
-      margin-top: 15px;
-    }
-
-    /* 🌟 修改 3：美化右上角關閉按鈕 (覆蓋舊設定) */
-    .modal-close-btn {
-      color: #bfa092 !important;
-      /* 改成莫蘭迪紅棕色 */
-      top: 15px !important;
-      /* 位置微調 */
-      right: 15px !important;
-      font-weight: 300;
-      font-size: 2.2rem !important;
-      /* 放大一點比較好按 */
-    }
-
-    /* === 2. 首頁贈品行：回歸簡單單行 (原 I 欄) === */
-    .gift-row {
-      font-family: "Noto Sans TC", sans-serif;
-      font-size: 0.8rem;
-      color: #d65a5a;
-      margin-bottom: 8px;
-
-      /* 回復成單行的高度 */
-      height: 1.5em;
-      line-height: 1.5;
-
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-    }
-
-    /* === 6. 購買按鈕區 === */
-    .action-row {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      align-items: center;
-      flex-shrink: 0;
-      margin-top: 2px;
-
-      padding-bottom: 5px;
-    }
-
-    select {
-      background: transparent;
-      border: 1px solid #e0e0e0;
-      /* 邊框淡一點 */
-      padding: 0 10px;
-      height: 36px;
-      /* 高度跟按鈕一樣 */
-      font-size: 0.9rem;
-      color: #666;
-      outline: none;
-      border-radius: 4px;
-      /* 微圓角 */
-      cursor: pointer;
-      margin-right: 5px;
-      /* 跟按鈕保持距離 */
-      font-family: "Fredoka", sans-serif;
-    }
-
-    /* === 4. 規格選單 (縮短 + 美化) === */
-    .variant-select {
-      /* 寬度設定：改成 70% 左右，比較精緻 */
-      width: 70%;
-      max-width: 200px;
-      /* 也不要太寬 */
-
-      /* 置中 */
-      margin: 5px auto 15px;
-      display: block;
-
-      padding: 6px;
-      /* 稍微扁一點 */
-      font-family: "Noto Sans TC", sans-serif;
-      font-size: 0.85rem;
-      color: #d4a373;
-      background-color: #fff;
-      border: 1px solid #d4a373;
-      border-radius: 4px;
-      cursor: pointer;
-      text-align: center;
-      text-align-last: center;
-
-      appearance: none;
-      -webkit-appearance: none;
-
-      /* 箭頭 */
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-      background-repeat: no-repeat;
-      background-position: right 8px center;
-      background-size: 10px;
-    }
-
-    /* === 收單時間提醒 (修正版：短標籤) === */
-    .deadline-badge {
-      /* 1. 讓它像便利貼一樣，字多少、框就多寬 */
-      display: inline-block;
-
-      background-color: #f4e3e3;
-      color: #c97c7c;
-
-      font-family: "Noto Sans TC", sans-serif;
-      font-size: 0.8rem;
-      font-weight: 500;
-
-      /* 2. 內距改小一點，看起來比較精緻 */
-      padding: 2px 8px;
-
-      border-radius: 4px;
-      margin-bottom: 8px;
-      letter-spacing: 1px;
-
-      /* 3. 關鍵限制：不讓它超過 90% 寬，避免手機版撐爆 */
-      max-width: 90%;
-
-      /* 4. 如果字真的太長，變成 ... */
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    /* 這是新的：隱藏版收單時間 (用來佔位子) */
-    .deadline-badge.empty {
-      visibility: hidden;
-      /* 讓它看不見 */
-      background: transparent;
-      /* 背景變透明 */
-    }
-
-    /* === 價格 === */
-    .price {
-      font-family: "Fredoka", sans-serif;
-      font-size: 1.4rem;
-      font-weight: 500;
-      color: #2c2c2c;
-      display: block;
-      margin-bottom: 4px;
-
-      /* 🔴 確認這裡是 0，不要是 auto */
-      margin-top: 0;
-
-      letter-spacing: 0.5px;
-    }
-
-    /* === 價格比較樣式 === */
-    .price-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      /* 讓價格置中 */
-      gap: 8px;
-      /* 兩個價格中間的距離 */
-      margin-bottom: 4px;
-      /* 跟下方按鈕的距離 */
-    }
-
-    /* 被劃掉的原價 */
-    .price-original {
-      color: #bbb;
-      /* 淺灰色 */
-      font-size: 0.9rem;
-      /* 字稍微小一點 */
-      text-decoration: line-through;
-      /* 關鍵：刪除線 */
-      font-family: "Fredoka", sans-serif;
-    }
-
-    /* 顯眼的優惠價 */
-    .price-vip {
-      color: #d65a5a;
-      /* 漂亮的莫蘭迪紅 */
-      font-size: 1.3rem;
-      /* 字大一點 */
-      font-weight: 600;
-      /* 加粗 */
-      font-family: "Fredoka", sans-serif;
-    }
-
-    /* === 6. 購買按鈕  === */
-    button.btn-add {
-      background-color: #d4a373;
-      color: #fff;
-      border: 1px solid #d4a373;
-      border-radius: 50px;
-      padding: 6px 28px;
-      font-size: 0.85rem;
-      letter-spacing: 1.5px;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-family: "Fredoka", sans-serif;
-
-      /* 對齊設定 */
-      height: 36px;
-      line-height: 1;
-
-      /* 🌟 關鍵修改：用 Flexbox 讓文字上下左右都置中 */
-      display: flex;
-      align-items: center;
-      /* 垂直置中 */
-      justify-content: center;
-      /* 🌟 加了這行：水平置中 (修正手機版靠左問題) */
-    }
-
-    button.btn-add:hover {
-      background-color: #fff;
-      color: #d4a373;
-    }
-
-    /* === 最終極簡版 Footer (緊湊型) === */
-    footer {
-      background-color: #1a1a1a;
-      color: #fff;
-
-      /* 修改 1：高度縮減，原本 40px 改成 25px */
-      padding: 25px 20px;
-
-      text-align: center;
-      margin-top: 60px;
-    }
-
-    /* LOGO 設定：縮小 + 拉近距離 */
-    .footer-logo-simple {
-      font-family: "Zen Maru Gothic", "Cormorant Garamond", sans-serif;
-
-      /* 修改 2：字體縮小，原本 1.6rem -> 1.1rem */
-      font-size: 1.1rem;
-
-      letter-spacing: 2px;
-      /* 字距稍微縮小一點點，比較緊密 */
-      color: #ffffff;
-
-      /* 修改 3：跟下面連結的距離大幅縮短，原本 25px -> 8px */
-      margin-bottom: 8px;
-
-      font-weight: 500;
-    }
-
-    .footer-links {
-      /* 修改 4：跟下面版權字的距離也縮短 */
-      margin-bottom: 15px;
-
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 15px;
-    }
-
-    /* 連結樣式 (維持不變) */
-    .social-link {
-      text-decoration: none;
-      color: #aaa;
-      transition: all 0.3s;
-      font-family: "Noto Sans TC", sans-serif;
-      font-size: 0.8rem;
-      /* 連結字也可以微縮一點 */
-      letter-spacing: 1px;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .social-link:hover {
-      color: #fff;
-    }
-
-    .icon {
-      width: 14px;
-      height: 14px;
-      opacity: 0.9;
-    }
-
-    /* 圖示微縮 */
-    .divider {
-      color: #444;
-      font-weight: 100;
-      font-size: 0.8rem;
-    }
-
-    /* 版權與聲明文字 */
-    .copyright {
-      font-size: 0.65rem;
-      color: #555;
-      font-family: sans-serif;
-      line-height: 1.3;
-    }
-
-    /* 手機版設定 */
-    @media (max-width: 600px) {
-      .footer-links {
-        flex-direction: column;
-        gap: 5px;
+      /* 2. 限制大圖高度，讓它乖乖縮放 */
+      .quick-shop-img-box img#qs-img {
+        width: 100%;
+        height: 350px !important;
+        /* 強制高度 */
+        object-fit: contain !important;
+        /* 確保不裁切 */
+        border-radius: 8px;
       }
 
-      .divider {
-        display: none;
+      /* 3. 縮圖容器 */
+      .qs-gallery-container {
+        display: flex !important;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        overflow-x: auto;
       }
 
-      /* 手機版 padding 稍微大一點點以免太擠，但還是比原本小 */
-      footer {
-        padding: 30px 20px;
-      }
-    }
-
-    /* === 購物車與彈窗 (修改 1：圖示變大、時尚感增強) === */
-    #cart-float-btn {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      /* 放大按鈕尺寸 55px -> 70px */
-      width: 70px;
-      height: 70px;
-      background: var(--text-main);
-      color: white;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      /* 陰影加深，更有懸浮層次感 */
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-      cursor: pointer;
-      z-index: 100;
-      transition: transform 0.2s;
-    }
-
-    /* 讓裡面的 SVG 圖示也跟著變大 */
-    #cart-float-btn svg {
-      width: 32px;
-      height: 32px;
-    }
-
-    #cart-count {
-      position: absolute;
-      top: -5px;
-      right: -5px;
-      background: #bfa092;
-      color: white;
-      border-radius: 50%;
-      width: 24px;
-      /* 稍微加大 */
-      height: 24px;
-      font-size: 0.8rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 2px solid #fff;
-      /* 加個白邊更有質感 */
-    }
-
-    .cart-modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.3);
-      z-index: 2000;
-      justify-content: flex-end;
-    }
-
-    .cart-modal.show {
-      display: flex;
-    }
-
-    .cart-content {
-      background: #fff;
-      width: 100%;
-      max-width: 420px;
-      height: 100%;
-      padding: 40px;
-      display: flex;
-      flex-direction: column;
-      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
-      animation: slideLeft 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    @keyframes slideLeft {
-      from {
-        transform: translateX(100%);
-      }
-
-      to {
-        transform: translateX(0);
-      }
-    }
-
-    .btn-checkout {
-      width: 100%;
-      padding: 18px;
-      background: #06c755;
-      color: white;
-      border: none;
-      font-weight: 500;
-      cursor: pointer;
-      margin-top: 20px;
-      letter-spacing: 1px;
-      /* 這裡的中文字距可以微調 */
-      font-family: "Noto Sans TC", sans-serif;
-    }
-
-    /* === 新版 Loading 樣式：優雅轉圈圈 === */
-    #loading {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      min-height: 300px;
-      /* 確保至少有高度，不會太扁 */
-      gap: 25px;
-      /* 圈圈跟文字的距離 */
-    }
-
-    /* 轉圈圈本體 */
-    .loader-spinner {
-      width: 50px;
-      height: 50px;
-      /* 1. 底圈顏色 (淺灰) */
-      border: 2px solid #f0f0f0;
-      /* 2. 轉動線條顏色 (你的主題金棕色) */
-      border-top: 2px solid #d4a373;
-      border-radius: 50%;
-      /* 動畫設定：1秒轉一圈，無限循環 */
-      animation: spin 1s linear infinite;
-    }
-
-    /* 文字樣式 */
-    .loading-text {
-      font-family: "Cormorant Garamond", serif;
-      /* 維持你的質感字體 */
-      font-size: 1.1rem;
-      color: #999;
-      font-style: italic;
-      letter-spacing: 1.5px;
-      /* 增加呼吸燈效果 (忽明忽暗) */
-      animation: breathe 2s ease-in-out infinite;
-    }
-
-    /* 定義旋轉動畫 */
-    @keyframes spin {
-      0% {
-        transform: rotate(0deg);
-      }
-
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-
-    /* 定義呼吸動畫 */
-    @keyframes breathe {
-
-      0%,
-      100% {
+      /* 4. 🌟 關鍵修正：縮圖一定要很小！ */
+      .qs-thumb {
+        width: 50px !important;
+        /* 強制縮小寬度 */
+        height: 50px !important;
+        /* 強制縮小高度 */
+        min-width: 50px !important;
+        /* 防止被擠扁 */
+        object-fit: cover !important;
+        border-radius: 6px;
+        border: 1px solid #eee;
+        cursor: pointer;
         opacity: 0.6;
       }
 
-      50% {
+      /* 選中時的效果 */
+      .qs-thumb:hover,
+      .qs-thumb.active {
         opacity: 1;
-      }
-    }
-
-    /* === 手機版專屬設定 (商品列表整合版) === */
-    @media (max-width: 768px) {
-
-      /* 1. 隱藏不必要的佔位元素，消除空隙 */
-      .mobile-hidden,
-      div[style*="visibility:hidden"],
-      span[style*="visibility:hidden"] {
-        display: none !important;
+        border: 2px solid #d4a373 !important;
       }
 
-      /* 2. 商品列表排版：強制平分兩欄 */
+      /* === 🔍 圖片放大鏡樣式 === */
+      .zoom-overlay {
+        display: none;
+        /* 平常隱藏 */
+        position: fixed;
+        z-index: 10000;
+        /* 🌟 關鍵：要比購物彈窗 (9999) 還高！ */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        /* 90% 透明度的黑底 */
+        justify-content: center;
+        align-items: center;
+        cursor: zoom-out;
+        /* 滑鼠變縮小鏡頭 */
+        flex-direction: column;
+      }
+
+      /* 放大的圖片本體 */
+      .zoom-overlay img {
+        max-width: 95%;
+        /* 佔滿寬度 */
+        max-height: 90%;
+        /* 佔滿高度 */
+        object-fit: contain;
+        /* 保持比例 */
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        /* 微微發光 */
+        transform: scale(0.9);
+        transition: transform 0.3s;
+      }
+
+      /* 打開時的動畫 */
+      .zoom-overlay.show img {
+        transform: scale(1);
+      }
+
+      /* 提示文字 */
+      .zoom-hint {
+        color: #fff;
+        margin-top: 15px;
+        font-size: 0.9rem;
+        opacity: 0.7;
+        letter-spacing: 1px;
+      }
+
+      :root {
+        /* === 色票系統：韓系低飽和度 === */
+        --bg-color: #f9f8f6;
+        /* 米灰白背景 */
+        --text-main: #2c2c2c;
+        /* 深灰黑 (比純黑更柔和) */
+        --text-sub: #666666;
+        /* 次要文字 */
+        --accent: #d4a373;
+        /* 質感金棕色 (取代原本的粉紅，更成熟) */
+        --accent-light: #faeadd;
+        /* 淺杏色 (用於背景點綴) */
+        --price-color: #bfa092;
+        /* 莫蘭迪磚紅 */
+        --white: #ffffff;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Cormorant Garamond", "Noto Sans TC", sans-serif;
+
+        /* === 選項一：流動光暈 === */
+        background-color: #fdfbf7;
+        /* 溫暖的米白底 */
+
+        /* 這裡用了三個顏色的漸層光球，交疊出豐富感 */
+        background-image:
+          radial-gradient(
+            at 40% 20%,
+            rgba(212, 163, 115, 0.15) 0px,
+            transparent 50%
+          ),
+          radial-gradient(
+            at 80% 0%,
+            rgba(181, 131, 141, 0.1) 0px,
+            transparent 50%
+          ),
+          radial-gradient(
+            at 0% 50%,
+            rgba(229, 152, 155, 0.1) 0px,
+            transparent 50%
+          );
+
+        background-attachment: fixed;
+        /* 這行很重要！讓背景固定住，滑動時有層次感 */
+        background-size: 100% 100%;
+
+        color: var(--text-main);
+        line-height: 1.7;
+        padding-bottom: 0;
+      }
+
+      /* === Header: 雜誌封面感 (更新版) === */
+      header {
+        text-align: center;
+        padding: 80px 20px 40px;
+        /* 底部留白稍微縮小，讓視覺集中 */
+        position: relative;
+      }
+
+      h1 {
+        /* 必須是 Cormorant Garamond 才會像你圖片那樣 */
+        font-family: "Cormorant Garamond", serif;
+
+        font-weight: 600;
+        font-size: 3.8rem;
+
+        /* 關鍵：要加上斜體，才會有手寫的高級感 */
+        font-style: italic;
+
+        color: var(--text-main);
+        margin-bottom: 5px;
+        line-height: 1.2;
+      }
+
+      /* 店名樣式 */
+      .brand-name {
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 1.1rem;
+        letter-spacing: 6px;
+        /* 字距拉開，高級感關鍵 */
+        color: var(--text-main);
+        margin: 15px 0;
+        font-weight: 400;
+      }
+
+      /* === 業務說明：精緻備註風格 (修正版) === */
+      .service-info {
+        font-family: "Noto Sans TC", sans-serif;
+
+        /* 1. 字體縮小：原本 0.9rem -> 改成 0.75rem (約 12px)，看起來才像備註 */
+        font-size: 0.75rem;
+
+        /* 2. 顏色變淡：改成淺灰色，不搶標題風采 */
+        color: #999;
+
+        /* 3. 字距微調：稍微寬一點點就好，比較優雅 */
+        letter-spacing: 1px;
+
+        margin-top: 12px;
+        /* 離上面店名近一點，強調從屬關係 */
+        text-align: center;
+
+        /* 4. 關鍵：游標設為預設箭頭，這樣滑過去不會以為可以點 */
+        cursor: default;
+
+        /* 讓它維持一行，不換行 */
+        white-space: nowrap;
+      }
+
+      /* 分隔線樣式 */
+      .service-info .divider {
+        color: #d4a373;
+        /* 金棕色，呼應主題 */
+        opacity: 0.5;
+        /* 半透明，讓它不要太搶眼 */
+        margin: 0 12px;
+        /* 控制文字之間的距離 */
+        font-weight: 100;
+        /* 線條極細 */
+        font-size: 0.8rem;
+        /* 分隔線稍微小一點 */
+      }
+
+      .brand-subtitle {
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 0.95rem;
+        letter-spacing: 4px;
+        color: var(--text-sub);
+        text-transform: uppercase;
+        position: relative;
+        display: inline-block;
+        margin-top: 10px;
+      }
+
+      .brand-subtitle::after {
+        content: "";
+        display: block;
+        width: 40px;
+        height: 1px;
+        background: var(--text-main);
+        margin: 15px auto 0;
+      }
+
+      /* === 最終版：隱形質感公告區 (縮小、透明) === */
+      .memo-board {
+        /* 寬度：維持自動縮放，但最大寬度縮小，讓它不要佔滿螢幕 */
+        width: fit-content;
+        max-width: 85%;
+
+        margin: 0 auto 40px;
+        /* 下方留白也縮小 */
+
+        /* 關鍵修改：背景變得非常透 (0.3)，讓它融入背景色 */
+        background: rgba(255, 255, 255, 0.4);
+
+        /* 拿掉邊框，改成更柔和的圓角 */
+        border: none;
+        border-radius: 15px;
+
+        /* 內距大幅縮小，讓框框變得很扁 */
+        padding: 20px 30px;
+
+        text-align: left;
+
+        /* 陰影幾乎拿掉，只剩一點點立體感 */
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+      }
+
+      .memo-title {
+        font-family: "Cormorant Garamond", serif;
+        /* 標題縮小 */
+        font-size: 1.1rem;
+        font-style: italic;
+        color: #888;
+        /* 顏色變淡，不搶眼 */
+        display: block;
+        text-align: center;
+        margin-bottom: 10px;
+        /* 標題跟內容距離拉近 */
+        letter-spacing: 1px;
+      }
+
+      .memo-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      /* 每一行的樣式 (修正換行版) */
+      .memo-list li {
+        position: relative;
+        margin-bottom: 8px;
+        /* 行距微調 */
+
+        /* 圓點與文字的距離 (保留你剛剛覺得不錯的距離) */
+        padding-left: 25px;
+
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 0.8rem;
+        color: #666;
+        line-height: 1.6;
+        /* 行高設定 1.6，這樣兩行字之間才不會太擠 */
+
+        /* 修改這裡：原本是 nowrap (不換行)，改成 normal (允許換行) */
+        white-space: normal;
+      }
+
+      /* 圓點設定 (確保它對齊第一行) */
+      .memo-list li::before {
+        content: "·";
+        position: absolute;
+        left: 5px;
+
+        /* 修改這裡：原本是 top: 0，改成 top: 0px 搭配 line-height 對齊 */
+        /* 這樣圓點會對齊第一行文字，而不是跑去兩行中間 */
+        top: 0px;
+
+        font-weight: bold;
+        color: #d4a373;
+      }
+
+      /* 手機版設定 (舊的保留，新的在最下面) */
+      @media (max-width: 768px) {
+        .memo-list li {
+          white-space: normal;
+        }
+
+        /* 手機版允許換行 */
+        .memo-board {
+          display: table !important;
+          /* 關鍵！讓它像表格一樣，內容多寬、框就多寬 */
+          width: auto !important;
+          /* 自動寬度 */
+          max-width: 90% !important;
+          /* 還是要限制一下，不要超出螢幕 */
+
+          padding: 20px 25px !important;
+          /* 內距維持 */
+          margin: 0 auto 40px !important;
+          /* 上下左右自動置中 */
+
+          /* 確保背景色跟圓角還在 */
+          background: rgba(255, 255, 255, 0.4);
+          border-radius: 15px;
+        }
+      }
+
+      /* === 產品列表 === */
       .container {
-        grid-template-columns: 1fr 1fr !important;
-        gap: 20px 10px !important;
-        padding: 0 12px 80px !important;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 30px 80px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 50px 30px;
+        /* 上下間距大一點，比較透氣 */
       }
 
       .product-card {
-        min-width: 0 !important;
+        background: transparent;
+        position: relative;
+        transition: all 0.4s ease;
+        /* 改回 Flexbox，這是最穩定的排版 */
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        /* 確保卡片拉長 */
+        padding-bottom: 10px;
+        /* 底部留點空間 */
       }
 
-      /* 3. 資訊區與品名對齊 */
+      /* 圖片區域 */
+      .img-wrapper {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        background: #fff;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+        /* 極淡陰影 */
+        transition: box-shadow 0.3s ease;
+      }
+
+      .product-card:hover .img-wrapper {
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+      }
+
+      .img-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+      }
+
+      /* === 優化後的標籤 Badge (韓系絲帶感) === */
+      .badge {
+        position: absolute;
+        top: 0;
+        left: 15px;
+        /* 稍微往內縮一點 */
+        padding: 6px 10px 8px;
+        /* 下方留長一點 */
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 1px;
+        z-index: 2;
+        color: #fff;
+
+        /* 做成下方有缺口的絲帶形狀 */
+        clip-path: polygon(0% 0%, 100% 0%, 100% 85%, 50% 100%, 0% 85%);
+
+        /* 加上微微的陰影，更有層次 */
+        filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
+      }
+
+      /* NEW: 質感霧金 (呼應你的主題色) */
+      .badge.new {
+        background-color: #d4a373;
+      }
+
+      /* HOT: 溫柔磚紅 */
+      .badge.hot {
+        background-color: #bfa092;
+      }
+
+      /* SALE: 顯眼的紅色 (備用) */
+      .badge.sale {
+        background-color: #c97c7c;
+      }
+
+      /* === 2. 資訊區域 (負責對齊) === */
       .info {
-        justify-content: flex-start !important;
-        padding-top: 5px !important;
+        padding: 15px 5px 0;
+        text-align: center;
+        /* 讓資訊區佔滿剩下空間 */
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
       }
 
       .name {
-        font-size: 0.95rem !important;
-        letter-spacing: -0.5px !important;
-        min-height: 2.4rem !important;
-        line-height: 1.35 !important;
-        margin-bottom: 4px !important;
-        padding-top: 0 !important;
+        font-family: "Zen Maru Gothic", "Noto Sans TC", sans-serif;
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: var(--text-main);
 
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        text-align: center !important;
-        word-break: keep-all !important;
+        /* 🔴 關鍵修改：設定固定高度 (兩行字高) */
+        height: 3.2rem;
+
+        /* 讓文字垂直置中 */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        /* 超出隱藏 */
+        overflow: hidden;
+
+        margin-bottom: 4px;
+        line-height: 1.4;
+        letter-spacing: 0.5px;
       }
 
-      /* 4. 其他文字與標籤間距微調 */
-      .deadline-badge {
-        margin-bottom: 2px !important;
-      }
-
+      /* ✅ 貼上這段新的 (時尚副標題樣式) */
       .desc-text {
-        font-size: 0.75rem !important;
-        margin-bottom: 2px !important;
-        height: auto !important;
+        display: block;
+        /* 讓它自己佔一行 */
+
+        /* 字體設定：小巧精緻 */
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 0.85rem;
+        color: #999;
+        /* 淺灰色，不搶眼 */
+        letter-spacing: 1px;
+        /* 字距微寬 */
+
+        /* 版面位置：置中 */
+        text-align: center;
+        margin-top: 4px;
+        /* 離品名近一點 */
+        margin-bottom: 8px;
+        /* 離按鈕遠一點 */
+
+        /* 高度控制 (避免沒填寫時版面亂跳) */
+        height: 1.5em;
+        line-height: 1.5;
+        white-space: nowrap;
+        /* 不換行 */
+        overflow: hidden;
+        /* 超出隱藏 */
+        text-overflow: ellipsis;
+        /* 變成 ... */
       }
 
+      /* === ✨ 新版：時尚內容物清單小卡 (完整修正版) ✨ === */
+      .content-info-card {
+        background-color: #fffcf7;
+        border: 1px solid #e6d0c0;
+        border-radius: 8px;
+        padding: 30px 20px 20px;
+
+        /* 🌟 修改 1：加大上方距離，避開右上角按鈕 */
+        margin: 60px 30px 25px;
+
+        position: relative;
+
+        /* 🌟 修改 2：強制置中設定 */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        /* 水平置中 */
+        justify-content: center;
+        /* 垂直置中 */
+        text-align: center;
+        /* 文字內容置中 */
+      }
+
+      /* 上方的懸浮標籤 (STYLE 不變，但要補回來以免被刪掉) */
+      .content-info-tag {
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+
+        background-color: #d4a373;
+        color: #fff;
+
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 0.8rem;
+        letter-spacing: 2px;
+        font-weight: 500;
+
+        padding: 4px 15px;
+        border-radius: 50px;
+        box-shadow: 0 2px 5px rgba(212, 163, 115, 0.2);
+        white-space: nowrap;
+      }
+
+      /* ✅ 貼上這段新的 (讓文字置中但靠左對齊) */
+      .content-info-text {
+        font-family: "Zen Maru Gothic", "Noto Sans TC", sans-serif;
+        font-size: 0.95rem;
+        color: #555;
+
+        /* 行高加大，清單看起來更舒服 */
+        line-height: 2;
+
+        /* 關鍵 1：忽略 CSV 裡多餘的空格，讓 <br> 後面也能對齊 */
+        white-space: normal;
+
+        /* 關鍵 2：讓文字區塊縮小到剛好包住文字 */
+        display: inline-block;
+
+        /* 關鍵 3：區塊內的文字靠左對齊 */
+        text-align: left;
+
+        margin-top: 15px;
+      }
+
+      /* 🌟 修改 3：美化右上角關閉按鈕 (覆蓋舊設定) */
+      .modal-close-btn {
+        color: #bfa092 !important;
+        /* 改成莫蘭迪紅棕色 */
+        top: 15px !important;
+        /* 位置微調 */
+        right: 15px !important;
+        font-weight: 300;
+        font-size: 2.2rem !important;
+        /* 放大一點比較好按 */
+      }
+
+      /* === 2. 首頁贈品行：回歸簡單單行 (原 I 欄) === */
       .gift-row {
-        margin-bottom: 5px !important;
-        height: auto !important;
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 0.8rem;
+        color: #d65a5a;
+        margin-bottom: 8px;
+
+        /* 回復成單行的高度 */
+        height: 1.5em;
+        line-height: 1.5;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
       }
 
-      /* 5. 價格與購買按鈕 */
-      .price,
-      .price-container {
-        font-size: 1.1rem !important;
-        margin-bottom: 8px !important;
-        margin-top: 0 !important;
-      }
-
+      /* === 6. 購買按鈕區 === */
       .action-row {
-        margin-top: 2px !important;
-        padding-bottom: 5px !important;
-      }
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        align-items: center;
+        flex-shrink: 0;
+        margin-top: 2px;
 
-      button.btn-add {
-        width: 100% !important;
-        height: 32px !important;
-        padding: 4px 0 !important;
-        font-size: 0.75rem !important;
+        padding-bottom: 5px;
       }
 
       select {
-        height: 32px !important;
-      }
-    }
-
-    /* === 🛒 購物快速彈窗 (Quick Shop Modal) === */
-    .quick-shop-overlay {
-      display: none;
-      /* 預設隱藏 */
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      /* 半透明黑底 */
-      backdrop-filter: blur(4px);
-      /* 背景模糊更有質感 */
-      z-index: 9999;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .quick-shop-overlay.show {
-      display: flex;
-      opacity: 1;
-    }
-
-    .quick-shop-content {
-      background: #fff;
-      width: 100%;
-      max-width: 900px;
-      /* 電腦版寬度 */
-      max-height: 90vh;
-      border-radius: 12px;
-      overflow-y: auto;
-      /* 內容多時可捲動 */
-      position: relative;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-      transform: translateY(20px);
-      transition: transform 0.3s ease;
-    }
-
-    .quick-shop-overlay.show .quick-shop-content {
-      transform: translateY(0);
-    }
-
-    .quick-shop-body {
-      display: flex;
-      /* 左右排版關鍵 */
-      flex-wrap: wrap;
-    }
-
-    /* 右側資訊區 */
-    .quick-shop-info-box {
-      flex: 1;
-      min-width: 300px;
-      padding: 40px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* === ❌ 商品彈窗關閉按鈕 (顯眼版) === */
-    .quick-shop-close {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-
-      /* 🌟 外觀：做成圓形按鈕，比較好點 */
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background-color: rgba(255, 255, 255, 0.9);
-      /* 半透明白底 */
-      border: 1px solid #eee;
-      /* 淡淡的邊框 */
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      /* 讓它浮起來 */
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 20;
-      /* 確保它浮在最上面，不會被圖片蓋住 */
-      transition: all 0.2s;
-    }
-
-    /* 裡面的叉叉符號 */
-    .quick-shop-close span {
-      font-size: 2rem;
-      color: #555;
-      /* 深灰色，清楚可見 */
-      font-weight: 300;
-      line-height: 1;
-      margin-top: -2px;
-      /* 微調垂直位置 */
-    }
-
-    /* 滑鼠移過去的效果 */
-    .quick-shop-close:hover {
-      background-color: #333;
-      /* 變成深色背景 */
-      border-color: #333;
-    }
-
-    .quick-shop-close:hover span {
-      color: #fff;
-      /* 符號變白色 */
-    }
-
-    /* 手機版微調 */
-    @media (max-width: 768px) {
-      .quick-shop-close {
-        top: 10px;
-        right: 10px;
-        width: 36px;
-        /* 手機版稍微小一點點，但還是很好按 */
+        background: transparent;
+        border: 1px solid #e0e0e0;
+        /* 邊框淡一點 */
+        padding: 0 10px;
         height: 36px;
-      }
-    }
-
-    /* 內部文字樣式 */
-    #qs-title {
-      font-family: 'Zen Maru Gothic', sans-serif;
-      font-size: 1.3rem;
-      color: #333;
-      margin-bottom: 10px;
-      line-height: 1.5;
-    }
-
-    .qs-subtitle {
-      font-size: 1rem;
-      color: #888;
-      margin-bottom: 15px;
-      font-family: 'Noto Sans TC', sans-serif;
-    }
-
-    #qs-price-box {
-      font-family: 'Fredoka', sans-serif;
-      font-size: 1.5rem;
-      color: #2c2c2c;
-      font-weight: 500;
-      margin-bottom: 25px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid #eee;
-    }
-
-    /* === ✨ 新版：I 欄內容物 (極簡文字風格) === */
-    .qs-gift-card {
-      /* 拿掉背景色和邊框，回歸純淨 */
-      background: transparent;
-      border: none;
-      padding: 0;
-
-      /* 位置微調：緊貼標題下方，跟價格保持距離 */
-      margin-top: 5px;
-      margin-bottom: 20px;
-
-      text-align: left;
-      /* 靠左對齊，跟標題一致 */
-    }
-
-    /* 內容文字 */
-    .qs-gift-text {
-      font-family: 'Noto Sans TC', sans-serif;
-      font-size: 0.95rem;
-      /* 字不用太大，精緻為主 */
-      color: #666;
-      /* 質感深灰 */
-      line-height: 1.6;
-
-      /* 讓它能夠換行 */
-      white-space: pre-wrap;
-
-      /* 加個左邊框裝飾，更有設計感 (如果不喜歡可以拿掉 border-left 和 padding-left) */
-      border-left: 3px solid #d4a373;
-      padding-left: 12px;
-    }
-
-    /* 表單元件 */
-    .qs-section {
-      margin-bottom: 20px;
-    }
-
-    .qs-label {
-      display: block;
-      font-size: 0.9rem;
-      color: #333;
-      margin-bottom: 8px;
-      font-weight: 500;
-    }
-
-    /* === 優化後的規格選單  === */
-    .qs-select {
-      width: 100%;
-
-      /* 🔴 修改 1：改用「固定高度」取代 padding 撐開 */
-      /* 這樣在手機上才不會因為預設樣式而跑版 */
-      height: 45px;
-      line-height: 45px;
-      /* 讓文字垂直置中 */
-
-      /* 🔴 修改 2：內距設定 (上下設為 0，只留左右) */
-      /* 右邊留 40px 是為了避開我們畫的那個箭頭，避免字疊在一起 */
-      padding: 0 40px 0 15px;
-
-      /* 邊框與背景 (維持不變) */
-      border: 1px solid #d4a373;
-      background-color: #fff;
-      border-radius: 8px;
-
-      /* 字體設定 */
-      font-size: 16px;
-      /* 🌟 建議：手機版設 16px 可以防止 iPhone 自動放大畫面 */
-      color: #555;
-      outline: none;
-      cursor: pointer;
-
-      /* 去除預設樣式 (維持不變) */
-      appearance: none;
-      -webkit-appearance: none;
-
-      /* 自訂箭頭 (維持不變) */
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-      background-repeat: no-repeat;
-      background-position: right 15px center;
-      background-size: 12px;
-    }
-
-    /* 數量加減 */
-    .qs-qty-wrapper {
-      display: flex;
-      width: 120px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-    }
-
-    .qs-qty-wrapper button {
-      width: 35px;
-      background: #f5f5f5;
-      border: none;
-      cursor: pointer;
-      font-size: 1.2rem;
-      color: #555;
-    }
-
-    .qs-qty-wrapper input {
-      width: 50px;
-      border: none;
-      text-align: center;
-      font-size: 1rem;
-      outline: none;
-    }
-
-    /* 大按鈕 */
-    .qs-add-btn {
-      margin-top: auto;
-      /* 推到底部 */
-      width: 100%;
-      padding: 15px;
-      background: #d4a373;
-      /* 主題色 */
-      color: #fff;
-      border: none;
-      border-radius: 50px;
-      font-size: 1.1rem;
-      letter-spacing: 2px;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .qs-add-btn:hover {
-      background: #bfa092;
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(212, 163, 115, 0.3);
-    }
-
-    /* 手機版調整 */
-    @media (max-width: 768px) {
-      .quick-shop-info-box {
-        padding: 25px;
+        /* 高度跟按鈕一樣 */
+        font-size: 0.9rem;
+        color: #666;
+        outline: none;
+        border-radius: 4px;
+        /* 微圓角 */
+        cursor: pointer;
+        margin-right: 5px;
+        /* 跟按鈕保持距離 */
+        font-family: "Fredoka", sans-serif;
       }
 
-      .quick-shop-img-box {
-        min-height: 250px;
+      /* === 4. 規格選單 (縮短 + 美化) === */
+      .variant-select {
+        /* 寬度設定：改成 70% 左右，比較精緻 */
+        width: 70%;
+        max-width: 200px;
+        /* 也不要太寬 */
+
+        /* 置中 */
+        margin: 5px auto 15px;
+        display: block;
+
+        padding: 6px;
+        /* 稍微扁一點 */
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 0.85rem;
+        color: #d4a373;
+        background-color: #fff;
+        border: 1px solid #d4a373;
+        border-radius: 4px;
+        cursor: pointer;
+        text-align: center;
+        text-align-last: center;
+
+        appearance: none;
+        -webkit-appearance: none;
+
+        /* 箭頭 */
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 8px center;
+        background-size: 10px;
       }
 
-      #qs-title {
+      /* === 收單時間提醒 (修正版：短標籤) === */
+      .deadline-badge {
+        /* 1. 讓它像便利貼一樣，字多少、框就多寬 */
+        display: inline-block;
+
+        background-color: #f4e3e3;
+        color: #c97c7c;
+
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 0.8rem;
+        font-weight: 500;
+
+        /* 2. 內距改小一點，看起來比較精緻 */
+        padding: 2px 8px;
+
+        border-radius: 4px;
+        margin-bottom: 8px;
+        letter-spacing: 1px;
+
+        /* 3. 關鍵限制：不讓它超過 90% 寬，避免手機版撐爆 */
+        max-width: 90%;
+
+        /* 4. 如果字真的太長，變成 ... */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      /* 這是新的：隱藏版收單時間 (用來佔位子) */
+      .deadline-badge.empty {
+        visibility: hidden;
+        /* 讓它看不見 */
+        background: transparent;
+        /* 背景變透明 */
+      }
+
+      /* === 價格 === */
+      .price {
+        font-family: "Fredoka", sans-serif;
         font-size: 1.4rem;
-      }
-    }
+        font-weight: 500;
+        color: #2c2c2c;
+        display: block;
+        margin-bottom: 4px;
 
-    /* === 📸 商品相簿樣式 === */
+        /* 🔴 確認這裡是 0，不要是 auto */
+        margin-top: 0;
 
-    /* 修改原本的圖片盒：改成直向排列 (大圖在上，縮圖在下) */
-    .quick-shop-img-box {
-      flex-direction: column;
-      /* 變成直排 */
-      padding: 20px;
-      gap: 15px;
-      /* 大圖跟縮圖的距離 */
-    }
-
-    /* 大圖設定：關鍵魔法 object-fit */
-    .quick-shop-img-box img#qs-img {
-      width: 100%;
-      height: 350px;
-      /* 固定高度，讓版面不亂跳 */
-      object-fit: contain;
-      /* 🌟 關鍵！讓圖片完整顯示不裁切，自動留白 */
-      border-radius: 8px;
-      transition: opacity 0.3s;
-    }
-
-    /* 縮圖容器 */
-    .qs-gallery-container {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      /* 縮圖之間的空隙 */
-      width: 100%;
-      overflow-x: auto;
-      /* 如果圖太多，可以左右滑動 */
-    }
-
-    /* 小縮圖樣式 */
-    .qs-thumb {
-      width: 50px;
-      height: 50px;
-      object-fit: cover;
-      /* 縮圖可以裁切沒關係，整齊比較重要 */
-      border-radius: 6px;
-      border: 1px solid #eee;
-      cursor: pointer;
-      opacity: 0.6;
-      transition: all 0.2s;
-    }
-
-    /* 滑鼠移過去 或 被選中時 */
-    .qs-thumb:hover,
-    .qs-thumb.active {
-      opacity: 1;
-      border: 2px solid #d4a373;
-      /* 選中時出現金框 */
-      transform: translateY(-2px);
-      /* 微微浮起 */
-    }
-
-    /* === 📱 手機版專屬優化 (緊湊模式) === */
-    @media (max-width: 768px) {
-
-      /* 1. 彈窗內距縮小 (讓空間變大) */
-      .quick-shop-info-box {
-        padding: 15px 20px !important;
-        /* 原本比較寬，改窄一點 */
-        gap: 0 !important;
-        /* 消除額外間隙 */
+        letter-spacing: 0.5px;
       }
 
-      /* 2. 標題縮小 & 間距拉近 */
-      #qs-title {
-        font-size: 1.1rem !important;
-        /* 字變小 (原本 1.3) */
-        margin-bottom: 2px !important;
-        /* 緊貼下方 */
-        line-height: 1.3 !important;
+      /* === 價格比較樣式 === */
+      .price-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* 讓價格置中 */
+        gap: 8px;
+        /* 兩個價格中間的距離 */
+        margin-bottom: 4px;
+        /* 跟下方按鈕的距離 */
       }
 
-      /* 3. 價格區塊縮小 & 拉近 */
-      #qs-price-box {
-        font-size: 1.2rem !important;
-        margin-bottom: 12px !important;
-        /* 離下面規格近一點 */
-        padding-bottom: 8px !important;
+      /* 被劃掉的原價 */
+      .price-original {
+        color: #bbb;
+        /* 淺灰色 */
+        font-size: 0.9rem;
+        /* 字稍微小一點 */
+        text-decoration: line-through;
+        /* 關鍵：刪除線 */
+        font-family: "Fredoka", sans-serif;
       }
 
-      /* 4. 內容物清單 (I欄) 微調 */
-      .qs-gift-card {
-        margin-bottom: 8px !important;
-        margin-top: 2px !important;
+      /* 顯眼的優惠價 */
+      .price-vip {
+        color: #d65a5a;
+        /* 漂亮的莫蘭迪紅 */
+        font-size: 1.3rem;
+        /* 字大一點 */
+        font-weight: 600;
+        /* 加粗 */
+        font-family: "Fredoka", sans-serif;
       }
 
-      /* 5. 規格選單大改造：變胖 + 變短 */
-      .qs-select {
-        /* 變短：只佔 65% 寬度 (約少了 1/3) */
-        width: 65% !important;
+      /* === 6. 購買按鈕  === */
+      button.btn-add {
+        background-color: #d4a373;
+        color: #fff;
+        border: 1px solid #d4a373;
+        border-radius: 50px;
+        padding: 6px 28px;
+        font-size: 0.85rem;
+        letter-spacing: 1.5px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-family: "Fredoka", sans-serif;
 
-        /* 變胖：高度增加，手指好點 */
-        height: 52px !important;
-        line-height: 52px !important;
-        /* 確保文字垂直置中 */
+        /* 對齊設定 */
+        height: 36px;
+        line-height: 1;
 
-        font-size: 16px !important;
+        /* 🌟 關鍵修改：用 Flexbox 讓文字上下左右都置中 */
+        display: flex;
+        align-items: center;
+        /* 垂直置中 */
+        justify-content: center;
+        /* 🌟 加了這行：水平置中 (修正手機版靠左問題) */
       }
 
-      /* 6. 區塊間距縮小 */
-      .qs-section {
-        margin-bottom: 12px !important;
-        /* 每個區塊距離拉近 */
+      button.btn-add:hover {
+        background-color: #fff;
+        color: #d4a373;
       }
 
-      /* 7. 按鈕調整 */
-      .qs-add-btn {
-        padding: 12px !important;
-        /* 按鈕不用那麼厚 */
-        margin-top: 5px !important;
-      }
-    }
+      /* === 最終極簡版 Footer (緊湊型) === */
+      footer {
+        background-color: #1a1a1a;
+        color: #fff;
 
-    /* === 📱 手機版並排優化 (規格+數量) === */
+        /* 修改 1：高度縮減，原本 40px 改成 25px */
+        padding: 25px 20px;
 
-    /* 1. 讓它們橫向排列 */
-    .qs-row-group {
-      display: flex;
-      gap: 15px;
-      /* 中間的空隙 */
-      align-items: flex-end;
-      /* 對齊底部 (讓輸入框對齊) */
-      margin-bottom: 12px;
-    }
-
-    /* 2. 左邊規格：自動長大，佔滿剩餘空間 */
-    .qs-col-grow {
-      flex: 1;
-      /* 關鍵！吃掉剩下所有寬度 */
-      min-width: 0;
-      /* 防止被超長文字撐爆 */
-      margin-bottom: 0 !important;
-      /* 消除原本的下方留白 */
-    }
-
-    /* 3. 右邊數量：固定寬度 */
-    .qs-col-fixed {
-      width: 120px;
-      /* 給數量一個固定的家 */
-      flex-shrink: 0;
-      /* 不准縮小 */
-      margin-bottom: 0 !important;
-    }
-
-    /* 4. 數量選擇器樣式微調 */
-    .qs-qty-wrapper {
-      width: 100% !important;
-      /* 填滿那個 120px */
-      height: 52px;
-      /* 跟隔壁規格一樣高 */
-      display: flex;
-      align-items: center;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      /* 圓角跟規格一致 */
-    }
-
-    .qs-qty-wrapper button {
-      width: 35px;
-      height: 100%;
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      font-size: 1.2rem;
-    }
-
-    .qs-qty-wrapper input {
-      flex: 1;
-      width: 100%;
-      border: none;
-      text-align: center;
-      font-size: 1rem;
-      outline: none;
-      background: transparent;
-    }
-
-    /* 5. 🛑 重要修正：手機版規格選單 */
-    /* 我們之前設 width: 65%，現在要改回 100% (因為它已經在 flex 框框裡了) */
-    @media (max-width: 768px) {
-      .qs-select {
-        width: 100% !important;
-        /* 填滿左邊那個格子 */
-      }
-    }
-
-    /* === 🏷️ 分類選單樣式 (膠囊按鈕 + 橫向滑動 - 高級立體版) === */
-    .category-nav {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      /* 增加一點間距 */
-      padding: 15px 20px 25px;
-      /* 增加下方 padding 讓陰影有空間顯示 */
-      margin-bottom: 10px;
-      overflow-x: auto;
-      white-space: nowrap;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      /* 增加一個很淺的背景色條，讓按鈕更突出 (可選) */
-      /* background: linear-gradient(to bottom, #fff, #fdfbf9); */
-    }
-
-    .category-nav::-webkit-scrollbar {
-      display: none;
-    }
-
-    /* 🟢 按鈕基礎設定 */
-    /* 🟢 雜誌質感底線風 */
-    .category-btn {
-      display: inline-block;
-      padding: 5px 15px;
-      /* 內距縮小，因為沒有框了 */
-      font-family: "Noto Sans TC", sans-serif;
-      font-size: 0.95rem;
-      font-weight: 400;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      letter-spacing: 2px;
-
-      /* 平常的狀態：完全透明背景 */
-      background: transparent;
-      color: #999;
-      border: none;
-      position: relative;
-      /* 為了畫底線做準備 */
-    }
-
-    /* 隱形的底線 */
-    .category-btn::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 0;
-      /* 預設沒有寬度 */
-      height: 1px;
-      /* 極細的線 */
-      background-color: #d4a373;
-      transition: width 0.3s ease;
-      /* 變寬的動畫 */
-    }
-
-    /* 👆 滑鼠懸停狀態 */
-    .category-btn:hover {
-      color: #666;
-    }
-
-    /* 🟡 選中狀態：字變深，底線長出來 */
-    .category-btn.active {
-      color: #2c2c2c;
-      font-weight: 500;
-    }
-
-    .category-btn.active::after {
-      width: 60%;
-      /* 底線長出來，只佔字體的 60% 最優雅 */
-    }
-
-    /* 手機版調整：靠左對齊 */
-    @media (max-width: 768px) {
-      .category-nav {
-        justify-content: flex-start;
-        padding-left: 20px;
-        padding-right: 20px;
-        /* 右邊也要加，不然滑到底會切到 */
-      }
-    }
-
-    /* === 🛒 購物車專用關閉按鈕 (強制變大) === */
-    .cart-close-btn {
-      cursor: pointer;
-      font-size: 2.8rem;
-      /* 字體放大 */
-      color: #333;
-      /* 深灰色 */
-      font-weight: 300;
-      /* 細體比較時尚 */
-      line-height: 1;
-      padding: 5px 15px;
-      /* 增加手指點擊範圍 */
-
-      /* 讓它在手機上容易被按到 */
-      display: inline-block;
-      transition: transform 0.2s;
-    }
-
-    .cart-close-btn:active {
-      transform: scale(0.9);
-      /* 手機按下去會有縮小效果 */
-    }
-
-    @keyframes twinkle {
-
-      0%,
-      100% {
-        opacity: 0.3;
-        transform: scale(0.8);
+        text-align: center;
+        margin-top: 60px;
       }
 
-      50% {
-        opacity: 1;
-        transform: scale(1.2);
+      /* LOGO 設定：縮小 + 拉近距離 */
+      .footer-logo-simple {
+        font-family: "Zen Maru Gothic", "Cormorant Garamond", sans-serif;
+
+        /* 修改 2：字體縮小，原本 1.6rem -> 1.1rem */
+        font-size: 1.1rem;
+
+        letter-spacing: 2px;
+        /* 字距稍微縮小一點點，比較緊密 */
+        color: #ffffff;
+
+        /* 修改 3：跟下面連結的距離大幅縮短，原本 25px -> 8px */
+        margin-bottom: 8px;
+
+        font-weight: 500;
       }
-    }
 
-    /* === 📱 手機版購物車空間極限優化 (讓商品列表變很長！) === */
-    @media (max-width: 768px) {
+      .footer-links {
+        /* 修改 4：跟下面版權字的距離也縮短 */
+        margin-bottom: 15px;
 
-      /* 1. 把整個白框的內距縮到最小，爭取最大空間 */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+      }
+
+      /* 連結樣式 (維持不變) */
+      .social-link {
+        text-decoration: none;
+        color: #aaa;
+        transition: all 0.3s;
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 0.8rem;
+        /* 連結字也可以微縮一點 */
+        letter-spacing: 1px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .social-link:hover {
+        color: #fff;
+      }
+
+      .icon {
+        width: 14px;
+        height: 14px;
+        opacity: 0.9;
+      }
+
+      /* 圖示微縮 */
+      .divider {
+        color: #444;
+        font-weight: 100;
+        font-size: 0.8rem;
+      }
+
+      /* 版權與聲明文字 */
+      .copyright {
+        font-size: 0.65rem;
+        color: #555;
+        font-family: sans-serif;
+        line-height: 1.3;
+      }
+
+      /* 手機版設定 */
+      @media (max-width: 600px) {
+        .footer-links {
+          flex-direction: column;
+          gap: 5px;
+        }
+
+        .divider {
+          display: none;
+        }
+
+        /* 手機版 padding 稍微大一點點以免太擠，但還是比原本小 */
+        footer {
+          padding: 30px 20px;
+        }
+      }
+
+      /* === 購物車與彈窗 (修改 1：圖示變大、時尚感增強) === */
+      #cart-float-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        /* 放大按鈕尺寸 55px -> 70px */
+        width: 70px;
+        height: 70px;
+        background: var(--text-main);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* 陰影加深，更有懸浮層次感 */
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+        cursor: pointer;
+        z-index: 100;
+        transition: transform 0.2s;
+      }
+
+      /* 讓裡面的 SVG 圖示也跟著變大 */
+      #cart-float-btn svg {
+        width: 32px;
+        height: 32px;
+      }
+
+      #cart-count {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: #bfa092;
+        color: white;
+        border-radius: 50%;
+        width: 24px;
+        /* 稍微加大 */
+        height: 24px;
+        font-size: 0.8rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #fff;
+        /* 加個白邊更有質感 */
+      }
+
+      .cart-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.3);
+        z-index: 2000;
+        justify-content: flex-end;
+      }
+
+      .cart-modal.show {
+        display: flex;
+      }
+
       .cart-content {
-        padding: 15px !important;
-        /* 原本 40px -> 改 15px，瞬間多出很多空間 */
+        background: #fff;
+        width: 100%;
+        max-width: 420px;
+        height: 100%;
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+        animation: slideLeft 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       }
 
-      /* 2. 標題「購物清單」往上收 */
-      .cart-content>div:first-child {
-        margin-bottom: 10px !important;
+      @keyframes slideLeft {
+        from {
+          transform: translateX(100%);
+        }
+
+        to {
+          transform: translateX(0);
+        }
       }
 
-      /* 3. 壓縮「選擇下單平台」區塊 (這是接在商品列表下面的那塊) */
-      #cartItems+div {
-        padding-top: 10px !important;
-        /* 分隔線上方留白減少 */
-        margin-bottom: 10px !important;
-        /* 跟折扣碼的距離減少 */
-      }
-
-      /* 讓裡面的選項緊湊一點 */
-      #cartItems+div p {
-        margin-bottom: 5px !important;
-      }
-
-      #cartItems+div label {
-        margin-bottom: 2px !important;
-      }
-
-      /* 4. 壓縮「折扣碼」區塊 */
-      #promo-box {
-        margin-bottom: 8px !important;
-      }
-
-      /* 讓輸入框稍微矮一點，不用那麼肥 */
-      #promo-code-input,
-      #promo-box button {
-        height: 38px !important;
-      }
-
-      /* 5. 壓縮「總金額」與「按鈕」 */
-      #cartTotal {
-        margin-bottom: 5px !important;
-      }
-
-      /* 提醒小字 (訂單成立那行) */
-      .cart-content>p {
-        margin: 5px 0 !important;
-      }
-
-      /* 綠色結帳按鈕 */
       .btn-checkout {
-        margin-top: 5px !important;
-        /* 離上面近一點 */
-        padding: 12px !important;
-        /* 按鈕變矮一點 */
+        width: 100%;
+        padding: 18px;
+        background: #06c755;
+        color: white;
+        border: none;
+        font-weight: 500;
+        cursor: pointer;
+        margin-top: 20px;
+        letter-spacing: 1px;
+        /* 這裡的中文字距可以微調 */
+        font-family: "Noto Sans TC", sans-serif;
       }
-    }
-  </style>
-</head>
 
-<body>
-  <header>
-    <h1>Mina's Journal</h1>
+      /* === 新版 Loading 樣式：優雅轉圈圈 === */
+      #loading {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 300px;
+        /* 確保至少有高度，不會太扁 */
+        gap: 25px;
+        /* 圈圈跟文字的距離 */
+      }
 
-    <div class="brand-name">│ Mina．妝日子 │</div>
+      /* 轉圈圈本體 */
+      .loader-spinner {
+        width: 50px;
+        height: 50px;
+        /* 1. 底圈顏色 (淺灰) */
+        border: 2px solid #f0f0f0;
+        /* 2. 轉動線條顏色 (你的主題金棕色) */
+        border-top: 2px solid #d4a373;
+        border-radius: 50%;
+        /* 動畫設定：1秒轉一圈，無限循環 */
+        animation: spin 1s linear infinite;
+      }
 
-    <div class="service-info">
-      KR 美妝保養 &nbsp;·&nbsp; 韓國各大官網代購 &nbsp;·&nbsp; 私房選品團購
-    </div>
+      /* 文字樣式 */
+      .loading-text {
+        font-family: "Cormorant Garamond", serif;
+        /* 維持你的質感字體 */
+        font-size: 1.1rem;
+        color: #999;
+        font-style: italic;
+        letter-spacing: 1.5px;
+        /* 增加呼吸燈效果 (忽明忽暗) */
+        animation: breathe 2s ease-in-out infinite;
+      }
 
-    <div style="
+      /* 定義旋轉動畫 */
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* 定義呼吸動畫 */
+      @keyframes breathe {
+        0%,
+        100% {
+          opacity: 0.6;
+        }
+
+        50% {
+          opacity: 1;
+        }
+      }
+
+      /* === 手機版專屬設定 (商品列表整合版) === */
+      @media (max-width: 768px) {
+        /* 1. 隱藏不必要的佔位元素，消除空隙 */
+        .mobile-hidden,
+        div[style*="visibility:hidden"],
+        span[style*="visibility:hidden"] {
+          display: none !important;
+        }
+
+        /* 2. 商品列表排版：強制平分兩欄 */
+        .container {
+          grid-template-columns: 1fr 1fr !important;
+          gap: 20px 10px !important;
+          padding: 0 12px 80px !important;
+        }
+
+        .product-card {
+          min-width: 0 !important;
+        }
+
+        /* 3. 資訊區與品名對齊 */
+        .info {
+          justify-content: flex-start !important;
+          padding-top: 5px !important;
+        }
+
+        .name {
+          font-size: 0.95rem !important;
+          letter-spacing: -0.5px !important;
+          min-height: 2.4rem !important;
+          line-height: 1.35 !important;
+          margin-bottom: 4px !important;
+          padding-top: 0 !important;
+
+          display: flex !important;
+          justify-content: center !important;
+          align-items: center !important;
+          text-align: center !important;
+          word-break: keep-all !important;
+        }
+
+        /* 4. 其他文字與標籤間距微調 */
+        .deadline-badge {
+          margin-bottom: 2px !important;
+        }
+
+        .desc-text {
+          font-size: 0.75rem !important;
+          margin-bottom: 2px !important;
+          height: auto !important;
+        }
+
+        .gift-row {
+          margin-bottom: 5px !important;
+          height: auto !important;
+        }
+
+        /* 5. 價格與購買按鈕 */
+        .price,
+        .price-container {
+          font-size: 1.1rem !important;
+          margin-bottom: 8px !important;
+          margin-top: 0 !important;
+        }
+
+        .action-row {
+          margin-top: 2px !important;
+          padding-bottom: 5px !important;
+        }
+
+        button.btn-add {
+          width: 100% !important;
+          height: 32px !important;
+          padding: 4px 0 !important;
+          font-size: 0.75rem !important;
+        }
+
+        select {
+          height: 32px !important;
+        }
+      }
+
+      /* === 🛒 購物快速彈窗 (Quick Shop Modal) === */
+      .quick-shop-overlay {
+        display: none;
+        /* 預設隱藏 */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        /* 半透明黑底 */
+        backdrop-filter: blur(4px);
+        /* 背景模糊更有質感 */
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .quick-shop-overlay.show {
+        display: flex;
+        opacity: 1;
+      }
+
+      .quick-shop-content {
+        background: #fff;
+        width: 100%;
+        max-width: 900px;
+        /* 電腦版寬度 */
+        max-height: 90vh;
+        border-radius: 12px;
+        overflow-y: auto;
+        /* 內容多時可捲動 */
+        position: relative;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        transform: translateY(20px);
+        transition: transform 0.3s ease;
+      }
+
+      .quick-shop-overlay.show .quick-shop-content {
+        transform: translateY(0);
+      }
+
+      .quick-shop-body {
+        display: flex;
+        /* 左右排版關鍵 */
+        flex-wrap: wrap;
+      }
+
+      /* 右側資訊區 */
+      .quick-shop-info-box {
+        flex: 1;
+        min-width: 300px;
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* === ❌ 商品彈窗關閉按鈕 (顯眼版) === */
+      .quick-shop-close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+
+        /* 🌟 外觀：做成圓形按鈕，比較好點 */
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.9);
+        /* 半透明白底 */
+        border: 1px solid #eee;
+        /* 淡淡的邊框 */
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        /* 讓它浮起來 */
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 20;
+        /* 確保它浮在最上面，不會被圖片蓋住 */
+        transition: all 0.2s;
+      }
+
+      /* 裡面的叉叉符號 */
+      .quick-shop-close span {
+        font-size: 2rem;
+        color: #555;
+        /* 深灰色，清楚可見 */
+        font-weight: 300;
+        line-height: 1;
+        margin-top: -2px;
+        /* 微調垂直位置 */
+      }
+
+      /* 滑鼠移過去的效果 */
+      .quick-shop-close:hover {
+        background-color: #333;
+        /* 變成深色背景 */
+        border-color: #333;
+      }
+
+      .quick-shop-close:hover span {
+        color: #fff;
+        /* 符號變白色 */
+      }
+
+      /* 手機版微調 */
+      @media (max-width: 768px) {
+        .quick-shop-close {
+          top: 10px;
+          right: 10px;
+          width: 36px;
+          /* 手機版稍微小一點點，但還是很好按 */
+          height: 36px;
+        }
+      }
+
+      /* 內部文字樣式 */
+      #qs-title {
+        font-family: "Zen Maru Gothic", sans-serif;
+        font-size: 1.3rem;
+        color: #333;
+        margin-bottom: 10px;
+        line-height: 1.5;
+      }
+
+      .qs-subtitle {
+        font-size: 1rem;
+        color: #888;
+        margin-bottom: 15px;
+        font-family: "Noto Sans TC", sans-serif;
+      }
+
+      #qs-price-box {
+        font-family: "Fredoka", sans-serif;
+        font-size: 1.5rem;
+        color: #2c2c2c;
+        font-weight: 500;
+        margin-bottom: 25px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eee;
+      }
+
+      /* === ✨ 新版：I 欄內容物 (極簡文字風格) === */
+      .qs-gift-card {
+        /* 拿掉背景色和邊框，回歸純淨 */
+        background: transparent;
+        border: none;
+        padding: 0;
+
+        /* 位置微調：緊貼標題下方，跟價格保持距離 */
+        margin-top: 5px;
+        margin-bottom: 20px;
+
+        text-align: left;
+        /* 靠左對齊，跟標題一致 */
+      }
+
+      /* 內容文字 */
+      .qs-gift-text {
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 0.95rem;
+        /* 字不用太大，精緻為主 */
+        color: #666;
+        /* 質感深灰 */
+        line-height: 1.6;
+
+        /* 讓它能夠換行 */
+        white-space: pre-wrap;
+
+        /* 加個左邊框裝飾，更有設計感 (如果不喜歡可以拿掉 border-left 和 padding-left) */
+        border-left: 3px solid #d4a373;
+        padding-left: 12px;
+      }
+
+      /* 表單元件 */
+      .qs-section {
+        margin-bottom: 20px;
+      }
+
+      .qs-label {
+        display: block;
+        font-size: 0.9rem;
+        color: #333;
+        margin-bottom: 8px;
+        font-weight: 500;
+      }
+
+      /* === 優化後的規格選單  === */
+      .qs-select {
+        width: 100%;
+
+        /* 🔴 修改 1：改用「固定高度」取代 padding 撐開 */
+        /* 這樣在手機上才不會因為預設樣式而跑版 */
+        height: 45px;
+        line-height: 45px;
+        /* 讓文字垂直置中 */
+
+        /* 🔴 修改 2：內距設定 (上下設為 0，只留左右) */
+        /* 右邊留 40px 是為了避開我們畫的那個箭頭，避免字疊在一起 */
+        padding: 0 40px 0 15px;
+
+        /* 邊框與背景 (維持不變) */
+        border: 1px solid #d4a373;
+        background-color: #fff;
+        border-radius: 8px;
+
+        /* 字體設定 */
+        font-size: 16px;
+        /* 🌟 建議：手機版設 16px 可以防止 iPhone 自動放大畫面 */
+        color: #555;
+        outline: none;
+        cursor: pointer;
+
+        /* 去除預設樣式 (維持不變) */
+        appearance: none;
+        -webkit-appearance: none;
+
+        /* 自訂箭頭 (維持不變) */
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 15px center;
+        background-size: 12px;
+      }
+
+      /* 數量加減 */
+      .qs-qty-wrapper {
+        display: flex;
+        width: 120px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+      }
+
+      .qs-qty-wrapper button {
+        width: 35px;
+        background: #f5f5f5;
+        border: none;
+        cursor: pointer;
+        font-size: 1.2rem;
+        color: #555;
+      }
+
+      .qs-qty-wrapper input {
+        width: 50px;
+        border: none;
+        text-align: center;
+        font-size: 1rem;
+        outline: none;
+      }
+
+      /* 大按鈕 */
+      .qs-add-btn {
+        margin-top: auto;
+        /* 推到底部 */
+        width: 100%;
+        padding: 15px;
+        background: #d4a373;
+        /* 主題色 */
+        color: #fff;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        letter-spacing: 2px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .qs-add-btn:hover {
+        background: #bfa092;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(212, 163, 115, 0.3);
+      }
+
+      /* 手機版調整 */
+      @media (max-width: 768px) {
+        .quick-shop-info-box {
+          padding: 25px;
+        }
+
+        .quick-shop-img-box {
+          min-height: 250px;
+        }
+
+        #qs-title {
+          font-size: 1.4rem;
+        }
+      }
+
+      /* === 📸 商品相簿樣式 === */
+
+      /* 修改原本的圖片盒：改成直向排列 (大圖在上，縮圖在下) */
+      .quick-shop-img-box {
+        flex-direction: column;
+        /* 變成直排 */
+        padding: 20px;
+        gap: 15px;
+        /* 大圖跟縮圖的距離 */
+      }
+
+      /* 大圖設定：關鍵魔法 object-fit */
+      .quick-shop-img-box img#qs-img {
+        width: 100%;
+        height: 350px;
+        /* 固定高度，讓版面不亂跳 */
+        object-fit: contain;
+        /* 🌟 關鍵！讓圖片完整顯示不裁切，自動留白 */
+        border-radius: 8px;
+        transition: opacity 0.3s;
+      }
+
+      /* 縮圖容器 */
+      .qs-gallery-container {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        /* 縮圖之間的空隙 */
+        width: 100%;
+        overflow-x: auto;
+        /* 如果圖太多，可以左右滑動 */
+      }
+
+      /* 小縮圖樣式 */
+      .qs-thumb {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        /* 縮圖可以裁切沒關係，整齊比較重要 */
+        border-radius: 6px;
+        border: 1px solid #eee;
+        cursor: pointer;
+        opacity: 0.6;
+        transition: all 0.2s;
+      }
+
+      /* 滑鼠移過去 或 被選中時 */
+      .qs-thumb:hover,
+      .qs-thumb.active {
+        opacity: 1;
+        border: 2px solid #d4a373;
+        /* 選中時出現金框 */
+        transform: translateY(-2px);
+        /* 微微浮起 */
+      }
+
+      /* === 📱 手機版專屬優化 (緊湊模式) === */
+      @media (max-width: 768px) {
+        /* 1. 彈窗內距縮小 (讓空間變大) */
+        .quick-shop-info-box {
+          padding: 15px 20px !important;
+          /* 原本比較寬，改窄一點 */
+          gap: 0 !important;
+          /* 消除額外間隙 */
+        }
+
+        /* 2. 標題縮小 & 間距拉近 */
+        #qs-title {
+          font-size: 1.1rem !important;
+          /* 字變小 (原本 1.3) */
+          margin-bottom: 2px !important;
+          /* 緊貼下方 */
+          line-height: 1.3 !important;
+        }
+
+        /* 3. 價格區塊縮小 & 拉近 */
+        #qs-price-box {
+          font-size: 1.2rem !important;
+          margin-bottom: 12px !important;
+          /* 離下面規格近一點 */
+          padding-bottom: 8px !important;
+        }
+
+        /* 4. 內容物清單 (I欄) 微調 */
+        .qs-gift-card {
+          margin-bottom: 8px !important;
+          margin-top: 2px !important;
+        }
+
+        /* 5. 規格選單大改造：變胖 + 變短 */
+        .qs-select {
+          /* 變短：只佔 65% 寬度 (約少了 1/3) */
+          width: 65% !important;
+
+          /* 變胖：高度增加，手指好點 */
+          height: 52px !important;
+          line-height: 52px !important;
+          /* 確保文字垂直置中 */
+
+          font-size: 16px !important;
+        }
+
+        /* 6. 區塊間距縮小 */
+        .qs-section {
+          margin-bottom: 12px !important;
+          /* 每個區塊距離拉近 */
+        }
+
+        /* 7. 按鈕調整 */
+        .qs-add-btn {
+          padding: 12px !important;
+          /* 按鈕不用那麼厚 */
+          margin-top: 5px !important;
+        }
+      }
+
+      /* === 📱 手機版並排優化 (規格+數量) === */
+
+      /* 1. 讓它們橫向排列 */
+      .qs-row-group {
+        display: flex;
+        gap: 15px;
+        /* 中間的空隙 */
+        align-items: flex-end;
+        /* 對齊底部 (讓輸入框對齊) */
+        margin-bottom: 12px;
+      }
+
+      /* 2. 左邊規格：自動長大，佔滿剩餘空間 */
+      .qs-col-grow {
+        flex: 1;
+        /* 關鍵！吃掉剩下所有寬度 */
+        min-width: 0;
+        /* 防止被超長文字撐爆 */
+        margin-bottom: 0 !important;
+        /* 消除原本的下方留白 */
+      }
+
+      /* 3. 右邊數量：固定寬度 */
+      .qs-col-fixed {
+        width: 120px;
+        /* 給數量一個固定的家 */
+        flex-shrink: 0;
+        /* 不准縮小 */
+        margin-bottom: 0 !important;
+      }
+
+      /* 4. 數量選擇器樣式微調 */
+      .qs-qty-wrapper {
+        width: 100% !important;
+        /* 填滿那個 120px */
+        height: 52px;
+        /* 跟隔壁規格一樣高 */
+        display: flex;
+        align-items: center;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        /* 圓角跟規格一致 */
+      }
+
+      .qs-qty-wrapper button {
+        width: 35px;
+        height: 100%;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        font-size: 1.2rem;
+      }
+
+      .qs-qty-wrapper input {
+        flex: 1;
+        width: 100%;
+        border: none;
+        text-align: center;
+        font-size: 1rem;
+        outline: none;
+        background: transparent;
+      }
+
+      /* 5. 🛑 重要修正：手機版規格選單 */
+      /* 我們之前設 width: 65%，現在要改回 100% (因為它已經在 flex 框框裡了) */
+      @media (max-width: 768px) {
+        .qs-select {
+          width: 100% !important;
+          /* 填滿左邊那個格子 */
+        }
+      }
+
+      /* === 🏷️ 分類選單樣式 (膠囊按鈕 + 橫向滑動 - 高級立體版) === */
+      .category-nav {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        /* 增加一點間距 */
+        padding: 15px 20px 25px;
+        /* 增加下方 padding 讓陰影有空間顯示 */
+        margin-bottom: 10px;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        /* 增加一個很淺的背景色條，讓按鈕更突出 (可選) */
+        /* background: linear-gradient(to bottom, #fff, #fdfbf9); */
+      }
+
+      .category-nav::-webkit-scrollbar {
+        display: none;
+      }
+
+      /* 🟢 按鈕基礎設定 */
+      /* 🟢 雜誌質感底線風 */
+      .category-btn {
+        display: inline-block;
+        padding: 5px 15px;
+        /* 內距縮小，因為沒有框了 */
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 0.95rem;
+        font-weight: 400;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        letter-spacing: 2px;
+
+        /* 平常的狀態：完全透明背景 */
+        background: transparent;
+        color: #999;
+        border: none;
+        position: relative;
+        /* 為了畫底線做準備 */
+      }
+
+      /* 隱形的底線 */
+      .category-btn::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        /* 預設沒有寬度 */
+        height: 1px;
+        /* 極細的線 */
+        background-color: #d4a373;
+        transition: width 0.3s ease;
+        /* 變寬的動畫 */
+      }
+
+      /* 👆 滑鼠懸停狀態 */
+      .category-btn:hover {
+        color: #666;
+      }
+
+      /* 🟡 選中狀態：字變深，底線長出來 */
+      .category-btn.active {
+        color: #2c2c2c;
+        font-weight: 500;
+      }
+
+      .category-btn.active::after {
+        width: 60%;
+        /* 底線長出來，只佔字體的 60% 最優雅 */
+      }
+
+      /* 手機版調整：靠左對齊 */
+      @media (max-width: 768px) {
+        .category-nav {
+          justify-content: flex-start;
+          padding-left: 20px;
+          padding-right: 20px;
+          /* 右邊也要加，不然滑到底會切到 */
+        }
+      }
+
+      /* === 🛒 購物車專用關閉按鈕 (強制變大) === */
+      .cart-close-btn {
+        cursor: pointer;
+        font-size: 2.8rem;
+        /* 字體放大 */
+        color: #333;
+        /* 深灰色 */
+        font-weight: 300;
+        /* 細體比較時尚 */
+        line-height: 1;
+        padding: 5px 15px;
+        /* 增加手指點擊範圍 */
+
+        /* 讓它在手機上容易被按到 */
+        display: inline-block;
+        transition: transform 0.2s;
+      }
+
+      .cart-close-btn:active {
+        transform: scale(0.9);
+        /* 手機按下去會有縮小效果 */
+      }
+
+      @keyframes twinkle {
+        0%,
+        100% {
+          opacity: 0.3;
+          transform: scale(0.8);
+        }
+
+        50% {
+          opacity: 1;
+          transform: scale(1.2);
+        }
+      }
+
+      /* === 📱 手機版購物車空間極限優化 (讓商品列表變很長！) === */
+      @media (max-width: 768px) {
+        /* 1. 把整個白框的內距縮到最小，爭取最大空間 */
+        .cart-content {
+          padding: 15px !important;
+          /* 原本 40px -> 改 15px，瞬間多出很多空間 */
+        }
+
+        /* 2. 標題「購物清單」往上收 */
+        .cart-content > div:first-child {
+          margin-bottom: 10px !important;
+        }
+
+        /* 3. 壓縮「選擇下單平台」區塊 (這是接在商品列表下面的那塊) */
+        #cartItems + div {
+          padding-top: 10px !important;
+          /* 分隔線上方留白減少 */
+          margin-bottom: 10px !important;
+          /* 跟折扣碼的距離減少 */
+        }
+
+        /* 讓裡面的選項緊湊一點 */
+        #cartItems + div p {
+          margin-bottom: 5px !important;
+        }
+
+        #cartItems + div label {
+          margin-bottom: 2px !important;
+        }
+
+        /* 4. 壓縮「折扣碼」區塊 */
+        #promo-box {
+          margin-bottom: 8px !important;
+        }
+
+        /* 讓輸入框稍微矮一點，不用那麼肥 */
+        #promo-code-input,
+        #promo-box button {
+          height: 38px !important;
+        }
+
+        /* 5. 壓縮「總金額」與「按鈕」 */
+        #cartTotal {
+          margin-bottom: 5px !important;
+        }
+
+        /* 提醒小字 (訂單成立那行) */
+        .cart-content > p {
+          margin: 5px 0 !important;
+        }
+
+        /* 綠色結帳按鈕 */
+        .btn-checkout {
+          margin-top: 5px !important;
+          /* 離上面近一點 */
+          padding: 12px !important;
+          /* 按鈕變矮一點 */
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1>Mina's Journal</h1>
+
+      <div class="brand-name">│ Mina．妝日子 │</div>
+
+      <div class="service-info">
+        KR 美妝保養 &nbsp;·&nbsp; 韓國各大官網代購 &nbsp;·&nbsp; 私房選品團購
+      </div>
+
+      <div
+        style="
           position: absolute;
           top: 60px;
           right: 15%;
           color: #d4a373;
           opacity: 0.6;
           animation: twinkle 3s infinite;
-        ">
-      ✦
+        "
+      >
+        ✦
+      </div>
+    </header>
+
+    <div class="memo-board">
+      <span class="memo-title">Notice</span>
+      <ul class="memo-list">
+        <li>本頁商品皆為代購，下單後約 10-15 個工作天寄出。</li>
+        <li>部分熱門品項可能提前缺貨，建議儘早下單。</li>
+
+        <li>
+          選購完成至購物車內點選「 傳送至 LINE官方帳號 」，
+          方便確認訂單與匯款資訊。
+        </li>
+
+        <li>
+          <a
+            href="https://myship.7-11.com.tw/general/detail/GM2508314219264"
+            target="_blank"
+            style="text-decoration: underline; color: #bfa092"
+          >
+            現貨免等專區 (7-11 賣貨便直購) ➝
+          </a>
+        </li>
+      </ul>
     </div>
-  </header>
 
-  <div class="memo-board">
-    <span class="memo-title">Notice</span>
-    <ul class="memo-list">
-      <li>本頁商品皆為代購，下單後約 10-15 個工作天寄出。</li>
-      <li>部分熱門品項可能提前缺貨，建議儘早下單。</li>
+    <div id="category-container" class="category-nav"></div>
 
-      <li>
-        選購完成至購物車內點選「 傳送至 LINE官方帳號 」，
-        方便確認訂單與匯款資訊。
-      </li>
+    <div id="loading">
+      <div class="loader-spinner"></div>
+      <span class="loading-text">loading.....</span>
+    </div>
+    <div class="container" id="product-list"></div>
 
-      <li>
-        <a href="https://myship.7-11.com.tw/general/detail/GM2508314219264" target="_blank"
-          style="text-decoration: underline; color: #bfa092">
-          現貨免等專區 (7-11 賣貨便直購) ➝
+    <footer>
+      <div class="footer-logo-simple">│ Mina · 妝日子 │</div>
+
+      <div class="footer-links">
+        <a
+          href="https://www.instagram.com/mina_k.beautyroom/"
+          target="_blank"
+          class="social-link"
+        >
+          <svg
+            class="icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+          mina_k.beautyroom
         </a>
-      </li>
-    </ul>
-  </div>
+        <span class="divider">｜</span>
+        <a
+          href="https://line.me/R/ti/p/@139gqqwy"
+          target="_blank"
+          class="social-link"
+        >
+          <svg
+            class="icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"
+            ></path>
+          </svg>
+          LINE 官方帳號 : @139gqqwy
+        </a>
+      </div>
 
-  <div id="category-container" class="category-nav"></div>
-
-  <div id="loading">
-    <div class="loader-spinner"></div>
-    <span class="loading-text">loading.....</span>
-  </div>
-  <div class="container" id="product-list"></div>
-
-  <footer>
-    <div class="footer-logo-simple">│ Mina · 妝日子 │</div>
-
-    <div class="footer-links">
-      <a href="https://www.instagram.com/mina_k.beautyroom/" target="_blank" class="social-link">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-          stroke-linejoin="round">
-          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-        </svg>
-        mina_k.beautyroom
-      </a>
-      <span class="divider">｜</span>
-      <a href="https://line.me/R/ti/p/@139gqqwy" target="_blank" class="social-link">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-          stroke-linejoin="round">
-          <path
-            d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
-          </path>
-        </svg>
-        LINE 官方帳號 : @139gqqwy
-      </a>
-    </div>
-
-    <div class="copyright">
-      &copy; 2026 │ Mina．妝日子 │. All rights reserved.<br />
-      <span style="
+      <div class="copyright">
+        &copy; 2026 │ Mina．妝日子 │. All rights reserved.<br />
+        <span
+          style="
             opacity: 0.5;
             font-size: 0.6rem;
             display: inline-block;
             margin-top: 8px;
             font-weight: 300;
-          ">
-        本站僅提供代購服務，商品圖片版權歸各品牌官方所有<br />
-        Images from official brand websites.
-      </span>
-    </div>
-  </footer>
+          "
+        >
+          本站僅提供代購服務，商品圖片版權歸各品牌官方所有<br />
+          Images from official brand websites.
+        </span>
+      </div>
+    </footer>
 
-  <div id="quickShopModal" class="quick-shop-overlay" onclick="closeQuickShop(event)">
-    <div class="quick-shop-content">
-      <button class="quick-shop-close" onclick="forceCloseQuickShop()"><span>×</span></button>
+    <div
+      id="quickShopModal"
+      class="quick-shop-overlay"
+      onclick="closeQuickShop(event)"
+    >
+      <div class="quick-shop-content">
+        <button class="quick-shop-close" onclick="forceCloseQuickShop()">
+          <span>×</span>
+        </button>
 
-      <div class="quick-shop-body">
-        <div class="quick-shop-img-box">
-          <img id="qs-img" src="" alt="Product Image">
+        <div class="quick-shop-body">
+          <div class="quick-shop-img-box">
+            <img id="qs-img" src="" alt="Product Image" />
 
-          <div id="qs-gallery-thumbs" class="qs-gallery-container"></div>
-        </div>
-
-        <div class="quick-shop-info-box">
-          <h2 id="qs-title">Product Name</h2>
-
-          <div id="qs-gift-card" class="qs-gift-card" style="display:none;">
-            <div id="qs-gift-text" class="qs-gift-text"></div>
+            <div id="qs-gallery-thumbs" class="qs-gallery-container"></div>
           </div>
 
-          <div id="qs-price-box">NT$ 0</div>
+          <div class="quick-shop-info-box">
+            <h2 id="qs-title">Product Name</h2>
 
-          <div class="qs-row-group">
-
-            <div class="qs-section qs-col-grow">
-              <label class="qs-label">規格 / 款式</label>
-              <select id="qs-variant-select" class="qs-select"></select>
+            <div id="qs-gift-card" class="qs-gift-card" style="display: none">
+              <div id="qs-gift-text" class="qs-gift-text"></div>
             </div>
 
-            <div class="qs-section qs-col-fixed">
-              <label class="qs-label">數量</label>
-              <div class="qs-qty-wrapper">
-                <button onclick="updateQsQty(-1)">−</button>
-                <input type="number" id="qs-qty" value="1" min="1" readonly>
-                <button onclick="updateQsQty(1)">+</button>
+            <div id="qs-price-box">NT$ 0</div>
+
+            <div class="qs-row-group">
+              <div class="qs-section qs-col-grow">
+                <label class="qs-label">規格 / 款式</label>
+                <select id="qs-variant-select" class="qs-select"></select>
+              </div>
+
+              <div class="qs-section qs-col-fixed">
+                <label class="qs-label">數量</label>
+                <div class="qs-qty-wrapper">
+                  <button onclick="updateQsQty(-1)">−</button>
+                  <input type="number" id="qs-qty" value="1" min="1" readonly />
+                  <button onclick="updateQsQty(1)">+</button>
+                </div>
               </div>
             </div>
-          </div>
 
-          <button id="qs-add-btn" class="qs-add-btn" onclick="addToCartFromModal()">
-            加入購物車
-          </button>
+            <button
+              id="qs-add-btn"
+              class="qs-add-btn"
+              onclick="addToCartFromModal()"
+            >
+              加入購物車
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div id="cart-float-btn" onclick="toggleCart()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-      stroke-linejoin="round">
-      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-      <line x1="3" y1="6" x2="21" y2="6"></line>
-      <path d="M16 10a4 4 0 0 1-8 0"></path>
-    </svg>
-    <div id="cart-count">0</div>
-  </div>
+    <div id="cart-float-btn" onclick="toggleCart()">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <path d="M16 10a4 4 0 0 1-8 0"></path>
+      </svg>
+      <div id="cart-count">0</div>
+    </div>
 
-  <div id="cartModal" class="cart-modal" onclick="closeCart(event)">
-    <div class="cart-content">
-      <div style="
+    <div id="cartModal" class="cart-modal" onclick="closeCart(event)">
+      <div class="cart-content">
+        <div
+          style="
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 30px;
-          ">
-        <h3 style="
+          "
+        >
+          <h3
+            style="
               font-family: &quot;Noto Sans TC&quot;, sans-serif;
               font-size: 1.6rem;
               font-weight: 600;
               letter-spacing: 1px;
               color: #2c2c2c;
-            ">
-          購物清單
-        </h3>
-        <span class="cart-close-btn" onclick="toggleCart()">×</span>
-      </div>
+            "
+          >
+            購物清單
+          </h3>
+          <span class="cart-close-btn" onclick="toggleCart()">×</span>
+        </div>
 
-      <div style="flex-grow: 1; overflow-y: auto" id="cartItems"></div>
+        <div style="flex-grow: 1; overflow-y: auto" id="cartItems"></div>
 
-      <div style="
+        <div
+          style="
             margin-bottom: 25px;
             border-top: 1px solid #eee;
             padding-top: 20px;
-          ">
-        <p style="
+          "
+        >
+          <p
+            style="
               margin-bottom: 15px;
               font-weight: bold;
               font-size: 1.1rem;
               color: #2c2c2c;
               font-family: &quot;Noto Sans TC&quot;, sans-serif;
-            ">
-          選擇下單平台：
-        </p>
+            "
+          >
+            選擇下單平台：
+          </p>
 
-        <label style="
+          <label
+            style="
               display: flex;
               align-items: center;
               margin-bottom: 12px;
@@ -1969,385 +2027,477 @@
               font-size: 1.1rem;
               color: #333;
               font-family: &quot;Noto Sans TC&quot;, sans-serif;
-            ">
-          <input type="radio" name="shipping" value="賣貨便" style="
+            "
+          >
+            <input
+              type="radio"
+              name="shipping"
+              value="賣貨便"
+              style="
                 margin-right: 12px;
                 transform: scale(1.5);
                 accent-color: #2c2c2c;
-              " />
-          7-11 賣貨便
-        </label>
+              "
+            />
+            7-11 賣貨便
+          </label>
 
-        <label style="
+          <label
+            style="
               display: flex;
               align-items: center;
               cursor: pointer;
               font-size: 1.1rem;
               color: #333;
               font-family: &quot;Noto Sans TC&quot;, sans-serif;
-            ">
-          <input type="radio" name="shipping" value="iOPEN Mall" style="
+            "
+          >
+            <input
+              type="radio"
+              name="shipping"
+              value="iOPEN Mall"
+              style="
                 margin-right: 12px;
                 transform: scale(1.5);
                 accent-color: #2c2c2c;
-              " />
-          iOPEN Mall
-        </label>
-      </div>
-      <div id="cartTotal" style="
+              "
+            />
+            iOPEN Mall
+          </label>
+        </div>
+        <div
+          id="cartTotal"
+          style="
             font-family: &quot;Noto Sans TC&quot;, sans-serif;
             font-size: 1.2rem;
             font-weight: 600;
             text-align: right;
-          ">
-        總金額: NT$ 0
-      </div>
+          "
+        >
+          總金額: NT$ 0
+        </div>
 
-      <p style="
+        <p
+          style="
             font-size: 0.85rem;
             color: #bfa092;
             margin: 15px 0 5px;
             text-align: center;
             font-family: &quot;Noto Sans TC&quot;, sans-serif;
             line-height: 1.5;
-          ">
-        ※ 確認訂單並完成定金匯款後，<br />訂單才算正式成立喔！謝謝
-      </p>
+          "
+        >
+          ※ 確認訂單並完成定金匯款後，<br />訂單才算正式成立喔！謝謝
+        </p>
 
-      <button class="btn-checkout" onclick="checkoutViaLine()">
-        傳送至 LINE官方帳號
-      </button>
+        <button class="btn-checkout" onclick="checkoutViaLine()">
+          傳送至 LINE官方帳號
+        </button>
+      </div>
     </div>
-  </div>
 
-  <div id="zoomOverlay" class="zoom-overlay" onclick="closeZoom()">
-    <img id="zoom-img-content" src="">
-    <div class="zoom-hint">點擊任意處關閉</div>
-  </div>
-
-  <div id="qrModal" class="quick-shop-overlay" onclick="closeQrModal(event)" style="z-index: 3000;">
-    <div class="quick-shop-content" style="max-width: 400px; padding: 30px; text-align: center;">
-      <span onclick="document.getElementById('qrModal').classList.remove('show')"
-        style="position: absolute; top: 10px; right: 15px; cursor: pointer; font-size: 1.8rem; color: #888;">&times;</span>
-      <h3 id="qrTitle"
-        style="font-family: 'Noto Sans TC', sans-serif; font-size: 1.2rem; color: #333; margin-bottom: 15px;">請使用手機掃描下單
-      </h3>
-      <div id="qrBody"></div>
+    <div id="zoomOverlay" class="zoom-overlay" onclick="closeZoom()">
+      <img id="zoom-img-content" src="" />
+      <div class="zoom-hint">點擊任意處關閉</div>
     </div>
-  </div>
 
+    <div
+      id="qrModal"
+      class="quick-shop-overlay"
+      onclick="closeQrModal(event)"
+      style="z-index: 3000"
+    >
+      <div
+        class="quick-shop-content"
+        style="max-width: 400px; padding: 30px; text-align: center"
+      >
+        <span
+          onclick="document.getElementById('qrModal').classList.remove('show')"
+          style="
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            cursor: pointer;
+            font-size: 1.8rem;
+            color: #888;
+          "
+          >&times;</span
+        >
+        <h3
+          id="qrTitle"
+          style="
+            font-family: &quot;Noto Sans TC&quot;, sans-serif;
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 15px;
+          "
+        >
+          請使用手機掃描下單
+        </h3>
+        <div id="qrBody"></div>
+      </div>
+    </div>
 
-  <script>
-    // === 🔒 手機版背景鎖定大神器 ===
-    let savedScrollPosition = 0; // 用來記住客人滑到哪裡
+    <script>
+      // === 🔒 手機版背景鎖定大神器 ===
+      let savedScrollPosition = 0; // 用來記住客人滑到哪裡
 
-    function freezeBackground() {
-      // 1. 記住現在滑到哪
-      savedScrollPosition = window.scrollY;
+      function freezeBackground() {
+        // 1. 記住現在滑到哪
+        savedScrollPosition = window.scrollY;
 
-      // 2. 把網頁「釘」在那個位置，強制變成 100% 寬度
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${savedScrollPosition}px`;
-      document.body.style.width = '100%';
-      document.body.style.overflow = 'hidden'; // 隱藏滑軌
-    }
+        // 2. 把網頁「釘」在那個位置，強制變成 100% 寬度
+        document.body.style.position = "fixed";
+        document.body.style.top = `-${savedScrollPosition}px`;
+        document.body.style.width = "100%";
+        document.body.style.overflow = "hidden"; // 隱藏滑軌
+      }
 
-    function unfreezeBackground() {
-      // 1. 解除釘選
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      document.body.style.overflow = '';
+      function unfreezeBackground() {
+        // 1. 解除釘選
+        document.body.style.position = "";
+        document.body.style.top = "";
+        document.body.style.width = "";
+        document.body.style.overflow = "";
 
-      // 2. 瞬間跳回原本的位置 (讓客人感覺不到變化)
-      window.scrollTo(0, savedScrollPosition);
-    }
-    // ===========================================
+        // 2. 瞬間跳回原本的位置 (讓客人感覺不到變化)
+        window.scrollTo(0, savedScrollPosition);
+      }
+      // ===========================================
 
-    const GOOGLE_SHEET_CSV_URL =
-      "https://docs.google.com/spreadsheets/d/e/2PACX-1vS_Cy5OSihu86kbG6c2iGLRUFSSVNnYuG_yanPRNuIF65KtJ_K9r-kXuz1IdWAbxnwfmvAWvWDjlywe/pub?output=csv";
-    // 🟢 新增這段：用來正確解析 CSV 的工具函式
-    function parseCSVLine(str) {
-      const result = [];
-      let start = 0;
-      let inQuotes = false;
+      const GOOGLE_SHEET_CSV_URL =
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vS_Cy5OSihu86kbG6c2iGLRUFSSVNnYuG_yanPRNuIF65KtJ_K9r-kXuz1IdWAbxnwfmvAWvWDjlywe/pub?output=csv";
+      // 🟢 新增這段：用來正確解析 CSV 的工具函式
+      function parseCSVLine(str) {
+        const result = [];
+        let start = 0;
+        let inQuotes = false;
 
-      for (let i = 0; i < str.length; i++) {
-        if (str[i] === '"') {
-          inQuotes = !inQuotes; // 判斷是否在引號內
-        } else if (str[i] === "," && !inQuotes) {
-          // 如果遇到逗號，且不在引號內，才切分
-          let field = str.substring(start, i).trim();
-          // 去除欄位前後的引號
-          if (field.startsWith('"') && field.endsWith('"')) {
-            field = field.substring(1, field.length - 1).replace(/""/g, '"');
+        for (let i = 0; i < str.length; i++) {
+          if (str[i] === '"') {
+            inQuotes = !inQuotes; // 判斷是否在引號內
+          } else if (str[i] === "," && !inQuotes) {
+            // 如果遇到逗號，且不在引號內，才切分
+            let field = str.substring(start, i).trim();
+            // 去除欄位前後的引號
+            if (field.startsWith('"') && field.endsWith('"')) {
+              field = field.substring(1, field.length - 1).replace(/""/g, '"');
+            }
+            result.push(field);
+            start = i + 1;
           }
-          result.push(field);
-          start = i + 1;
+        }
+        // 處理最後一個欄位
+        let lastField = str.substring(start).trim();
+        if (lastField.startsWith('"') && lastField.endsWith('"')) {
+          lastField = lastField
+            .substring(1, lastField.length - 1)
+            .replace(/""/g, '"');
+        }
+        result.push(lastField);
+        return result;
+      }
+
+      let allProductsData = [];
+      let cart = [];
+      let currentPromoCode = ""; // 紀錄目前使用的折扣碼
+      let currentDiscount = 0; // 紀錄折抵金額
+
+      // === 🏷️ 分類設定區 ===
+      const categoryMap = {
+        all: "全部商品", // 這個保留不要動
+        新品上架: "新品上架", // 左邊是判斷用的代號，右邊是顯示的文字
+        mangomee聯名: "mangomee聯名",
+        OY熱銷商品: "OY熱銷商品",
+      };
+      let currentCategory = "all";
+
+      // 1. 產生按鈕
+      function renderCategoryButtons() {
+        const container = document.getElementById("category-container");
+        container.innerHTML = "";
+
+        Object.keys(categoryMap).forEach((key) => {
+          const btn = document.createElement("div");
+          // 如果是當前選中的分類，就加上 active 讓它變色
+          btn.className = `category-btn ${currentCategory === key ? "active" : ""}`;
+          btn.innerText = categoryMap[key];
+          btn.onclick = () => switchCategory(key);
+          container.appendChild(btn);
+        });
+      }
+
+      // 2. 切換分類
+      function switchCategory(key) {
+        currentCategory = key;
+        renderCategoryButtons(); // 更新按鈕顏色
+
+        if (key === "all") {
+          // 如果選全部，就顯示所有資料
+          renderProducts(allProductsData);
+          renderCategoryButtons();
+        } else {
+          // 如果選特定分類，就檢查商品的 category 欄位有沒有包含該代號
+          const filtered = allProductsData.filter((p) => {
+            // 避免有些商品沒填分類會報錯，加個防護
+            const productCat = p.category ? p.category.toLowerCase() : "";
+            return productCat.includes(key);
+          });
+          renderProducts(filtered);
         }
       }
-      // 處理最後一個欄位
-      let lastField = str.substring(start).trim();
-      if (lastField.startsWith('"') && lastField.endsWith('"')) {
-        lastField = lastField
-          .substring(1, lastField.length - 1)
-          .replace(/""/g, '"');
-      }
-      result.push(lastField);
-      return result;
-    }
 
-    let allProductsData = [];
-    let cart = [];
-    let currentPromoCode = ""; // 紀錄目前使用的折扣碼
-    let currentDiscount = 0;   // 紀錄折抵金額
+      // === 🎁 折扣碼功能 ===
+      function applyPromoCode() {
+        const input = document
+          .getElementById("promo-code-input")
+          .value.trim()
+          .toUpperCase();
+        const msgEl = document.getElementById("promo-message");
 
-    // === 🏷️ 分類設定區 ===
-    const categoryMap = {
-      "all": "全部商品",         // 這個保留不要動
-      "新品上架": "新品上架",      // 左邊是判斷用的代號，右邊是顯示的文字
-      "限時優惠": "限時優惠",
-      "OY熱銷商品": "OY熱銷商品"
-    };
-    let currentCategory = "all";
+        // 計算目前總金額
+        let subtotal = 0;
+        cart.forEach((item) => (subtotal += item.price * item.qty));
 
-    // 1. 產生按鈕
-    function renderCategoryButtons() {
-      const container = document.getElementById("category-container");
-      container.innerHTML = "";
+        if (input === "") {
+          msgEl.innerText = "請輸入折扣碼";
+          return;
+        }
 
-      Object.keys(categoryMap).forEach(key => {
-        const btn = document.createElement("div");
-        // 如果是當前選中的分類，就加上 active 讓它變色
-        btn.className = `category-btn ${currentCategory === key ? 'active' : ''}`;
-        btn.innerText = categoryMap[key];
-        btn.onclick = () => switchCategory(key);
-        container.appendChild(btn);
-      });
-    }
+        // 🛑 這裡可以修改你要的折扣碼文字！
+        if (input !== "HELLO50") {
+          msgEl.innerText = "無效的折扣碼";
+          return;
+        }
 
-    // 2. 切換分類
-    function switchCategory(key) {
-      currentCategory = key;
-      renderCategoryButtons(); // 更新按鈕顏色
+        // 檢查活動時間
+        const now = new Date();
+        const startTime = new Date("2026-02-24T00:00:00");
+        const endTime = new Date("2026-03-06T23:59:59");
 
-      if (key === "all") {
-        // 如果選全部，就顯示所有資料
-        renderProducts(allProductsData);
-        renderCategoryButtons();
-      } else {
-        // 如果選特定分類，就檢查商品的 category 欄位有沒有包含該代號
-        const filtered = allProductsData.filter(p => {
-          // 避免有些商品沒填分類會報錯，加個防護
-          const productCat = p.category ? p.category.toLowerCase() : "";
-          return productCat.includes(key);
-        });
-        renderProducts(filtered);
-      }
-    }
+        if (now < startTime) {
+          msgEl.innerText = "活動將於 2/28 開始喔！敬請期待";
+          return;
+        }
+        if (now > endTime) {
+          msgEl.innerText = "此折扣碼活動已結束囉！";
+          return;
+        }
 
-    // === 🎁 折扣碼功能 ===
-    function applyPromoCode() {
-      const input = document.getElementById("promo-code-input").value.trim().toUpperCase();
-      const msgEl = document.getElementById("promo-message");
+        // 檢查滿額門檻
+        if (subtotal < 500) {
+          msgEl.innerText = `需滿 NT$500 才可使用 (目前差 NT$${500 - subtotal})`;
+          return;
+        }
 
-      // 計算目前總金額
-      let subtotal = 0;
-      cart.forEach(item => subtotal += item.price * item.qty);
-
-      if (input === "") {
-        msgEl.innerText = "請輸入折扣碼";
-        return;
+        // 套用成功
+        currentPromoCode = input;
+        currentDiscount = 50; // 🛑 這裡可以改折抵的金額
+        renderCartItems(); // 重新整理購物車畫面
       }
 
-      // 🛑 這裡可以修改你要的折扣碼文字！
-      if (input !== "HELLO50") {
-        msgEl.innerText = "無效的折扣碼";
-        return;
+      function removePromoCode() {
+        currentPromoCode = "";
+        currentDiscount = 0;
+        renderCartItems();
       }
 
-      // 檢查活動時間
-      const now = new Date();
-      const startTime = new Date("2026-02-24T00:00:00");
-      const endTime = new Date("2026-03-06T23:59:59");
-
-      if (now < startTime) {
-        msgEl.innerText = "活動將於 2/28 開始喔！敬請期待";
-        return;
-      }
-      if (now > endTime) {
-        msgEl.innerText = "此折扣碼活動已結束囉！";
-        return;
+      // 🟢 新增 1：讀取舊的購物車資料 (網頁一打開就執行)
+      function loadCart() {
+        const savedCart = localStorage.getItem("minaShopCart");
+        if (savedCart) {
+          cart = JSON.parse(savedCart);
+          updateCartIcon();
+        }
       }
 
-      // 檢查滿額門檻
-      if (subtotal < 500) {
-        msgEl.innerText = `需滿 NT$500 才可使用 (目前差 NT$${500 - subtotal})`;
-        return;
-      }
-
-      // 套用成功
-      currentPromoCode = input;
-      currentDiscount = 50; // 🛑 這裡可以改折抵的金額
-      renderCartItems(); // 重新整理購物車畫面
-    }
-
-    function removePromoCode() {
-      currentPromoCode = "";
-      currentDiscount = 0;
-      renderCartItems();
-    }
-
-    // 🟢 新增 1：讀取舊的購物車資料 (網頁一打開就執行)
-    function loadCart() {
-      const savedCart = localStorage.getItem("minaShopCart");
-      if (savedCart) {
-        cart = JSON.parse(savedCart);
+      // 🟢 新增 2：把購物車存起來 (每次增減商品都要執行)
+      function saveCart() {
+        localStorage.setItem("minaShopCart", JSON.stringify(cart));
         updateCartIcon();
       }
-    }
 
-    // 🟢 新增 2：把購物車存起來 (每次增減商品都要執行)
-    function saveCart() {
-      localStorage.setItem("minaShopCart", JSON.stringify(cart));
-      updateCartIcon();
-    }
+      // 1. 全新的資料讀取函式 (只負責讀資料 & 產生分類按鈕)
+      async function fetchProducts() {
+        const loading = document.getElementById("loading");
+        const container = document.getElementById("product-list");
 
-    // 1. 全新的資料讀取函式 (只負責讀資料 & 產生分類按鈕)
-    async function fetchProducts() {
-      const loading = document.getElementById("loading");
-      const container = document.getElementById("product-list");
+        try {
+          // 強制更新資料
+          const response = await fetch(
+            GOOGLE_SHEET_CSV_URL + "&t=" + new Date().getTime(),
+          );
+          const data = await response.text();
+          const rows = data.split("\n").map((row) => parseCSVLine(row));
+          rows.shift(); // 移除標題列
 
-      try {
-        // 強制更新資料
-        const response = await fetch(
-          GOOGLE_SHEET_CSV_URL + "&t=" + new Date().getTime(),
-        );
-        const data = await response.text();
-        const rows = data.split("\n").map((row) => parseCSVLine(row));
-        rows.shift(); // 移除標題列
+          loading.style.display = "none";
+          allProductsData = [];
 
-        loading.style.display = "none";
-        allProductsData = [];
+          rows.forEach((row, index) => {
+            if (row.length < 4) return;
 
-        rows.forEach((row, index) => {
-          if (row.length < 4) return;
+            // --- 讀取基礎資料 ---
+            const rawSpec = row[1] ? row[1].trim() : "";
+            const variants = rawSpec.includes("|")
+              ? rawSpec.split("|").map((s) => s.trim())
+              : rawSpec
+                ? [rawSpec]
+                : [];
 
-          // --- 讀取基礎資料 ---
-          const rawSpec = row[1] ? row[1].trim() : "";
-          const variants = rawSpec.includes("|")
-            ? rawSpec.split("|").map((s) => s.trim())
-            : rawSpec
-              ? [rawSpec]
-              : [];
+            // 圖片處理
+            const extraImgs = [row[10], row[11], row[12], row[13], row[14]]
+              .map((url) => (url ? url.trim() : ""))
+              .filter((url) => url !== "");
 
-          // 圖片處理
-          const extraImgs = [
-            row[10], row[11], row[12], row[13], row[14]
-          ].map(url => url ? url.trim() : "").filter(url => url !== "");
-          const allImages = [row[3] ? row[3].trim() : "", ...extraImgs].filter(url => url !== "");
+            const allImages = [
+              row[9] ? row[9].trim() : "",
+              ...extraImgs,
+            ].filter((url) => url !== "");
 
-          const product = {
-            id: index,
-            name: row[0] ? row[0].trim() : "Unnamed",
-            variants: variants,
-            // 價格暫存原始字串，顯示時再處理
-            originalPriceStr: row[2] ? row[2].trim() : "0",
-            vipPriceStr: row[9] ? row[9].trim() : "",
+            const product = {
+              id: index,
+              name: row[0] ? row[0].trim() : "Unnamed",
+              variants: variants,
+              originalPriceStr: row[2] ? row[2].trim() : "0",
 
-            // 這裡會自動處理，讓其他地方用起來方便
-            price: row[2] ? row[2].trim() : "0",
+              vipPriceStr: row[3] ? row[3].trim() : "",
+              price:
+                row[3] && row[3].trim() !== ""
+                  ? row[3].trim()
+                  : row[2]
+                    ? row[2].trim()
+                    : "0",
 
-            imgUrl: row[3] ? row[3].trim() : "",
-            gallery: allImages,
-            detailImgUrl: row[4] ? row[4].trim() : "",
+              price: row[2] ? row[2].trim() : "0",
 
-            // 🔴 修改 1：原本 F 欄是 description，現在要讓位給分類，所以這裡先改成空字串
-            // (如果不改，網頁可能會把「美妝」這兩個字當成副標題顯示在價格上方)
-            description: "",
+              imgUrl: row[9] ? row[9].trim() : "",
+              gallery: allImages,
+              detailImgUrl: row[4] ? row[4].trim() : "",
 
-            tag: row[6] ? row[6].trim().toUpperCase() : "",
-            deadline: row[7] ? row[7].trim() : "",
+              // 🔴 修改 1：原本 F 欄是 description，現在要讓位給分類，所以這裡先改成空字串
+              // (如果不改，網頁可能會把「美妝」這兩個字當成副標題顯示在價格上方)
+              description: "",
 
-            // 這裡也加上了去空格功能
-            giftDesc: row[8] ? row[8].trim().replace(/\s*<br\s*\/?>\s*/gi, '<br>') : "",
+              tag: row[6] ? row[6].trim().toUpperCase() : "",
+              deadline: row[7] ? row[7].trim() : "",
 
-            // 🔴 修改 2：關鍵！分類改成讀取 row[5] (也就是 F 欄)
-            // 原本是: category: row[15] ? row[15].trim() : "其他",
-            category: row[5] ? row[5].trim() : "其他",
-          };
+              // 這裡也加上了去空格功能
+              giftDesc: row[8]
+                ? row[8].trim().replace(/\s*<br\s*\/?>\s*/gi, "<br>")
+                : "",
 
-          // 處理規格預設值
-          if (product.variants.length === 1) product.selectedVariant = product.variants[0];
-          else if (product.variants.length === 0) product.selectedVariant = "單一規格";
+              // 🔴 修改 2：關鍵！分類改成讀取 row[5] (也就是 F 欄)
+              // 原本是: category: row[15] ? row[15].trim() : "其他",
+              category: row[5] ? row[5].trim() : "其他",
+            };
 
-          allProductsData.push(product);
-        });
+            // 處理規格預設值
+            if (product.variants.length === 1)
+              product.selectedVariant = product.variants[0];
+            else if (product.variants.length === 0)
+              product.selectedVariant = "單一規格";
 
-        // === 自動排序邏輯：1.看標籤 2.同品牌聚攏 ===
-        allProductsData.sort((a, b) => {
-          // 規則一：設定標籤的優先級 (數字越小排越前面)
-          const getPriority = (tag) => {
-            // 你可以在這裡增減你要置頂的標籤關鍵字
-            if (tag.includes("NEW") || tag.includes("特價")) return 1;
-            if (tag.includes("HOT")) return 2;
-            if (tag.includes("SALE")) return 3;
-            return 4; // 沒有標籤的商品，統一歸到最後這層
-          };
+            allProductsData.push(product);
+          });
 
-          const priorityA = getPriority(a.tag);
-          const priorityB = getPriority(b.tag);
+          // === 自動排序邏輯：1.看標籤 2.同品牌聚攏 ===
+          allProductsData.sort((a, b) => {
+            // 規則一：設定標籤的優先級 (數字越小排越前面)
+            const getPriority = (tag) => {
+              // 你可以在這裡增減你要置頂的標籤關鍵字
+              if (tag.includes("NEW") || tag.includes("特價")) return 1;
+              if (tag.includes("HOT")) return 2;
+              if (tag.includes("SALE")) return 3;
+              return 4; // 沒有標籤的商品，統一歸到最後這層
+            };
 
-          // 如果兩個商品的標籤優先級不同，就讓數字小的排前面
-          if (priorityA !== priorityB) {
-            return priorityA - priorityB;
-          }
+            const priorityA = getPriority(a.tag);
+            const priorityB = getPriority(b.tag);
 
-          // 規則二：如果標籤一樣（例如兩個都是一般商品），就依照「品名」的英文字母或筆畫排序
-          // 只要你的品名開頭是品牌名 (例如 CLIO)，它們就會自動排在一起
-          return a.name.localeCompare(b.name, 'zh-TW');
-        });
-        renderCategoryButtons();
-        renderProducts(allProductsData);
+            // 如果兩個商品的標籤優先級不同，就讓數字小的排前面
+            if (priorityA !== priorityB) {
+              return priorityA - priorityB;
+            }
 
-      } catch (error) {
-        console.error(error);
-        loading.style.display = "none";
-        container.innerHTML = '<p style="text-align:center; padding:20px;">載入失敗。</p>';
-      }
-    }
-
-    // 4. 🟢 新增：負責把商品畫在螢幕上的函式 (從原本的 fetchProducts 拆出來的)
-    function renderProducts(products) {
-      const container = document.getElementById("product-list"); // 🌟 補上這行告訴它 container 是誰
-      container.innerHTML = ""; // 先清空畫面
-
-      if (products.length === 0) {
-        container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:40px; color:#999;">此分類暫無商品</div>`;
-        return;
+            // 規則二：如果標籤一樣（例如兩個都是一般商品），就依照「品名」的英文字母或筆畫排序
+            // 只要你的品名開頭是品牌名 (例如 CLIO)，它們就會自動排在一起
+            return a.name.localeCompare(b.name, "zh-TW");
+          });
+          renderCategoryButtons();
+          renderProducts(allProductsData);
+        } catch (error) {
+          console.error(error);
+          loading.style.display = "none";
+          container.innerHTML =
+            '<p style="text-align:center; padding:20px;">載入失敗。</p>';
+        }
       }
 
-      products.forEach((product, idx) => {
-        product.price = product.originalPriceStr;
-        let finalPriceDisplay = product.originalPriceStr;
-        let priceHtml = `<span class="price">NT$ ${product.originalPriceStr}</span>`;
+      // 4. 🟢 新增：負責把商品畫在螢幕上的函式 (從原本的 fetchProducts 拆出來的)
+      function renderProducts(products) {
+        const container = document.getElementById("product-list"); // 🌟 補上這行告訴它 container 是誰
+        container.innerHTML = ""; // 先清空畫面
 
-        // 標籤邏輯
+        if (products.length === 0) {
+          container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:40px; color:#999;">此分類暫無商品</div>`;
+          return;
+        }
+
+products.forEach((product, idx) => {
+        const globalIdx = allProductsData.indexOf(product);
+
+        // 🌟 1. 判斷這項商品是不是「全部缺貨」
+        let isAllOutOfStock = false;
+        if (product.variants.length > 0 && product.variants[0] !== "") {
+          // 檢查是不是「每一個」規格都包含了 (缺)
+          isAllOutOfStock = product.variants.every(v => v.includes('(缺)'));
+        }
+
+        // 價格顯示邏輯
+        let priceHtml = "";
+        if (product.vipPriceStr) {
+          priceHtml = `
+            <div class="price-container">
+              <span class="price-original">NT$ ${product.originalPriceStr}</span>
+              <span class="price-vip">NT$ ${product.vipPriceStr}</span>
+            </div>
+          `;
+        } else {
+          priceHtml = `<span class="price">NT$ ${product.originalPriceStr}</span>`;
+        }
+
+// 🌟 2. 標籤邏輯
         let badgeHtml = "";
-        if (product.tag === "NEW") badgeHtml = `<div class="badge new">NEW</div>`;
-        else if (product.tag === "HOT") badgeHtml = `<div class="badge hot">HOT</div>`;
-        else if (product.tag === "SALE") badgeHtml = `<div class="badge sale">SALE</div>`;
+        if (!isAllOutOfStock) {
+          if (product.tag === "NEW") badgeHtml = `<div class="badge new">NEW</div>`;
+          else if (product.tag === "HOT") badgeHtml = `<div class="badge hot">HOT</div>`;
+          else if (product.tag === "SALE") badgeHtml = `<div class="badge sale">SALE</div>`;
+        }
+
+        // 🌟 3. 按鈕邏輯：缺貨就鎖死變灰色
+        let btnHtml = "";
+        if (isAllOutOfStock) {
+          btnHtml = `<button class="btn-add" style="background-color: #ccc; border-color: #ccc; cursor: not-allowed; max-width: 200px;" disabled>已售完</button>`;
+        } else {
+          btnHtml = `<button class="btn-add" onclick="openQuickShop(${globalIdx})" style="max-width: 200px;">加入購物車</button>`;
+        }
+
+        // 🌟 4. 圖片特效：缺貨時讓圖片變淡 (opacity: 0.5)
+        let imgOpacity = isAllOutOfStock ? "opacity: 0.5;" : "";
+        let clickEvent = isAllOutOfStock ? "" : `onclick="openQuickShop(${globalIdx})"`;
+        let cursorStyle = isAllOutOfStock ? "default" : "pointer";
 
         const card = document.createElement("div");
         card.className = "product-card";
         card.innerHTML = `
-                <div class="img-wrapper" style="cursor:pointer;" onclick="openQuickShop(${idx})">
+                <div class="img-wrapper" style="cursor: ${cursorStyle}; background: #fff;" ${clickEvent}>
     ${badgeHtml}
-    <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
+    <img src="${product.imgUrl}" alt="${product.name}" loading="lazy" style="${imgOpacity}">
 </div>
 
 <div class="info">
-    <h3 class="name">${product.name}</h3>
+    <h3 class="name" style="${isAllOutOfStock ? 'color: #999;' : ''}">${product.name}</h3>
 
     <span class="deadline-badge ${product.deadline ? '' : 'empty'}">
         ${product.deadline || "空格佔位"}
@@ -2356,258 +2506,303 @@
     ${priceHtml}
       
                     <div class="action-row" style="margin-top: 10px; justify-content: center;">
-                        <button class="btn-add" onclick="openQuickShop(${idx})" style="max-width: 200px;">
-                            加入購物車
-                        </button>
+                        ${btnHtml}
                     </div>
                 </div>
             `;
         container.appendChild(card);
       });
-    }
+          }
 
-    // === 🛒 全域變數：紀錄目前彈窗正在看哪一個商品 ===
-    let currentQsIndex = null;
+      // === 🛒 全域變數：紀錄目前彈窗正在看哪一個商品 ===
+      let currentQsIndex = null;
 
-    // 1. 打開快速購物視窗
-    function openQuickShop(index) {
-      const product = allProductsData[index];
-      currentQsIndex = index; // 記住現在是誰
+      // 1. 打開快速購物視窗
+      function openQuickShop(index) {
+        const product = allProductsData[index];
+        currentQsIndex = index; // 記住現在是誰
 
-      // 填入圖片
-      // === 🟢 圖片相簿處理 (開始) ===
-      const mainImg = document.getElementById('qs-img');
-      const galleryContainer = document.getElementById('qs-gallery-thumbs');
+        // 填入圖片
+        // === 🟢 圖片相簿處理 (開始) ===
+        const mainImg = document.getElementById("qs-img");
+        const galleryContainer = document.getElementById("qs-gallery-thumbs");
 
-      // 1. 先顯示第一張圖 (主圖)
-      // 這裡加上 object-fit 設定，確保不管長寬都不會變形
-      mainImg.src = product.gallery[0];
-      mainImg.style.cursor = "zoom-in"; // 滑鼠變放大鏡
-      mainImg.onclick = function () {
-        openZoom(this.src); // 呼叫放大功能，傳入目前的圖片
-      };
+        // 1. 先顯示第一張圖 (主圖)
+        // 這裡加上 object-fit 設定，確保不管長寬都不會變形
+        mainImg.src = product.gallery[0];
+        mainImg.style.cursor = "zoom-in"; // 滑鼠變放大鏡
+        mainImg.onclick = function () {
+          openZoom(this.src); // 呼叫放大功能，傳入目前的圖片
+        };
 
-      // 2. 產生下方縮圖 (如果有超過 1 張圖的話)
-      galleryContainer.innerHTML = ''; // 清空舊的
+        // 2. 產生下方縮圖 (如果有超過 1 張圖的話)
+        galleryContainer.innerHTML = ""; // 清空舊的
 
-      if (product.gallery.length > 1) {
-        product.gallery.forEach((imgUrl, idx) => {
-          const thumb = document.createElement('img');
-          thumb.src = imgUrl;
-          thumb.className = 'qs-thumb';
+        if (product.gallery.length > 1) {
+          product.gallery.forEach((imgUrl, idx) => {
+            const thumb = document.createElement("img");
+            thumb.src = imgUrl;
+            thumb.className = "qs-thumb";
 
-          // 第一張預設選中
-          if (idx === 0) thumb.classList.add('active');
+            // 第一張預設選中
+            if (idx === 0) thumb.classList.add("active");
 
-          // 點擊縮圖：換大圖 + 切換金框
-          thumb.onclick = function () {
-            mainImg.src = imgUrl;
-            // 移除其他人的 active
-            document.querySelectorAll('.qs-thumb').forEach(t => t.classList.remove('active'));
-            // 自己加上 active
-            this.classList.add('active');
-          };
+            // 點擊縮圖：換大圖 + 切換金框
+            thumb.onclick = function () {
+              mainImg.src = imgUrl;
+              // 移除其他人的 active
+              document
+                .querySelectorAll(".qs-thumb")
+                .forEach((t) => t.classList.remove("active"));
+              // 自己加上 active
+              this.classList.add("active");
+            };
 
-          galleryContainer.appendChild(thumb);
-        });
-        galleryContainer.style.display = 'flex';
-      } else {
-        // 如果只有一張圖，就不顯示縮圖列
-        galleryContainer.style.display = 'none';
-      }
-      // === 🟢 圖片相簿處理 (結束) ===
+            galleryContainer.appendChild(thumb);
+          });
+          galleryContainer.style.display = "flex";
+        } else {
+          // 如果只有一張圖，就不顯示縮圖列
+          galleryContainer.style.display = "none";
+        }
+        // === 🟢 圖片相簿處理 (結束) ===
 
-      // 填入標題
-      document.getElementById('qs-title').innerHTML = product.name;
+        // 填入標題
+        document.getElementById("qs-title").innerHTML = product.name;
 
-      // 🟢 1. 填入 I 欄 (內容物清單) - 現在移到最上面了！
-      const giftCard = document.getElementById('qs-gift-card');
-      const giftText = document.getElementById('qs-gift-text');
+        // 🟢 1. 填入 I 欄 (內容物清單) - 現在移到最上面了！
+        const giftCard = document.getElementById("qs-gift-card");
+        const giftText = document.getElementById("qs-gift-text");
 
-      if (product.giftDesc) {
-        giftText.innerHTML = product.giftDesc; // 支援 HTML <br>
-        giftCard.style.display = 'block';
-      } else {
-        giftCard.style.display = 'none';
-      }
+        if (product.giftDesc) {
+          giftText.innerHTML = product.giftDesc; // 支援 HTML <br>
+          giftCard.style.display = "block";
+        } else {
+          giftCard.style.display = "none";
+        }
 
-      // 🟢 2. 填入價格
-      // 重新抓取網址參數判斷 VIP
-      const urlParams = new URLSearchParams(window.location.search);
-      // 這裡注意：你的變數名稱要對應，假設前面有用 const VIP_KEY = 'vip'
-      const isVipMode = urlParams.get('vip') === 'mina';
+        // 🟢 2. 填入價格
+        // 重新抓取網址參數判斷 VIP
+        const urlParams = new URLSearchParams(window.location.search);
+        // 這裡注意：你的變數名稱要對應，假設前面有用 const VIP_KEY = 'vip'
+        const isVipMode = urlParams.get("vip") === "mina";
 
-      // 直接抓取資料表裡的價格顯示
-      // 因為我們已經在 fetchProducts 處理過價格邏輯，這裡直接顯示 product.price 最保險
-      document.getElementById('qs-price-box').innerText = 'NT$ ' + product.price;
+        // 🌟 彈窗內的價格顯示邏輯
+        const priceBox = document.getElementById("qs-price-box");
+        if (product.vipPriceStr) {
+          // 有優惠價：為了讓彈窗排版好看，這裡稍微調整字體大小和靠左對齊
+          priceBox.innerHTML = `
+          <div class="price-container" style="justify-content: flex-start; margin-bottom: 0;">
+            <span class="price-original" style="font-size: 1.1rem;">NT$ ${product.originalPriceStr}</span>
+            <span class="price-vip" style="font-size: 1.6rem;">NT$ ${product.vipPriceStr}</span>
+          </div>
+        `;
+        } else {
+          // 沒優惠價
+          priceBox.innerText = "NT$ " + product.originalPriceStr;
+        }
 
-      // 產生規格選單
+// 產生規格選單
       const select = document.getElementById('qs-variant-select');
       select.innerHTML = ''; // 清空
+
+      let allOutOfStock = true; // 🌟 新增：用來偵測是不是全部賣光了
 
       if (product.variants.length > 0 && product.variants[0] !== "") {
         product.variants.forEach(v => {
           const opt = document.createElement('option');
           opt.value = v;
-          opt.innerText = v;
+
           if (v.includes('(缺)')) {
             opt.disabled = true;
-            opt.innerText += ' (Sold Out)';
+            // 把 (缺) 替換成空白，加上 (Sold Out)
+            opt.innerText = v.replace('(缺)', '').trim() + ' (Sold Out)';
+            opt.style.color = '#cecece'; 
+          } else {
+            opt.innerText = v;
+            opt.style.color = '#555'; 
+            allOutOfStock = false; // 🌟 只要有一個選項沒缺，就代表還能買
           }
+
           select.appendChild(opt);
         });
-        // 顯示選單區塊
         select.parentElement.style.display = 'block';
       } else {
-        // 如果沒有規格 (ONE SIZE)，隱藏選單
+        // 如果完全空白沒填規格，代表是一般有貨的單一商品
         select.parentElement.style.display = 'none';
+        allOutOfStock = false; 
       }
 
-      // 重置數量
-      document.getElementById('qs-qty').value = 1;
-
-      // 顯示彈窗 (加一點動畫 class)
-      const modal = document.getElementById('quickShopModal');
-      modal.style.display = 'flex';
-      // 稍微延遲加 show class 讓 fade in 動畫生效
-      setTimeout(() => {
-        modal.classList.add('show');
-      }, 10);
-      freezeBackground();
-    }
-
-    // 2. 關閉彈窗
-    function closeQuickShop(e) {
-      if (e.target.classList.contains('quick-shop-overlay')) {
-        unfreezeBackground();
-      }
-    }
-
-    function forceCloseQuickShop() {
-      const modal = document.getElementById('quickShopModal');
-      modal.classList.remove('show');
-      unfreezeBackground();
-      setTimeout(() => {
-        modal.style.display = 'none';
-      }, 300); // 等動畫跑完
-    }
-
-    // 3. 數量加減
-    function updateQsQty(change) {
-      const input = document.getElementById('qs-qty');
-      let newVal = parseInt(input.value) + change;
-      if (newVal < 1) newVal = 1;
-      input.value = newVal;
-    }
-
-    // === 🔍 放大鏡功能 ===
-    function openZoom(imgSrc) {
-      const overlay = document.getElementById('zoomOverlay');
-      const img = document.getElementById('zoom-img-content');
-
-      img.src = imgSrc; // 把圖源傳過去
-      overlay.style.display = 'flex';
-
-      // 加一點動畫延遲
-      setTimeout(() => { overlay.classList.add('show'); }, 10);
-    }
-
-    function closeZoom() {
-      const overlay = document.getElementById('zoomOverlay');
-      overlay.classList.remove('show');
-      setTimeout(() => { overlay.style.display = 'none'; }, 300);
-    }
-
-    // 4. 從彈窗加入購物車 (關鍵功能！)
-    function addToCartFromModal() {
-      if (currentQsIndex === null) return;
-      const product = allProductsData[currentQsIndex];
-
-      // 抓數量
-      const qty = parseInt(document.getElementById('qs-qty').value);
-
-      // 抓規格
-      let selectedSpec = "單一規格";
-      const select = document.getElementById('qs-variant-select');
-      // 如果選單有顯示，就抓選單的值
-      if (select.parentElement.style.display !== 'none') {
-        selectedSpec = select.value;
-      }
-
-      // 處理價格字串轉數字
-      let priceNum = parseInt(product.price.replace(/[^0-9]/g, ""));
-
-      // 加入購物車
-      const cartItem = {
-        name: product.name,
-        spec: selectedSpec,
-        price: priceNum,
-        qty: qty,
-      };
-
-      cart.push(cartItem);
-      saveCart();
-
-      // 按鈕回饋特效
-      const btn = document.getElementById('qs-add-btn');
-      const originalText = btn.innerText;
-      btn.innerText = "已加入！OK";
-      btn.style.background = "#6c757d"; // 變灰色提示
-
-      setTimeout(() => {
-        btn.innerText = originalText;
-        btn.style.background = "#d4a373"; // 變回金色
-        forceCloseQuickShop(); // 自動關閉視窗，讓客人繼續逛
-      }, 800);
-    }
-
-    // ==========================================
-    // 🟢 購物車功能區域
-    // ==========================================
-
-    function updateCartIcon() {
-      document.getElementById("cart-count").innerText = cart.length;
-    }
-
-    function toggleCart() {
-      const modal = document.getElementById("cartModal");
-      if (!modal.classList.contains("show")) {
-        renderCartItems();
-        modal.classList.add("show");
-        freezeBackground();
+      // 🌟 控制「加入購物車」按鈕的狀態
+      const addBtn = document.getElementById('qs-add-btn');
+      if (allOutOfStock) {
+        // 全部缺貨 -> 按鈕變灰色、不可點擊
+        addBtn.innerText = "已售完 (Sold Out)";
+        addBtn.style.background = "#ccc";
+        addBtn.style.borderColor = "#ccc";
+        addBtn.style.cursor = "not-allowed";
+        addBtn.disabled = true;
       } else {
+        // 正常狀態 -> 恢復金色按鈕
+        addBtn.innerText = "加入購物車";
+        addBtn.style.background = "#d4a373";
+        addBtn.style.borderColor = "#d4a373";
+        addBtn.style.cursor = "pointer";
+        addBtn.disabled = false;
+      }
+
+        // 重置數量
+        document.getElementById("qs-qty").value = 1;
+
+        // 顯示彈窗 (加一點動畫 class)
+        const modal = document.getElementById("quickShopModal");
+        modal.style.display = "flex";
+        // 稍微延遲加 show class 讓 fade in 動畫生效
+        setTimeout(() => {
+          modal.classList.add("show");
+        }, 10);
+        freezeBackground();
+      }
+
+      // 2. 關閉彈窗
+      function closeQuickShop(e) {
+        if (e.target.classList.contains("quick-shop-overlay")) {
+          unfreezeBackground();
+        }
+      }
+
+      function forceCloseQuickShop() {
+        const modal = document.getElementById("quickShopModal");
         modal.classList.remove("show");
         unfreezeBackground();
-      }
-    }
-
-    function closeCart(e) {
-      if (e.target.classList.contains("cart-modal")) {
-        document.getElementById("cartModal").classList.remove("show");
-        unfreezeBackground();
-      }
-    }
-
-    function renderCartItems() {
-      const container = document.getElementById("cartItems");
-      const totalEl = document.getElementById("cartTotal");
-
-      if (cart.length === 0) {
-        container.innerHTML =
-          "<p style=\"text-align:center; color:#999; margin-top:40px; font-family:'Noto Sans TC', sans-serif;\">購物車目前是空的</p>";
-        totalEl.innerText = "總金額: NT$ 0";
-        // 如果購物車清空，順便把折扣碼也清掉
-        currentPromoCode = "";
-        currentDiscount = 0;
-        return;
+        setTimeout(() => {
+          modal.style.display = "none";
+        }, 300); // 等動畫跑完
       }
 
-      let html = "";
-      let total = 0;
-      let depositHtml = "";
-      cart.forEach((item, idx) => {
-        total += item.price * item.qty;
-        html += `
+      // 3. 數量加減
+      function updateQsQty(change) {
+        const input = document.getElementById("qs-qty");
+        let newVal = parseInt(input.value) + change;
+        if (newVal < 1) newVal = 1;
+        input.value = newVal;
+      }
+
+      // === 🔍 放大鏡功能 ===
+      function openZoom(imgSrc) {
+        const overlay = document.getElementById("zoomOverlay");
+        const img = document.getElementById("zoom-img-content");
+
+        img.src = imgSrc; // 把圖源傳過去
+        overlay.style.display = "flex";
+
+        // 加一點動畫延遲
+        setTimeout(() => {
+          overlay.classList.add("show");
+        }, 10);
+      }
+
+      function closeZoom() {
+        const overlay = document.getElementById("zoomOverlay");
+        overlay.classList.remove("show");
+        setTimeout(() => {
+          overlay.style.display = "none";
+        }, 300);
+      }
+
+      // 4. 從彈窗加入購物車 (關鍵功能！)
+      function addToCartFromModal() {
+        if (currentQsIndex === null) return;
+        const product = allProductsData[currentQsIndex];
+
+        // 抓數量
+        const qty = parseInt(document.getElementById("qs-qty").value);
+
+        // 抓規格
+        let selectedSpec = "單一規格";
+        const select = document.getElementById("qs-variant-select");
+        // 如果選單有顯示，就抓選單的值
+        if (select.parentElement.style.display !== "none") {
+          selectedSpec = select.value;
+        }
+
+        // 🌟 處理價格
+        let checkoutPriceStr = product.vipPriceStr
+          ? product.vipPriceStr
+          : product.originalPriceStr;
+        let priceNum = parseInt(checkoutPriceStr.replace(/[^0-9]/g, ""));
+
+        // 加入購物車
+        const cartItem = {
+          name: product.name,
+          spec: selectedSpec,
+          price: priceNum,
+          qty: qty,
+        };
+
+        cart.push(cartItem);
+        saveCart();
+
+        // 按鈕回饋特效
+        const btn = document.getElementById("qs-add-btn");
+        const originalText = btn.innerText;
+        btn.innerText = "已加入！OK";
+        btn.style.background = "#6c757d"; // 變灰色提示
+
+        setTimeout(() => {
+          btn.innerText = originalText;
+          btn.style.background = "#d4a373"; // 變回金色
+          forceCloseQuickShop(); // 自動關閉視窗，讓客人繼續逛
+        }, 800);
+      }
+
+      // ==========================================
+      // 🟢 購物車功能區域
+      // ==========================================
+
+      function updateCartIcon() {
+        document.getElementById("cart-count").innerText = cart.length;
+      }
+
+      function toggleCart() {
+        const modal = document.getElementById("cartModal");
+        if (!modal.classList.contains("show")) {
+          renderCartItems();
+          modal.classList.add("show");
+          freezeBackground();
+        } else {
+          modal.classList.remove("show");
+          unfreezeBackground();
+        }
+      }
+
+      function closeCart(e) {
+        if (e.target.classList.contains("cart-modal")) {
+          document.getElementById("cartModal").classList.remove("show");
+          unfreezeBackground();
+        }
+      }
+
+      function renderCartItems() {
+        const container = document.getElementById("cartItems");
+        const totalEl = document.getElementById("cartTotal");
+
+        if (cart.length === 0) {
+          container.innerHTML =
+            "<p style=\"text-align:center; color:#999; margin-top:40px; font-family:'Noto Sans TC', sans-serif;\">購物車目前是空的</p>";
+          totalEl.innerText = "總金額: NT$ 0";
+          // 如果購物車清空，順便把折扣碼也清掉
+          currentPromoCode = "";
+          currentDiscount = 0;
+          return;
+        }
+
+        let html = "";
+        let total = 0;
+        let depositHtml = "";
+        cart.forEach((item, idx) => {
+          total += item.price * item.qty;
+          html += `
                 <div style="display:grid; grid-template-columns: 1fr 90px; gap:10px; padding:15px 0; border-bottom:1px solid #f5f5f5; align-items:center;">
                     <div style="font-family: 'Noto Sans TC', sans-serif; overflow:hidden;">
                         <div style="font-size: 1rem; font-weight: 500; color: #2c2c2c; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.name}</div>
@@ -2618,16 +2813,16 @@
                         <div style="color:#bfa092; cursor:pointer; font-size:0.8rem; margin-top:6px; text-decoration:underline;" onclick="removeFromCart(${idx})">移除</div>
                     </div>
                 </div>`;
-      });
+        });
 
-      let finalTotal = total - currentDiscount;
-      if (finalTotal < 0) finalTotal = 0;
+        let finalTotal = total - currentDiscount;
+        if (finalTotal < 0) finalTotal = 0;
 
-      if (finalTotal >= 1500) {
-        let rawDeposit = finalTotal * 0.20;
-        let finalDeposit = Math.round(rawDeposit / 100) * 100;
+        if (finalTotal >= 1500) {
+          let rawDeposit = finalTotal * 0.2;
+          let finalDeposit = Math.round(rawDeposit / 100) * 100;
 
-        depositHtml = `
+          depositHtml = `
                 <div style="
                     margin-top: 8px;
                     text-align: right; 
@@ -2652,133 +2847,133 @@
                     </span>
                 </div>
             `;
-      }
+        }
 
-      container.innerHTML = html;
-      totalEl.style.fontFamily = "'Noto Sans TC', sans-serif";
+        container.innerHTML = html;
+        totalEl.style.fontFamily = "'Noto Sans TC', sans-serif";
 
-      // 更新總金額顯示方式
-      if (currentDiscount > 0) {
-        totalEl.innerHTML = `
+        // 更新總金額顯示方式
+        if (currentDiscount > 0) {
+          totalEl.innerHTML = `
           <div style="font-size: 0.9rem; color: #999; text-decoration: line-through; margin-bottom: 4px; font-weight: normal;">小計: NT$ ${total}</div>
           <div style="color: #d65a5a; font-weight: 600;">結帳總金額: NT$ ${finalTotal}</div>
         `;
-      } else {
-        totalEl.innerText = `總金額: NT$ ${total}`;
-      }
+        } else {
+          totalEl.innerText = `總金額: NT$ ${total}`;
+        }
 
-      const oldDeposit = document.getElementById("deposit-display");
-      if (oldDeposit) oldDeposit.remove();
+        const oldDeposit = document.getElementById("deposit-display");
+        if (oldDeposit) oldDeposit.remove();
 
-      if (depositHtml) {
-        let div = document.createElement("div");
-        div.id = "deposit-display";
-        div.innerHTML = depositHtml;
-        totalEl.after(div);
-      }
-    }
-
-    function removeFromCart(idx) {
-      cart.splice(idx, 1);
-      saveCart(); // 🔴 修改：這裡也改成 saveCart()
-      renderCartItems();
-    }
-
-    function checkoutViaLine() {
-      if (cart.length === 0) return;
-
-      const shippingRadios = document.getElementsByName("shipping");
-      let selectedShipping = null;
-      for (const radio of shippingRadios) {
-        if (radio.checked) {
-          selectedShipping = radio.value;
-          break;
+        if (depositHtml) {
+          let div = document.createElement("div");
+          div.id = "deposit-display";
+          div.innerHTML = depositHtml;
+          totalEl.after(div);
         }
       }
-      if (!selectedShipping) {
-        alert("請選擇下單平台 (7-11 賣貨便 or iOPEN Mall)");
-        return;
+
+      function removeFromCart(idx) {
+        cart.splice(idx, 1);
+        saveCart(); // 🔴 修改：這裡也改成 saveCart()
+        renderCartItems();
       }
 
-      const now = new Date();
-      const dateStr = `${now.getMonth() + 1}月${now.getDate()}日`;
-      const titleTag = "";
+      function checkoutViaLine() {
+        if (cart.length === 0) return;
 
-      // 1. 極簡開頭
-      let message = `您好，這是我的訂購清單 (${dateStr})${titleTag}：\n\n`;
+        const shippingRadios = document.getElementsByName("shipping");
+        let selectedShipping = null;
+        for (const radio of shippingRadios) {
+          if (radio.checked) {
+            selectedShipping = radio.value;
+            break;
+          }
+        }
+        if (!selectedShipping) {
+          alert("請選擇下單平台 (7-11 賣貨便 or iOPEN Mall)");
+          return;
+        }
 
-      let total = 0;
-      cart.forEach((item, index) => {
-        total += item.price * item.qty;
-        let cleanName = item.name.replace(/<br\s*\/?>/gi, " ");
-        let cleanSpec = item.spec ? item.spec.replace(/<br\s*\/?>/gi, " ") : "單一規格";
-        let num = (index + 1).toString().padStart(2, "0");
+        const now = new Date();
+        const dateStr = `${now.getMonth() + 1}月${now.getDate()}日`;
+        const titleTag = "";
 
-        // 2. 拿掉圖示，改用簡潔的括號標註編號
-        message += `[${num}] ${cleanName}\n`;
-        // 3. 規格與價格拆成兩行，絕對不會被擠到換行
-        message += `- 規格: ${cleanSpec}\n`;
-        message += `- 數量: ${item.qty} ($${item.price})\n\n`;
-      });
+        // 1. 極簡開頭
+        let message = `您好，這是我的訂購清單 (${dateStr})${titleTag}：\n\n`;
 
-      // 4. 使用較短的虛線，避免手機螢幕不夠寬被切斷
-      message += `-------------\n`;
+        let total = 0;
+        cart.forEach((item, index) => {
+          total += item.price * item.qty;
+          let cleanName = item.name.replace(/<br\s*\/?>/gi, " ");
+          let cleanSpec = item.spec
+            ? item.spec.replace(/<br\s*\/?>/gi, " ")
+            : "單一規格";
+          let num = (index + 1).toString().padStart(2, "0");
 
-      // 計算最終結帳金額
-      let finalTotal = total - currentDiscount;
-      if (finalTotal < 0) finalTotal = 0;
+          // 2. 拿掉圖示，改用簡潔的括號標註編號
+          message += `[${num}] ${cleanName}\n`;
+          // 3. 規格與價格拆成兩行，絕對不會被擠到換行
+          message += `- 規格: ${cleanSpec}\n`;
+          message += `- 數量: ${item.qty} ($${item.price})\n\n`;
+        });
 
-      // 5. 縮短標題文字 (例如：把「結帳總金額」改成「總金額」)，確保數字能待在同一行
-      if (currentDiscount > 0) {
-        message += `小計: NT$ ${total}\n`;
-        message += `折扣 [${currentPromoCode}]: -$${currentDiscount}\n`;
-        message += `總金額: NT$ ${finalTotal}\n\n`;
-      } else {
-        message += `總金額: NT$ ${total}\n\n`;
-      }
+        // 4. 使用較短的虛線，避免手機螢幕不夠寬被切斷
+        message += `-------------\n`;
 
-      if (finalTotal >= 1500) {
-        let rawDeposit = finalTotal * 0.20;
-        let finalDeposit = Math.round(rawDeposit / 100) * 100;
-        message += `(預付20%定金: NT$ ${finalDeposit})\n\n`;
-      }
+        // 計算最終結帳金額
+        let finalTotal = total - currentDiscount;
+        if (finalTotal < 0) finalTotal = 0;
 
-      message += `平台: ${selectedShipping}`;
+        // 5. 縮短標題文字 (例如：把「結帳總金額」改成「總金額」)，確保數字能待在同一行
+        if (currentDiscount > 0) {
+          message += `小計: NT$ ${total}\n`;
+          message += `折扣 [${currentPromoCode}]: -$${currentDiscount}\n`;
+          message += `總金額: NT$ ${finalTotal}\n\n`;
+        } else {
+          message += `總金額: NT$ ${total}\n\n`;
+        }
 
-      const lineUrl = `https://line.me/R/oaMessage/@139gqqwy/?${encodeURIComponent(message)}`;
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (finalTotal >= 1500) {
+          let rawDeposit = finalTotal * 0.2;
+          let finalDeposit = Math.round(rawDeposit / 100) * 100;
+          message += `(預付20%定金: NT$ ${finalDeposit})\n\n`;
+        }
 
-      if (isMobile) {
-        window.location.href = lineUrl;
-      } else {
-        // 電腦版顯示 QR Code
-        const modal = document.getElementById("qrModal");
-        const title = document.getElementById("qrTitle");
-        const body = document.getElementById("qrBody");
+        message += `平台: ${selectedShipping}`;
 
-        const qrImgUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(lineUrl)}`;
+        const lineUrl = `https://line.me/R/oaMessage/@139gqqwy/?${encodeURIComponent(message)}`;
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-        body.innerHTML = `
+        if (isMobile) {
+          window.location.href = lineUrl;
+        } else {
+          // 電腦版顯示 QR Code
+          const modal = document.getElementById("qrModal");
+          const title = document.getElementById("qrTitle");
+          const body = document.getElementById("qrBody");
+
+          const qrImgUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(lineUrl)}`;
+
+          body.innerHTML = `
             <p style="margin-bottom:20px; color:#666; font-size:0.9rem;">拿起手機掃描 QR Code<br>訂單將自動帶入對話框！</p>
             <img src="${qrImgUrl}" alt="Order QR Code" style="width:280px; height:280px; border:1px solid #eee; padding:10px; border-radius: 8px;">`;
 
-        modal.classList.add("show");
+          modal.classList.add("show");
+        }
       }
-    }
 
-    // 🟢 讓點擊背景也能關閉 QR Code 視窗
-    function closeQrModal(event) {
-      if (event.target.id === "qrModal") {
-        document.getElementById("qrModal").classList.remove("show");
+      // 🟢 讓點擊背景也能關閉 QR Code 視窗
+      function closeQrModal(event) {
+        if (event.target.id === "qrModal") {
+          document.getElementById("qrModal").classList.remove("show");
+        }
       }
-    }
 
-    // 🔴 新增：先讀取購物車紀錄
-    loadCart();
+      // 🔴 新增：先讀取購物車紀錄
+      loadCart();
 
-    fetchProducts();
-  </script>
-
-</body>
-
+      fetchProducts();
+    </script>
+  </body>
 </html>
