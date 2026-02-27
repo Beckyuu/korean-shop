@@ -2591,17 +2591,25 @@
         select.innerHTML = ""; // 清空
 
         if (product.variants.length > 0 && product.variants[0] !== "") {
-          product.variants.forEach((v) => {
-            const opt = document.createElement("option");
-            opt.value = v;
-            opt.innerText = v;
-            if (v.includes("(缺)")) {
-              opt.disabled = true;
-              opt.innerText += " (Sold Out)";
-            }
-            select.appendChild(opt);
-          });
-          // 顯示選單區塊
+product.variants.forEach(v => {
+       const opt = document.createElement('option');
+       opt.value = v;
+
+       if (v.includes('(缺)')) {
+         opt.disabled = true;
+         // 🌟 1. 把字串裡的 '(缺)' 替換成空白，再加上時尚的 (Sold Out)
+         opt.innerText = v.replace('(缺)', '').trim() + ' (Sold Out)';
+         // 🌟 2. 讓這個選項的字體變成很淡的灰色
+         opt.style.color = '#cecece'; 
+       } else {
+         opt.innerText = v;
+         // 正常選項維持深灰色
+         opt.style.color = '#555'; 
+       }
+
+       select.appendChild(opt);
+     });
+               // 顯示選單區塊
           select.parentElement.style.display = "block";
         } else {
           // 如果沒有規格 (ONE SIZE)，隱藏選單
