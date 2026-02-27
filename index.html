@@ -2586,35 +2586,54 @@
           priceBox.innerText = "NT$ " + product.originalPriceStr;
         }
 
-        // 產生規格選單
-        const select = document.getElementById("qs-variant-select");
-        select.innerHTML = ""; // 清空
+// 產生規格選單
+      const select = document.getElementById('qs-variant-select');
+      select.innerHTML = ''; // 清空
 
-        if (product.variants.length > 0 && product.variants[0] !== "") {
-product.variants.forEach(v => {
-       const opt = document.createElement('option');
-       opt.value = v;
+      let allOutOfStock = true; // 🌟 新增：用來偵測是不是全部賣光了
 
-       if (v.includes('(缺)')) {
-         opt.disabled = true;
-         // 🌟 1. 把字串裡的 '(缺)' 替換成空白，再加上時尚的 (Sold Out)
-         opt.innerText = v.replace('(缺)', '').trim() + ' (Sold Out)';
-         // 🌟 2. 讓這個選項的字體變成很淡的灰色
-         opt.style.color = '#cecece'; 
-       } else {
-         opt.innerText = v;
-         // 正常選項維持深灰色
-         opt.style.color = '#555'; 
-       }
+      if (product.variants.length > 0 && product.variants[0] !== "") {
+        product.variants.forEach(v => {
+          const opt = document.createElement('option');
+          opt.value = v;
 
-       select.appendChild(opt);
-     });
-               // 顯示選單區塊
-          select.parentElement.style.display = "block";
-        } else {
-          // 如果沒有規格 (ONE SIZE)，隱藏選單
-          select.parentElement.style.display = "none";
-        }
+          if (v.includes('(缺)')) {
+            opt.disabled = true;
+            // 把 (缺) 替換成空白，加上 (Sold Out)
+            opt.innerText = v.replace('(缺)', '').trim() + ' (Sold Out)';
+            opt.style.color = '#cecece'; 
+          } else {
+            opt.innerText = v;
+            opt.style.color = '#555'; 
+            allOutOfStock = false; // 🌟 只要有一個選項沒缺，就代表還能買
+          }
+
+          select.appendChild(opt);
+        });
+        select.parentElement.style.display = 'block';
+      } else {
+        // 如果完全空白沒填規格，代表是一般有貨的單一商品
+        select.parentElement.style.display = 'none';
+        allOutOfStock = false; 
+      }
+
+      // 🌟 控制「加入購物車」按鈕的狀態
+      const addBtn = document.getElementById('qs-add-btn');
+      if (allOutOfStock) {
+        // 全部缺貨 -> 按鈕變灰色、不可點擊
+        addBtn.innerText = "已售完 (Sold Out)";
+        addBtn.style.background = "#ccc";
+        addBtn.style.borderColor = "#ccc";
+        addBtn.style.cursor = "not-allowed";
+        addBtn.disabled = true;
+      } else {
+        // 正常狀態 -> 恢復金色按鈕
+        addBtn.innerText = "加入購物車";
+        addBtn.style.background = "#d4a373";
+        addBtn.style.borderColor = "#d4a373";
+        addBtn.style.cursor = "pointer";
+        addBtn.disabled = false;
+      }
 
         // 重置數量
         document.getElementById("qs-qty").value = 1;
