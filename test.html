@@ -1602,6 +1602,59 @@
         }
       }
 
+      /* === 🔍 搜尋框 === */
+    .search-wrapper {
+      display: flex;
+      justify-content: center;
+      padding: 0 20px;
+      margin-bottom: 15px; /* 跟下方分類按鈕保持優雅距離 */
+    }
+
+    .search-container {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      max-width: 350px; /* 不要太長，短一點比較精緻 */
+      padding: 0 16px;
+      background-color: #fff;
+      border: 1px solid #e6d0c0; /* 呼應你的金棕色系 */
+      border-radius: 50px; /* 圓潤的膠囊造型 */
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+    }
+
+    /* 當客人點擊準備輸入時的發光特效 */
+    .search-container:focus-within {
+      border-color: #d4a373;
+      box-shadow: 0 5px 15px rgba(212, 163, 115, 0.15);
+      transform: translateY(-1px);
+    }
+
+    /* 放大鏡小圖示 */
+    .search-icon {
+      width: 16px;
+      height: 16px;
+      color: #bfa092;
+      margin-right: 10px;
+    }
+
+    .search-input {
+      flex: 1;
+      height: 40px;
+      border: none;
+      background: transparent;
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size: 0.95rem;
+      color: #555;
+      outline: none;
+    }
+
+    .search-input::placeholder {
+      color: #ccc;
+      font-weight: 300;
+      letter-spacing: 1px;
+    }
+
       /* === 🏷️ 分類選單樣式 (膠囊按鈕 + 橫向滑動 - 高級立體版) === */
       .category-nav {
         display: flex;
@@ -1830,6 +1883,16 @@
         </li>
       </ul>
     </div>
+
+<div class="search-wrapper">
+    <div class="search-container">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input type="text" id="searchInput" class="search-input" placeholder="Search... ( 例: 面膜 )" oninput="handleSmartSearch()">
+    </div>
+  </div>
 
     <div id="category-container" class="category-nav"></div>
 
@@ -2202,6 +2265,35 @@
       let cart = [];
       let currentPromoCode = ""; // 紀錄目前使用的折扣碼
       let currentDiscount = 0; // 紀錄折抵金額
+
+      // === 🔍 聰明搜尋功能 (無視大小寫與空白) ===
+    function handleSmartSearch() {
+      const inputStr = document.getElementById("searchInput").value;
+      
+      // 🌟 核心魔法：把客人的輸入轉成小寫，並把「所有空白」刪掉
+      const cleanSearchTerm = inputStr.toLowerCase().replace(/\s+/g, '');
+      
+      // 如果客人把搜尋框清空了，就恢復顯示目前分類的商品
+      if (cleanSearchTerm === "") {
+        switchCategory(currentCategory);
+        return;
+      }
+
+      // 如果有輸入文字，我們就在「所有商品」裡面尋找
+      const filtered = allProductsData.filter(p => {
+        // 🌟 把商品名稱也做一樣的處理：轉小寫、去空白
+        const cleanName = p.name.toLowerCase().replace(/\s+/g, '');
+        
+        // 只要商品名稱裡面包含客人的關鍵字，就抓出來
+        return cleanName.includes(cleanSearchTerm);
+      });
+
+      // 把找到的商品畫到畫面上
+      renderProducts(filtered);
+
+      // 視覺小優化：因為現在是「全域搜尋」，所以把分類按鈕的底色偷偷拿掉，以免客人困惑
+      document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+    }
 
       // === 🏷️ 分類設定區 ===
       const categoryMap = {
