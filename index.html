@@ -2445,6 +2445,7 @@
         }
 
         products.forEach((product, idx) => {
+          const globalIdx = allProductsData.indexOf(product);
           // 🌟 價格顯示邏輯：判斷有沒有優惠價
           let priceHtml = "";
           if (product.vipPriceStr) {
@@ -2472,7 +2473,7 @@
           const card = document.createElement("div");
           card.className = "product-card";
           card.innerHTML = `
-                <div class="img-wrapper" style="cursor:pointer;" onclick="openQuickShop(${idx})">
+                <div class="img-wrapper" style="cursor:pointer;" onclick="openQuickShop(${globalIdx})">
     ${badgeHtml}
     <img src="${product.imgUrl}" alt="${product.name}" loading="lazy">
 </div>
@@ -2487,7 +2488,7 @@
     ${priceHtml}
       
                     <div class="action-row" style="margin-top: 10px; justify-content: center;">
-                        <button class="btn-add" onclick="openQuickShop(${idx})" style="max-width: 200px;">
+                        <button class="btn-add" onclick="openQuickShop(${globalIdx})" style="max-width: 200px;">
                             加入購物車
                         </button>
                     </div>
