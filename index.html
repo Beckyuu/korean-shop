@@ -2241,24 +2241,24 @@
               ? [rawSpec]
               : [];
 
-          // 圖片處理
+// 圖片處理
           const extraImgs = [
             row[10], row[11], row[12], row[13], row[14]
           ].map(url => url ? url.trim() : "").filter(url => url !== "");
-          const allImages = [row[3] ? row[3].trim() : "", ...extraImgs].filter(url => url !== "");
+          
+          const allImages = [row[9] ? row[9].trim() : "", ...extraImgs].filter(url => url !== "");
 
           const product = {
             id: index,
             name: row[0] ? row[0].trim() : "Unnamed",
             variants: variants,
-            // 價格暫存原始字串，顯示時再處理
             originalPriceStr: row[2] ? row[2].trim() : "0",
-            vipPriceStr: row[9] ? row[9].trim() : "",
+            
+            vipPriceStr: row[3] ? row[3].trim() : "",
 
-            // 這裡會自動處理，讓其他地方用起來方便
             price: row[2] ? row[2].trim() : "0",
 
-            imgUrl: row[3] ? row[3].trim() : "",
+            imgUrl: row[9] ? row[9].trim() : "",
             gallery: allImages,
             detailImgUrl: row[4] ? row[4].trim() : "",
 
