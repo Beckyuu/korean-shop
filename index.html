@@ -2467,11 +2467,9 @@ products.forEach((product, idx) => {
           priceHtml = `<span class="price">NT$ ${product.originalPriceStr}</span>`;
         }
 
-        // 🌟 2. 標籤邏輯：如果缺貨，直接蓋上灰色的 SOLD OUT
+// 🌟 2. 標籤邏輯
         let badgeHtml = "";
-        if (isAllOutOfStock) {
-          badgeHtml = `<div class="badge" style="background-color: #b0b0b0;">SOLD OUT</div>`;
-        } else {
+        if (!isAllOutOfStock) {
           if (product.tag === "NEW") badgeHtml = `<div class="badge new">NEW</div>`;
           else if (product.tag === "HOT") badgeHtml = `<div class="badge hot">HOT</div>`;
           else if (product.tag === "SALE") badgeHtml = `<div class="badge sale">SALE</div>`;
