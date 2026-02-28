@@ -2333,7 +2333,7 @@
           const filtered = allProductsData.filter((p) => {
             // 避免有些商品沒填分類會報錯，加個防護
             const productCat = p.category ? p.category.toLowerCase() : "";
-            return productCat.includes(key);
+            return productCat.includes(key.toLowerCase());
           });
           renderProducts(filtered);
         }
