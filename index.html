@@ -2567,9 +2567,15 @@ products.forEach((product, idx) => {
           else if (product.tag === "SALE") badgeHtml = `<div class="badge sale">SALE</div>`;
         }
 
-        // 🌟 3. 按鈕邏輯：缺貨就鎖死變灰色
+// 🌟 3. 按鈕邏輯：加入「自動結單」時間判斷
+        const cutOffTime = new Date("2026-03-07T19:00:00"); // 這裡設定今晚 7 點
+        const isEnded = new Date() >= cutOffTime; // 判斷現在時間到了沒
+
         let btnHtml = "";
-        if (isAllOutOfStock) {
+        if (isEnded) {
+          // 時間一到，按鈕全部變成已結束，鎖死變灰色
+          btnHtml = `<button class="btn-add" style="background-color: #ccc; border-color: #ccc; cursor: not-allowed; max-width: 200px;" disabled>已結束</button>`;
+        } else if (isAllOutOfStock) {
           btnHtml = `<button class="btn-add" style="background-color: #ccc; border-color: #ccc; cursor: not-allowed; max-width: 200px;" disabled>已售完</button>`;
         } else {
           btnHtml = `<button class="btn-add" onclick="openQuickShop(${globalIdx})" style="max-width: 200px;">加入購物車</button>`;
@@ -2611,6 +2617,12 @@ products.forEach((product, idx) => {
 
       // 1. 打開快速購物視窗
       function openQuickShop(index) {
+        // 結帳時間攔截
+        const cutOffTime = new Date("2026-03-07T19:00:00");
+        if (new Date() >= cutOffTime) {
+          alert("本次活動已於今晚 7 點結單囉！目前網站轉為「型錄模式」僅供核對商品。");
+          return;
+        }
         const product = allProductsData[index];
         currentQsIndex = index; // 記住現在是誰
 
@@ -2972,6 +2984,12 @@ products.forEach((product, idx) => {
       }
 
       function checkoutViaLine() {
+        // 結帳時間攔截
+        const cutOffTime = new Date("2026-03-07T19:00:00");
+        if (new Date() >= cutOffTime) {
+          alert("本次活動已於今晚 7 點結單囉！目前網站轉為「型錄模式」僅供核對商品。");
+          return;
+        }
         if (cart.length === 0) return;
 
         const shippingRadios = document.getElementsByName("shipping");
