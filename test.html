@@ -2668,7 +2668,7 @@
               optEl.innerHTML = `<span>${parsedDisabled.main}</span>${parsedDisabled.gift ? `<span class="opt-gift-line">🎁 ${parsedDisabled.gift}</span>` : ''}<span style="opacity:0.5;"> (Sold Out)</span>`;
             } else {
               const parsed = _parseSpecName(vObj.name);
-              optEl.innerHTML = `<span>${parsed.main}　NT$ ${displayPrice}</span>${parsed.gift ? `<span class="opt-gift-line">🎁 ${parsed.gift}</span>` : ''}`;
+              optEl.innerHTML = `<span>${parsed.main} · NT$ ${displayPrice}</span>${parsed.gift ? `<span class="opt-gift-line">🎁 ${parsed.gift}</span>` : ''}`;
               optEl.onclick = (function(idx) {
                 return function() { _selectVariantOption(idx); };
               })(vIndex);
@@ -2690,7 +2690,7 @@
           const firstGiftHtml = firstParsed.gift ? `<span class="opt-gift-line">🎁 ${firstParsed.gift}</span>` : '';
           selectedTextEl.innerHTML = firstV.name.includes('(缺)')
             ? `<span>${firstParsed.main} (Sold Out)</span>${firstGiftHtml}`
-            : `<span>${firstParsed.main}　NT$ ${firstDisplayPrice}</span>${firstGiftHtml}`;
+            : `<span>${firstParsed.main} · NT$ ${firstDisplayPrice}</span>${firstGiftHtml}`;
 
           const optEls = optionsContainer.querySelectorAll('.custom-variant-option');
           if (optEls[firstAvailableIdx]) optEls[firstAvailableIdx].classList.add('opt-selected');
@@ -3031,7 +3031,7 @@
         const selGiftHtml = selParsed.gift ? `<span class="opt-gift-line">🎁 ${selParsed.gift}</span>` : '';
         selectedTextEl.innerHTML = vObj.name.includes('(缺)')
           ? `<span>${selParsed.main} (Sold Out)</span>${selGiftHtml}`
-          : `<span>${selParsed.main}　NT$ ${displayPrice}</span>${selGiftHtml}`;
+          : `<span>${selParsed.main} · NT$ ${displayPrice}</span>${selGiftHtml}`;
 
         // 更新清單內的選中狀態
         document.querySelectorAll('#qs-variant-options .custom-variant-option').forEach((el, idx) => {
