@@ -2097,7 +2097,7 @@
         <div id="cartTotal" class="cart-total">總金額: NT$ 0</div>
 
         <p class="cart-notice">
-          ※ 確認訂單並完成定金匯款後，<br />訂單才算正式成立喔！謝謝
+          ※ 訂單滿 NT$1,500 需預付定金，完成匯款後訂單才算正式成立喔！謝謝
         </p>
 
         <button class="btn-checkout" onclick="checkoutViaLine()">
@@ -2772,12 +2772,12 @@
         if (finalTotal < 0) finalTotal = 0;
 
         if (finalTotal >= 1500) {
-          let rawDeposit = finalTotal * 0.2;
-          let finalDeposit = Math.round(rawDeposit / 100) * 100;
+          let rawDeposit = finalTotal * 0.1;
+          let finalDeposit = Math.min(Math.round(rawDeposit / 100) * 100, 500);
 
           depositHtml = `
                 <div style="margin-top: 8px; text-align: right; font-family: 'Noto Sans TC', sans-serif;">
-                    <span style="font-size: 0.85rem; color: #999; background: #f9f9f9; padding: 4px 8px; border-radius: 4px; margin-right: 8px;">需預付定金 (20%)</span>
+                    <span style="font-size: 0.85rem; color: #999; background: #f9f9f9; padding: 4px 8px; border-radius: 4px; margin-right: 8px;">需預付定金 (10%，上限 NT$500)</span>
                     <span style="font-size: 1.1rem; color: #bfa092; font-weight: 500;">NT$ ${finalDeposit}</span>
                 </div>
             `;
@@ -2863,9 +2863,9 @@
         }
 
         if (finalTotal >= 1500) {
-          let rawDeposit = finalTotal * 0.2;
-          let finalDeposit = Math.round(rawDeposit / 100) * 100;
-          message += `(預付20%定金: NT$ ${finalDeposit})\n\n`;
+          let rawDeposit = finalTotal * 0.1;
+          let finalDeposit = Math.min(Math.round(rawDeposit / 100) * 100, 500);
+          message += `(預付定金10%，上限NT$500: NT$ ${finalDeposit})\n\n`;
         }
 
         message += `平台: ${selectedShipping}`;
