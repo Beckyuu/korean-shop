@@ -2590,7 +2590,6 @@
             <div class="info">
               <h3 class="name" style="${isAllOutOfStock ? 'color: #999;' : ''}">${product.name}</h3>
               <span class="deadline-badge ${product.deadline ? '' : 'empty'}">${product.deadline || "空格佔位"}</span>
-              ${product.variants && product.variants[0] && product.variants[0].gift ? `<div class="gift-row">🎁 ${product.variants[0].gift}</div>` : ''}
               ${priceHtml}
               <div class="action-row" style="margin-top: 10px; justify-content: center;">
                   ${btnHtml}
