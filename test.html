@@ -9,63 +9,14 @@
       href="https://ik.imagekit.io/mina09/OliveYoung/%E5%9C%96%E7%89%873.png"
       type="image/png"
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Fredoka:wght@400;500;600&family=Noto+Sans+TC:wght@300;400;500&family=Zen+Maru+Gothic:wght@300;400;500;700&display=swap"
       rel="stylesheet"
     />
 
     <style>
-      /* === 📸 商品相簿樣式 (補強修正版) === */
-
-      /* 1. 確保大圖與縮圖是垂直排列 */
-      .quick-shop-img-box {
-        display: flex !important;
-        flex-direction: column !important;
-        padding: 20px;
-        gap: 15px;
-      }
-
-      /* 2. 限制大圖高度，讓它乖乖縮放 */
-      .quick-shop-img-box img#qs-img {
-        width: 100%;
-        height: 350px !important;
-        /* 強制高度 */
-        object-fit: scale-down !important;
-        /* 確保不裁切 */
-        border-radius: 8px;
-      }
-
-      /* 3. 縮圖容器 */
-      .qs-gallery-container {
-        display: flex !important;
-        justify-content: center;
-        gap: 8px;
-        width: 100%;
-        overflow-x: auto;
-      }
-
-      /* 4. 🌟 關鍵修正：縮圖一定要很小！ */
-      .qs-thumb {
-        width: 50px !important;
-        /* 強制縮小寬度 */
-        height: 50px !important;
-        /* 強制縮小高度 */
-        min-width: 50px !important;
-        /* 防止被擠扁 */
-        object-fit: cover !important;
-        border-radius: 6px;
-        border: 1px solid #eee;
-        cursor: pointer;
-        opacity: 0.6;
-      }
-
-      /* 選中時的效果 */
-      .qs-thumb:hover,
-      .qs-thumb.active {
-        opacity: 1;
-        border: 2px solid #d4a373 !important;
-      }
-
       /* === 🔍 圖片放大鏡樣式 === */
       .zoom-overlay {
         display: none;
@@ -129,6 +80,9 @@
         --price-color: #bfa092;
         /* 莫蘭迪磚紅 */
         --white: #ffffff;
+        --color-sale: #d65a5a;
+        --footer-bg: #1a1a1a;
+        --badge-sale: #c97c7c;
       }
 
       * {
@@ -231,7 +185,7 @@
 
       /* 分隔線樣式 */
       .service-info .divider {
-        color: #d4a373;
+        color: var(--accent);
         /* 金棕色，呼應主題 */
         opacity: 0.5;
         /* 半透明，讓它不要太搶眼 */
@@ -319,7 +273,7 @@
 
         font-family: "Noto Sans TC", sans-serif;
         font-size: 0.8rem;
-        color: #666;
+        color: var(--text-sub);
         line-height: 1.6;
         /* 行高設定 1.6，這樣兩行字之間才不會太擠 */
 
@@ -338,7 +292,7 @@
         top: 0px;
 
         font-weight: bold;
-        color: #d4a373;
+        color: var(--accent);
       }
 
       /* 手機版設定 (舊的保留，新的在最下面) */
@@ -437,17 +391,17 @@
 
       /* NEW: 質感霧金 (呼應你的主題色) */
       .badge.new {
-        background-color: #d4a373;
+        background-color: var(--accent);
       }
 
       /* HOT: 溫柔磚紅 */
       .badge.hot {
-        background-color: #bfa092;
+        background-color: var(--price-color);
       }
 
       /* SALE: 顯眼的紅色 (備用) */
       .badge.sale {
-        background-color: #c97c7c;
+        background-color: var(--badge-sale);
       }
 
       /* === 2. 資訊區域 (負責對齊) === */
@@ -543,7 +497,7 @@
         left: 50%;
         transform: translateX(-50%);
 
-        background-color: #d4a373;
+        background-color: var(--accent);
         color: #fff;
 
         font-family: "Noto Sans TC", sans-serif;
@@ -580,7 +534,7 @@
 
       /* 🌟 修改 3：美化右上角關閉按鈕 (覆蓋舊設定) */
       .modal-close-btn {
-        color: #bfa092 !important;
+        color: var(--price-color) !important;
         /* 改成莫蘭迪紅棕色 */
         top: 15px !important;
         /* 位置微調 */
@@ -594,7 +548,7 @@
       .gift-row {
         font-family: "Noto Sans TC", sans-serif;
         font-size: 0.8rem;
-        color: #d65a5a;
+        color: var(--color-sale);
         margin-bottom: 8px;
 
         /* 回復成單行的高度 */
@@ -631,7 +585,7 @@
         height: 36px;
         /* 高度跟按鈕一樣 */
         font-size: 0.9rem;
-        color: #666;
+        color: var(--text-sub);
         outline: none;
         border-radius: 4px;
         /* 微圓角 */
@@ -656,9 +610,9 @@
         /* 稍微扁一點 */
         font-family: "Noto Sans TC", sans-serif;
         font-size: 0.85rem;
-        color: #d4a373;
+        color: var(--accent);
         background-color: #fff;
-        border: 1px solid #d4a373;
+        border: 1px solid var(--accent);
         border-radius: 4px;
         cursor: pointer;
         text-align: center;
@@ -680,7 +634,7 @@
         display: inline-block;
 
         background-color: #f4e3e3;
-        color: #c97c7c;
+        color: var(--badge-sale);
 
         font-family: "Noto Sans TC", sans-serif;
         font-size: 0.8rem;
@@ -715,7 +669,7 @@
         font-family: "Fredoka", sans-serif;
         font-size: 1.4rem;
         font-weight: 500;
-        color: #2c2c2c;
+        color: var(--text-main);
         display: block;
         margin-bottom: 4px;
 
@@ -750,7 +704,7 @@
 
       /* 顯眼的優惠價 */
       .price-vip {
-        color: #d65a5a;
+        color: var(--color-sale);
         /* 漂亮的莫蘭迪紅 */
         font-size: 1.3rem;
         /* 字大一點 */
@@ -761,9 +715,9 @@
 
       /* === 6. 購買按鈕  === */
       button.btn-add {
-        background-color: #d4a373;
+        background-color: var(--accent);
         color: #fff;
-        border: 1px solid #d4a373;
+        border: 1px solid var(--accent);
         border-radius: 50px;
         padding: 6px 28px;
         font-size: 0.85rem;
@@ -786,12 +740,12 @@
 
       button.btn-add:hover {
         background-color: #fff;
-        color: #d4a373;
+        color: var(--accent);
       }
 
       /* === 最終極簡版 Footer (緊湊型) === */
       footer {
-        background-color: #1a1a1a;
+        background-color: var(--footer-bg);
         color: #fff;
 
         /* 修改 1：高度縮減，原本 40px 改成 25px */
@@ -903,6 +857,7 @@
         cursor: pointer;
         z-index: 100;
         transition: transform 0.2s;
+        border: none;
       }
 
       /* 讓裡面的 SVG 圖示也跟著變大 */
@@ -915,7 +870,7 @@
         position: absolute;
         top: -5px;
         right: -5px;
-        background: #bfa092;
+        background: var(--price-color);
         color: white;
         border-radius: 50%;
         width: 24px;
@@ -1000,7 +955,7 @@
         /* 1. 底圈顏色 (淺灰) */
         border: 2px solid #f0f0f0;
         /* 2. 轉動線條顏色 (你的主題金棕色) */
-        border-top: 2px solid #d4a373;
+        border-top: 2px solid var(--accent);
         border-radius: 50%;
         /* 動畫設定：1秒轉一圈，無限循環 */
         animation: spin 1s linear infinite;
@@ -1051,75 +1006,75 @@
         }
 
         /* 2. 商品列表排版：強制平分兩欄 */
-        .container {
-          grid-template-columns: 1fr 1fr !important;
-          gap: 20px 10px !important;
-          padding: 0 12px 80px !important;
+        #product-list.container {
+          grid-template-columns: 1fr 1fr;
+          gap: 20px 10px;
+          padding: 0 12px 80px;
         }
 
-        .product-card {
-          min-width: 0 !important;
+        #product-list .product-card {
+          min-width: 0;
         }
 
         /* 3. 資訊區與品名對齊 */
-        .info {
-          justify-content: flex-start !important;
-          padding-top: 5px !important;
+        #product-list .info {
+          justify-content: flex-start;
+          padding-top: 5px;
         }
 
-        .name {
-          font-size: 0.95rem !important;
-          letter-spacing: -0.5px !important;
-          min-height: 2.4rem !important;
-          line-height: 1.35 !important;
-          margin-bottom: 4px !important;
-          padding-top: 0 !important;
+        #product-list .name {
+          font-size: 0.95rem;
+          letter-spacing: -0.5px;
+          min-height: 2.4rem;
+          line-height: 1.35;
+          margin-bottom: 4px;
+          padding-top: 0;
 
-          display: flex !important;
-          justify-content: center !important;
-          align-items: center !important;
-          text-align: center !important;
-          word-break: keep-all !important;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          word-break: keep-all;
         }
 
         /* 4. 其他文字與標籤間距微調 */
-        .deadline-badge {
-          margin-bottom: 2px !important;
+        #product-list .deadline-badge {
+          margin-bottom: 2px;
         }
 
-        .desc-text {
-          font-size: 0.75rem !important;
-          margin-bottom: 2px !important;
-          height: auto !important;
+        #product-list .desc-text {
+          font-size: 0.75rem;
+          margin-bottom: 2px;
+          height: auto;
         }
 
-        .gift-row {
-          margin-bottom: 5px !important;
-          height: auto !important;
+        #product-list .gift-row {
+          margin-bottom: 5px;
+          height: auto;
         }
 
         /* 5. 價格與購買按鈕 */
-        .price,
-        .price-container {
-          font-size: 1.1rem !important;
-          margin-bottom: 8px !important;
-          margin-top: 0 !important;
+        #product-list .price,
+        #product-list .price-container {
+          font-size: 1.1rem;
+          margin-bottom: 8px;
+          margin-top: 0;
         }
 
-        .action-row {
-          margin-top: 2px !important;
-          padding-bottom: 5px !important;
+        #product-list .action-row {
+          margin-top: 2px;
+          padding-bottom: 5px;
         }
 
-        button.btn-add {
-          width: 100% !important;
-          height: 32px !important;
-          padding: 4px 0 !important;
-          font-size: 0.75rem !important;
+        #product-list button.btn-add {
+          width: 100%;
+          height: 32px;
+          padding: 4px 0;
+          font-size: 0.75rem;
         }
 
-        select {
-          height: 32px !important;
+        #product-list select {
+          height: 32px;
         }
       }
 
@@ -1262,7 +1217,7 @@
       #qs-price-box {
         font-family: "Fredoka", sans-serif;
         font-size: 1.5rem;
-        color: #2c2c2c;
+        color: var(--text-main);
         font-weight: 500;
         margin-bottom: 25px;
         padding-bottom: 20px;
@@ -1289,7 +1244,7 @@
         font-family: "Noto Sans TC", sans-serif;
         font-size: 0.95rem;
         /* 字不用太大，精緻為主 */
-        color: #666;
+        color: var(--text-sub);
         /* 質感深灰 */
         line-height: 1.6;
 
@@ -1297,7 +1252,7 @@
         white-space: pre-wrap;
 
         /* 加個左邊框裝飾，更有設計感 (如果不喜歡可以拿掉 border-left 和 padding-left) */
-        border-left: 3px solid #d4a373;
+        border-left: 3px solid var(--accent);
         padding-left: 12px;
       }
 
@@ -1329,7 +1284,7 @@
         padding: 0 40px 0 15px;
 
         /* 邊框與背景 (維持不變) */
-        border: 1px solid #d4a373;
+        border: 1px solid var(--accent);
         background-color: #fff;
         border-radius: 8px;
 
@@ -1382,7 +1337,7 @@
         /* 推到底部 */
         width: 100%;
         padding: 15px;
-        background: #d4a373;
+        background: var(--accent);
         /* 主題色 */
         color: #fff;
         border: none;
@@ -1394,7 +1349,7 @@
       }
 
       .qs-add-btn:hover {
-        background: #bfa092;
+        background: var(--price-color);
         transform: translateY(-2px);
         box-shadow: 0 5px 15px rgba(212, 163, 115, 0.3);
       }
@@ -1418,6 +1373,7 @@
 
       /* 修改原本的圖片盒：改成直向排列 (大圖在上，縮圖在下) */
       .quick-shop-img-box {
+        display: flex;
         flex-direction: column;
         /* 變成直排 */
         padding: 20px;
@@ -1464,7 +1420,7 @@
       .qs-thumb:hover,
       .qs-thumb.active {
         opacity: 1;
-        border: 2px solid #d4a373;
+        border: 2px solid var(--accent);
         /* 選中時出現金框 */
         transform: translateY(-2px);
         /* 微微浮起 */
@@ -1603,57 +1559,57 @@
       }
 
       /* === 🔍 搜尋框 === */
-    .search-wrapper {
-      display: flex;
-      justify-content: center;
-      padding: 0 20px;
-      margin-bottom: 15px; /* 跟下方分類按鈕保持優雅距離 */
-    }
+      .search-wrapper {
+        display: flex;
+        justify-content: center;
+        padding: 0 20px;
+        margin-bottom: 15px; /* 跟下方分類按鈕保持優雅距離 */
+      }
 
-    .search-container {
-      display: flex;
-      align-items: center;
-      width: 100%;
-      max-width: 350px; /* 不要太長，短一點比較精緻 */
-      padding: 0 16px;
-      background-color: #fff;
-      border: 1px solid #e6d0c0; /* 呼應你的金棕色系 */
-      border-radius: 50px; /* 圓潤的膠囊造型 */
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
-    }
+      .search-container {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        max-width: 350px; /* 不要太長，短一點比較精緻 */
+        padding: 0 16px;
+        background-color: #fff;
+        border: 1px solid #e6d0c0; /* 呼應你的金棕色系 */
+        border-radius: 50px; /* 圓潤的膠囊造型 */
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+      }
 
-    /* 當客人點擊準備輸入時的發光特效 */
-    .search-container:focus-within {
-      border-color: #d4a373;
-      box-shadow: 0 5px 15px rgba(212, 163, 115, 0.15);
-      transform: translateY(-1px);
-    }
+      /* 當客人點擊準備輸入時的發光特效 */
+      .search-container:focus-within {
+        border-color: var(--accent);
+        box-shadow: 0 5px 15px rgba(212, 163, 115, 0.15);
+        transform: translateY(-1px);
+      }
 
-    /* 放大鏡小圖示 */
-    .search-icon {
-      width: 16px;
-      height: 16px;
-      color: #bfa092;
-      margin-right: 10px;
-    }
+      /* 放大鏡小圖示 */
+      .search-icon {
+        width: 16px;
+        height: 16px;
+        color: var(--price-color);
+        margin-right: 10px;
+      }
 
-    .search-input {
-      flex: 1;
-      height: 40px;
-      border: none;
-      background: transparent;
-      font-family: 'Noto Sans TC', sans-serif;
-      font-size: 0.95rem;
-      color: #555;
-      outline: none;
-    }
+      .search-input {
+        flex: 1;
+        height: 40px;
+        border: none;
+        background: transparent;
+        font-family: 'Noto Sans TC', sans-serif;
+        font-size: 0.95rem;
+        color: #555;
+        outline: none;
+      }
 
-    .search-input::placeholder {
-      color: #ccc;
-      font-weight: 300;
-      letter-spacing: 1px;
-    }
+      .search-input::placeholder {
+        color: #ccc;
+        font-weight: 300;
+        letter-spacing: 1px;
+      }
 
       /* === 🏷️ 分類選單樣式 (膠囊按鈕 + 橫向滑動 - 高級立體版) === */
       .category-nav {
@@ -1708,19 +1664,19 @@
         /* 預設沒有寬度 */
         height: 1px;
         /* 極細的線 */
-        background-color: #d4a373;
+        background-color: var(--accent);
         transition: width 0.3s ease;
         /* 變寬的動畫 */
       }
 
       /* 👆 滑鼠懸停狀態 */
       .category-btn:hover {
-        color: #666;
+        color: var(--text-sub);
       }
 
       /* 🟡 選中狀態：字變深，底線長出來 */
       .category-btn.active {
-        color: #2c2c2c;
+        color: var(--text-main);
         font-weight: 500;
       }
 
@@ -1832,6 +1788,84 @@
           /* 離上面近一點 */
           padding: 12px !important;
           /* 按鈕變矮一點 */
+        }
+      }
+
+      /* === 🛒 購物車 Modal 結構樣式 === */
+      .cart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+      }
+
+      .cart-title {
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 1.6rem;
+        font-weight: 600;
+        letter-spacing: 1px;
+        color: var(--text-main);
+      }
+
+      .cart-body {
+        flex-grow: 1;
+        overflow-y: auto;
+      }
+
+      .cart-platform-section {
+        margin-bottom: 25px;
+        border-top: 1px solid #eee;
+        padding-top: 20px;
+      }
+
+      .cart-platform-title {
+        margin-bottom: 15px;
+        font-weight: bold;
+        font-size: 1.1rem;
+        color: var(--text-main);
+        font-family: "Noto Sans TC", sans-serif;
+      }
+
+      .cart-platform-label {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+        cursor: pointer;
+        font-size: 1.1rem;
+        color: #333;
+        font-family: "Noto Sans TC", sans-serif;
+      }
+
+      .cart-platform-label:last-child {
+        margin-bottom: 0;
+      }
+
+      .cart-radio {
+        margin-right: 12px;
+        transform: scale(1.5);
+        accent-color: var(--text-main);
+      }
+
+      .cart-total {
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 1.2rem;
+        font-weight: 600;
+        text-align: right;
+      }
+
+      .cart-notice {
+        font-size: 0.85rem;
+        color: var(--price-color);
+        margin: 15px 0 5px;
+        text-align: center;
+        font-family: "Noto Sans TC", sans-serif;
+        line-height: 1.5;
+      }
+
+      /* 手機版購物車調整 */
+      @media (max-width: 768px) {
+        .cart-header {
+          margin-bottom: 10px;
         }
       }
     </style>
@@ -1970,6 +2004,9 @@
       id="quickShopModal"
       class="quick-shop-overlay"
       onclick="closeQuickShop(event)"
+      role="dialog"
+      aria-modal="true"
+      aria-label="商品快速購買"
     >
       <div class="quick-shop-content">
         <button class="quick-shop-close" onclick="forceCloseQuickShop()">
@@ -2020,7 +2057,7 @@
       </div>
     </div>
 
-    <div id="cart-float-btn" onclick="toggleCart()">
+    <button id="cart-float-btn" onclick="toggleCart()" aria-label="開啟購物車">
       <svg
         viewBox="0 0 24 24"
         fill="none"
@@ -2034,122 +2071,32 @@
         <path d="M16 10a4 4 0 0 1-8 0"></path>
       </svg>
       <div id="cart-count">0</div>
-    </div>
+    </button>
 
-    <div id="cartModal" class="cart-modal" onclick="closeCart(event)">
+    <div id="cartModal" class="cart-modal" onclick="closeCart(event)" role="dialog" aria-modal="true" aria-label="購物車">
       <div class="cart-content">
-        <div
-          style="
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-          "
-        >
-          <h3
-            style="
-              font-family: &quot;Noto Sans TC&quot;, sans-serif;
-              font-size: 1.6rem;
-              font-weight: 600;
-              letter-spacing: 1px;
-              color: #2c2c2c;
-            "
-          >
-            購物清單
-          </h3>
+        <div class="cart-header">
+          <h3 class="cart-title">購物清單</h3>
           <span class="cart-close-btn" onclick="toggleCart()">×</span>
         </div>
 
-        <div style="flex-grow: 1; overflow-y: auto" id="cartItems"></div>
+        <div class="cart-body" id="cartItems"></div>
 
-        <div
-          style="
-            margin-bottom: 25px;
-            border-top: 1px solid #eee;
-            padding-top: 20px;
-          "
-        >
-          <p
-            style="
-              margin-bottom: 15px;
-              font-weight: bold;
-              font-size: 1.1rem;
-              color: #2c2c2c;
-              font-family: &quot;Noto Sans TC&quot;, sans-serif;
-            "
-          >
-            選擇下單平台：
-          </p>
-
-          <label
-            style="
-              display: flex;
-              align-items: center;
-              margin-bottom: 12px;
-              cursor: pointer;
-              font-size: 1.1rem;
-              color: #333;
-              font-family: &quot;Noto Sans TC&quot;, sans-serif;
-            "
-          >
-            <input
-              type="radio"
-              name="shipping"
-              value="賣貨便"
-              style="
-                margin-right: 12px;
-                transform: scale(1.5);
-                accent-color: #2c2c2c;
-              "
-            />
+        <div class="cart-platform-section">
+          <p class="cart-platform-title">選擇下單平台：</p>
+          <label class="cart-platform-label">
+            <input type="radio" name="shipping" value="賣貨便" class="cart-radio" />
             7-11 賣貨便
           </label>
-
-          <label
-            style="
-              display: flex;
-              align-items: center;
-              cursor: pointer;
-              font-size: 1.1rem;
-              color: #333;
-              font-family: &quot;Noto Sans TC&quot;, sans-serif;
-            "
-          >
-            <input
-              type="radio"
-              name="shipping"
-              value="iOPEN Mall"
-              style="
-                margin-right: 12px;
-                transform: scale(1.5);
-                accent-color: #2c2c2c;
-              "
-            />
+          <label class="cart-platform-label">
+            <input type="radio" name="shipping" value="iOPEN Mall" class="cart-radio" />
             iOPEN Mall
           </label>
         </div>
-        <div
-          id="cartTotal"
-          style="
-            font-family: &quot;Noto Sans TC&quot;, sans-serif;
-            font-size: 1.2rem;
-            font-weight: 600;
-            text-align: right;
-          "
-        >
-          總金額: NT$ 0
-        </div>
 
-        <p
-          style="
-            font-size: 0.85rem;
-            color: #bfa092;
-            margin: 15px 0 5px;
-            text-align: center;
-            font-family: &quot;Noto Sans TC&quot;, sans-serif;
-            line-height: 1.5;
-          "
-        >
+        <div id="cartTotal" class="cart-total">總金額: NT$ 0</div>
+
+        <p class="cart-notice">
           ※ 確認訂單並完成定金匯款後，<br />訂單才算正式成立喔！謝謝
         </p>
 
@@ -2159,7 +2106,7 @@
       </div>
     </div>
 
-    <div id="zoomOverlay" class="zoom-overlay" onclick="closeZoom()">
+    <div id="zoomOverlay" class="zoom-overlay" onclick="closeZoom()" role="dialog" aria-modal="true" aria-label="圖片放大">
       <img id="zoom-img-content" src="" />
       <div class="zoom-hint">點擊任意處關閉</div>
     </div>
@@ -2169,6 +2116,9 @@
       class="quick-shop-overlay"
       onclick="closeQrModal(event)"
       style="z-index: 3000"
+      role="dialog"
+      aria-modal="true"
+      aria-label="QR Code 下單"
     >
       <div
         class="quick-shop-content"
@@ -2203,14 +2153,14 @@
 
 <script>
       // === 🔒 手機版背景鎖定大神器 ===
-      let savedScrollPosition = 0; 
+      let savedScrollPosition = 0;
 
       function freezeBackground() {
         savedScrollPosition = window.scrollY;
         document.body.style.position = "fixed";
         document.body.style.top = `-${savedScrollPosition}px`;
         document.body.style.width = "100%";
-        document.body.style.overflow = "hidden"; 
+        document.body.style.overflow = "hidden";
       }
 
       function unfreezeBackground() {
@@ -2224,14 +2174,14 @@
 
       const GOOGLE_SHEET_CSV_URL =
         "https://docs.google.com/spreadsheets/d/e/2PACX-1vS_Cy5OSihu86kbG6c2iGLRUFSSVNnYuG_yanPRNuIF65KtJ_K9r-kXuz1IdWAbxnwfmvAWvWDjlywe/pub?output=csv";
-      
+
       function parseCSVLine(str) {
         const result = [];
         let start = 0;
         let inQuotes = false;
         for (let i = 0; i < str.length; i++) {
           if (str[i] === '"') {
-            inQuotes = !inQuotes; 
+            inQuotes = !inQuotes;
           } else if (str[i] === "," && !inQuotes) {
             let field = str.substring(start, i).trim();
             if (field.startsWith('"') && field.endsWith('"')) {
@@ -2251,14 +2201,19 @@
 
       let allProductsData = [];
       let cart = [];
-      let currentPromoCode = ""; 
-      let currentDiscount = 0; 
+      let currentPromoCode = "";
+      let currentDiscount = 0;
 
       // === 🔍 聰明搜尋功能 ===
+      let _searchTimer = null;
       function handleSmartSearch() {
+        clearTimeout(_searchTimer);
+        _searchTimer = setTimeout(_doSearch, 200);
+      }
+      function _doSearch() {
         const inputStr = document.getElementById("searchInput").value;
         const cleanSearchTerm = inputStr.toLowerCase().replace(/\s+/g, '');
-        
+
         if (cleanSearchTerm === "") {
           switchCategory(currentCategory);
           return;
@@ -2275,8 +2230,10 @@
 
       // === 🏷️ 分類設定區 ===
       const categoryMap = {
-        all: "全部商品", 
-        "WAKEMAKE x Hello Kitty": "WAKEMAKE x Hello Kitty",
+        all: "全部商品",
+        新品上架: "新品上架",
+        mangomee聯名: "mangomee聯名",
+        OY熱銷商品: "OY熱銷商品",
       };
       let currentCategory = "all";
 
@@ -2294,10 +2251,9 @@
 
       function switchCategory(key) {
         currentCategory = key;
-        renderCategoryButtons(); 
+        renderCategoryButtons();
         if (key === "all") {
           renderProducts(allProductsData);
-          renderCategoryButtons();
         } else {
           const filtered = allProductsData.filter((p) => {
             const productCat = p.category ? p.category.toLowerCase() : "";
@@ -2327,8 +2283,8 @@
         if (subtotal < 500) { msgEl.innerText = `需滿 NT$500 才可使用 (目前差 NT$${500 - subtotal})`; return; }
 
         currentPromoCode = input;
-        currentDiscount = 50; 
-        renderCartItems(); 
+        currentDiscount = 50;
+        renderCartItems();
       }
 
       function removePromoCode() {
@@ -2340,8 +2296,14 @@
       function loadCart() {
         const savedCart = localStorage.getItem("minaShopCart");
         if (savedCart) {
-          cart = JSON.parse(savedCart);
-          updateCartIcon();
+          try {
+            cart = JSON.parse(savedCart);
+            updateCartIcon();
+          } catch (e) {
+            console.warn("購物車資料損毀，已重置", e);
+            cart = [];
+            localStorage.removeItem("minaShopCart");
+          }
         }
       }
 
@@ -2359,7 +2321,7 @@
           const response = await fetch(GOOGLE_SHEET_CSV_URL + "&t=" + new Date().getTime());
           const data = await response.text();
           const rows = data.split("\n").map((row) => parseCSVLine(row));
-          rows.shift(); 
+          rows.shift();
 
           loading.style.display = "none";
           allProductsData = [];
@@ -2368,7 +2330,7 @@
             if (row.length < 4) return;
 
             const rawSpec = row[1] ? row[1].trim() : "";
-            
+
             // 🌟 多規格解析器：把「款式::500::400」拆解成懂價格的物件
             let parsedVariants = [];
             if (rawSpec) {
@@ -2418,7 +2380,7 @@
               if (tag.includes("NEW") || tag.includes("特價")) return 1;
               if (tag.includes("HOT")) return 2;
               if (tag.includes("SALE")) return 3;
-              return 4; 
+              return 4;
             };
             const priorityA = getPriority(a.tag);
             const priorityB = getPriority(b.tag);
@@ -2436,8 +2398,8 @@
       }
 
       function renderProducts(products) {
-        const container = document.getElementById("product-list"); 
-        container.innerHTML = ""; 
+        const container = document.getElementById("product-list");
+        container.innerHTML = "";
 
         if (products.length === 0) {
           container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:40px; color:#999;">此分類暫無商品</div>`;
@@ -2500,7 +2462,7 @@
               priceHtml = `<span class="price">NT$ ${product.originalPriceStr}</span>`;
             }
           }
-          
+
           let badgeHtml = "";
           if (!isAllOutOfStock) {
             if (product.tag === "NEW") badgeHtml = `<div class="badge new">NEW</div>`;
@@ -2509,8 +2471,8 @@
           }
 
           // 🌟 結單時間攔截解除！改到 2099 年
-          const cutOffTime = new Date("2099-12-31T23:59:59"); 
-          const isEnded = new Date() >= cutOffTime; 
+          const cutOffTime = new Date("2099-12-31T23:59:59");
+          const isEnded = new Date() >= cutOffTime;
 
           let btnHtml = "";
           if (isEnded) {
@@ -2554,18 +2516,18 @@
           alert("本次活動已於今晚 7 點結單囉！目前網站轉為「型錄模式」僅供核對商品。");
           return;
         }
-        
+
         const product = allProductsData[index];
-        currentQsIndex = index; 
+        currentQsIndex = index;
 
         // 相簿處理
         const mainImg = document.getElementById("qs-img");
         const galleryContainer = document.getElementById("qs-gallery-thumbs");
         mainImg.src = product.gallery[0];
-        mainImg.style.cursor = "zoom-in"; 
+        mainImg.style.cursor = "zoom-in";
         mainImg.onclick = function () { openZoom(this.src); };
 
-        galleryContainer.innerHTML = ""; 
+        galleryContainer.innerHTML = "";
         if (product.gallery.length > 1) {
           product.gallery.forEach((imgUrl, idx) => {
             const thumb = document.createElement("img");
@@ -2589,17 +2551,17 @@
         const giftCard = document.getElementById("qs-gift-card");
         const giftText = document.getElementById("qs-gift-text");
         if (product.giftDesc) {
-          giftText.innerHTML = product.giftDesc; 
+          giftText.innerHTML = product.giftDesc;
           giftCard.style.display = "block";
         } else {
           giftCard.style.display = "none";
         }
 
-        // 🌟 規格選單與價格聯動魔法 
+        // 🌟 規格選單與價格聯動魔法
         const select = document.getElementById('qs-variant-select');
         const priceBox = document.getElementById("qs-price-box");
-        select.innerHTML = ''; 
-        let allOutOfStock = true; 
+        select.innerHTML = '';
+        let allOutOfStock = true;
 
         if (product.variants.length > 0 && product.variants[0].name !== "") {
           product.variants.forEach((vObj, vIndex) => {
@@ -2611,12 +2573,12 @@
             if (vObj.name.includes('(缺)')) {
               opt.disabled = true;
               opt.innerText = vObj.name.replace('(缺)', '').trim() + ' (Sold Out)';
-              opt.style.color = '#cecece'; 
+              opt.style.color = '#cecece';
             } else {
               // 在選單選項裡加上價格，讓客人一目了然
               opt.innerText = `${vObj.name} - NT$ ${displayPrice}`;
-              opt.style.color = '#555'; 
-              allOutOfStock = false; 
+              opt.style.color = '#555';
+              allOutOfStock = false;
             }
             select.appendChild(opt);
           });
@@ -2636,7 +2598,7 @@
         } else {
           // 單一規格沒填的話，用預設方式顯示
           select.parentElement.style.display = 'none';
-          allOutOfStock = false; 
+          allOutOfStock = false;
           updateModalPrice({ price: product.originalPriceStr, promo: product.vipPriceStr });
         }
 
@@ -2700,7 +2662,7 @@
       function openZoom(imgSrc) {
         const overlay = document.getElementById("zoomOverlay");
         const img = document.getElementById("zoom-img-content");
-        img.src = imgSrc; 
+        img.src = imgSrc;
         overlay.style.display = "flex";
         setTimeout(() => { overlay.classList.add("show"); }, 10);
       }
@@ -2718,14 +2680,14 @@
         const qty = parseInt(document.getElementById("qs-qty").value);
 
         let selectedSpecName = "單一規格";
-        let checkoutPriceStr = product.vipPriceStr || product.originalPriceStr || "0"; 
+        let checkoutPriceStr = product.vipPriceStr || product.originalPriceStr || "0";
 
         const select = document.getElementById("qs-variant-select");
         if (select.parentElement.style.display !== "none") {
           const vIndex = select.value;
           const selectedV = product.variants[vIndex];
           selectedSpecName = selectedV.name;
-          
+
           // 如果有特價抓特價，沒特價抓原價
           checkoutPriceStr = selectedV.promo ? selectedV.promo : selectedV.price;
         }
@@ -2745,12 +2707,12 @@
         const btn = document.getElementById("qs-add-btn");
         const originalText = btn.innerText;
         btn.innerText = "已加入！OK";
-        btn.style.background = "#6c757d"; 
+        btn.style.background = "#6c757d";
 
         setTimeout(() => {
           btn.innerText = originalText;
-          btn.style.background = "#d4a373"; 
-          forceCloseQuickShop(); 
+          btn.style.background = "#d4a373";
+          forceCloseQuickShop();
         }, 800);
       }
 
@@ -2847,7 +2809,7 @@
 
       function removeFromCart(idx) {
         cart.splice(idx, 1);
-        saveCart(); 
+        saveCart();
         renderCartItems();
       }
 
