@@ -2776,11 +2776,13 @@
 
         let selectedSpecName = "單一規格";
         let checkoutPriceStr = product.vipPriceStr || product.originalPriceStr || "0";
+        let selectedGift = "";
 
         const wrapperEl = document.getElementById("qs-variant-wrapper");
         if (wrapperEl.style.display !== "none" && _currentVariants.length > 0) {
           const selectedV = _currentVariants[_currentVariantIndex];
           selectedSpecName = _parseSpecName(selectedV.name).main; // 移除 【】，送出乾淨名稱
+          selectedGift = selectedV.gift || "";
 
           // 如果有特價抓特價，沒特價抓原價
           checkoutPriceStr = selectedV.promo ? selectedV.promo : selectedV.price;
@@ -2793,6 +2795,7 @@
           spec: selectedSpecName,
           price: priceNum,
           qty: qty,
+          gift: selectedGift,
         };
 
         cart.push(cartItem);
@@ -2854,7 +2857,7 @@
                 <div style="display:grid; grid-template-columns: 1fr 90px; gap:10px; padding:15px 0; border-bottom:1px solid #f5f5f5; align-items:center;">
                     <div style="font-family: 'Noto Sans TC', sans-serif; overflow:hidden;">
                         <div style="font-size: 1rem; font-weight: 500; color: #2c2c2c; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.name}</div>
-                        <div style="font-size:0.85rem; color:#888;">${item.spec} <span style="font-size:0.8rem; color:#ccc; margin:0 5px;">x</span> ${item.qty}</div>
+                        <div style="font-size:0.85rem; color:#888;">${item.spec} <span style="font-size:0.8rem; color:#ccc; margin:0 5px;">x</span> ${item.qty}${item.gift ? `<span style="color:#d4a373; font-size:0.78rem; margin-left:6px;">🎁 ${item.gift}</span>` : ''}</div>
                     </div>
                     <div style="text-align:right; font-family: 'Noto Sans TC', sans-serif;">
                         <div style="font-weight:600; font-size:1rem; color:#2c2c2c;">NT$ ${item.price * item.qty}</div>
@@ -2940,7 +2943,7 @@
           let num = (index + 1).toString().padStart(2, "0");
 
           message += `[${num}] ${cleanName}\n`;
-          message += `- 規格: ${cleanSpec}\n`;
+          message += `- 規格: ${cleanSpec}${item.gift ? ` (贈: ${item.gift})` : ''}\n`;
           message += `- 數量: ${item.qty} ($${item.price})\n\n`;
         });
 
