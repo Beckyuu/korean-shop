@@ -1269,41 +1269,134 @@
         font-weight: 500;
       }
 
-      /* === 優化後的規格選單  === */
-      .qs-select {
+      /* === 🎛️ 自訂規格下拉選單 (完整顯示版，無省略號) === */
+
+      /* 外層容器 */
+      .custom-variant-wrapper {
+        position: relative;
         width: 100%;
+      }
 
-        /* 🔴 修改 1：改用「固定高度」取代 padding 撐開 */
-        /* 這樣在手機上才不會因為預設樣式而跑版 */
-        height: 45px;
-        line-height: 45px;
-        /* 讓文字垂直置中 */
-
-        /* 🔴 修改 2：內距設定 (上下設為 0，只留左右) */
-        /* 右邊留 40px 是為了避開我們畫的那個箭頭，避免字疊在一起 */
-        padding: 0 40px 0 15px;
-
-        /* 邊框與背景 (維持不變) */
+      /* 已選項目顯示欄 (點擊開/關) */
+      .custom-variant-display {
+        width: 100%;
+        min-height: 52px;
+        padding: 10px 36px 10px 12px;
         border: 1px solid var(--accent);
         background-color: #fff;
         border-radius: 8px;
-
-        /* 字體設定 */
-        font-size: 16px;
-        /* 🌟 建議：手機版設 16px 可以防止 iPhone 自動放大畫面 */
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 0.88rem;
         color: #555;
-        outline: none;
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        position: relative;
+        white-space: normal;        /* 允許換行 */
+        word-break: break-word;
+        line-height: 1.5;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        user-select: none;
+        -webkit-user-select: none;
+      }
 
-        /* 去除預設樣式 (維持不變) */
-        appearance: none;
-        -webkit-appearance: none;
+      .custom-variant-display:hover {
+        border-color: var(--price-color);
+        box-shadow: 0 2px 8px rgba(212, 163, 115, 0.15);
+      }
 
-        /* 自訂箭頭 (維持不變) */
-        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-        background-repeat: no-repeat;
-        background-position: right 15px center;
-        background-size: 12px;
+      .custom-variant-display.open {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+
+      /* 箭頭圖示 */
+      .custom-variant-arrow {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+        pointer-events: none;
+        color: var(--accent);
+        transition: transform 0.2s ease;
+      }
+
+      .custom-variant-display.open .custom-variant-arrow {
+        transform: translateY(-50%) rotate(180deg);
+      }
+
+      /* 下拉清單容器 */
+      .custom-variant-options {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #fff;
+        border: 1px solid var(--accent);
+        border-top: none;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+        z-index: 600;
+        max-height: 280px;
+        overflow-y: auto;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .custom-variant-options.open {
+        display: block;
+      }
+
+      /* 每一個選項 */
+      .custom-variant-option {
+        padding: 11px 12px;
+        cursor: pointer;
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 0.88rem;
+        color: #555;
+        white-space: normal;        /* 允許換行，絕不截斷 */
+        word-break: break-word;
+        line-height: 1.6;
+        border-bottom: 1px solid #f5f5f5;
+        transition: background 0.15s;
+      }
+
+      .custom-variant-option:last-child {
+        border-bottom: none;
+      }
+
+      .custom-variant-option:hover:not(.opt-disabled) {
+        background-color: var(--accent-light);
+      }
+
+      .custom-variant-option.opt-disabled {
+        color: #ccc;
+        cursor: not-allowed;
+        background: #fafafa;
+      }
+
+      .custom-variant-option.opt-selected {
+        background-color: var(--accent-light);
+        color: var(--accent);
+        font-weight: 500;
+      }
+
+      /* 手機版：字體微縮，確保不超出螢幕 */
+      @media (max-width: 768px) {
+        .custom-variant-display {
+          font-size: 0.82rem;
+          min-height: 52px;
+          padding: 10px 32px 10px 10px;
+        }
+
+        .custom-variant-option {
+          font-size: 0.82rem;
+          padding: 12px 10px;
+          line-height: 1.6;
+        }
       }
 
       /* 數量加減 */
@@ -1459,19 +1552,6 @@
           margin-top: 2px !important;
         }
 
-        /* 5. 規格選單大改造：變胖 + 變短 */
-        .qs-select {
-          /* 變短：只佔 65% 寬度 (約少了 1/3) */
-          width: 65% !important;
-
-          /* 變胖：高度增加，手指好點 */
-          height: 52px !important;
-          line-height: 52px !important;
-          /* 確保文字垂直置中 */
-
-          font-size: 16px !important;
-        }
-
         /* 6. 區塊間距縮小 */
         .qs-section {
           margin-bottom: 12px !important;
@@ -1547,15 +1627,6 @@
         font-size: 1rem;
         outline: none;
         background: transparent;
-      }
-
-      /* 5. 🛑 重要修正：手機版規格選單 */
-      /* 我們之前設 width: 65%，現在要改回 100% (因為它已經在 flex 框框裡了) */
-      @media (max-width: 768px) {
-        .qs-select {
-          width: 100% !important;
-          /* 填滿左邊那個格子 */
-        }
       }
 
       /* === 🔍 搜尋框 === */
@@ -2032,7 +2103,15 @@
             <div class="qs-row-group">
               <div class="qs-section qs-col-grow">
                 <label class="qs-label">規格 / 款式</label>
-                <select id="qs-variant-select" class="qs-select"></select>
+                <div class="custom-variant-wrapper" id="qs-variant-wrapper">
+                  <div class="custom-variant-display" id="qs-variant-display" onclick="toggleCustomVariantSelect()">
+                    <span id="qs-variant-selected-text">請選擇規格</span>
+                    <svg class="custom-variant-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </div>
+                  <div class="custom-variant-options" id="qs-variant-options"></div>
+                </div>
               </div>
 
               <div class="qs-section qs-col-fixed">
@@ -2557,63 +2636,59 @@
           giftCard.style.display = "none";
         }
 
-        // 🌟 規格選單與價格聯動魔法
-        const select = document.getElementById('qs-variant-select');
-        const priceBox = document.getElementById("qs-price-box");
-        select.innerHTML = '';
+        // 🌟 規格選單與價格聯動魔法 (自訂下拉選單版)
+        const optionsContainer = document.getElementById('qs-variant-options');
+        const wrapperEl = document.getElementById('qs-variant-wrapper');
+        const selectedTextEl = document.getElementById('qs-variant-selected-text');
+        optionsContainer.innerHTML = '';
+        _currentVariants = [];
         let allOutOfStock = true;
 
         if (product.variants.length > 0 && product.variants[0].name !== "") {
-          product.variants.forEach((vObj, vIndex) => {
-            const opt = document.createElement('option');
-            opt.value = vIndex; // 存陣列的位子，方便等下切換時抓資料
+          _currentVariants = product.variants;
 
+          product.variants.forEach((vObj, vIndex) => {
+            const optEl = document.createElement('div');
+            optEl.className = 'custom-variant-option';
             const displayPrice = vObj.promo ? vObj.promo : vObj.price;
 
             if (vObj.name.includes('(缺)')) {
-              opt.disabled = true;
-              opt.innerText = vObj.name.replace('(缺)', '').trim() + ' (Sold Out)';
-              opt.style.color = '#cecece';
+              optEl.classList.add('opt-disabled');
+              optEl.textContent = vObj.name.replace('(缺)', '').trim() + '　(Sold Out)';
             } else {
-              // 在選單選項裡加上價格，讓客人一目了然
-              opt.innerText = `${vObj.name} - NT$ ${displayPrice}`;
-              opt.style.color = '#555';
+              // 完整顯示規格名稱與價格，允許換行
+              optEl.textContent = `${vObj.name}　NT$ ${displayPrice}`;
+              optEl.onclick = (function(idx) {
+                return function() { _selectVariantOption(idx); };
+              })(vIndex);
               allOutOfStock = false;
             }
-            select.appendChild(opt);
+            optionsContainer.appendChild(optEl);
           });
-          select.parentElement.style.display = 'block';
 
-          // 🌟 當客人在選單切換時，動態改變上方的價格
-          select.onchange = function() {
-            const selectedV = product.variants[this.value];
-            updateModalPrice(selectedV);
-          };
+          wrapperEl.style.display = 'block';
 
-          // 預設選中第一個有貨的規格，並顯示它的價格
-          let firstAvailable = product.variants.find(v => !v.name.includes('(缺)')) || product.variants[0];
-          select.value = product.variants.indexOf(firstAvailable);
-          updateModalPrice(firstAvailable);
+          // 預設選中第一個有貨的規格
+          let firstAvailableIdx = product.variants.findIndex(v => !v.name.includes('(缺)'));
+          if (firstAvailableIdx === -1) firstAvailableIdx = 0;
+          _currentVariantIndex = firstAvailableIdx;
+
+          const firstV = product.variants[firstAvailableIdx];
+          const firstDisplayPrice = firstV.promo ? firstV.promo : firstV.price;
+          selectedTextEl.textContent = firstV.name.includes('(缺)')
+            ? firstV.name.replace('(缺)', '').trim() + '　(Sold Out)'
+            : `${firstV.name}　NT$ ${firstDisplayPrice}`;
+
+          const optEls = optionsContainer.querySelectorAll('.custom-variant-option');
+          if (optEls[firstAvailableIdx]) optEls[firstAvailableIdx].classList.add('opt-selected');
+
+          updateModalPrice(firstV);
 
         } else {
-          // 單一規格沒填的話，用預設方式顯示
-          select.parentElement.style.display = 'none';
+          // 單一規格沒填的話，隱藏選單
+          wrapperEl.style.display = 'none';
           allOutOfStock = false;
           updateModalPrice({ price: product.originalPriceStr, promo: product.vipPriceStr });
-        }
-
-        // --- 負責更新價格畫面的小幫手 ---
-        function updateModalPrice(vObj) {
-          if (vObj.promo) {
-            priceBox.innerHTML = `
-              <div class="price-container" style="justify-content: flex-start; margin-bottom: 0;">
-                <span class="price-original" style="font-size: 1.1rem;">NT$ ${vObj.price}</span>
-                <span class="price-vip" style="font-size: 1.6rem;">NT$ ${vObj.promo}</span>
-              </div>
-            `;
-          } else {
-            priceBox.innerText = "NT$ " + vObj.price;
-          }
         }
 
         const addBtn = document.getElementById('qs-add-btn');
@@ -2646,6 +2721,7 @@
       }
 
       function forceCloseQuickShop() {
+        closeCustomVariantSelect();
         const modal = document.getElementById("quickShopModal");
         modal.classList.remove("show");
         unfreezeBackground();
@@ -2682,10 +2758,9 @@
         let selectedSpecName = "單一規格";
         let checkoutPriceStr = product.vipPriceStr || product.originalPriceStr || "0";
 
-        const select = document.getElementById("qs-variant-select");
-        if (select.parentElement.style.display !== "none") {
-          const vIndex = select.value;
-          const selectedV = product.variants[vIndex];
+        const wrapperEl = document.getElementById("qs-variant-wrapper");
+        if (wrapperEl.style.display !== "none" && _currentVariants.length > 0) {
+          const selectedV = _currentVariants[_currentVariantIndex];
           selectedSpecName = selectedV.name;
 
           // 如果有特價抓特價，沒特價抓原價
@@ -2896,6 +2971,71 @@
           document.getElementById("qrModal").classList.remove("show");
         }
       }
+
+      // === 🎛️ 自訂規格下拉選單的全域狀態與控制函式 ===
+      let _currentVariantIndex = 0;
+      let _currentVariants = [];
+
+      function toggleCustomVariantSelect() {
+        const display = document.getElementById('qs-variant-display');
+        const options = document.getElementById('qs-variant-options');
+        const isOpen = options.classList.contains('open');
+        if (isOpen) {
+          options.classList.remove('open');
+          display.classList.remove('open');
+        } else {
+          options.classList.add('open');
+          display.classList.add('open');
+        }
+      }
+
+      function closeCustomVariantSelect() {
+        const display = document.getElementById('qs-variant-display');
+        const options = document.getElementById('qs-variant-options');
+        if (display) display.classList.remove('open');
+        if (options) options.classList.remove('open');
+      }
+
+      function _selectVariantOption(vIndex) {
+        _currentVariantIndex = vIndex;
+        const vObj = _currentVariants[vIndex];
+        const selectedTextEl = document.getElementById('qs-variant-selected-text');
+        const displayPrice = vObj.promo ? vObj.promo : vObj.price;
+
+        selectedTextEl.textContent = vObj.name.includes('(缺)')
+          ? vObj.name.replace('(缺)', '').trim() + '　(Sold Out)'
+          : `${vObj.name}　NT$ ${displayPrice}`;
+
+        // 更新清單內的選中狀態
+        document.querySelectorAll('#qs-variant-options .custom-variant-option').forEach((el, idx) => {
+          el.classList.toggle('opt-selected', idx === vIndex);
+        });
+
+        updateModalPrice(vObj);
+        closeCustomVariantSelect();
+      }
+
+      function updateModalPrice(vObj) {
+        const priceBox = document.getElementById("qs-price-box");
+        if (vObj.promo) {
+          priceBox.innerHTML = `
+            <div class="price-container" style="justify-content: flex-start; margin-bottom: 0;">
+              <span class="price-original" style="font-size: 1.1rem;">NT$ ${vObj.price}</span>
+              <span class="price-vip" style="font-size: 1.6rem;">NT$ ${vObj.promo}</span>
+            </div>
+          `;
+        } else {
+          priceBox.innerText = "NT$ " + vObj.price;
+        }
+      }
+
+      // 點擊選單以外的地方時自動關閉
+      document.addEventListener('click', function(e) {
+        const wrapper = document.getElementById('qs-variant-wrapper');
+        if (wrapper && !wrapper.contains(e.target)) {
+          closeCustomVariantSelect();
+        }
+      });
 
       loadCart();
       fetchProducts();
