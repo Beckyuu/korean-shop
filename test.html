@@ -2865,7 +2865,7 @@
         if (finalTotal >= 1500) {
           let rawDeposit = finalTotal * 0.1;
           let finalDeposit = Math.min(Math.round(rawDeposit / 100) * 100, 500);
-          message += `(預付定金10%，上限NT$500: NT$ ${finalDeposit})\n\n`;
+          message += `(預付定金10%: NT$ ${finalDeposit})\n\n`;
         }
 
         message += `平台: ${selectedShipping}`;
