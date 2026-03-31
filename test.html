@@ -1384,6 +1384,16 @@
         font-weight: 500;
       }
 
+      /* 贈品第二行：小字 + 金棕色 */
+      .opt-gift-line {
+        display: block;
+        font-size: 0.78rem;
+        color: var(--accent);
+        margin-top: 3px;
+        line-height: 1.4;
+        font-family: "Noto Sans TC", sans-serif;
+      }
+
       /* 手機版：字體微縮，確保不超出螢幕 */
       @media (max-width: 768px) {
         .custom-variant-display {
@@ -2654,10 +2664,11 @@
 
             if (vObj.name.includes('(缺)')) {
               optEl.classList.add('opt-disabled');
-              optEl.textContent = vObj.name.replace('(缺)', '').trim() + '　(Sold Out)';
+              const parsedDisabled = _parseSpecName(vObj.name.replace('(缺)', '').trim());
+              optEl.innerHTML = `<span>${parsedDisabled.main}</span>${parsedDisabled.gift ? `<span class="opt-gift-line">🎁 ${parsedDisabled.gift}</span>` : ''}<span style="opacity:0.5;"> (Sold Out)</span>`;
             } else {
-              // 完整顯示規格名稱與價格，允許換行
-              optEl.textContent = `${vObj.name}　NT$ ${displayPrice}`;
+              const parsed = _parseSpecName(vObj.name);
+              optEl.innerHTML = `<span>${parsed.main}　NT$ ${displayPrice}</span>${parsed.gift ? `<span class="opt-gift-line">🎁 ${parsed.gift}</span>` : ''}`;
               optEl.onclick = (function(idx) {
                 return function() { _selectVariantOption(idx); };
               })(vIndex);
@@ -2675,9 +2686,11 @@
 
           const firstV = product.variants[firstAvailableIdx];
           const firstDisplayPrice = firstV.promo ? firstV.promo : firstV.price;
-          selectedTextEl.textContent = firstV.name.includes('(缺)')
-            ? firstV.name.replace('(缺)', '').trim() + '　(Sold Out)'
-            : `${firstV.name}　NT$ ${firstDisplayPrice}`;
+          const firstParsed = _parseSpecName(firstV.name.includes('(缺)') ? firstV.name.replace('(缺)', '').trim() : firstV.name);
+          const firstGiftHtml = firstParsed.gift ? `<span class="opt-gift-line">🎁 ${firstParsed.gift}</span>` : '';
+          selectedTextEl.innerHTML = firstV.name.includes('(缺)')
+            ? `<span>${firstParsed.main} (Sold Out)</span>${firstGiftHtml}`
+            : `<span>${firstParsed.main}　NT$ ${firstDisplayPrice}</span>${firstGiftHtml}`;
 
           const optEls = optionsContainer.querySelectorAll('.custom-variant-option');
           if (optEls[firstAvailableIdx]) optEls[firstAvailableIdx].classList.add('opt-selected');
@@ -2972,6 +2985,18 @@
         }
       }
 
+      // === 🎁 規格名稱解析：自動拆出【贈品】到第二行 ===
+      function _parseSpecName(name) {
+        const match = name.match(/^(.*?)【(.+?)】(.*)$/);
+        if (match) {
+          return {
+            main: (match[1] + match[3]).trim(),
+            gift: match[2].trim()
+          };
+        }
+        return { main: name, gift: null };
+      }
+
       // === 🎛️ 自訂規格下拉選單的全域狀態與控制函式 ===
       let _currentVariantIndex = 0;
       let _currentVariants = [];
@@ -3002,9 +3027,11 @@
         const selectedTextEl = document.getElementById('qs-variant-selected-text');
         const displayPrice = vObj.promo ? vObj.promo : vObj.price;
 
-        selectedTextEl.textContent = vObj.name.includes('(缺)')
-          ? vObj.name.replace('(缺)', '').trim() + '　(Sold Out)'
-          : `${vObj.name}　NT$ ${displayPrice}`;
+        const selParsed = _parseSpecName(vObj.name.includes('(缺)') ? vObj.name.replace('(缺)', '').trim() : vObj.name);
+        const selGiftHtml = selParsed.gift ? `<span class="opt-gift-line">🎁 ${selParsed.gift}</span>` : '';
+        selectedTextEl.innerHTML = vObj.name.includes('(缺)')
+          ? `<span>${selParsed.main} (Sold Out)</span>${selGiftHtml}`
+          : `<span>${selParsed.main}　NT$ ${displayPrice}</span>${selGiftHtml}`;
 
         // 更新清單內的選中狀態
         document.querySelectorAll('#qs-variant-options .custom-variant-option').forEach((el, idx) => {
