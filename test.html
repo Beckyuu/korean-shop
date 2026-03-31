@@ -2433,7 +2433,7 @@
                     name: chunks[0] ? chunks[0].trim() : "",
                     price: chunks[1] ? chunks[1].trim() : "",
                     promo: chunks[2] ? chunks[2].trim() : "",
-                    gift: variantGift  // E 欄贈品，套用到所有規格
+                    gift: (chunks[3] ? chunks[3].trim() : "") || variantGift  // 優先讀規格內建贈品，fallback 到 E 欄
                   });
                 } else {
                   // 相容以前沒有設定獨立價格的舊商品
