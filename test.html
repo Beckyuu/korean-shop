@@ -2419,6 +2419,8 @@
             if (row.length < 4) return;
 
             const rawSpec = row[1] ? row[1].trim() : "";
+            // E 欄 (row[4])：規格贈品欄，填「貼紙」系統自動顯示 🎁 貼紙
+            const variantGift = row[4] ? row[4].trim() : "";
 
             // 🌟 多規格解析器：把「款式::500::400」拆解成懂價格的物件
             let parsedVariants = [];
@@ -2430,14 +2432,16 @@
                   parsedVariants.push({
                     name: chunks[0] ? chunks[0].trim() : "",
                     price: chunks[1] ? chunks[1].trim() : "",
-                    promo: chunks[2] ? chunks[2].trim() : ""
+                    promo: chunks[2] ? chunks[2].trim() : "",
+                    gift: variantGift  // E 欄贈品，套用到所有規格
                   });
                 } else {
                   // 相容以前沒有設定獨立價格的舊商品
                   parsedVariants.push({
                     name: p,
                     price: row[2] ? row[2].trim() : "0",
-                    promo: row[3] ? row[3].trim() : ""
+                    promo: row[3] ? row[3].trim() : "",
+                    gift: variantGift
                   });
                 }
               });
@@ -2586,6 +2590,7 @@
             <div class="info">
               <h3 class="name" style="${isAllOutOfStock ? 'color: #999;' : ''}">${product.name}</h3>
               <span class="deadline-badge ${product.deadline ? '' : 'empty'}">${product.deadline || "空格佔位"}</span>
+              ${product.variants && product.variants[0] && product.variants[0].gift ? `<div class="gift-row">🎁 ${product.variants[0].gift}</div>` : ''}
               ${priceHtml}
               <div class="action-row" style="margin-top: 10px; justify-content: center;">
                   ${btnHtml}
@@ -2664,11 +2669,11 @@
 
             if (vObj.name.includes('(缺)')) {
               optEl.classList.add('opt-disabled');
-              const parsedDisabled = _parseSpecName(vObj.name.replace('(缺)', '').trim());
-              optEl.innerHTML = `<span>${parsedDisabled.main}</span>${parsedDisabled.gift ? `<span class="opt-gift-line">🎁 ${parsedDisabled.gift}</span>` : ''}<span style="opacity:0.5;"> (Sold Out)</span>`;
+              const d = _getVariantDisplay({ ...vObj, name: vObj.name.replace('(缺)', '').trim() });
+              optEl.innerHTML = `<span>${d.displayName}</span>${d.gift ? `<span class="opt-gift-line">🎁 ${d.gift}</span>` : ''}<span style="opacity:0.5;"> (Sold Out)</span>`;
             } else {
-              const parsed = _parseSpecName(vObj.name);
-              optEl.innerHTML = `<span>${parsed.main}</span>${parsed.gift ? `<span class="opt-gift-line">🎁 ${parsed.gift}</span>` : ''}`;
+              const d = _getVariantDisplay(vObj);
+              optEl.innerHTML = `<span>${d.displayName}</span>${d.gift ? `<span class="opt-gift-line">🎁 ${d.gift}</span>` : ''}`;
               optEl.onclick = (function(idx) {
                 return function() { _selectVariantOption(idx); };
               })(vIndex);
@@ -2686,11 +2691,13 @@
 
           const firstV = product.variants[firstAvailableIdx];
           const firstDisplayPrice = firstV.promo ? firstV.promo : firstV.price;
-          const firstParsed = _parseSpecName(firstV.name.includes('(缺)') ? firstV.name.replace('(缺)', '').trim() : firstV.name);
-          const firstGiftHtml = firstParsed.gift ? `<span class="opt-gift-line">🎁 ${firstParsed.gift}</span>` : '';
+          const firstD = _getVariantDisplay(firstV.name.includes('(缺)')
+            ? { ...firstV, name: firstV.name.replace('(缺)', '').trim() }
+            : firstV);
+          const firstGiftHtml = firstD.gift ? `<span class="opt-gift-line">🎁 ${firstD.gift}</span>` : '';
           selectedTextEl.innerHTML = firstV.name.includes('(缺)')
-            ? `<span>${firstParsed.main} (Sold Out)</span>${firstGiftHtml}`
-            : `<span>${firstParsed.main}</span>${firstGiftHtml}`;
+            ? `<span>${firstD.displayName} (Sold Out)</span>${firstGiftHtml}`
+            : `<span>${firstD.displayName}</span>${firstGiftHtml}`;
 
           const optEls = optionsContainer.querySelectorAll('.custom-variant-option');
           if (optEls[firstAvailableIdx]) optEls[firstAvailableIdx].classList.add('opt-selected');
@@ -2774,7 +2781,7 @@
         const wrapperEl = document.getElementById("qs-variant-wrapper");
         if (wrapperEl.style.display !== "none" && _currentVariants.length > 0) {
           const selectedV = _currentVariants[_currentVariantIndex];
-          selectedSpecName = selectedV.name;
+          selectedSpecName = _parseSpecName(selectedV.name).main; // 移除 【】，送出乾淨名稱
 
           // 如果有特價抓特價，沒特價抓原價
           checkoutPriceStr = selectedV.promo ? selectedV.promo : selectedV.price;
@@ -2997,6 +3004,15 @@
         return { main: name, gift: null };
       }
 
+      // === 🎁 取得規格顯示名稱與贈品 (E欄優先，再fallback到【】寫法) ===
+      function _getVariantDisplay(vObj) {
+        const parsed = _parseSpecName(vObj.name);
+        return {
+          displayName: parsed.main,                      // 永遠移除 【】
+          gift: vObj.gift || parsed.gift || null          // E欄優先，再用【】
+        };
+      }
+
       // === 🎛️ 自訂規格下拉選單的全域狀態與控制函式 ===
       let _currentVariantIndex = 0;
       let _currentVariants = [];
@@ -3027,11 +3043,13 @@
         const selectedTextEl = document.getElementById('qs-variant-selected-text');
         const displayPrice = vObj.promo ? vObj.promo : vObj.price;
 
-        const selParsed = _parseSpecName(vObj.name.includes('(缺)') ? vObj.name.replace('(缺)', '').trim() : vObj.name);
-        const selGiftHtml = selParsed.gift ? `<span class="opt-gift-line">🎁 ${selParsed.gift}</span>` : '';
+        const selD = _getVariantDisplay(vObj.name.includes('(缺)')
+          ? { ...vObj, name: vObj.name.replace('(缺)', '').trim() }
+          : vObj);
+        const selGiftHtml = selD.gift ? `<span class="opt-gift-line">🎁 ${selD.gift}</span>` : '';
         selectedTextEl.innerHTML = vObj.name.includes('(缺)')
-          ? `<span>${selParsed.main} (Sold Out)</span>${selGiftHtml}`
-          : `<span>${selParsed.main}</span>${selGiftHtml}`;
+          ? `<span>${selD.displayName} (Sold Out)</span>${selGiftHtml}`
+          : `<span>${selD.displayName}</span>${selGiftHtml}`;
 
         // 更新清單內的選中狀態
         document.querySelectorAll('#qs-variant-options .custom-variant-option').forEach((el, idx) => {
