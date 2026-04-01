@@ -9,63 +9,14 @@
       href="https://ik.imagekit.io/mina09/OliveYoung/%E5%9C%96%E7%89%873.png"
       type="image/png"
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Fredoka:wght@400;500;600&family=Noto+Sans+TC:wght@300;400;500&family=Zen+Maru+Gothic:wght@300;400;500;700&display=swap"
       rel="stylesheet"
     />
 
     <style>
-      /* === 📸 商品相簿樣式 (補強修正版) === */
-
-      /* 1. 確保大圖與縮圖是垂直排列 */
-      .quick-shop-img-box {
-        display: flex !important;
-        flex-direction: column !important;
-        padding: 20px;
-        gap: 15px;
-      }
-
-      /* 2. 限制大圖高度，讓它乖乖縮放 */
-      .quick-shop-img-box img#qs-img {
-        width: 100%;
-        height: 350px !important;
-        /* 強制高度 */
-        object-fit: scale-down !important;
-        /* 確保不裁切 */
-        border-radius: 8px;
-      }
-
-      /* 3. 縮圖容器 */
-      .qs-gallery-container {
-        display: flex !important;
-        justify-content: center;
-        gap: 8px;
-        width: 100%;
-        overflow-x: auto;
-      }
-
-      /* 4. 🌟 關鍵修正：縮圖一定要很小！ */
-      .qs-thumb {
-        width: 50px !important;
-        /* 強制縮小寬度 */
-        height: 50px !important;
-        /* 強制縮小高度 */
-        min-width: 50px !important;
-        /* 防止被擠扁 */
-        object-fit: cover !important;
-        border-radius: 6px;
-        border: 1px solid #eee;
-        cursor: pointer;
-        opacity: 0.6;
-      }
-
-      /* 選中時的效果 */
-      .qs-thumb:hover,
-      .qs-thumb.active {
-        opacity: 1;
-        border: 2px solid #d4a373 !important;
-      }
-
       /* === 🔍 圖片放大鏡樣式 === */
       .zoom-overlay {
         display: none;
@@ -129,6 +80,9 @@
         --price-color: #bfa092;
         /* 莫蘭迪磚紅 */
         --white: #ffffff;
+        --color-sale: #d65a5a;
+        --footer-bg: #1a1a1a;
+        --badge-sale: #c97c7c;
       }
 
       * {
@@ -231,7 +185,7 @@
 
       /* 分隔線樣式 */
       .service-info .divider {
-        color: #d4a373;
+        color: var(--accent);
         /* 金棕色，呼應主題 */
         opacity: 0.5;
         /* 半透明，讓它不要太搶眼 */
@@ -319,7 +273,7 @@
 
         font-family: "Noto Sans TC", sans-serif;
         font-size: 0.8rem;
-        color: #666;
+        color: var(--text-sub);
         line-height: 1.6;
         /* 行高設定 1.6，這樣兩行字之間才不會太擠 */
 
@@ -338,7 +292,7 @@
         top: 0px;
 
         font-weight: bold;
-        color: #d4a373;
+        color: var(--accent);
       }
 
       /* 手機版設定 (舊的保留，新的在最下面) */
@@ -437,17 +391,17 @@
 
       /* NEW: 質感霧金 (呼應你的主題色) */
       .badge.new {
-        background-color: #d4a373;
+        background-color: var(--accent);
       }
 
       /* HOT: 溫柔磚紅 */
       .badge.hot {
-        background-color: #bfa092;
+        background-color: var(--price-color);
       }
 
       /* SALE: 顯眼的紅色 (備用) */
       .badge.sale {
-        background-color: #c97c7c;
+        background-color: var(--badge-sale);
       }
 
       /* === 2. 資訊區域 (負責對齊) === */
@@ -543,7 +497,7 @@
         left: 50%;
         transform: translateX(-50%);
 
-        background-color: #d4a373;
+        background-color: var(--accent);
         color: #fff;
 
         font-family: "Noto Sans TC", sans-serif;
@@ -580,7 +534,7 @@
 
       /* 🌟 修改 3：美化右上角關閉按鈕 (覆蓋舊設定) */
       .modal-close-btn {
-        color: #bfa092 !important;
+        color: var(--price-color) !important;
         /* 改成莫蘭迪紅棕色 */
         top: 15px !important;
         /* 位置微調 */
@@ -594,7 +548,7 @@
       .gift-row {
         font-family: "Noto Sans TC", sans-serif;
         font-size: 0.8rem;
-        color: #d65a5a;
+        color: var(--color-sale);
         margin-bottom: 8px;
 
         /* 回復成單行的高度 */
@@ -631,7 +585,7 @@
         height: 36px;
         /* 高度跟按鈕一樣 */
         font-size: 0.9rem;
-        color: #666;
+        color: var(--text-sub);
         outline: none;
         border-radius: 4px;
         /* 微圓角 */
@@ -656,9 +610,9 @@
         /* 稍微扁一點 */
         font-family: "Noto Sans TC", sans-serif;
         font-size: 0.85rem;
-        color: #d4a373;
+        color: var(--accent);
         background-color: #fff;
-        border: 1px solid #d4a373;
+        border: 1px solid var(--accent);
         border-radius: 4px;
         cursor: pointer;
         text-align: center;
@@ -680,7 +634,7 @@
         display: inline-block;
 
         background-color: #f4e3e3;
-        color: #c97c7c;
+        color: var(--badge-sale);
 
         font-family: "Noto Sans TC", sans-serif;
         font-size: 0.8rem;
@@ -715,7 +669,7 @@
         font-family: "Fredoka", sans-serif;
         font-size: 1.4rem;
         font-weight: 500;
-        color: #2c2c2c;
+        color: var(--text-main);
         display: block;
         margin-bottom: 4px;
 
@@ -750,7 +704,7 @@
 
       /* 顯眼的優惠價 */
       .price-vip {
-        color: #d65a5a;
+        color: var(--color-sale);
         /* 漂亮的莫蘭迪紅 */
         font-size: 1.3rem;
         /* 字大一點 */
@@ -761,9 +715,9 @@
 
       /* === 6. 購買按鈕  === */
       button.btn-add {
-        background-color: #d4a373;
+        background-color: var(--accent);
         color: #fff;
-        border: 1px solid #d4a373;
+        border: 1px solid var(--accent);
         border-radius: 50px;
         padding: 6px 28px;
         font-size: 0.85rem;
@@ -786,12 +740,12 @@
 
       button.btn-add:hover {
         background-color: #fff;
-        color: #d4a373;
+        color: var(--accent);
       }
 
       /* === 最終極簡版 Footer (緊湊型) === */
       footer {
-        background-color: #1a1a1a;
+        background-color: var(--footer-bg);
         color: #fff;
 
         /* 修改 1：高度縮減，原本 40px 改成 25px */
@@ -903,6 +857,7 @@
         cursor: pointer;
         z-index: 100;
         transition: transform 0.2s;
+        border: none;
       }
 
       /* 讓裡面的 SVG 圖示也跟著變大 */
@@ -915,7 +870,7 @@
         position: absolute;
         top: -5px;
         right: -5px;
-        background: #bfa092;
+        background: var(--price-color);
         color: white;
         border-radius: 50%;
         width: 24px;
@@ -1000,7 +955,7 @@
         /* 1. 底圈顏色 (淺灰) */
         border: 2px solid #f0f0f0;
         /* 2. 轉動線條顏色 (你的主題金棕色) */
-        border-top: 2px solid #d4a373;
+        border-top: 2px solid var(--accent);
         border-radius: 50%;
         /* 動畫設定：1秒轉一圈，無限循環 */
         animation: spin 1s linear infinite;
@@ -1051,75 +1006,75 @@
         }
 
         /* 2. 商品列表排版：強制平分兩欄 */
-        .container {
-          grid-template-columns: 1fr 1fr !important;
-          gap: 20px 10px !important;
-          padding: 0 12px 80px !important;
+        #product-list.container {
+          grid-template-columns: 1fr 1fr;
+          gap: 20px 10px;
+          padding: 0 12px 80px;
         }
 
-        .product-card {
-          min-width: 0 !important;
+        #product-list .product-card {
+          min-width: 0;
         }
 
         /* 3. 資訊區與品名對齊 */
-        .info {
-          justify-content: flex-start !important;
-          padding-top: 5px !important;
+        #product-list .info {
+          justify-content: flex-start;
+          padding-top: 5px;
         }
 
-        .name {
-          font-size: 0.95rem !important;
-          letter-spacing: -0.5px !important;
-          min-height: 2.4rem !important;
-          line-height: 1.35 !important;
-          margin-bottom: 4px !important;
-          padding-top: 0 !important;
+        #product-list .name {
+          font-size: 0.95rem;
+          letter-spacing: -0.5px;
+          min-height: 2.4rem;
+          line-height: 1.35;
+          margin-bottom: 4px;
+          padding-top: 0;
 
-          display: flex !important;
-          justify-content: center !important;
-          align-items: center !important;
-          text-align: center !important;
-          word-break: keep-all !important;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          word-break: keep-all;
         }
 
         /* 4. 其他文字與標籤間距微調 */
-        .deadline-badge {
-          margin-bottom: 2px !important;
+        #product-list .deadline-badge {
+          margin-bottom: 2px;
         }
 
-        .desc-text {
-          font-size: 0.75rem !important;
-          margin-bottom: 2px !important;
-          height: auto !important;
+        #product-list .desc-text {
+          font-size: 0.75rem;
+          margin-bottom: 2px;
+          height: auto;
         }
 
-        .gift-row {
-          margin-bottom: 5px !important;
-          height: auto !important;
+        #product-list .gift-row {
+          margin-bottom: 5px;
+          height: auto;
         }
 
         /* 5. 價格與購買按鈕 */
-        .price,
-        .price-container {
-          font-size: 1.1rem !important;
-          margin-bottom: 8px !important;
-          margin-top: 0 !important;
+        #product-list .price,
+        #product-list .price-container {
+          font-size: 1.1rem;
+          margin-bottom: 8px;
+          margin-top: 0;
         }
 
-        .action-row {
-          margin-top: 2px !important;
-          padding-bottom: 5px !important;
+        #product-list .action-row {
+          margin-top: 2px;
+          padding-bottom: 5px;
         }
 
-        button.btn-add {
-          width: 100% !important;
-          height: 32px !important;
-          padding: 4px 0 !important;
-          font-size: 0.75rem !important;
+        #product-list button.btn-add {
+          width: 100%;
+          height: 32px;
+          padding: 4px 0;
+          font-size: 0.75rem;
         }
 
-        select {
-          height: 32px !important;
+        #product-list select {
+          height: 32px;
         }
       }
 
@@ -1262,7 +1217,7 @@
       #qs-price-box {
         font-family: "Fredoka", sans-serif;
         font-size: 1.5rem;
-        color: #2c2c2c;
+        color: var(--text-main);
         font-weight: 500;
         margin-bottom: 25px;
         padding-bottom: 20px;
@@ -1289,7 +1244,7 @@
         font-family: "Noto Sans TC", sans-serif;
         font-size: 0.95rem;
         /* 字不用太大，精緻為主 */
-        color: #666;
+        color: var(--text-sub);
         /* 質感深灰 */
         line-height: 1.6;
 
@@ -1297,7 +1252,7 @@
         white-space: pre-wrap;
 
         /* 加個左邊框裝飾，更有設計感 (如果不喜歡可以拿掉 border-left 和 padding-left) */
-        border-left: 3px solid #d4a373;
+        border-left: 3px solid var(--accent);
         padding-left: 12px;
       }
 
@@ -1314,41 +1269,144 @@
         font-weight: 500;
       }
 
-      /* === 優化後的規格選單  === */
-      .qs-select {
+      /* === 🎛️ 自訂規格下拉選單 (完整顯示版，無省略號) === */
+
+      /* 外層容器 */
+      .custom-variant-wrapper {
+        position: relative;
         width: 100%;
+      }
 
-        /* 🔴 修改 1：改用「固定高度」取代 padding 撐開 */
-        /* 這樣在手機上才不會因為預設樣式而跑版 */
-        height: 45px;
-        line-height: 45px;
-        /* 讓文字垂直置中 */
-
-        /* 🔴 修改 2：內距設定 (上下設為 0，只留左右) */
-        /* 右邊留 40px 是為了避開我們畫的那個箭頭，避免字疊在一起 */
-        padding: 0 40px 0 15px;
-
-        /* 邊框與背景 (維持不變) */
-        border: 1px solid #d4a373;
+      /* 已選項目顯示欄 (點擊開/關) */
+      .custom-variant-display {
+        width: 100%;
+        min-height: 40px;
+        padding: 8px 36px 8px 12px;
+        border: 1px solid var(--accent);
         background-color: #fff;
         border-radius: 8px;
-
-        /* 字體設定 */
-        font-size: 16px;
-        /* 🌟 建議：手機版設 16px 可以防止 iPhone 自動放大畫面 */
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 0.88rem;
         color: #555;
-        outline: none;
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        position: relative;
+        white-space: normal;        /* 允許換行 */
+        word-break: break-word;
+        line-height: 1.5;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        user-select: none;
+        -webkit-user-select: none;
+      }
 
-        /* 去除預設樣式 (維持不變) */
-        appearance: none;
-        -webkit-appearance: none;
+      .custom-variant-display:hover {
+        border-color: var(--price-color);
+        box-shadow: 0 2px 8px rgba(212, 163, 115, 0.15);
+      }
 
-        /* 自訂箭頭 (維持不變) */
-        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-        background-repeat: no-repeat;
-        background-position: right 15px center;
-        background-size: 12px;
+      .custom-variant-display.open {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+
+      /* 箭頭圖示 */
+      .custom-variant-arrow {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+        pointer-events: none;
+        color: var(--accent);
+        transition: transform 0.2s ease;
+      }
+
+      .custom-variant-display.open .custom-variant-arrow {
+        transform: translateY(-50%) rotate(180deg);
+      }
+
+      /* 下拉清單容器 */
+      .custom-variant-options {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #fff;
+        border: 1px solid var(--accent);
+        border-top: none;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+        z-index: 600;
+        max-height: 280px;
+        overflow-y: auto;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .custom-variant-options.open {
+        display: block;
+      }
+
+      /* 每一個選項 */
+      .custom-variant-option {
+        padding: 9px 12px;
+        cursor: pointer;
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 0.88rem;
+        color: #555;
+        white-space: normal;        /* 允許換行，絕不截斷 */
+        word-break: break-word;
+        line-height: 1.6;
+        border-bottom: 1px solid #f5f5f5;
+        transition: background 0.15s;
+      }
+
+      .custom-variant-option:last-child {
+        border-bottom: none;
+      }
+
+      .custom-variant-option:hover:not(.opt-disabled) {
+        background-color: var(--accent-light);
+      }
+
+      .custom-variant-option.opt-disabled {
+        color: #ccc;
+        cursor: not-allowed;
+        background: #fafafa;
+      }
+
+      .custom-variant-option.opt-selected {
+        background-color: var(--accent-light);
+        color: var(--accent);
+        font-weight: 500;
+      }
+
+      /* 贈品第二行：小字 + 金棕色 */
+      .opt-gift-line {
+        display: block;
+        font-size: 0.78rem;
+        color: var(--accent);
+        margin-top: 3px;
+        line-height: 1.4;
+        font-family: "Noto Sans TC", sans-serif;
+      }
+
+      /* 手機版：字體微縮，確保不超出螢幕 */
+      @media (max-width: 768px) {
+        .custom-variant-display {
+          font-size: 0.82rem;
+          min-height: 40px;
+          padding: 8px 32px 8px 10px;
+        }
+
+        .custom-variant-option {
+          font-size: 0.82rem;
+          padding: 12px 10px;
+          line-height: 1.6;
+        }
       }
 
       /* 數量加減 */
@@ -1382,7 +1440,7 @@
         /* 推到底部 */
         width: 100%;
         padding: 15px;
-        background: #d4a373;
+        background: var(--accent);
         /* 主題色 */
         color: #fff;
         border: none;
@@ -1394,7 +1452,7 @@
       }
 
       .qs-add-btn:hover {
-        background: #bfa092;
+        background: var(--price-color);
         transform: translateY(-2px);
         box-shadow: 0 5px 15px rgba(212, 163, 115, 0.3);
       }
@@ -1418,6 +1476,7 @@
 
       /* 修改原本的圖片盒：改成直向排列 (大圖在上，縮圖在下) */
       .quick-shop-img-box {
+        display: flex;
         flex-direction: column;
         /* 變成直排 */
         padding: 20px;
@@ -1464,7 +1523,7 @@
       .qs-thumb:hover,
       .qs-thumb.active {
         opacity: 1;
-        border: 2px solid #d4a373;
+        border: 2px solid var(--accent);
         /* 選中時出現金框 */
         transform: translateY(-2px);
         /* 微微浮起 */
@@ -1501,19 +1560,6 @@
         .qs-gift-card {
           margin-bottom: 8px !important;
           margin-top: 2px !important;
-        }
-
-        /* 5. 規格選單大改造：變胖 + 變短 */
-        .qs-select {
-          /* 變短：只佔 65% 寬度 (約少了 1/3) */
-          width: 65% !important;
-
-          /* 變胖：高度增加，手指好點 */
-          height: 52px !important;
-          line-height: 52px !important;
-          /* 確保文字垂直置中 */
-
-          font-size: 16px !important;
         }
 
         /* 6. 區塊間距縮小 */
@@ -1565,7 +1611,7 @@
       .qs-qty-wrapper {
         width: 100% !important;
         /* 填滿那個 120px */
-        height: 52px;
+        height: 40px;
         /* 跟隔壁規格一樣高 */
         display: flex;
         align-items: center;
@@ -1593,67 +1639,58 @@
         background: transparent;
       }
 
-      /* 5. 🛑 重要修正：手機版規格選單 */
-      /* 我們之前設 width: 65%，現在要改回 100% (因為它已經在 flex 框框裡了) */
-      @media (max-width: 768px) {
-        .qs-select {
-          width: 100% !important;
-          /* 填滿左邊那個格子 */
-        }
+      /* === 🔍 搜尋框 === */
+      .search-wrapper {
+        display: flex;
+        justify-content: center;
+        padding: 0 20px;
+        margin-bottom: 15px; /* 跟下方分類按鈕保持優雅距離 */
       }
 
-      /* === 🔍 搜尋框 === */
-    .search-wrapper {
-      display: flex;
-      justify-content: center;
-      padding: 0 20px;
-      margin-bottom: 15px; /* 跟下方分類按鈕保持優雅距離 */
-    }
+      .search-container {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        max-width: 350px; /* 不要太長，短一點比較精緻 */
+        padding: 0 16px;
+        background-color: #fff;
+        border: 1px solid #e6d0c0; /* 呼應你的金棕色系 */
+        border-radius: 50px; /* 圓潤的膠囊造型 */
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+      }
 
-    .search-container {
-      display: flex;
-      align-items: center;
-      width: 100%;
-      max-width: 350px; /* 不要太長，短一點比較精緻 */
-      padding: 0 16px;
-      background-color: #fff;
-      border: 1px solid #e6d0c0; /* 呼應你的金棕色系 */
-      border-radius: 50px; /* 圓潤的膠囊造型 */
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
-    }
+      /* 當客人點擊準備輸入時的發光特效 */
+      .search-container:focus-within {
+        border-color: var(--accent);
+        box-shadow: 0 5px 15px rgba(212, 163, 115, 0.15);
+        transform: translateY(-1px);
+      }
 
-    /* 當客人點擊準備輸入時的發光特效 */
-    .search-container:focus-within {
-      border-color: #d4a373;
-      box-shadow: 0 5px 15px rgba(212, 163, 115, 0.15);
-      transform: translateY(-1px);
-    }
+      /* 放大鏡小圖示 */
+      .search-icon {
+        width: 16px;
+        height: 16px;
+        color: var(--price-color);
+        margin-right: 10px;
+      }
 
-    /* 放大鏡小圖示 */
-    .search-icon {
-      width: 16px;
-      height: 16px;
-      color: #bfa092;
-      margin-right: 10px;
-    }
+      .search-input {
+        flex: 1;
+        height: 40px;
+        border: none;
+        background: transparent;
+        font-family: 'Noto Sans TC', sans-serif;
+        font-size: 0.95rem;
+        color: #555;
+        outline: none;
+      }
 
-    .search-input {
-      flex: 1;
-      height: 40px;
-      border: none;
-      background: transparent;
-      font-family: 'Noto Sans TC', sans-serif;
-      font-size: 0.95rem;
-      color: #555;
-      outline: none;
-    }
-
-    .search-input::placeholder {
-      color: #ccc;
-      font-weight: 300;
-      letter-spacing: 1px;
-    }
+      .search-input::placeholder {
+        color: #ccc;
+        font-weight: 300;
+        letter-spacing: 1px;
+      }
 
       /* === 🏷️ 分類選單樣式 (膠囊按鈕 + 橫向滑動 - 高級立體版) === */
       .category-nav {
@@ -1708,19 +1745,19 @@
         /* 預設沒有寬度 */
         height: 1px;
         /* 極細的線 */
-        background-color: #d4a373;
+        background-color: var(--accent);
         transition: width 0.3s ease;
         /* 變寬的動畫 */
       }
 
       /* 👆 滑鼠懸停狀態 */
       .category-btn:hover {
-        color: #666;
+        color: var(--text-sub);
       }
 
       /* 🟡 選中狀態：字變深，底線長出來 */
       .category-btn.active {
-        color: #2c2c2c;
+        color: var(--text-main);
         font-weight: 500;
       }
 
@@ -1832,6 +1869,84 @@
           /* 離上面近一點 */
           padding: 12px !important;
           /* 按鈕變矮一點 */
+        }
+      }
+
+      /* === 🛒 購物車 Modal 結構樣式 === */
+      .cart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+      }
+
+      .cart-title {
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 1.6rem;
+        font-weight: 600;
+        letter-spacing: 1px;
+        color: var(--text-main);
+      }
+
+      .cart-body {
+        flex-grow: 1;
+        overflow-y: auto;
+      }
+
+      .cart-platform-section {
+        margin-bottom: 25px;
+        border-top: 1px solid #eee;
+        padding-top: 20px;
+      }
+
+      .cart-platform-title {
+        margin-bottom: 15px;
+        font-weight: bold;
+        font-size: 1.1rem;
+        color: var(--text-main);
+        font-family: "Noto Sans TC", sans-serif;
+      }
+
+      .cart-platform-label {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+        cursor: pointer;
+        font-size: 1.1rem;
+        color: #333;
+        font-family: "Noto Sans TC", sans-serif;
+      }
+
+      .cart-platform-label:last-child {
+        margin-bottom: 0;
+      }
+
+      .cart-radio {
+        margin-right: 12px;
+        transform: scale(1.5);
+        accent-color: var(--text-main);
+      }
+
+      .cart-total {
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 1.2rem;
+        font-weight: 600;
+        text-align: right;
+      }
+
+      .cart-notice {
+        font-size: 0.85rem;
+        color: var(--price-color);
+        margin: 15px 0 5px;
+        text-align: center;
+        font-family: "Noto Sans TC", sans-serif;
+        line-height: 1.5;
+      }
+
+      /* 手機版購物車調整 */
+      @media (max-width: 768px) {
+        .cart-header {
+          margin-bottom: 10px;
         }
       }
     </style>
@@ -1970,6 +2085,9 @@
       id="quickShopModal"
       class="quick-shop-overlay"
       onclick="closeQuickShop(event)"
+      role="dialog"
+      aria-modal="true"
+      aria-label="商品快速購買"
     >
       <div class="quick-shop-content">
         <button class="quick-shop-close" onclick="forceCloseQuickShop()">
@@ -1995,7 +2113,15 @@
             <div class="qs-row-group">
               <div class="qs-section qs-col-grow">
                 <label class="qs-label">規格 / 款式</label>
-                <select id="qs-variant-select" class="qs-select"></select>
+                <div class="custom-variant-wrapper" id="qs-variant-wrapper">
+                  <div class="custom-variant-display" id="qs-variant-display" onclick="toggleCustomVariantSelect()">
+                    <span id="qs-variant-selected-text">請選擇規格</span>
+                    <svg class="custom-variant-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </div>
+                  <div class="custom-variant-options" id="qs-variant-options"></div>
+                </div>
               </div>
 
               <div class="qs-section qs-col-fixed">
@@ -2020,7 +2146,7 @@
       </div>
     </div>
 
-    <div id="cart-float-btn" onclick="toggleCart()">
+    <button id="cart-float-btn" onclick="toggleCart()" aria-label="開啟購物車">
       <svg
         viewBox="0 0 24 24"
         fill="none"
@@ -2034,123 +2160,33 @@
         <path d="M16 10a4 4 0 0 1-8 0"></path>
       </svg>
       <div id="cart-count">0</div>
-    </div>
+    </button>
 
-    <div id="cartModal" class="cart-modal" onclick="closeCart(event)">
+    <div id="cartModal" class="cart-modal" onclick="closeCart(event)" role="dialog" aria-modal="true" aria-label="購物車">
       <div class="cart-content">
-        <div
-          style="
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-          "
-        >
-          <h3
-            style="
-              font-family: &quot;Noto Sans TC&quot;, sans-serif;
-              font-size: 1.6rem;
-              font-weight: 600;
-              letter-spacing: 1px;
-              color: #2c2c2c;
-            "
-          >
-            購物清單
-          </h3>
+        <div class="cart-header">
+          <h3 class="cart-title">購物清單</h3>
           <span class="cart-close-btn" onclick="toggleCart()">×</span>
         </div>
 
-        <div style="flex-grow: 1; overflow-y: auto" id="cartItems"></div>
+        <div class="cart-body" id="cartItems"></div>
 
-        <div
-          style="
-            margin-bottom: 25px;
-            border-top: 1px solid #eee;
-            padding-top: 20px;
-          "
-        >
-          <p
-            style="
-              margin-bottom: 15px;
-              font-weight: bold;
-              font-size: 1.1rem;
-              color: #2c2c2c;
-              font-family: &quot;Noto Sans TC&quot;, sans-serif;
-            "
-          >
-            選擇下單平台：
-          </p>
-
-          <label
-            style="
-              display: flex;
-              align-items: center;
-              margin-bottom: 12px;
-              cursor: pointer;
-              font-size: 1.1rem;
-              color: #333;
-              font-family: &quot;Noto Sans TC&quot;, sans-serif;
-            "
-          >
-            <input
-              type="radio"
-              name="shipping"
-              value="賣貨便"
-              style="
-                margin-right: 12px;
-                transform: scale(1.5);
-                accent-color: #2c2c2c;
-              "
-            />
+        <div class="cart-platform-section">
+          <p class="cart-platform-title">選擇下單平台：</p>
+          <label class="cart-platform-label">
+            <input type="radio" name="shipping" value="賣貨便" class="cart-radio" />
             7-11 賣貨便
           </label>
-
-          <label
-            style="
-              display: flex;
-              align-items: center;
-              cursor: pointer;
-              font-size: 1.1rem;
-              color: #333;
-              font-family: &quot;Noto Sans TC&quot;, sans-serif;
-            "
-          >
-            <input
-              type="radio"
-              name="shipping"
-              value="iOPEN Mall"
-              style="
-                margin-right: 12px;
-                transform: scale(1.5);
-                accent-color: #2c2c2c;
-              "
-            />
+          <label class="cart-platform-label">
+            <input type="radio" name="shipping" value="iOPEN Mall" class="cart-radio" />
             iOPEN Mall
           </label>
         </div>
-        <div
-          id="cartTotal"
-          style="
-            font-family: &quot;Noto Sans TC&quot;, sans-serif;
-            font-size: 1.2rem;
-            font-weight: 600;
-            text-align: right;
-          "
-        >
-          總金額: NT$ 0
-        </div>
 
-        <p
-          style="
-            font-size: 0.85rem;
-            color: #bfa092;
-            margin: 15px 0 5px;
-            text-align: center;
-            font-family: &quot;Noto Sans TC&quot;, sans-serif;
-            line-height: 1.5;
-          "
-        >
-          ※ 確認訂單並完成定金匯款後，<br />訂單才算正式成立喔！謝謝
+        <div id="cartTotal" class="cart-total">總金額: NT$ 0</div>
+
+        <p class="cart-notice">
+          ※ 首次交易皆需預付定金；非首次交易滿 NT$1,500 預收 10% 定金。
         </p>
 
         <button class="btn-checkout" onclick="checkoutViaLine()">
@@ -2159,7 +2195,7 @@
       </div>
     </div>
 
-    <div id="zoomOverlay" class="zoom-overlay" onclick="closeZoom()">
+    <div id="zoomOverlay" class="zoom-overlay" onclick="closeZoom()" role="dialog" aria-modal="true" aria-label="圖片放大">
       <img id="zoom-img-content" src="" />
       <div class="zoom-hint">點擊任意處關閉</div>
     </div>
@@ -2169,6 +2205,9 @@
       class="quick-shop-overlay"
       onclick="closeQrModal(event)"
       style="z-index: 3000"
+      role="dialog"
+      aria-modal="true"
+      aria-label="QR Code 下單"
     >
       <div
         class="quick-shop-content"
@@ -2201,48 +2240,39 @@
       </div>
     </div>
 
-    <script>
+<script>
       // === 🔒 手機版背景鎖定大神器 ===
-      let savedScrollPosition = 0; // 用來記住客人滑到哪裡
+      let savedScrollPosition = 0;
 
       function freezeBackground() {
-        // 1. 記住現在滑到哪
         savedScrollPosition = window.scrollY;
-
-        // 2. 把網頁「釘」在那個位置，強制變成 100% 寬度
         document.body.style.position = "fixed";
         document.body.style.top = `-${savedScrollPosition}px`;
         document.body.style.width = "100%";
-        document.body.style.overflow = "hidden"; // 隱藏滑軌
+        document.body.style.overflow = "hidden";
       }
 
       function unfreezeBackground() {
-        // 1. 解除釘選
         document.body.style.position = "";
         document.body.style.top = "";
         document.body.style.width = "";
         document.body.style.overflow = "";
-
-        // 2. 瞬間跳回原本的位置 (讓客人感覺不到變化)
         window.scrollTo(0, savedScrollPosition);
       }
       // ===========================================
 
       const GOOGLE_SHEET_CSV_URL =
         "https://docs.google.com/spreadsheets/d/e/2PACX-1vS_Cy5OSihu86kbG6c2iGLRUFSSVNnYuG_yanPRNuIF65KtJ_K9r-kXuz1IdWAbxnwfmvAWvWDjlywe/pub?output=csv";
-      // 🟢 新增這段：用來正確解析 CSV 的工具函式
+
       function parseCSVLine(str) {
         const result = [];
         let start = 0;
         let inQuotes = false;
-
         for (let i = 0; i < str.length; i++) {
           if (str[i] === '"') {
-            inQuotes = !inQuotes; // 判斷是否在引號內
+            inQuotes = !inQuotes;
           } else if (str[i] === "," && !inQuotes) {
-            // 如果遇到逗號，且不在引號內，才切分
             let field = str.substring(start, i).trim();
-            // 去除欄位前後的引號
             if (field.startsWith('"') && field.endsWith('"')) {
               field = field.substring(1, field.length - 1).replace(/""/g, '"');
             }
@@ -2250,12 +2280,9 @@
             start = i + 1;
           }
         }
-        // 處理最後一個欄位
         let lastField = str.substring(start).trim();
         if (lastField.startsWith('"') && lastField.endsWith('"')) {
-          lastField = lastField
-            .substring(1, lastField.length - 1)
-            .replace(/""/g, '"');
+          lastField = lastField.substring(1, lastField.length - 1).replace(/""/g, '"');
         }
         result.push(lastField);
         return result;
@@ -2263,55 +2290,48 @@
 
       let allProductsData = [];
       let cart = [];
-      let currentPromoCode = ""; // 紀錄目前使用的折扣碼
-      let currentDiscount = 0; // 紀錄折抵金額
+      let currentPromoCode = "";
+      let currentDiscount = 0;
 
-      // === 🔍 聰明搜尋功能 (無視大小寫與空白) ===
-    function handleSmartSearch() {
-      const inputStr = document.getElementById("searchInput").value;
-      
-      // 🌟 核心魔法：把客人的輸入轉成小寫，並把「所有空白」刪掉
-      const cleanSearchTerm = inputStr.toLowerCase().replace(/\s+/g, '');
-      
-      // 如果客人把搜尋框清空了，就恢復顯示目前分類的商品
-      if (cleanSearchTerm === "") {
-        switchCategory(currentCategory);
-        return;
+      // === 🔍 聰明搜尋功能 ===
+      let _searchTimer = null;
+      function handleSmartSearch() {
+        clearTimeout(_searchTimer);
+        _searchTimer = setTimeout(_doSearch, 200);
       }
+      function _doSearch() {
+        const inputStr = document.getElementById("searchInput").value;
+        const cleanSearchTerm = inputStr.toLowerCase().replace(/\s+/g, '');
 
-      // 如果有輸入文字，我們就在「所有商品」裡面尋找
-      const filtered = allProductsData.filter(p => {
-        // 🌟 把商品名稱也做一樣的處理：轉小寫、去空白
-        const cleanName = p.name.toLowerCase().replace(/\s+/g, '');
-        
-        // 只要商品名稱裡面包含客人的關鍵字，就抓出來
-        return cleanName.includes(cleanSearchTerm);
-      });
+        if (cleanSearchTerm === "") {
+          switchCategory(currentCategory);
+          return;
+        }
 
-      // 把找到的商品畫到畫面上
-      renderProducts(filtered);
+        const filtered = allProductsData.filter(p => {
+          const cleanName = p.name.toLowerCase().replace(/\s+/g, '');
+          return cleanName.includes(cleanSearchTerm);
+        });
 
-      // 視覺小優化：因為現在是「全域搜尋」，所以把分類按鈕的底色偷偷拿掉，以免客人困惑
-      document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
-    }
+        renderProducts(filtered);
+        document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+      }
 
       // === 🏷️ 分類設定區 ===
       const categoryMap = {
-        all: "全部商品", // 這個保留不要動
-        新品上架: "新品上架", // 左邊是判斷用的代號，右邊是顯示的文字
-        mangomee聯名: "mangomee聯名",
-        OY熱銷商品: "OY熱銷商品",
+        all: "全部商品",
+        新品上架: "新品上架",
+        "WAKEMAKE x Hello Kitty": "WAKEMAKE x Hello Kitty",
+        "ILLIYOON x 蒙奇奇": "ILLIYOON x 蒙奇奇",
+        "AMUSE x 蒙奇奇": "AMUSE x 蒙奇奇",
       };
       let currentCategory = "all";
 
-      // 1. 產生按鈕
       function renderCategoryButtons() {
         const container = document.getElementById("category-container");
         container.innerHTML = "";
-
         Object.keys(categoryMap).forEach((key) => {
           const btn = document.createElement("div");
-          // 如果是當前選中的分類，就加上 active 讓它變色
           btn.className = `category-btn ${currentCategory === key ? "active" : ""}`;
           btn.innerText = categoryMap[key];
           btn.onclick = () => switchCategory(key);
@@ -2319,19 +2339,13 @@
         });
       }
 
-      // 2. 切換分類
       function switchCategory(key) {
         currentCategory = key;
-        renderCategoryButtons(); // 更新按鈕顏色
-
+        renderCategoryButtons();
         if (key === "all") {
-          // 如果選全部，就顯示所有資料
           renderProducts(allProductsData);
-          renderCategoryButtons();
         } else {
-          // 如果選特定分類，就檢查商品的 category 欄位有沒有包含該代號
           const filtered = allProductsData.filter((p) => {
-            // 避免有些商品沒填分類會報錯，加個防護
             const productCat = p.category ? p.category.toLowerCase() : "";
             return productCat.includes(key.toLowerCase());
           });
@@ -2341,51 +2355,26 @@
 
       // === 🎁 折扣碼功能 ===
       function applyPromoCode() {
-        const input = document
-          .getElementById("promo-code-input")
-          .value.trim()
-          .toUpperCase();
+        const input = document.getElementById("promo-code-input").value.trim().toUpperCase();
         const msgEl = document.getElementById("promo-message");
 
-        // 計算目前總金額
         let subtotal = 0;
         cart.forEach((item) => (subtotal += item.price * item.qty));
 
-        if (input === "") {
-          msgEl.innerText = "請輸入折扣碼";
-          return;
-        }
+        if (input === "") { msgEl.innerText = "請輸入折扣碼"; return; }
+        if (input !== "HELLO50") { msgEl.innerText = "無效的折扣碼"; return; }
 
-        // 🛑 這裡可以修改你要的折扣碼文字！
-        if (input !== "HELLO50") {
-          msgEl.innerText = "無效的折扣碼";
-          return;
-        }
-
-        // 檢查活動時間
         const now = new Date();
         const startTime = new Date("2026-02-24T00:00:00");
         const endTime = new Date("2026-03-06T23:59:59");
 
-        if (now < startTime) {
-          msgEl.innerText = "活動將於 2/28 開始喔！敬請期待";
-          return;
-        }
-        if (now > endTime) {
-          msgEl.innerText = "此折扣碼活動已結束囉！";
-          return;
-        }
+        if (now < startTime) { msgEl.innerText = "活動將於 2/28 開始喔！"; return; }
+        if (now > endTime) { msgEl.innerText = "此折扣碼活動已結束囉！"; return; }
+        if (subtotal < 500) { msgEl.innerText = `需滿 NT$500 才可使用 (目前差 NT$${500 - subtotal})`; return; }
 
-        // 檢查滿額門檻
-        if (subtotal < 500) {
-          msgEl.innerText = `需滿 NT$500 才可使用 (目前差 NT$${500 - subtotal})`;
-          return;
-        }
-
-        // 套用成功
         currentPromoCode = input;
-        currentDiscount = 50; // 🛑 這裡可以改折抵的金額
-        renderCartItems(); // 重新整理購物車畫面
+        currentDiscount = 50;
+        renderCartItems();
       }
 
       function removePromoCode() {
@@ -2394,34 +2383,35 @@
         renderCartItems();
       }
 
-      // 🟢 新增 1：讀取舊的購物車資料 (網頁一打開就執行)
       function loadCart() {
         const savedCart = localStorage.getItem("minaShopCart");
         if (savedCart) {
-          cart = JSON.parse(savedCart);
-          updateCartIcon();
+          try {
+            cart = JSON.parse(savedCart);
+            updateCartIcon();
+          } catch (e) {
+            console.warn("購物車資料損毀，已重置", e);
+            cart = [];
+            localStorage.removeItem("minaShopCart");
+          }
         }
       }
 
-      // 🟢 新增 2：把購物車存起來 (每次增減商品都要執行)
       function saveCart() {
         localStorage.setItem("minaShopCart", JSON.stringify(cart));
         updateCartIcon();
       }
 
-      // 1. 全新的資料讀取函式 (只負責讀資料 & 產生分類按鈕)
+      // 🌟 1. 全新的資料讀取 (支援自動拆解多價格規格)
       async function fetchProducts() {
         const loading = document.getElementById("loading");
         const container = document.getElementById("product-list");
 
         try {
-          // 強制更新資料
-          const response = await fetch(
-            GOOGLE_SHEET_CSV_URL + "&t=" + new Date().getTime(),
-          );
+          const response = await fetch(GOOGLE_SHEET_CSV_URL + "&t=" + new Date().getTime());
           const data = await response.text();
           const rows = data.split("\n").map((row) => parseCSVLine(row));
-          rows.shift(); // 移除標題列
+          rows.shift();
 
           loading.style.display = "none";
           allProductsData = [];
@@ -2429,346 +2419,321 @@
           rows.forEach((row, index) => {
             if (row.length < 4) return;
 
-            // --- 讀取基礎資料 ---
             const rawSpec = row[1] ? row[1].trim() : "";
-            const variants = rawSpec.includes("|")
-              ? rawSpec.split("|").map((s) => s.trim())
-              : rawSpec
-                ? [rawSpec]
-                : [];
+            // E 欄 (row[4])：規格贈品欄，填「貼紙」系統自動顯示 🎁 貼紙
+            const variantGift = row[4] ? row[4].trim() : "";
 
-            // 圖片處理
-            const extraImgs = [row[10], row[11], row[12], row[13], row[14]]
-              .map((url) => (url ? url.trim() : ""))
-              .filter((url) => url !== "");
+            // 🌟 多規格解析器：把「款式::500::400」拆解成懂價格的物件
+            let parsedVariants = [];
+            if (rawSpec) {
+              const parts = rawSpec.split("|").map(s => s.trim());
+              parts.forEach(p => {
+                if (p.includes("::")) {
+                  const chunks = p.split("::");
+                  parsedVariants.push({
+                    name: chunks[0] ? chunks[0].trim() : "",
+                    price: chunks[1] ? chunks[1].trim() : "",
+                    promo: chunks[2] ? chunks[2].trim() : "",
+                    gift: (chunks[3] ? chunks[3].trim() : "") || variantGift  // 優先讀規格內建贈品，fallback 到 E 欄
+                  });
+                } else {
+                  // 相容以前沒有設定獨立價格的舊商品
+                  parsedVariants.push({
+                    name: p,
+                    price: row[2] ? row[2].trim() : "0",
+                    promo: row[3] ? row[3].trim() : "",
+                    gift: variantGift
+                  });
+                }
+              });
+            }
 
-            const allImages = [
-              row[9] ? row[9].trim() : "",
-              ...extraImgs,
-            ].filter((url) => url !== "");
+            const extraImgs = [row[10], row[11], row[12], row[13], row[14]].map(url => (url ? url.trim() : "")).filter(url => url !== "");
+            const allImages = [row[9] ? row[9].trim() : "", ...extraImgs].filter(url => url !== "");
 
             const product = {
               id: index,
               name: row[0] ? row[0].trim() : "Unnamed",
-              variants: variants,
+              variants: parsedVariants, // 存入強大的新規格陣列
               originalPriceStr: row[2] ? row[2].trim() : "0",
-
               vipPriceStr: row[3] ? row[3].trim() : "",
-              price:
-                row[3] && row[3].trim() !== ""
-                  ? row[3].trim()
-                  : row[2]
-                    ? row[2].trim()
-                    : "0",
-
-              price: row[2] ? row[2].trim() : "0",
-
               imgUrl: row[9] ? row[9].trim() : "",
               gallery: allImages,
-              detailImgUrl: row[4] ? row[4].trim() : "",
-
-              // 🔴 修改 1：原本 F 欄是 description，現在要讓位給分類，所以這裡先改成空字串
-              // (如果不改，網頁可能會把「美妝」這兩個字當成副標題顯示在價格上方)
-              description: "",
-
               tag: row[6] ? row[6].trim().toUpperCase() : "",
               deadline: row[7] ? row[7].trim() : "",
-
-              // 這裡也加上了去空格功能
-              giftDesc: row[8]
-                ? row[8].trim().replace(/\s*<br\s*\/?>\s*/gi, "<br>")
-                : "",
-
-              // 🔴 修改 2：關鍵！分類改成讀取 row[5] (也就是 F 欄)
-              // 原本是: category: row[15] ? row[15].trim() : "其他",
+              giftDesc: row[8] ? row[8].trim().replace(/\s*<br\s*\/?>\s*/gi, "<br>") : "",
               category: row[5] ? row[5].trim() : "其他",
             };
-
-            // 處理規格預設值
-            if (product.variants.length === 1)
-              product.selectedVariant = product.variants[0];
-            else if (product.variants.length === 0)
-              product.selectedVariant = "單一規格";
 
             allProductsData.push(product);
           });
 
-          // === 自動排序邏輯：1.看標籤 2.同品牌聚攏 ===
+          // 排序邏輯
           allProductsData.sort((a, b) => {
-            // 規則一：設定標籤的優先級 (數字越小排越前面)
             const getPriority = (tag) => {
-              // 你可以在這裡增減你要置頂的標籤關鍵字
               if (tag.includes("NEW") || tag.includes("特價")) return 1;
               if (tag.includes("HOT")) return 2;
               if (tag.includes("SALE")) return 3;
-              return 4; // 沒有標籤的商品，統一歸到最後這層
+              return 4;
             };
-
             const priorityA = getPriority(a.tag);
             const priorityB = getPriority(b.tag);
-
-            // 如果兩個商品的標籤優先級不同，就讓數字小的排前面
-            if (priorityA !== priorityB) {
-              return priorityA - priorityB;
-            }
-
-            // 規則二：如果標籤一樣（例如兩個都是一般商品），就依照「品名」的英文字母或筆畫排序
-            // 只要你的品名開頭是品牌名 (例如 CLIO)，它們就會自動排在一起
+            if (priorityA !== priorityB) return priorityA - priorityB;
             return a.name.localeCompare(b.name, "zh-TW");
           });
+
           renderCategoryButtons();
           renderProducts(allProductsData);
         } catch (error) {
           console.error(error);
           loading.style.display = "none";
-          container.innerHTML =
-            '<p style="text-align:center; padding:20px;">載入失敗。</p>';
+          container.innerHTML = '<p style="text-align:center; padding:20px;">載入失敗。</p>';
         }
       }
 
-      // 4. 🟢 新增：負責把商品畫在螢幕上的函式 (從原本的 fetchProducts 拆出來的)
       function renderProducts(products) {
-        const container = document.getElementById("product-list"); // 🌟 補上這行告訴它 container 是誰
-        container.innerHTML = ""; // 先清空畫面
+        const container = document.getElementById("product-list");
+        container.innerHTML = "";
 
         if (products.length === 0) {
           container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:40px; color:#999;">此分類暫無商品</div>`;
           return;
         }
 
-products.forEach((product, idx) => {
-        const globalIdx = allProductsData.indexOf(product);
+        products.forEach((product) => {
+          const globalIdx = allProductsData.indexOf(product);
 
-        // 🌟 1. 判斷這項商品是不是「全部缺貨」
-        let isAllOutOfStock = false;
-        if (product.variants.length > 0 && product.variants[0] !== "") {
-          // 檢查是不是「每一個」規格都包含了 (缺)
-          isAllOutOfStock = product.variants.every(v => v.includes('(缺)'));
-        }
-
-        // 價格顯示邏輯
-        let priceHtml = "";
-        if (product.vipPriceStr) {
-          priceHtml = `
-            <div class="price-container">
-              <span class="price-original">NT$ ${product.originalPriceStr}</span>
-              <span class="price-vip">NT$ ${product.vipPriceStr}</span>
-            </div>
-          `;
-        } else {
-          priceHtml = `<span class="price">NT$ ${product.originalPriceStr}</span>`;
-        }
-
-// 🌟 2. 標籤邏輯
-        let badgeHtml = "";
-        if (!isAllOutOfStock) {
-          if (product.tag === "NEW") badgeHtml = `<div class="badge new">NEW</div>`;
-          else if (product.tag === "HOT") badgeHtml = `<div class="badge hot">HOT</div>`;
-          else if (product.tag === "SALE") badgeHtml = `<div class="badge sale">SALE</div>`;
-        }
-
-// 🌟 3. 按鈕邏輯：加入「自動結單」時間判斷
-const cutOffTime = new Date("2099-12-31T23:59:59"); // 測試用
-//         const isEnded = new Date() >= cutOffTime; // 判斷現在時間到了沒
-
-        let btnHtml = "";
-        if (isEnded) {
-          // 時間一到，按鈕全部變成已結束，鎖死變灰色
-          btnHtml = `<button class="btn-add" style="background-color: #ccc; border-color: #ccc; cursor: not-allowed; max-width: 200px;" disabled>已結束</button>`;
-        } else if (isAllOutOfStock) {
-          btnHtml = `<button class="btn-add" style="background-color: #ccc; border-color: #ccc; cursor: not-allowed; max-width: 200px;" disabled>已售完</button>`;
-        } else {
-          btnHtml = `<button class="btn-add" onclick="openQuickShop(${globalIdx})" style="max-width: 200px;">加入購物車</button>`;
-        }
-
-        // 🌟 4. 圖片特效：缺貨時讓圖片變淡 (opacity: 0.5)
-        let imgOpacity = isAllOutOfStock ? "opacity: 0.5;" : "";
-        let clickEvent = isAllOutOfStock ? "" : `onclick="openQuickShop(${globalIdx})"`;
-        let cursorStyle = isAllOutOfStock ? "default" : "pointer";
-
-        const card = document.createElement("div");
-        card.className = "product-card";
-        card.innerHTML = `
-                <div class="img-wrapper" style="cursor: ${cursorStyle}; background: #fff;" ${clickEvent}>
-    ${badgeHtml}
-    <img src="${product.imgUrl}" alt="${product.name}" loading="lazy" style="${imgOpacity}">
-</div>
-
-<div class="info">
-    <h3 class="name" style="${isAllOutOfStock ? 'color: #999;' : ''}">${product.name}</h3>
-
-    <span class="deadline-badge ${product.deadline ? '' : 'empty'}">
-        ${product.deadline || "空格佔位"}
-    </span>
-    
-    ${priceHtml}
-      
-                    <div class="action-row" style="margin-top: 10px; justify-content: center;">
-                        ${btnHtml}
-                    </div>
-                </div>
-            `;
-        container.appendChild(card);
-      });
+          // 🌟 判斷這項商品是不是「全部缺貨」
+          let isAllOutOfStock = false;
+          if (product.variants.length > 0 && product.variants[0].name !== "") {
+            isAllOutOfStock = product.variants.every(v => v.name.includes('(缺)'));
           }
 
-      // === 🛒 全域變數：紀錄目前彈窗正在看哪一個商品 ===
+// 🌟 動態價格區間魔法 🌟
+          let priceHtml = "";
+          let isPriceRange = false;
+          let minPrice = 0;
+          let maxPrice = 0;
+
+          // 1. 檢查這個商品是不是有多個規格
+          if (product.variants.length > 1) {
+            let validPrices = [];
+            product.variants.forEach(v => {
+              // 抓取每一款的真實售價 (有特價就抓特價，沒特價抓原價)
+              let effectivePriceStr = v.promo ? v.promo : v.price;
+              // 把文字轉成純數字
+              let priceNum = parseInt(effectivePriceStr.replace(/[^0-9]/g, ""));
+              if (!isNaN(priceNum) && priceNum > 0) {
+                validPrices.push(priceNum);
+              }
+            });
+
+            // 2. 如果收集到的價格超過一種，我們就來比大小
+            if (validPrices.length > 0) {
+              minPrice = Math.min(...validPrices);
+              maxPrice = Math.max(...validPrices);
+              // 如果最低價跟最高價不一樣，就代表需要顯示區間！
+              if (minPrice !== maxPrice) {
+                isPriceRange = true;
+              }
+            }
+          }
+
+          // 3. 決定要把什麼價格印在畫面上
+          if (isPriceRange) {
+            // 有價差：顯示價格區間 (例如: NT$ 295 - NT$ 888)
+            priceHtml = `<span class="price" style="color: #d65a5a; font-weight: 500;">NT$ ${minPrice} - NT$ ${maxPrice}</span>`;
+          } else {
+            // 沒價差：維持原本的顯示方式 (單一價格，或原價畫刪除線)
+            if (product.vipPriceStr) {
+              priceHtml = `
+                <div class="price-container">
+                  <span class="price-original">NT$ ${product.originalPriceStr}</span>
+                  <span class="price-vip">NT$ ${product.vipPriceStr}</span>
+                </div>
+              `;
+            } else {
+              priceHtml = `<span class="price">NT$ ${product.originalPriceStr}</span>`;
+            }
+          }
+
+          let badgeHtml = "";
+          if (!isAllOutOfStock) {
+            if (product.tag === "NEW") badgeHtml = `<div class="badge new">NEW</div>`;
+            else if (product.tag === "HOT") badgeHtml = `<div class="badge hot">HOT</div>`;
+            else if (product.tag === "SALE") badgeHtml = `<div class="badge sale">SALE</div>`;
+          }
+
+          // 🌟 結單時間攔截解除！改到 2099 年
+          const cutOffTime = new Date("2099-12-31T23:59:59");
+          const isEnded = new Date() >= cutOffTime;
+
+          let btnHtml = "";
+          if (isEnded) {
+            btnHtml = `<button class="btn-add" style="background-color: #ccc; border-color: #ccc; cursor: not-allowed; max-width: 200px;" disabled>已結束</button>`;
+          } else if (isAllOutOfStock) {
+            btnHtml = `<button class="btn-add" style="background-color: #ccc; border-color: #ccc; cursor: not-allowed; max-width: 200px;" disabled>已售完</button>`;
+          } else {
+            btnHtml = `<button class="btn-add" onclick="openQuickShop(${globalIdx})" style="max-width: 200px;">加入購物車</button>`;
+          }
+
+          let imgOpacity = isAllOutOfStock ? "opacity: 0.5;" : "";
+          let clickEvent = isAllOutOfStock ? "" : `onclick="openQuickShop(${globalIdx})"`;
+          let cursorStyle = isAllOutOfStock ? "default" : "pointer";
+
+          const card = document.createElement("div");
+          card.className = "product-card";
+          card.innerHTML = `
+            <div class="img-wrapper" style="cursor: ${cursorStyle}; background: #fff;" ${clickEvent}>
+              ${badgeHtml}
+              <img src="${product.imgUrl}" alt="${product.name}" loading="lazy" style="${imgOpacity}">
+            </div>
+            <div class="info">
+              <h3 class="name" style="${isAllOutOfStock ? 'color: #999;' : ''}">${product.name}</h3>
+              <span class="deadline-badge ${product.deadline ? '' : 'empty'}">${product.deadline || "空格佔位"}</span>
+              ${priceHtml}
+              <div class="action-row" style="margin-top: 10px; justify-content: center;">
+                  ${btnHtml}
+              </div>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      }
+
       let currentQsIndex = null;
 
-      // 1. 打開快速購物視窗
+      // 🌟 2. 打開快速購物視窗 (自動顯示變更價格)
       function openQuickShop(index) {
-        // 結帳時間攔截
-const cutOffTime = new Date("2099-12-31T23:59:59");
+        const cutOffTime = new Date("2099-12-31T23:59:59");
         if (new Date() >= cutOffTime) {
           alert("本次活動已於今晚 7 點結單囉！目前網站轉為「型錄模式」僅供核對商品。");
           return;
         }
-        const product = allProductsData[index];
-        currentQsIndex = index; // 記住現在是誰
 
-        // 填入圖片
-        // === 🟢 圖片相簿處理 (開始) ===
+        const product = allProductsData[index];
+        currentQsIndex = index;
+
+        // 相簿處理
         const mainImg = document.getElementById("qs-img");
         const galleryContainer = document.getElementById("qs-gallery-thumbs");
-
-        // 1. 先顯示第一張圖 (主圖)
-        // 這裡加上 object-fit 設定，確保不管長寬都不會變形
         mainImg.src = product.gallery[0];
-        mainImg.style.cursor = "zoom-in"; // 滑鼠變放大鏡
-        mainImg.onclick = function () {
-          openZoom(this.src); // 呼叫放大功能，傳入目前的圖片
-        };
+        mainImg.style.cursor = "zoom-in";
+        mainImg.onclick = function () { openZoom(this.src); };
 
-        // 2. 產生下方縮圖 (如果有超過 1 張圖的話)
-        galleryContainer.innerHTML = ""; // 清空舊的
-
+        galleryContainer.innerHTML = "";
         if (product.gallery.length > 1) {
           product.gallery.forEach((imgUrl, idx) => {
             const thumb = document.createElement("img");
             thumb.src = imgUrl;
             thumb.className = "qs-thumb";
-
-            // 第一張預設選中
             if (idx === 0) thumb.classList.add("active");
-
-            // 點擊縮圖：換大圖 + 切換金框
             thumb.onclick = function () {
               mainImg.src = imgUrl;
-              // 移除其他人的 active
-              document
-                .querySelectorAll(".qs-thumb")
-                .forEach((t) => t.classList.remove("active"));
-              // 自己加上 active
+              document.querySelectorAll(".qs-thumb").forEach((t) => t.classList.remove("active"));
               this.classList.add("active");
             };
-
             galleryContainer.appendChild(thumb);
           });
           galleryContainer.style.display = "flex";
         } else {
-          // 如果只有一張圖，就不顯示縮圖列
           galleryContainer.style.display = "none";
         }
-        // === 🟢 圖片相簿處理 (結束) ===
 
-        // 填入標題
         document.getElementById("qs-title").innerHTML = product.name;
 
-        // 🟢 1. 填入 I 欄 (內容物清單) - 現在移到最上面了！
         const giftCard = document.getElementById("qs-gift-card");
         const giftText = document.getElementById("qs-gift-text");
-
         if (product.giftDesc) {
-          giftText.innerHTML = product.giftDesc; // 支援 HTML <br>
+          giftText.innerHTML = product.giftDesc;
           giftCard.style.display = "block";
         } else {
           giftCard.style.display = "none";
         }
 
-        // 🟢 2. 填入價格
-        // 重新抓取網址參數判斷 VIP
-        const urlParams = new URLSearchParams(window.location.search);
-        // 這裡注意：你的變數名稱要對應，假設前面有用 const VIP_KEY = 'vip'
-        const isVipMode = urlParams.get("vip") === "mina";
+        // 🌟 規格選單與價格聯動魔法 (自訂下拉選單版)
+        const optionsContainer = document.getElementById('qs-variant-options');
+        const wrapperEl = document.getElementById('qs-variant-wrapper');
+        const selectedTextEl = document.getElementById('qs-variant-selected-text');
+        optionsContainer.innerHTML = '';
+        _currentVariants = [];
+        let allOutOfStock = true;
 
-        // 🌟 彈窗內的價格顯示邏輯
-        const priceBox = document.getElementById("qs-price-box");
-        if (product.vipPriceStr) {
-          // 有優惠價：為了讓彈窗排版好看，這裡稍微調整字體大小和靠左對齊
-          priceBox.innerHTML = `
-          <div class="price-container" style="justify-content: flex-start; margin-bottom: 0;">
-            <span class="price-original" style="font-size: 1.1rem;">NT$ ${product.originalPriceStr}</span>
-            <span class="price-vip" style="font-size: 1.6rem;">NT$ ${product.vipPriceStr}</span>
-          </div>
-        `;
+        if (product.variants.length > 0 && product.variants[0].name !== "") {
+          _currentVariants = product.variants;
+
+          product.variants.forEach((vObj, vIndex) => {
+            const optEl = document.createElement('div');
+            optEl.className = 'custom-variant-option';
+            const displayPrice = vObj.promo ? vObj.promo : vObj.price;
+
+            if (vObj.name.includes('(缺)')) {
+              optEl.classList.add('opt-disabled');
+              const d = _getVariantDisplay({ ...vObj, name: vObj.name.replace('(缺)', '').trim() });
+              optEl.innerHTML = `<span>${d.displayName}</span>${d.gift ? `<span class="opt-gift-line">🎁 ${d.gift}</span>` : ''}<span style="opacity:0.5;"> (Sold Out)</span>`;
+            } else {
+              const d = _getVariantDisplay(vObj);
+              optEl.innerHTML = `<span>${d.displayName}</span>${d.gift ? `<span class="opt-gift-line">🎁 ${d.gift}</span>` : ''}`;
+              optEl.onclick = (function(idx) {
+                return function() { _selectVariantOption(idx); };
+              })(vIndex);
+              allOutOfStock = false;
+            }
+            optionsContainer.appendChild(optEl);
+          });
+
+          wrapperEl.style.display = 'block';
+
+          // 預設選中第一個有貨的規格
+          let firstAvailableIdx = product.variants.findIndex(v => !v.name.includes('(缺)'));
+          if (firstAvailableIdx === -1) firstAvailableIdx = 0;
+          _currentVariantIndex = firstAvailableIdx;
+
+          const firstV = product.variants[firstAvailableIdx];
+          const firstDisplayPrice = firstV.promo ? firstV.promo : firstV.price;
+          const firstD = _getVariantDisplay(firstV.name.includes('(缺)')
+            ? { ...firstV, name: firstV.name.replace('(缺)', '').trim() }
+            : firstV);
+          const firstGiftHtml = firstD.gift ? `<span class="opt-gift-line">🎁 ${firstD.gift}</span>` : '';
+          selectedTextEl.innerHTML = firstV.name.includes('(缺)')
+            ? `<span>${firstD.displayName} (Sold Out)</span>${firstGiftHtml}`
+            : `<span>${firstD.displayName}</span>${firstGiftHtml}`;
+
+          const optEls = optionsContainer.querySelectorAll('.custom-variant-option');
+          if (optEls[firstAvailableIdx]) optEls[firstAvailableIdx].classList.add('opt-selected');
+
+          updateModalPrice(firstV);
+
         } else {
-          // 沒優惠價
-          priceBox.innerText = "NT$ " + product.originalPriceStr;
+          // 單一規格沒填的話，隱藏選單
+          wrapperEl.style.display = 'none';
+          allOutOfStock = false;
+          updateModalPrice({ price: product.originalPriceStr, promo: product.vipPriceStr });
         }
 
-// 產生規格選單
-      const select = document.getElementById('qs-variant-select');
-      select.innerHTML = ''; // 清空
+        const addBtn = document.getElementById('qs-add-btn');
+        if (allOutOfStock) {
+          addBtn.innerText = "已售完 (Sold Out)";
+          addBtn.style.background = "#ccc";
+          addBtn.style.borderColor = "#ccc";
+          addBtn.style.cursor = "not-allowed";
+          addBtn.disabled = true;
+        } else {
+          addBtn.innerText = "加入購物車";
+          addBtn.style.background = "#d4a373";
+          addBtn.style.borderColor = "#d4a373";
+          addBtn.style.cursor = "pointer";
+          addBtn.disabled = false;
+        }
 
-      let allOutOfStock = true; // 🌟 新增：用來偵測是不是全部賣光了
-
-      if (product.variants.length > 0 && product.variants[0] !== "") {
-        product.variants.forEach(v => {
-          const opt = document.createElement('option');
-          opt.value = v;
-
-          if (v.includes('(缺)')) {
-            opt.disabled = true;
-            // 把 (缺) 替換成空白，加上 (Sold Out)
-            opt.innerText = v.replace('(缺)', '').trim() + ' (Sold Out)';
-            opt.style.color = '#cecece'; 
-          } else {
-            opt.innerText = v;
-            opt.style.color = '#555'; 
-            allOutOfStock = false; // 🌟 只要有一個選項沒缺，就代表還能買
-          }
-
-          select.appendChild(opt);
-        });
-        select.parentElement.style.display = 'block';
-      } else {
-        // 如果完全空白沒填規格，代表是一般有貨的單一商品
-        select.parentElement.style.display = 'none';
-        allOutOfStock = false; 
-      }
-
-      // 🌟 控制「加入購物車」按鈕的狀態
-      const addBtn = document.getElementById('qs-add-btn');
-      if (allOutOfStock) {
-        // 全部缺貨 -> 按鈕變灰色、不可點擊
-        addBtn.innerText = "已售完 (Sold Out)";
-        addBtn.style.background = "#ccc";
-        addBtn.style.borderColor = "#ccc";
-        addBtn.style.cursor = "not-allowed";
-        addBtn.disabled = true;
-      } else {
-        // 正常狀態 -> 恢復金色按鈕
-        addBtn.innerText = "加入購物車";
-        addBtn.style.background = "#d4a373";
-        addBtn.style.borderColor = "#d4a373";
-        addBtn.style.cursor = "pointer";
-        addBtn.disabled = false;
-      }
-
-        // 重置數量
         document.getElementById("qs-qty").value = 1;
 
-        // 顯示彈窗 (加一點動畫 class)
         const modal = document.getElementById("quickShopModal");
         modal.style.display = "flex";
-        // 稍微延遲加 show class 讓 fade in 動畫生效
-        setTimeout(() => {
-          modal.classList.add("show");
-        }, 10);
+        setTimeout(() => { modal.classList.add("show"); }, 10);
         freezeBackground();
       }
 
-      // 2. 關閉彈窗
       function closeQuickShop(e) {
         if (e.target.classList.contains("quick-shop-overlay")) {
           unfreezeBackground();
@@ -2776,15 +2741,13 @@ const cutOffTime = new Date("2099-12-31T23:59:59");
       }
 
       function forceCloseQuickShop() {
+        closeCustomVariantSelect();
         const modal = document.getElementById("quickShopModal");
         modal.classList.remove("show");
         unfreezeBackground();
-        setTimeout(() => {
-          modal.style.display = "none";
-        }, 300); // 等動畫跑完
+        setTimeout(() => { modal.style.display = "none"; }, 300);
       }
 
-      // 3. 數量加減
       function updateQsQty(change) {
         const input = document.getElementById("qs-qty");
         let newVal = parseInt(input.value) + change;
@@ -2792,77 +2755,64 @@ const cutOffTime = new Date("2099-12-31T23:59:59");
         input.value = newVal;
       }
 
-      // === 🔍 放大鏡功能 ===
       function openZoom(imgSrc) {
         const overlay = document.getElementById("zoomOverlay");
         const img = document.getElementById("zoom-img-content");
-
-        img.src = imgSrc; // 把圖源傳過去
+        img.src = imgSrc;
         overlay.style.display = "flex";
-
-        // 加一點動畫延遲
-        setTimeout(() => {
-          overlay.classList.add("show");
-        }, 10);
+        setTimeout(() => { overlay.classList.add("show"); }, 10);
       }
 
       function closeZoom() {
         const overlay = document.getElementById("zoomOverlay");
         overlay.classList.remove("show");
-        setTimeout(() => {
-          overlay.style.display = "none";
-        }, 300);
+        setTimeout(() => { overlay.style.display = "none"; }, 300);
       }
 
-      // 4. 從彈窗加入購物車 (關鍵功能！)
+      // 🌟 3. 從彈窗加入購物車 (抓取對應款式的正確價格)
       function addToCartFromModal() {
         if (currentQsIndex === null) return;
         const product = allProductsData[currentQsIndex];
-
-        // 抓數量
         const qty = parseInt(document.getElementById("qs-qty").value);
 
-        // 抓規格
-        let selectedSpec = "單一規格";
-        const select = document.getElementById("qs-variant-select");
-        // 如果選單有顯示，就抓選單的值
-        if (select.parentElement.style.display !== "none") {
-          selectedSpec = select.value;
+        let selectedSpecName = "單一規格";
+        let checkoutPriceStr = product.vipPriceStr || product.originalPriceStr || "0";
+        let selectedGift = "";
+
+        const wrapperEl = document.getElementById("qs-variant-wrapper");
+        if (wrapperEl.style.display !== "none" && _currentVariants.length > 0) {
+          const selectedV = _currentVariants[_currentVariantIndex];
+          selectedSpecName = _parseSpecName(selectedV.name).main; // 移除 【】，送出乾淨名稱
+          selectedGift = selectedV.gift || "";
+
+          // 如果有特價抓特價，沒特價抓原價
+          checkoutPriceStr = selectedV.promo ? selectedV.promo : selectedV.price;
         }
 
-        // 🌟 處理價格
-        let checkoutPriceStr = product.vipPriceStr
-          ? product.vipPriceStr
-          : product.originalPriceStr;
         let priceNum = parseInt(checkoutPriceStr.replace(/[^0-9]/g, ""));
 
-        // 加入購物車
         const cartItem = {
           name: product.name,
-          spec: selectedSpec,
+          spec: selectedSpecName,
           price: priceNum,
           qty: qty,
+          gift: selectedGift,
         };
 
         cart.push(cartItem);
         saveCart();
 
-        // 按鈕回饋特效
         const btn = document.getElementById("qs-add-btn");
         const originalText = btn.innerText;
         btn.innerText = "已加入！OK";
-        btn.style.background = "#6c757d"; // 變灰色提示
+        btn.style.background = "#6c757d";
 
         setTimeout(() => {
           btn.innerText = originalText;
-          btn.style.background = "#d4a373"; // 變回金色
-          forceCloseQuickShop(); // 自動關閉視窗，讓客人繼續逛
+          btn.style.background = "#d4a373";
+          forceCloseQuickShop();
         }, 800);
       }
-
-      // ==========================================
-      // 🟢 購物車功能區域
-      // ==========================================
 
       function updateCartIcon() {
         document.getElementById("cart-count").innerText = cart.length;
@@ -2892,10 +2842,8 @@ const cutOffTime = new Date("2099-12-31T23:59:59");
         const totalEl = document.getElementById("cartTotal");
 
         if (cart.length === 0) {
-          container.innerHTML =
-            "<p style=\"text-align:center; color:#999; margin-top:40px; font-family:'Noto Sans TC', sans-serif;\">購物車目前是空的</p>";
+          container.innerHTML = "<p style=\"text-align:center; color:#999; margin-top:40px; font-family:'Noto Sans TC', sans-serif;\">購物車目前是空的</p>";
           totalEl.innerText = "總金額: NT$ 0";
-          // 如果購物車清空，順便把折扣碼也清掉
           currentPromoCode = "";
           currentDiscount = 0;
           return;
@@ -2910,7 +2858,7 @@ const cutOffTime = new Date("2099-12-31T23:59:59");
                 <div style="display:grid; grid-template-columns: 1fr 90px; gap:10px; padding:15px 0; border-bottom:1px solid #f5f5f5; align-items:center;">
                     <div style="font-family: 'Noto Sans TC', sans-serif; overflow:hidden;">
                         <div style="font-size: 1rem; font-weight: 500; color: #2c2c2c; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.name}</div>
-                        <div style="font-size:0.85rem; color:#888;">${item.spec} <span style="font-size:0.8rem; color:#ccc; margin:0 5px;">x</span> ${item.qty}</div>
+                        <div style="font-size:0.85rem; color:#888;">${item.spec} <span style="font-size:0.8rem; color:#ccc; margin:0 5px;">x</span> ${item.qty}${item.gift ? `<span style="color:#d4a373; font-size:0.78rem; margin-left:6px;">🎁 ${item.gift}</span>` : ''}</div>
                     </div>
                     <div style="text-align:right; font-family: 'Noto Sans TC', sans-serif;">
                         <div style="font-weight:600; font-size:1rem; color:#2c2c2c;">NT$ ${item.price * item.qty}</div>
@@ -2923,32 +2871,13 @@ const cutOffTime = new Date("2099-12-31T23:59:59");
         if (finalTotal < 0) finalTotal = 0;
 
         if (finalTotal >= 1500) {
-          let rawDeposit = finalTotal * 0.2;
-          let finalDeposit = Math.round(rawDeposit / 100) * 100;
+          let rawDeposit = finalTotal * 0.1;
+          let finalDeposit = Math.min(Math.round(rawDeposit / 100) * 100, 500);
 
           depositHtml = `
-                <div style="
-                    margin-top: 8px;
-                    text-align: right; 
-                    font-family: 'Noto Sans TC', sans-serif;
-                ">
-                    <span style="
-                        font-size: 0.85rem; 
-                        color: #999; 
-                        background: #f9f9f9; 
-                        padding: 4px 8px; 
-                        border-radius: 4px;
-                        margin-right: 8px;
-                    ">
-                        需預付定金 (20%)
-                    </span>
-                    <span style="
-                        font-size: 1.1rem; 
-                        color: #bfa092;
-                        font-weight: 500;
-                    ">
-                        NT$ ${finalDeposit}
-                    </span>
+                <div style="margin-top: 8px; text-align: right; font-family: 'Noto Sans TC', sans-serif;">
+                    <span style="font-size: 0.85rem; color: #999; background: #f9f9f9; padding: 4px 8px; border-radius: 4px; margin-right: 8px;">需預付定金 (10%)</span>
+                    <span style="font-size: 1.1rem; color: #bfa092; font-weight: 500;">NT$ ${finalDeposit}</span>
                 </div>
             `;
         }
@@ -2956,7 +2885,6 @@ const cutOffTime = new Date("2099-12-31T23:59:59");
         container.innerHTML = html;
         totalEl.style.fontFamily = "'Noto Sans TC', sans-serif";
 
-        // 更新總金額顯示方式
         if (currentDiscount > 0) {
           totalEl.innerHTML = `
           <div style="font-size: 0.9rem; color: #999; text-decoration: line-through; margin-bottom: 4px; font-weight: normal;">小計: NT$ ${total}</div>
@@ -2979,13 +2907,12 @@ const cutOffTime = new Date("2099-12-31T23:59:59");
 
       function removeFromCart(idx) {
         cart.splice(idx, 1);
-        saveCart(); // 🔴 修改：這裡也改成 saveCart()
+        saveCart();
         renderCartItems();
       }
 
       function checkoutViaLine() {
-        // 結帳時間攔截
-const cutOffTime = new Date("2099-12-31T23:59:59");
+        const cutOffTime = new Date("2099-12-31T23:59:59");
         if (new Date() >= cutOffTime) {
           alert("本次活動已於今晚 7 點結單囉！目前網站轉為「型錄模式」僅供核對商品。");
           return;
@@ -3007,35 +2934,25 @@ const cutOffTime = new Date("2099-12-31T23:59:59");
 
         const now = new Date();
         const dateStr = `${now.getMonth() + 1}月${now.getDate()}日`;
-        const titleTag = "";
-
-        // 1. 極簡開頭
-        let message = `您好，這是我的訂購清單 (${dateStr})${titleTag}：\n\n`;
+        let message = `您好，這是我的訂購清單 (${dateStr})：\n\n`;
 
         let total = 0;
         cart.forEach((item, index) => {
           total += item.price * item.qty;
           let cleanName = item.name.replace(/<br\s*\/?>/gi, " ");
-          let cleanSpec = item.spec
-            ? item.spec.replace(/<br\s*\/?>/gi, " ")
-            : "單一規格";
+          let cleanSpec = item.spec ? item.spec.replace(/<br\s*\/?>/gi, " ") : "單一規格";
           let num = (index + 1).toString().padStart(2, "0");
 
-          // 2. 拿掉圖示，改用簡潔的括號標註編號
           message += `[${num}] ${cleanName}\n`;
-          // 3. 規格與價格拆成兩行，絕對不會被擠到換行
-          message += `- 規格: ${cleanSpec}\n`;
+          message += `- 規格: ${cleanSpec}${item.gift ? ` (贈: ${item.gift})` : ''}\n`;
           message += `- 數量: ${item.qty} ($${item.price})\n\n`;
         });
 
-        // 4. 使用較短的虛線，避免手機螢幕不夠寬被切斷
         message += `-------------\n`;
 
-        // 計算最終結帳金額
         let finalTotal = total - currentDiscount;
         if (finalTotal < 0) finalTotal = 0;
 
-        // 5. 縮短標題文字 (例如：把「結帳總金額」改成「總金額」)，確保數字能待在同一行
         if (currentDiscount > 0) {
           message += `小計: NT$ ${total}\n`;
           message += `折扣 [${currentPromoCode}]: -$${currentDiscount}\n`;
@@ -3045,9 +2962,9 @@ const cutOffTime = new Date("2099-12-31T23:59:59");
         }
 
         if (finalTotal >= 1500) {
-          let rawDeposit = finalTotal * 0.2;
-          let finalDeposit = Math.round(rawDeposit / 100) * 100;
-          message += `(預付20%定金: NT$ ${finalDeposit})\n\n`;
+          let rawDeposit = finalTotal * 0.1;
+          let finalDeposit = Math.min(Math.round(rawDeposit / 100) * 100, 500);
+          message += `(預付定金10%: NT$ ${finalDeposit})\n\n`;
         }
 
         message += `平台: ${selectedShipping}`;
@@ -3058,7 +2975,6 @@ const cutOffTime = new Date("2099-12-31T23:59:59");
         if (isMobile) {
           window.location.href = lineUrl;
         } else {
-          // 電腦版顯示 QR Code
           const modal = document.getElementById("qrModal");
           const title = document.getElementById("qrTitle");
           const body = document.getElementById("qrBody");
@@ -3073,17 +2989,104 @@ const cutOffTime = new Date("2099-12-31T23:59:59");
         }
       }
 
-      // 🟢 讓點擊背景也能關閉 QR Code 視窗
       function closeQrModal(event) {
         if (event.target.id === "qrModal") {
           document.getElementById("qrModal").classList.remove("show");
         }
       }
 
-      // 🔴 新增：先讀取購物車紀錄
-      loadCart();
+      // === 🎁 規格名稱解析：自動拆出【贈品】到第二行 ===
+      function _parseSpecName(name) {
+        const match = name.match(/^(.*?)【(.+?)】(.*)$/);
+        if (match) {
+          return {
+            main: (match[1] + match[3]).trim(),
+            gift: match[2].trim()
+          };
+        }
+        return { main: name, gift: null };
+      }
 
+      // === 🎁 取得規格顯示名稱與贈品 (E欄優先，再fallback到【】寫法) ===
+      function _getVariantDisplay(vObj) {
+        const parsed = _parseSpecName(vObj.name);
+        return {
+          displayName: parsed.main,                      // 永遠移除 【】
+          gift: vObj.gift || parsed.gift || null          // E欄優先，再用【】
+        };
+      }
+
+      // === 🎛️ 自訂規格下拉選單的全域狀態與控制函式 ===
+      let _currentVariantIndex = 0;
+      let _currentVariants = [];
+
+      function toggleCustomVariantSelect() {
+        const display = document.getElementById('qs-variant-display');
+        const options = document.getElementById('qs-variant-options');
+        const isOpen = options.classList.contains('open');
+        if (isOpen) {
+          options.classList.remove('open');
+          display.classList.remove('open');
+        } else {
+          options.classList.add('open');
+          display.classList.add('open');
+        }
+      }
+
+      function closeCustomVariantSelect() {
+        const display = document.getElementById('qs-variant-display');
+        const options = document.getElementById('qs-variant-options');
+        if (display) display.classList.remove('open');
+        if (options) options.classList.remove('open');
+      }
+
+      function _selectVariantOption(vIndex) {
+        _currentVariantIndex = vIndex;
+        const vObj = _currentVariants[vIndex];
+        const selectedTextEl = document.getElementById('qs-variant-selected-text');
+        const displayPrice = vObj.promo ? vObj.promo : vObj.price;
+
+        const selD = _getVariantDisplay(vObj.name.includes('(缺)')
+          ? { ...vObj, name: vObj.name.replace('(缺)', '').trim() }
+          : vObj);
+        const selGiftHtml = selD.gift ? `<span class="opt-gift-line">🎁 ${selD.gift}</span>` : '';
+        selectedTextEl.innerHTML = vObj.name.includes('(缺)')
+          ? `<span>${selD.displayName} (Sold Out)</span>${selGiftHtml}`
+          : `<span>${selD.displayName}</span>${selGiftHtml}`;
+
+        // 更新清單內的選中狀態
+        document.querySelectorAll('#qs-variant-options .custom-variant-option').forEach((el, idx) => {
+          el.classList.toggle('opt-selected', idx === vIndex);
+        });
+
+        updateModalPrice(vObj);
+        closeCustomVariantSelect();
+      }
+
+      function updateModalPrice(vObj) {
+        const priceBox = document.getElementById("qs-price-box");
+        if (vObj.promo) {
+          priceBox.innerHTML = `
+            <div class="price-container" style="justify-content: flex-start; margin-bottom: 0;">
+              <span class="price-original" style="font-size: 1.1rem;">NT$ ${vObj.price}</span>
+              <span class="price-vip" style="font-size: 1.6rem;">NT$ ${vObj.promo}</span>
+            </div>
+          `;
+        } else {
+          priceBox.innerText = "NT$ " + vObj.price;
+        }
+      }
+
+      // 點擊選單以外的地方時自動關閉
+      document.addEventListener('click', function(e) {
+        const wrapper = document.getElementById('qs-variant-wrapper');
+        if (wrapper && !wrapper.contains(e.target)) {
+          closeCustomVariantSelect();
+        }
+      });
+
+      loadCart();
       fetchProducts();
     </script>
-  </body>
+      </body>
 </html>
