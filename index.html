@@ -2564,8 +2564,8 @@
             else if (product.tag === "SALE") badgeHtml = `<div class="badge sale">SALE</div>`;
           }
 
-          // 🌟 結單時間攔截解除！改到 2099 年
-          const cutOffTime = new Date("2099-12-31T23:59:59");
+          // 🌟 結單時間
+          const cutOffTime = new Date("2026-04-06T08:00:00");
           const isEnded = new Date() >= cutOffTime;
 
           let btnHtml = "";
@@ -2605,9 +2605,9 @@
 
       // 🌟 2. 打開快速購物視窗 (自動顯示變更價格)
       function openQuickShop(index) {
-        const cutOffTime = new Date("2099-12-31T23:59:59");
+        const cutOffTime = new Date("2026-04-06T08:00:00");
         if (new Date() >= cutOffTime) {
-          alert("本次活動已於今晚 7 點結單囉！目前網站轉為「型錄模式」僅供核對商品。");
+          alert("本批次已結單，感謝您的熱情支持。");
           return;
         }
 
@@ -2912,9 +2912,9 @@
       }
 
       function checkoutViaLine() {
-        const cutOffTime = new Date("2099-12-31T23:59:59");
+        const cutOffTime = new Date("2026-04-06T08:00:00");
         if (new Date() >= cutOffTime) {
-          alert("本次活動已於今晚 7 點結單囉！目前網站轉為「型錄模式」僅供核對商品。");
+          alert("本批次已結單，感謝您的熱情支持。");
           return;
         }
         if (cart.length === 0) return;
