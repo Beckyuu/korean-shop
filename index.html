@@ -2681,7 +2681,7 @@
             btnHtml = `<button class="btn-add" onclick="openQuickShop(${globalIdx})" style="max-width: 200px;">加入購物車</button>`;
           }
 
-          let imgOpacity = (isAllOutOfStock || isEnded) ? "opacity: 0.5; filter: grayscale(60%);" : "";
+          let imgOpacity = (isAllOutOfStock || isEnded) ? "opacity: 0.75; filter: grayscale(25%) brightness(0.95);" : "";
           let clickEvent = (isAllOutOfStock || isEnded) ? "" : `onclick="openQuickShop(${globalIdx})"`;
           let cursorStyle = (isAllOutOfStock || isEnded) ? "default" : "pointer";
 
@@ -3193,14 +3193,14 @@
       fetchProducts();
 
       // === 進站結單公告 ===
-      (function () {
+      document.addEventListener("DOMContentLoaded", function () {
         const cutOff = new Date("2026-04-06T08:00:00");
         if (new Date() >= cutOff) {
           const overlay = document.getElementById("ended-notice-overlay");
           overlay.style.display = "flex";
           setTimeout(() => overlay.classList.add("show"), 10);
         }
-      })();
+      });
 
       function closeEndedNotice() {
         const overlay = document.getElementById("ended-notice-overlay");
