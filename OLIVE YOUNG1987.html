@@ -304,6 +304,40 @@
     }
     #toast.show { opacity: 1; transform: translateY(0); }
 
+    /* ── 凍結 # 與 帳號 兩欄（左右滑動時固定不動）── */
+
+    /* thead 凍結 */
+    .s-row th:first-child {           /* # 欄 */
+      position: sticky; left: 0; z-index: 4;
+      background: #f0f8f2;
+    }
+    .s-row th:nth-child(2) {          /* 帳號欄 */
+      position: sticky; left: 44px; z-index: 4;
+      background: #f0f8f2;
+      box-shadow: 3px 0 8px rgba(74,144,98,.13);
+    }
+
+    /* tbody 凍結 */
+    td.td-no {
+      position: sticky; left: 0; z-index: 2;
+      background: var(--surface);
+    }
+    td.td-account {
+      position: sticky; left: 44px; z-index: 2;
+      background: var(--surface);
+      box-shadow: 3px 0 8px rgba(74,144,98,.10);
+    }
+
+    /* hover 時凍結欄同步變色 */
+    tbody tr:hover td.td-no,
+    tbody tr:hover td.td-account    { background: #f5fbf6; }
+
+    /* 生日快到時凍結欄同步變色 */
+    tr.bday-soon td.td-no,
+    tr.bday-soon td.td-account      { background: #fff1f2; }
+    tr.bday-soon:hover td.td-no,
+    tr.bday-soon:hover td.td-account { background: #ffe4e6; }
+
     /* ── 手機版：僅加大觸控間距，維持原本表格外觀 ── */
     @media (max-width: 768px) {
       .sel  { min-height: 42px; }
