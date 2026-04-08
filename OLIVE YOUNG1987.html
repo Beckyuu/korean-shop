@@ -304,138 +304,12 @@
     }
     #toast.show { opacity: 1; transform: translateY(0); }
 
-    /* ════════════════════════════════════════════
-       RWD — 手機版 (≤ 768px) 卡片式佈局
-       ════════════════════════════════════════════ */
+    /* ── 手機版：僅加大觸控間距，維持原本表格外觀 ── */
     @media (max-width: 768px) {
-
-      /* ── Header ── */
-      .app-header {
-        flex-wrap: wrap;
-        padding: 10px 14px;
-        gap: 8px;
-      }
-      .header-brand { flex: 1 1 auto; }
-      .header-brand h1 { font-size: 15px; }
-      .header-brand p  { display: none; }
-
-      /* 搜尋列獨佔第二行 */
-      .search-wrap {
-        order: 10;
-        flex-basis: 100%;
-        max-width: none;
-      }
-
-      /* 右側控制區 */
-      .header-right { gap: 6px; }
-      #sync-indicator { font-size: 0; gap: 0; } /* 只保留閃爍點，隱藏文字 */
-      #sync-dot { width: 8px; height: 8px; }
-      #count-badge { font-size: 12px; padding: 4px 10px; }
-      #btn-migrate  { font-size: 11px !important; padding: 6px 10px !important; }
-
-      /* ── Main 區塊 ── */
-      .main { padding: 12px 10px 60px; }
-
-      /* ── 新增欄 ── */
-      .add-card { padding: 12px; gap: 8px; }
-      .add-input { min-width: 0; font-size: 16px; /* 防 iOS 自動放大 */ }
-      .btn-add   { width: 100%; justify-content: center; padding: 11px; font-size: 15px; }
-
-      /* ── 表格容器：取消橫向滾動 ── */
-      .table-card   { border-radius: 0; border-left: none; border-right: none; box-shadow: none; }
-      .table-scroll { overflow-x: visible; }
-
-      /* ── 隱藏 thead（標題列）── */
-      #main-table thead { display: none; }
-
-      /* ── table / tbody 改為區塊 ── */
-      #main-table,
-      #main-table tbody { display: block; width: 100%; }
-
-      /* ── 每一行 → 獨立卡片 ── */
-      #main-table tbody tr {
-        display: block;
-        background: var(--surface);
-        border: 1.5px solid var(--border);
-        border-radius: 14px;
-        margin: 10px 0;
-        box-shadow: var(--shadow);
-        overflow: hidden;
-      }
-      #main-table tbody tr:first-child { margin-top: 0; }
-      #main-table tbody tr.bday-soon   { background: #fff1f2 !important; border-color: #f9a8a8; }
-
-      /* ── 每個 td → flex 左右佈局 ── */
-      #main-table tbody td {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 11px 14px;
-        border-bottom: 1px solid #edf4ef;
-        text-align: right;
-        white-space: normal;
-        min-height: 48px;   /* 觸控高度 */
-      }
-      #main-table tbody td:last-child { border-bottom: none; }
-
-      /* ── data-label 顯示欄位名稱 ── */
-      #main-table tbody td::before {
-        content: attr(data-label);
-        font-weight: 700;
-        color: var(--muted);
-        font-size: 12px;
-        text-align: left;
-        flex-shrink: 0;
-        margin-right: 10px;
-        white-space: nowrap;
-      }
-
-      /* ── 隱藏不需要的 td ── */
-      #main-table tbody td.td-no      { display: none; }  /* 序號手機不顯示 */
-      #main-table tbody td.td-spacer  { display: none; }  /* 活動分隔欄隱藏 */
-
-      /* ── 空資料狀態 ── */
-      #main-table tbody td.empty-cell {
-        display: block;
-        text-align: center;
-        border-bottom: none;
-      }
-      #main-table tbody td.empty-cell::before { display: none; }
-
-      /* ── 帳號欄 ── */
-      #main-table tbody td.td-account { padding-left: 14px; }
-      .account-txt  { word-break: break-all; font-size: 12.5px; }
-      .account-wrap { justify-content: flex-end; flex-wrap: wrap; gap: 6px; }
-      .account-inp  { width: 100%; max-width: 220px; font-size: 14px; }
-
-      /* ── 下拉選單 ── */
-      .sel {
-        min-height: 44px;
-        font-size: 14px;
-        padding: 8px 28px 8px 12px;
-        max-width: 160px;
-      }
-
-      /* ── 數字輸入框 ── */
-      .pts {
-        min-height: 44px;
-        width: 90px;
-        font-size: 15px;
-        border: 1.5px solid var(--border);
-        background: #f8fcf9;
-        border-radius: 10px;
-      }
-
-      /* ── 生日輸入框 ── */
-      .bday-inp { min-height: 44px; width: 88px; font-size: 15px; }
-      .bday-wrap { align-items: flex-end; }
-
-      /* ── 操作按鈕 ── */
-      .abtn      { width: 42px; height: 42px; font-size: 17px; }
-      .act-btns  { gap: 10px; justify-content: flex-end; }
-
-      /* ── 複製按鈕 ── */
-      .btn-copy-acc { width: 32px; height: 32px; font-size: 15px; }
+      .sel  { min-height: 42px; }
+      .abtn { width: 36px; height: 36px; }
+      .act-btns { gap: 8px; }
+      .add-input { font-size: 16px; } /* 防 iOS 自動放大 */
     }
   </style>
 </head>
@@ -701,20 +575,20 @@ function renderTable() {
 
     return `
     <tr data-id="${r.id}" class="${isSoon ? "bday-soon" : ""}">
-      <td class="td-no" data-label="#">${String(i + 1).padStart(2, "0")}</td>
-      <td class="td-account" data-label="帳號">${accountCell}</td>
-      <td data-label="等級">${levelSel(r.id, r.level)}</td>
-      <td data-label="點數"><input class="pts" type="number" step="0.01" min="0" value="${r.points}"
+      <td class="td-no">${String(i + 1).padStart(2, "0")}</td>
+      <td class="td-account">${accountCell}</td>
+      <td>${levelSel(r.id, r.level)}</td>
+      <td><input class="pts" type="number" step="0.01" min="0" value="${r.points}"
           onchange="updateField(${r.id},'points',parseFloat(this.value)||0)" /></td>
-      <td data-label="退款"><input class="pts" type="number" step="0.01" min="0" value="${r.refund}"
+      <td><input class="pts" type="number" step="0.01" min="0" value="${r.refund}"
           onchange="updateField(${r.id},'refund',parseFloat(this.value)||0)" /></td>
       <td class="td-spacer"></td>
-      ${r.act.map((a, ai) => `<td class="act-col" data-label="${escAttr(actNames[ai])}">${actSel(r.id, ai, a)}</td>`).join("")}
-      ${r.q.map((q, qi)   => `<td data-label="Q${qi + 1}">${qSel(r.id, qi, q)}</td>`).join("")}
-      <td data-label="生日">${bdayCell}</td>
-      <td data-label="生日禮-發送">${bgSel(r.id, r.bg)}</td>
-      <td data-label="生日禮-使用">${buSel(r.id, r.bu)}</td>
-      <td data-label="操作">
+      ${r.act.map((a, ai) => `<td class="act-col">${actSel(r.id, ai, a)}</td>`).join("")}
+      ${r.q.map((q, qi)   => `<td>${qSel(r.id, qi, q)}</td>`).join("")}
+      <td>${bdayCell}</td>
+      <td>${bgSel(r.id, r.bg)}</td>
+      <td>${buSel(r.id, r.bu)}</td>
+      <td>
         <div class="act-btns">
           ${editBtn}
           <button class="abtn abtn-del" onclick="delRow(${r.id})" title="刪除">🗑️</button>
