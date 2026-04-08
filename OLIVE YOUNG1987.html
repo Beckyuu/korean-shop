@@ -288,6 +288,18 @@
     .abtn-del  { background: #fff5f5; border-color: #f9a8a8; color: #dc2626; }
     .abtn-del:hover { background: #fde8e8; }
 
+    /* 拖曳把手 */
+    .drag-handle {
+      display: inline-block; cursor: grab;
+      color: #c0d4c8; font-size: 15px; line-height: 1;
+      user-select: none; padding: 2px 4px;
+      border-radius: 5px; transition: color .12s, background .12s;
+    }
+    .drag-handle:hover { color: #4a9062; background: #e8f5ec; }
+    .drag-handle:active { cursor: grabbing; }
+    tr.tr-dragging { opacity: .45; }
+    tr.tr-drag-over td { border-top: 2.5px solid var(--green) !important; }
+
     /* 空資料狀態 */
     .empty-cell { padding: 64px 20px !important; text-align: center !important; }
     .empty-icon { font-size: 44px; margin-bottom: 10px; }
@@ -308,34 +320,46 @@
     /* ── 凍結 # 與 帳號 兩欄（左右滑動時固定不動）── */
 
     /* thead 凍結 */
-    .s-row th:first-child {           /* # 欄 */
+    .s-row th:first-child {           /* 拖曳把手欄 */
       position: sticky; left: 0; z-index: 4;
       background: #f0f8f2;
     }
-    .s-row th:nth-child(2) {          /* 帳號欄 */
-      position: sticky; left: 44px; z-index: 4;
+    .s-row th:nth-child(2) {          /* # 欄 */
+      position: sticky; left: 30px; z-index: 4;
+      background: #f0f8f2;
+    }
+    .s-row th:nth-child(3) {          /* 帳號欄 */
+      position: sticky; left: 74px; z-index: 4;
       background: #f0f8f2;
       box-shadow: 3px 0 8px rgba(74,144,98,.13);
     }
 
     /* tbody 凍結 */
-    td.td-no {
+    td.td-drag {
       position: sticky; left: 0; z-index: 2;
+      background: var(--surface);
+      width: 30px; padding: 0 2px; text-align: center;
+    }
+    td.td-no {
+      position: sticky; left: 30px; z-index: 2;
       background: var(--surface);
     }
     td.td-account {
-      position: sticky; left: 44px; z-index: 2;
+      position: sticky; left: 74px; z-index: 2;
       background: var(--surface);
       box-shadow: 3px 0 8px rgba(74,144,98,.10);
     }
 
     /* hover 時凍結欄同步變色 */
+    tbody tr:hover td.td-drag,
     tbody tr:hover td.td-no,
     tbody tr:hover td.td-account    { background: #f5fbf6; }
 
     /* 生日快到時凍結欄同步變色 */
+    tr.bday-soon td.td-drag,
     tr.bday-soon td.td-no,
     tr.bday-soon td.td-account      { background: #fff1f2; }
+    tr.bday-soon:hover td.td-drag,
     tr.bday-soon:hover td.td-no,
     tr.bday-soon:hover td.td-account { background: #ffe4e6; }
 
@@ -399,6 +423,7 @@
         <thead>
 
           <tr class="s-row">
+            <th rowspan="2" class="th-base" style="width:30px"></th>
             <th rowspan="2" class="th-base" style="width:44px">#</th>
             <th rowspan="2" class="th-base" style="text-align:left;padding-left:16px;min-width:220px">帳號</th>
             <th rowspan="2" class="th-base" style="min-width:110px">會員等級</th>
@@ -494,6 +519,7 @@ let actNames     = ["活動一", "活動二", "活動三"];
 let actCollapsed = true;
 let searchKw     = "";
 let editingId    = null;
+let dragSrcId    = null;
 
 /* ────────────── 設定讀寫 ────────────── */
 async function loadSettings() {
@@ -568,10 +594,16 @@ function syncActLabels() {
   });
 }
 
+/* ────────────── 排序輔助 ────────────── */
+function getSorted() {
+  return [...records].sort((a, b) => (a.sortOrder ?? a.id) - (b.sortOrder ?? b.id));
+}
+
 /* ────────────── 渲染表格 ────────────── */
 function getFiltered() {
-  const kw = searchKw.trim().toLowerCase();
-  return kw ? records.filter(r => r.account.toLowerCase().includes(kw)) : records;
+  const kw     = searchKw.trim().toLowerCase();
+  const sorted = getSorted();
+  return kw ? sorted.filter(r => r.account.toLowerCase().includes(kw)) : sorted;
 }
 
 function renderTable() {
@@ -582,7 +614,7 @@ function renderTable() {
 
   if (list.length === 0) {
     tbody.innerHTML = `
-      <tr><td colspan="16" class="empty-cell">
+      <tr><td colspan="17" class="empty-cell">
         <div class="empty-icon">🌿</div>
         <div class="empty-txt">${records.length === 0
           ? "目前沒有帳號，請由上方新增"
@@ -622,8 +654,17 @@ function renderTable() {
         ${isSoon ? `<span style="font-size:11px;color:#e85d8a;font-weight:600;">快到了</span>` : ""}
       </div>`;
 
+    const draggable = searchKw.trim() ? "" :
+      `draggable="true"
+       ondragstart="onDragStart(event,${r.id})"
+       ondragover="onDragOver(event)"
+       ondragleave="onDragLeave(event)"
+       ondrop="onDrop(event,${r.id})"
+       ondragend="onDragEnd(event)"`;
+
     return `
-    <tr data-id="${r.id}" class="${isSoon ? "bday-soon" : ""}">
+    <tr data-id="${r.id}" class="${isSoon ? "bday-soon" : ""}" ${draggable}>
+      <td class="td-drag"><span class="drag-handle" title="拖曳排序">⠿</span></td>
       <td class="td-no">${String(i + 1).padStart(2, "0")}</td>
       <td class="td-account">${accountCell}</td>
       <td>${levelSel(r.id, r.level)}</td>
@@ -760,10 +801,13 @@ window.addRow = async function() {
   if (!account) { showToast("⚠️ 請輸入帳號"); return; }
 
   // 使用時間戳記作為唯一 ID（數字，可排序）
-  const id     = Date.now();
+  const id        = Date.now();
+  const sortOrder = records.length > 0
+    ? Math.max(...records.map(r => r.sortOrder ?? 0)) + 1
+    : 0;
   const record = {
     id, account, level: 3, points: 0, refund: 0,
-    act: [0, 0, 0], q: [0, 0, 0, 0], bday: "", bg: 0, bu: 0
+    act: [0, 0, 0], q: [0, 0, 0, 0], bday: "", bg: 0, bu: 0, sortOrder
   };
 
   try {
@@ -851,6 +895,73 @@ window.updateBday = async function(id, val) {
   renderTable(); // 立即更新「快到了」高亮
   try { await updateDoc(accDoc(id), { bday }); }
   catch (e) { console.error("[updateBday]", e); }
+};
+
+/* ────────────── 拖曳排序 ────────────── */
+window.onDragStart = function(e, id) {
+  dragSrcId = id;
+  e.dataTransfer.effectAllowed = "move";
+  e.currentTarget.classList.add("tr-dragging");
+};
+
+window.onDragOver = function(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = "move";
+  document.querySelectorAll("tr.tr-drag-over")
+    .forEach(el => el.classList.remove("tr-drag-over"));
+  e.currentTarget.classList.add("tr-drag-over");
+};
+
+window.onDragLeave = function(e) {
+  // 只在真正離開 tr 時才移除（避免滑到子元素閃爍）
+  if (!e.currentTarget.contains(e.relatedTarget)) {
+    e.currentTarget.classList.remove("tr-drag-over");
+  }
+};
+
+window.onDrop = async function(e, targetId) {
+  e.preventDefault();
+  document.querySelectorAll("tr.tr-drag-over")
+    .forEach(el => el.classList.remove("tr-drag-over"));
+
+  if (dragSrcId === null || dragSrcId === targetId) return;
+
+  const sorted = getSorted();
+  const srcIdx = sorted.findIndex(r => r.id === dragSrcId);
+  const tgtIdx = sorted.findIndex(r => r.id === targetId);
+  if (srcIdx === -1 || tgtIdx === -1) return;
+
+  // 移動到目標位置
+  const reordered = [...sorted];
+  const [moved]   = reordered.splice(srcIdx, 1);
+  reordered.splice(tgtIdx, 0, moved);
+
+  // 重新賦予 sortOrder
+  reordered.forEach((r, i) => { r.sortOrder = i; });
+
+  // 同步回 records（保留非排序欄位）
+  records = records.map(r => reordered.find(s => s.id === r.id) || r);
+  renderTable();
+
+  // 批次寫入 Firestore
+  try {
+    const batch = writeBatch(db);
+    reordered.forEach((r, i) => {
+      batch.update(accDoc(r.id), { sortOrder: i });
+    });
+    await batch.commit();
+  } catch (err) {
+    console.error("[onDrop]", err);
+    showToast("❌ 排序儲存失敗，請重試");
+  }
+};
+
+window.onDragEnd = function(e) {
+  dragSrcId = null;
+  document.querySelectorAll("tr.tr-dragging")
+    .forEach(el => el.classList.remove("tr-dragging"));
+  document.querySelectorAll("tr.tr-drag-over")
+    .forEach(el => el.classList.remove("tr-drag-over"));
 };
 
 /* ────────────── 搜尋輸入 ────────────── */
