@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Olive Young 帳號管理</title>
+  <link rel="icon" type="image/png" href="icon.png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #f3f8f4;
+      --surface:  #ffffff;
+      --border:   #d9e8dc;
+      --green:    #4a9062;
+      --green-h:  #3a7550;
+      --pink:     #e85d8a;
+      --pink-h:   #cc3f70;
+      --text:     #2c3e35;
+      --muted:    #7a9185;
+      --r-card:   16px;
+      --r-sel:    22px;
+      --shadow:   0 2px 12px rgba(74,144,98,.1);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      min-height: 100vh;
+    }
+
+    /* --- Header --- */
+    .app-header {
+      background: linear-gradient(120deg, #3a7550 0%, #5aaf78 60%, #7ec897 100%);
+      padding: 14px 24px;
+      display: flex; align-items: center; gap: 16px;
+      position: sticky; top: 0; z-index: 300;
+      box-shadow: 0 4px 20px rgba(58,117,80,.3);
+    }
+    .header-brand { flex-shrink: 0; }
+    .header-brand h1 {
+      color: #fff; font-size: 18px; font-weight: 800;
+      letter-spacing: -.3px; line-height: 1.2;
+    }
+    .header-brand p { color: rgba(255,255,255,.65); font-size: 11.5px; margin-top: 1px; }
+
+    .search-wrap { position: relative; flex: 1; max-width: 300px; }
+    .search-wrap input {
+      width: 100%; padding: 9px 14px 9px 36px;
+      background: rgba(255,255,255,.88);
+      border: none; border-radius: 24px;
+      font-size: 14px; outline: none; color: var(--text);
+      transition: box-shadow .15s;
+    }
+    .search-wrap input:focus { box-shadow: 0 0 0 3px rgba(255,255,255,.45); background: #fff; }
+    .search-wrap input::placeholder { color: #a8c4b0; }
+    .search-icon {
+      position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+      font-size: 14px; color: #a8c4b0; pointer-events: none;
+    }
+
+    .header-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+    #count-badge {
+      background: rgba(255,255,255,.2); color: #fff;
+      border: 1.5px solid rgba(255,255,255,.35);
+      border-radius: 20px; padding: 5px 14px;
+      font-size: 13px; font-weight: 600; white-space: nowrap;
+    }
+    #sync-indicator {
+      font-size: 11px; color: rgba(255,255,255,.7);
+      display: flex; align-items: center; gap: 5px;
+    }
+    #sync-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #a8f0c0; display: inline-block;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; }
+      50%      { opacity: .4; }
+    }
+
+    /* --- Main --- */
+    .main { padding: 20px 20px 60px; max-width: 1700px; margin: 0 auto; }
+
+    /* --- Add Card --- */
+    .add-card {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--r-card); box-shadow: var(--shadow);
+      padding: 14px 20px; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    }
+    .add-label { font-size: 13.5px; font-weight: 700; color: var(--green); white-space: nowrap; }
+    .add-input {
+      flex: 1; min-width: 220px; max-width: 400px;
+      padding: 9px 14px; border: 1.5px solid var(--border);
+      border-radius: 12px; font-size: 14px; outline: none;
+      font-family: inherit; background: #f8fcf9;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .add-input:focus {
+      border-color: var(--green); background: #fff;
+      box-shadow: 0 0 0 3px rgba(74,144,98,.14);
+    }
+    .btn-add {
+      padding: 9px 22px; background: var(--pink); color: #fff;
+      border: none; border-radius: 12px;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+      transition: background .15s, transform .1s; white-space: nowrap;
+    }
+    .btn-add:hover  { background: var(--pink-h); }
+    .btn-add:active { transform: scale(.97); }
+
+    /* --- Table Card --- */
+    .table-card {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--r-card); box-shadow: var(--shadow); overflow: hidden;
+    }
+    .table-scroll { overflow-x: auto; }
+
+    /* 基礎表格設定 */
+    table { border-collapse: collapse; white-space: nowrap; }
+
+    /* hide activity when collapsed */
+    table.act-collapsed #act-th-section { display: none; }
+    table.act-collapsed .act-col        { display: none; }
+
+    /* 區塊標題列 */
+    .s-row th {
+      padding: 10px 14px; text-align: center;
+      font-size: 14px; font-weight: 700; letter-spacing: .04em;
+      border-bottom: 1px solid var(--border);
+    }
+    .th-base    { background: #f0f8f2; color: #2e6644; }
+    .th-act     { background: #fff8f0; color: #b84d00;
+                  border-left: 2px dashed #fdc97a; border-right: 2px dashed #fdc97a; }
+    .th-quarter { background: #f0f4ff; color: #2d4baa; }
+    .th-bday    { background: #fff0f8; color: #9d1a6a; }
+
+    #th-toggle-wrap {
+      background: #fff8f0; width: 42px;
+      border-left: 2px dashed #fdc97a;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle; text-align: center; padding: 6px;
+    }
+
+    /* 欄位名稱列 */
+    .c-row th {
+      background: #f8faf8; padding: 10px 12px;
+      font-size: 14px; font-weight: 700; color: var(--muted);
+      text-align: center; border-bottom: 2px solid var(--border);
+    }
+    .c-row .th-act-inner {
+      background: #fffcf5; border-bottom-color: #fdc97a;
+      border-left: 2px dashed #fdc97a; border-right: 2px dashed #fdc97a;
+    }
+
+    /* Toggle btn */
+    #toggle-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px;
+      background: #fff3e0; border: 1.5px solid #fdc97a;
+      border-radius: 9px; font-size: 11px; font-weight: 800;
+      color: #b84d00; cursor: pointer;
+      transition: background .12s, transform .1s;
+    }
+    #toggle-btn:hover  { background: #ffe0b2; }
+    #toggle-btn:active { transform: scale(.9); }
+
+    /* 活動名稱可編輯 */
+    .act-lbl {
+      display: block; cursor: pointer; padding: 2px 6px;
+      border-radius: 6px; color: #8a5500; font-size: 12px; font-weight: 700;
+      transition: background .12s;
+    }
+    .act-lbl:hover { background: #fff0c0; }
+    .act-lbl-inp {
+      width: 80px; padding: 3px 6px; font-size: 12px; font-weight: 700;
+      color: #8a5500; border: 1.5px solid #fdc97a; border-radius: 6px;
+      outline: none; background: #fffbe8; text-align: center; font-family: inherit;
+    }
+
+    /* 表格內容列 */
+    tbody tr { border-bottom: 1px solid #edf4ef; transition: background .1s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #f5fbf6; }
+
+    td { padding: 9px 10px; vertical-align: middle; text-align: center; }
+    td.td-no { color: var(--muted); font-size: 13.5px; font-weight: 600; width: 42px; }
+    td.td-account { text-align: left; padding-left: 16px; min-width: 230px; }
+
+    .account-wrap { display: flex; align-items: center; gap: 7px; }
+    .account-txt  { font-family: "SFMono-Regular", Consolas, monospace; font-size: 13.5px; }
+    .account-inp  {
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 13.5px; padding: 5px 10px;
+      border: 1.5px solid var(--green); border-radius: 9px;
+      outline: none; width: 210px; background: #f0f8f2; color: var(--text);
+    }
+
+    /* 複製帳號按鈕 */
+    .btn-copy-acc {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 26px; height: 26px; flex-shrink: 0;
+      background: #f0f8f2; border: 1.5px solid var(--border);
+      border-radius: 8px; cursor: pointer; font-size: 13px;
+      transition: background .12s, border-color .12s, transform .1s;
+      padding: 0;
+    }
+    .btn-copy-acc:hover  { background: #d6f5e3; border-color: #7de0a8; }
+    .btn-copy-acc:active { transform: scale(.88); }
+    .btn-copy-acc.ok    { background: #d6f5e3; border-color: #7de0a8; color: #15803d; }
+
+    /* 生日輸入框 */
+    .bday-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .bday-inp {
+      width: 72px; padding: 5px 8px; text-align: center;
+      border: 1.5px solid var(--border); border-radius: 10px;
+      font-size: 13.5px; font-family: inherit; background: #fdf0f8;
+      color: #9d1a6a; font-weight: 600; outline: none;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .bday-inp:focus { border-color: #f472b6; box-shadow: 0 0 0 3px rgba(244,114,182,.14); background: #fff; }
+    .bday-inp::placeholder { color: #dba8c8; font-weight: 400; }
+
+    /* 生日快到提示 */
+    tr.bday-soon { background: #fff1f2 !important; }
+    tr.bday-soon:hover { background: #ffe4e6 !important; }
+
+    td.td-spacer {
+      width: 42px; padding: 0;
+      background: #fffcf5;
+      border-left: 2px dashed #fdc97a;
+    }
+
+    /* --- 下拉選單 --- */
+    .sel {
+      padding: 6px 28px 6px 12px; min-width: 86px;
+      border-radius: var(--r-sel); border: 1.5px solid;
+      font-size: 13.5px; font-weight: 600; cursor: pointer; outline: none;
+      appearance: none; -webkit-appearance: none;
+      background-repeat: no-repeat; background-position: right 9px center;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2394a3b8' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      transition: box-shadow .15s;
+    }
+    .sel:focus { box-shadow: 0 0 0 3px rgba(74,144,98,.18); }
+
+    /* status variants */
+    .s-none  { background-color: #f1f5f4; color: #7a9185; border-color: #c8d8cc; }
+    .s-given { background-color: #d6f5e3; color: #186640; border-color: #7de0a8; }
+    .s-used  { background-color: #fde8e8; color: #b91c1c; border-color: #f9a8a8; }
+    .s-got   { background-color: #dbeafe; color: #1d4ed8; border-color: #93c5fd; }
+
+    /* level variants */
+    .lv-0 { background-color: #fce7f3; color: #9d174d; border-color: #f9a8d4; } /* Baby Pink */
+    .lv-1 { background-color: #d6f5e3; color: #15803d; border-color: #7de0a8; } /* Green */
+    .lv-2 { background-color: #1e293b; color: #f8fafc; border-color: #475569; } /* Black */
+    .lv-3 { background-color: #fef3c7; color: #92400e; border-color: #fcd34d; } /* Gold */
+
+    /* 點數輸入框 */
+    .pts {
+      width: 74px; padding: 6px 8px; text-align: right;
+      border: 1.5px solid transparent; border-radius: 10px;
+      font-size: 14px; font-family: inherit; background: transparent; color: var(--text);
+      transition: border-color .15s, background .15s;
+    }
+    .pts:hover { border-color: var(--border); background: #f8fcf9; }
+    .pts:focus { border-color: var(--green); background: #fff; outline: none;
+      box-shadow: 0 0 0 2.5px rgba(74,144,98,.16); }
+
+    /* 操作按鈕 */
+    .act-btns { display: flex; gap: 5px; justify-content: center; }
+    .abtn {
+      width: 30px; height: 30px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 9px; cursor: pointer; font-size: 14px;
+      border: 1.5px solid; padding: 0;
+      transition: background .12s, transform .1s;
+    }
+    .abtn:active { transform: scale(.88); }
+    .abtn-edit { background: #eff6ff; border-color: #93c5fd; color: #1d4ed8; }
+    .abtn-edit:hover { background: #dbeafe; }
+    .abtn-save { background: #f0fdf4; border-color: #7de0a8; color: #15803d; }
+    .abtn-save:hover { background: #d6f5e3; }
+    .abtn-del  { background: #fff5f5; border-color: #f9a8a8; color: #dc2626; }
+    .abtn-del:hover { background: #fde8e8; }
+
+    /* 空資料狀態 */
+    .empty-cell { padding: 64px 20px !important; text-align: center !important; }
+    .empty-icon { font-size: 44px; margin-bottom: 10px; }
+    .empty-txt  { color: var(--muted); font-size: 15px; }
+
+    /* 提示訊息 */
+    #toast {
+      position: fixed; bottom: 26px; right: 26px;
+      background: #1e293b; color: #fff;
+      padding: 10px 20px; border-radius: 14px;
+      font-size: 14px; font-weight: 500;
+      opacity: 0; transform: translateY(8px);
+      transition: opacity .22s, transform .22s;
+      pointer-events: none; z-index: 9999;
+    }
+    #toast.show { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="header-brand">
+    <h1>🌿 Olive Young 帳號管理</h1>
+    <p>帳號紀錄與點數管理工具</p>
+  </div>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input id="search-input" type="text" placeholder="搜尋帳號..." autocomplete="off" />
+  </div>
+  <div class="header-right">
+    <button id="btn-migrate" onclick="migrateFromLocal()" title="將瀏覽器 localStorage 舊資料一鍵搬移至 Firebase"
+      style="padding:8px 14px;background:rgba(255,220,80,.92);color:#7a4800;border:none;border-radius:12px;
+             font-size:13px;font-weight:800;cursor:pointer;white-space:nowrap;
+             transition:background .15s,transform .1s;">
+      🚚 一鍵搬家
+    </button>
+    <span id="sync-indicator"><span id="sync-dot"></span>即時同步中</span>
+    <span id="count-badge">0 筆</span>
+  </div>
+</header>
+
+<div class="main">
+
+  <div class="add-card">
+    <span class="add-label">新增帳號</span>
+    <input class="add-input" id="new-account" type="text" placeholder="輸入 Email 或帳號..." autocomplete="off" />
+    <button class="btn-add" onclick="addRow()">＋ 新增</button>
+  </div>
+
+  <div class="table-card">
+    <div class="table-scroll">
+      <table id="main-table" class="act-collapsed">
+        <thead>
+
+          <tr class="s-row">
+            <th rowspan="2" class="th-base" style="width:44px">#</th>
+            <th rowspan="2" class="th-base" style="text-align:left;padding-left:16px;min-width:220px">帳號</th>
+            <th rowspan="2" class="th-base" style="min-width:110px">會員等級</th>
+            <th rowspan="2" class="th-base" style="min-width:82px">剩餘點數</th>
+            <th rowspan="2" class="th-base" style="min-width:82px">退款金額</th>
+            <th rowspan="2" id="th-toggle-wrap">
+              <button id="toggle-btn" onclick="toggleAct()" title="展開/收合活動">▶</button>
+            </th>
+            <th colspan="3" id="act-th-section" class="th-act">活動紀錄</th>
+            <th colspan="4" class="th-quarter">季度 點數活動</th>
+            <th colspan="3" class="th-bday">🎂 生日禮物</th>
+            <th rowspan="2" class="th-base" style="min-width:80px">操作</th>
+          </tr>
+
+          <tr class="c-row">
+            <th class="act-col th-act-inner">
+              <span class="act-lbl" id="aln-0" onclick="editActName(0)">活動一</span>
+            </th>
+            <th class="act-col th-act-inner">
+              <span class="act-lbl" id="aln-1" onclick="editActName(1)">活動二</span>
+            </th>
+            <th class="act-col th-act-inner">
+              <span class="act-lbl" id="aln-2" onclick="editActName(2)">活動三</span>
+            </th>
+            <th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th>
+            <th>生日</th><th>發送狀態</th><th>使用狀態</th>
+          </tr>
+
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+<div id="toast"></div>
+
+<!-- Firebase v10 CDN (模組化) -->
+<script type="module">
+import { initializeApp }                    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getFirestore, collection, doc,
+  setDoc, updateDoc, deleteDoc,
+  onSnapshot, getDoc, query, orderBy,
+  writeBatch
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+/* ────────────── Firebase 初始化 ────────────── */
+const firebaseConfig = {
+  apiKey:            "AIzaSyAuhynz3NZxZKGC6VhTxAIs7TGFVl5RdLc",
+  authDomain:        "olive-young-3dfb2.firebaseapp.com",
+  projectId:         "olive-young-3dfb2",
+  storageBucket:     "olive-young-3dfb2.firebasestorage.app",
+  messagingSenderId: "618167367744",
+  appId:             "1:618167367744:web:a83d4fa8b26845f708c7a5"
+};
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+/* ────────────── Firestore 集合參照 ────────────── */
+const accountsCol = collection(db, "oy_accounts");     // 每筆帳號一份 Document
+const settingsRef = doc(db, "oy_settings", "config");  // actNames 等設定
+
+/* ────────────── 常數 ────────────── */
+const LEVELS = [
+  { label:"Baby Pink", cls:"lv-0" },
+  { label:"Green",     cls:"lv-1" },
+  { label:"Black",     cls:"lv-2" },
+  { label:"Gold",      cls:"lv-3" },
+];
+const Q_OPTS = [
+  { label:"未發送", cls:"s-none"  },
+  { label:"已發送", cls:"s-given" },
+  { label:"已使用", cls:"s-used"  },
+];
+const ACT_OPTS = [
+  { label:"未領取", cls:"s-none"  },
+  { label:"已領取", cls:"s-got"   },
+  { label:"已使用", cls:"s-used"  },
+];
+const BG_OPTS = [
+  { label:"未發送", cls:"s-none"  },
+  { label:"已發送", cls:"s-given" },
+];
+const BU_OPTS = [
+  { label:"未使用", cls:"s-none" },
+  { label:"已使用", cls:"s-used" },
+];
+
+/* ────────────── 狀態 ────────────── */
+let records      = [];
+let actNames     = ["活動一", "活動二", "活動三"];
+let actCollapsed = true;
+let searchKw     = "";
+let editingId    = null;
+
+/* ────────────── 設定讀寫 ────────────── */
+async function loadSettings() {
+  try {
+    const snap = await getDoc(settingsRef);
+    if (snap.exists()) {
+      const d = snap.data();
+      if (d.actNames && d.actNames.length === 3) actNames = d.actNames;
+    }
+  } catch (e) {
+    console.warn("[loadSettings]", e);
+  }
+  syncActLabels();
+}
+
+async function saveSettings() {
+  try {
+    await setDoc(settingsRef, { actNames }, { merge: true });
+  } catch (e) {
+    console.warn("[saveSettings]", e);
+  }
+}
+
+/* ────────────── 即時同步監聽 (onSnapshot) ────────────── */
+function setupListener() {
+  const q = query(accountsCol, orderBy("id"));
+  onSnapshot(q, snapshot => {
+    records = snapshot.docs.map(d => d.data());
+    renderTable();
+  }, err => {
+    console.error("[onSnapshot]", err);
+    showToast("⚠️ 無法連線 Firestore，請確認網路");
+  });
+}
+
+/* ────────────── Helpers ────────────── */
+const rec     = id => records.find(r => r.id === id);
+const esc     = s  => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const escAttr = s  => String(s).replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+const accDoc  = id => doc(accountsCol, String(id));   // Firestore doc 參照
+
+/* ────────────── Select HTML 產生器 ────────────── */
+function mkSel(opts, val, onChangeFn, extra = "") {
+  const cls    = opts[val]?.cls ?? "s-none";
+  const opHTML = opts.map((o, i) =>
+    `<option value="${i}" ${i === val ? "selected" : ""}>${o.label}</option>`
+  ).join("");
+  return `<select class="sel ${cls}" onchange="${onChangeFn}" ${extra}>${opHTML}</select>`;
+}
+function levelSel(id, val) { return mkSel(LEVELS,   val, `updateLevel(${id},this)`); }
+function qSel(id, qi, val) { return mkSel(Q_OPTS,   val, `updateQ(${id},${qi},this)`); }
+function actSel(id, ai, val){ return mkSel(ACT_OPTS, val, `updateAct(${id},${ai},this)`); }
+function bgSel(id, val)    { return mkSel(BG_OPTS,  val, `updateBG(${id},this)`); }
+function buSel(id, val)    { return mkSel(BU_OPTS,  val, `updateBU(${id},this)`); }
+
+/* ────────────── 生日快到判斷 ────────────── */
+function bdayStatus(bday) {
+  if (!bday || !/^\d{1,2}\/\d{1,2}$/.test(bday)) return "normal";
+  const [mm, dd] = bday.split("/").map(Number);
+  if (!mm || !dd || mm < 1 || mm > 12 || dd < 1 || dd > 31) return "normal";
+  const now  = new Date();
+  let target = new Date(now.getFullYear(), mm - 1, dd);
+  if (target < now) target = new Date(now.getFullYear() + 1, mm - 1, dd);
+  return Math.ceil((target - now) / 86400000) <= 10 ? "soon" : "normal";
+}
+
+/* ────────────── 活動名稱同步到表頭 ────────────── */
+function syncActLabels() {
+  actNames.forEach((name, idx) => {
+    const el = document.getElementById(`aln-${idx}`);
+    if (el && el.tagName === "SPAN") el.textContent = name;
+  });
+}
+
+/* ────────────── 渲染表格 ────────────── */
+function getFiltered() {
+  const kw = searchKw.trim().toLowerCase();
+  return kw ? records.filter(r => r.account.toLowerCase().includes(kw)) : records;
+}
+
+function renderTable() {
+  const tbody = document.getElementById("tbody");
+  const list  = getFiltered();
+  document.getElementById("count-badge").textContent =
+    `${list.length} / ${records.length} 筆`;
+
+  if (list.length === 0) {
+    tbody.innerHTML = `
+      <tr><td colspan="16" class="empty-cell">
+        <div class="empty-icon">🌿</div>
+        <div class="empty-txt">${records.length === 0
+          ? "目前沒有帳號，請由上方新增"
+          : "找不到符合的帳號"}</div>
+      </td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = list.map((r, i) => {
+    const isEdit = r.id === editingId;
+    const isSoon = bdayStatus(r.bday ?? "") === "soon";
+
+    const accountCell = isEdit
+      ? `<div class="account-wrap">
+           <input class="account-inp" id="edit-inp" value="${escAttr(r.account)}"
+             onkeydown="handleEditKey(event,${r.id})" />
+         </div>`
+      : `<div class="account-wrap">
+           <span class="account-txt">${esc(r.account)}</span>
+           <button class="btn-copy-acc" id="copy-btn-${r.id}"
+             data-account="${escAttr(r.account)}"
+             onclick="copyAccount(this.dataset.account,${r.id})"
+             title="複製帳號">📋</button>
+         </div>`;
+
+    const editBtn = isEdit
+      ? `<button class="abtn abtn-save" onclick="saveEdit(${r.id})" title="儲存">💾</button>`
+      : `<button class="abtn abtn-edit" onclick="startEdit(${r.id})" title="編輯">✏️</button>`;
+
+    const bdayVal  = escAttr(r.bday ?? "");
+    const bdayCell = `
+      <div class="bday-wrap">
+        <input class="bday-inp" type="text" maxlength="5"
+          placeholder="MM/DD" value="${bdayVal}"
+          onchange="updateBday(${r.id},this.value)"
+          title="生日輸入" />
+        ${isSoon ? `<span style="font-size:11px;color:#e85d8a;font-weight:600;">快到了</span>` : ""}
+      </div>`;
+
+    return `
+    <tr data-id="${r.id}" class="${isSoon ? "bday-soon" : ""}">
+      <td class="td-no">${String(i + 1).padStart(2, "0")}</td>
+      <td class="td-account">${accountCell}</td>
+      <td>${levelSel(r.id, r.level)}</td>
+      <td><input class="pts" type="number" step="0.01" min="0" value="${r.points}"
+          onchange="updateField(${r.id},'points',parseFloat(this.value)||0)" /></td>
+      <td><input class="pts" type="number" step="0.01" min="0" value="${r.refund}"
+          onchange="updateField(${r.id},'refund',parseFloat(this.value)||0)" /></td>
+      <td class="td-spacer"></td>
+      ${r.act.map((a, ai) => `<td class="act-col">${actSel(r.id, ai, a)}</td>`).join("")}
+      ${r.q.map((q, qi)   => `<td>${qSel(r.id, qi, q)}</td>`).join("")}
+      <td>${bdayCell}</td>
+      <td>${bgSel(r.id, r.bg)}</td>
+      <td>${buSel(r.id, r.bu)}</td>
+      <td>
+        <div class="act-btns">
+          ${editBtn}
+          <button class="abtn abtn-del" onclick="delRow(${r.id})" title="刪除">🗑️</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join("");
+
+  if (editingId !== null) {
+    const inp = document.getElementById("edit-inp");
+    if (inp) { inp.focus(); inp.select(); }
+  }
+}
+
+/* ────────────── Toast 提示 ────────────── */
+let _tt = null;
+function showToast(msg) {
+  const el = document.getElementById("toast");
+  el.textContent = msg; el.classList.add("show");
+  clearTimeout(_tt);
+  _tt = setTimeout(() => el.classList.remove("show"), 2200);
+}
+
+/* ══════════════════════════════════════════
+   以下函式全部掛到 window，讓 HTML inline
+   事件處理器（onclick / onchange）能呼叫到
+   ══════════════════════════════════════════ */
+
+/* ── 展開/收合活動欄 ── */
+window.toggleAct = function() {
+  actCollapsed = !actCollapsed;
+  document.getElementById("main-table").classList.toggle("act-collapsed", actCollapsed);
+  document.getElementById("toggle-btn").textContent = actCollapsed ? "▶" : "◀";
+};
+
+/* ── 活動名稱可編輯 ── */
+window.editActName = function(idx) {
+  const el  = document.getElementById(`aln-${idx}`);
+  const cur = actNames[idx];
+  const inp = document.createElement("input");
+  inp.className = "act-lbl-inp";
+  inp.value = cur;
+  el.replaceWith(inp);
+  inp.focus(); inp.select();
+
+  const commit = () => {
+    const val    = inp.value.trim() || cur;
+    actNames[idx] = val;
+    saveSettings();
+    const span       = document.createElement("span");
+    span.className   = "act-lbl";
+    span.id          = `aln-${idx}`;
+    span.textContent = val;
+    span.onclick     = () => window.editActName(idx);
+    inp.replaceWith(span);
+  };
+  inp.addEventListener("blur", commit);
+  inp.addEventListener("keydown", e => {
+    if (e.key === "Enter")  inp.blur();
+    if (e.key === "Escape") { inp.value = cur; inp.blur(); }
+  });
+};
+
+/* ── 複製帳號 ── */
+window.copyAccount = async function(account, id) {
+  const markOk = () => {
+    const btn = document.getElementById(`copy-btn-${id}`);
+    if (btn) {
+      btn.textContent = "✔️"; btn.classList.add("ok");
+      setTimeout(() => { btn.textContent = "📋"; btn.classList.remove("ok"); }, 1600);
+    }
+    showToast("📋 帳號已複製");
+  };
+  if (navigator.clipboard?.writeText) {
+    try { await navigator.clipboard.writeText(account); markOk(); return; } catch {}
+  }
+  const ta = document.createElement("textarea");
+  ta.value = account;
+  ta.style.cssText = "position:fixed;top:0;left:0;opacity:0;pointer-events:none";
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  document.execCommand("copy") ? markOk() : showToast("❌ 複製失敗");
+  document.body.removeChild(ta);
+};
+
+/* ── 編輯模式 ── */
+window.startEdit = function(id) {
+  editingId = id;
+  renderTable();
+};
+
+window.saveEdit = async function(id) {
+  const inp = document.getElementById("edit-inp");
+  if (inp) {
+    const val = inp.value.trim();
+    if (val && rec(id)) {
+      rec(id).account = val;
+      try {
+        await updateDoc(accDoc(id), { account: val });
+        showToast("💾 帳號已更新");
+      } catch (e) {
+        console.error("[saveEdit]", e);
+        showToast("❌ 更新失敗，請重試");
+      }
+    }
+  }
+  editingId = null;
+  renderTable();
+};
+
+window.handleEditKey = function(e, id) {
+  if (e.key === "Enter")  window.saveEdit(id);
+  if (e.key === "Escape") { editingId = null; renderTable(); }
+};
+
+/* ── 新增帳號 ── */
+window.addRow = async function() {
+  const inp     = document.getElementById("new-account");
+  const account = inp.value.trim();
+  if (!account) { showToast("⚠️ 請輸入帳號"); return; }
+
+  // 使用時間戳記作為唯一 ID（數字，可排序）
+  const id     = Date.now();
+  const record = {
+    id, account, level: 3, points: 0, refund: 0,
+    act: [0, 0, 0], q: [0, 0, 0, 0], bday: "", bg: 0, bu: 0
+  };
+
+  try {
+    await setDoc(accDoc(id), record);
+    inp.value = "";
+    inp.focus();
+    showToast("✅ 帳號已新增");
+  } catch (e) {
+    console.error("[addRow]", e);
+    showToast("❌ 新增失敗，請重試");
+  }
+};
+
+/* ── 刪除帳號 ── */
+window.delRow = async function(id) {
+  if (!confirm("確定要刪除這筆資料嗎？")) return;
+  try {
+    await deleteDoc(accDoc(id));
+    if (editingId === id) editingId = null;
+    showToast("🗑️ 帳號已刪除");
+  } catch (e) {
+    console.error("[delRow]", e);
+    showToast("❌ 刪除失敗，請重試");
+  }
+};
+
+/* ── 更新會員等級 ── */
+window.updateLevel = async function(id, sel) {
+  const val = +sel.value;
+  if (rec(id)) rec(id).level = val;
+  sel.className = `sel ${LEVELS[val].cls}`;
+  try { await updateDoc(accDoc(id), { level: val }); }
+  catch (e) { console.error("[updateLevel]", e); }
+};
+
+/* ── 更新季度點數活動 ── */
+window.updateQ = async function(id, qi, sel) {
+  const val = +sel.value;
+  const r   = rec(id);
+  if (r) { r.q[qi] = val; }
+  sel.className = `sel ${Q_OPTS[val].cls}`;
+  try { await updateDoc(accDoc(id), { q: r ? r.q : [0,0,0,0] }); }
+  catch (e) { console.error("[updateQ]", e); }
+};
+
+/* ── 更新活動紀錄 ── */
+window.updateAct = async function(id, ai, sel) {
+  const val = +sel.value;
+  const r   = rec(id);
+  if (r) { r.act[ai] = val; }
+  sel.className = `sel ${ACT_OPTS[val].cls}`;
+  try { await updateDoc(accDoc(id), { act: r ? r.act : [0,0,0] }); }
+  catch (e) { console.error("[updateAct]", e); }
+};
+
+/* ── 更新生日發送狀態 ── */
+window.updateBG = async function(id, sel) {
+  const val = +sel.value;
+  if (rec(id)) rec(id).bg = val;
+  sel.className = `sel ${BG_OPTS[val].cls}`;
+  try { await updateDoc(accDoc(id), { bg: val }); }
+  catch (e) { console.error("[updateBG]", e); }
+};
+
+/* ── 更新生日使用狀態 ── */
+window.updateBU = async function(id, sel) {
+  const val = +sel.value;
+  if (rec(id)) rec(id).bu = val;
+  sel.className = `sel ${BU_OPTS[val].cls}`;
+  try { await updateDoc(accDoc(id), { bu: val }); }
+  catch (e) { console.error("[updateBU]", e); }
+};
+
+/* ── 更新數字欄位（點數 / 退款）── */
+window.updateField = async function(id, field, val) {
+  if (rec(id)) rec(id)[field] = val;
+  try { await updateDoc(accDoc(id), { [field]: val }); }
+  catch (e) { console.error("[updateField]", e); }
+};
+
+/* ── 更新生日 ── */
+window.updateBday = async function(id, val) {
+  const bday = val.trim();
+  if (rec(id)) rec(id).bday = bday;
+  renderTable(); // 立即更新「快到了」高亮
+  try { await updateDoc(accDoc(id), { bday }); }
+  catch (e) { console.error("[updateBday]", e); }
+};
+
+/* ────────────── 搜尋輸入 ────────────── */
+document.getElementById("search-input").addEventListener("input", e => {
+  searchKw = e.target.value;
+  renderTable();
+});
+document.getElementById("new-account").addEventListener("keydown", e => {
+  if (e.key === "Enter") window.addRow();
+});
+
+/* ────────────── 一鍵搬家：localStorage → Firestore ────────────── */
+window.migrateFromLocal = async function() {
+  // 1. 讀取 localStorage
+  const raw = localStorage.getItem("oy_tracker_v1");
+  if (!raw) {
+    showToast("⚠️ 找不到本機資料（oy_tracker_v1），可能已清除或從未存過");
+    return;
+  }
+
+  let data;
+  try { data = JSON.parse(raw); }
+  catch { showToast("❌ 本機資料格式錯誤，無法解析"); return; }
+
+  const localRecords  = data.records  || [];
+  const localActNames = data.actNames || ["活動一", "活動二", "活動三"];
+  const localNextId   = data.nextId   || 1;
+
+  if (localRecords.length === 0) {
+    showToast("⚠️ 本機資料的 records 是空的，沒有可搬移的帳號");
+    return;
+  }
+
+  if (!confirm(
+    `找到 ${localRecords.length} 筆帳號資料。\n` +
+    `確定要全部搬移到 Firebase 嗎？\n` +
+    `（不會覆蓋雲端已有的同 ID 資料以外的帳號）`
+  )) return;
+
+  // 鎖定按鈕避免重複點擊
+  const btn = document.getElementById("btn-migrate");
+  if (btn) { btn.disabled = true; btn.textContent = "搬家中..."; }
+  showToast("🚚 搬家中，請稍候...");
+
+  try {
+    // 2. 寫入 actNames + nextId 到 oy_settings/config
+    await setDoc(settingsRef, { actNames: localActNames, nextId: localNextId }, { merge: true });
+    actNames = localActNames;
+    syncActLabels();
+
+    // 3. 以 Firestore writeBatch 批次寫入 records
+    //    Firestore 每批次上限 500 筆，超過時自動分批
+    const BATCH_SIZE = 400;
+    let batchCount   = 0;
+
+    for (let start = 0; start < localRecords.length; start += BATCH_SIZE) {
+      const chunk = localRecords.slice(start, start + BATCH_SIZE);
+      const batch = writeBatch(db);
+
+      chunk.forEach(r => {
+        // 確保每筆資料都有完整欄位（對舊版資料做防呆補全）
+        const record = {
+          id:      r.id      ?? Date.now() + Math.random(),
+          account: r.account ?? "",
+          level:   r.level   ?? 3,
+          points:  r.points  ?? 0,
+          refund:  r.refund  ?? 0,
+          act:     Array.isArray(r.act)  && r.act.length  === 3 ? r.act  : [0, 0, 0],
+          q:       Array.isArray(r.q)    && r.q.length    === 4 ? r.q    : [0, 0, 0, 0],
+          bday:    r.bday ?? "",
+          bg:      r.bg   ?? 0,
+          bu:      r.bu   ?? 0,
+        };
+        batch.set(doc(accountsCol, String(record.id)), record);
+      });
+
+      await batch.commit();
+      batchCount++;
+    }
+
+    showToast(`✅ 搬家完成！共 ${localRecords.length} 筆已上傳 Firebase，請重新整理網頁`);
+
+    // 搬完後隱藏按鈕（避免誤觸重複搬）
+    if (btn) { btn.style.display = "none"; }
+
+  } catch (e) {
+    console.error("[migrateFromLocal]", e);
+    showToast("❌ 搬家失敗：" + (e.message || "未知錯誤"));
+    if (btn) { btn.disabled = false; btn.textContent = "🚚 一鍵搬家"; }
+  }
+};
+
+/* ────────────── 初始化 ────────────── */
+await loadSettings();   // 先讀 actNames
+setupListener();        // 啟動即時監聽（會立刻觸發一次 renderTable）
+
+</script>
+</body>
+</html>
