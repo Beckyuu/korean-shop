@@ -29,6 +29,7 @@
       color: var(--text);
       font-size: 14px;
       min-height: 100vh;
+      overflow-x: clip; /* 防止橫向溢位造成手勢縮小時旁邊留空白 */
     }
 
     /* --- Header --- */
@@ -338,12 +339,26 @@
     tr.bday-soon:hover td.td-no,
     tr.bday-soon:hover td.td-account { background: #ffe4e6; }
 
-    /* ── 手機版：僅加大觸控間距，維持原本表格外觀 ── */
+    /* ── 手機版：加大觸控間距 + 帳號欄縮窄截斷 ── */
     @media (max-width: 768px) {
       .sel  { min-height: 42px; }
       .abtn { width: 36px; height: 36px; }
       .act-btns { gap: 8px; }
       .add-input { font-size: 16px; } /* 防 iOS 自動放大 */
+
+      /* 帳號欄：縮窄至 120px，超出文字用 … 截斷 */
+      td.td-account {
+        min-width: 0;
+        max-width: 120px;
+        width: 120px;
+      }
+      .account-wrap { flex-wrap: nowrap; gap: 4px; overflow: hidden; }
+      .account-txt  {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 72px; /* 帳號文字最寬，剩餘給複製按鈕 */
+      }
     }
   </style>
 </head>
