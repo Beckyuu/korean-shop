@@ -2347,7 +2347,7 @@
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
   import {
-    getFirestore, collection, getDocs, query, orderBy
+    getFirestore, collection, getDocs, getDoc, doc, query, orderBy
   } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
   // ────────────────────────────────────────────
@@ -2398,6 +2398,7 @@ const firebaseConfig = {
   let cart             = [];
   let currentPromoCode = '';
   let currentDiscount  = 0;
+  let isOrderEnded     = false;   // 從 Firestore settings/global 讀取
 
   // === 🔍 聰明搜尋 ===
   let _searchTimer = null;
@@ -2506,7 +2507,25 @@ const firebaseConfig = {
     }
 
     try {
-      // 依建立時間降冪取全部，前端過濾「上架」（避免 Firestore 複合索引需求）
+      // 1. 先讀取全域設定（結單開關）
+      try {
+        const settingsSnap = await getDoc(doc(db, 'settings', 'global'));
+        if (settingsSnap.exists()) {
+          isOrderEnded = settingsSnap.data().isOrderEnded === true;
+        }
+      } catch (settingsErr) {
+        console.warn('[Firebase] settings/global 讀取失敗，預設開放下單', settingsErr);
+        isOrderEnded = false;
+      }
+
+      // 2. 進站公告彈窗
+      if (isOrderEnded) {
+        const overlay = document.getElementById('ended-notice-overlay');
+        overlay.style.display = 'flex';
+        setTimeout(() => overlay.classList.add('show'), 10);
+      }
+
+      // 3. 依建立時間降冪取全部，前端過濾「上架」（避免 Firestore 複合索引需求）
       const q    = query(collection(db, 'products'), orderBy('createdAt', 'desc'));
       const snap = await getDocs(q);
 
@@ -2608,11 +2627,8 @@ const firebaseConfig = {
       }
 
       // ── 結單判斷 ──
-      const cutOffTime = new Date('2026-04-06T08:00:00');
-      const isEnded    = new Date() >= cutOffTime;
-
       let btnHtml = '';
-      if (isEnded) {
+      if (isOrderEnded) {
         btnHtml = `<button class="btn-add" style="background-color:#ccc;border-color:#ccc;cursor:not-allowed;max-width:200px;" disabled>已結束</button>`;
       } else if (isAllOutOfStock) {
         btnHtml = `<button class="btn-add" style="background-color:#ccc;border-color:#ccc;cursor:not-allowed;max-width:200px;" disabled>已售完</button>`;
@@ -2620,9 +2636,10 @@ const firebaseConfig = {
         btnHtml = `<button class="btn-add" onclick="openQuickShop(${globalIdx})" style="max-width:200px;">加入購物車</button>`;
       }
 
-      const imgOpacity  = (isAllOutOfStock || isEnded) ? 'opacity:0.75;filter:grayscale(25%) brightness(0.95);' : '';
-      const clickEvent  = (isAllOutOfStock || isEnded) ? '' : `onclick="openQuickShop(${globalIdx})"`;
-      const cursorStyle = (isAllOutOfStock || isEnded) ? 'default' : 'pointer';
+      const isDimmed    = isAllOutOfStock || isOrderEnded;
+      const imgOpacity  = isDimmed ? 'opacity:0.75;filter:grayscale(25%) brightness(0.95);' : '';
+      const clickEvent  = isDimmed ? '' : `onclick="openQuickShop(${globalIdx})"`;
+      const cursorStyle = isDimmed ? 'default' : 'pointer';
 
       const card = document.createElement('div');
       card.className = 'product-card';
@@ -2649,8 +2666,7 @@ const firebaseConfig = {
   let _currentVariants    = [];
 
   function openQuickShop(index) {
-    const cutOffTime = new Date('2026-04-06T08:00:00');
-    if (new Date() >= cutOffTime) { alert('本批次已結單，感謝您的熱情支持。'); return; }
+    if (isOrderEnded) { alert('本批次已結單，感謝您的熱情支持。'); return; }
 
     const product = allProductsData[index];
     currentQsIndex = index;
@@ -2929,8 +2945,7 @@ const firebaseConfig = {
   }
 
   function checkoutViaLine() {
-    const cutOffTime = new Date('2026-04-06T08:00:00');
-    if (new Date() >= cutOffTime) { alert('本批次已結單，感謝您的熱情支持。'); return; }
+    if (isOrderEnded) { alert('本批次已結單，感謝您的熱情支持。'); return; }
     if (cart.length === 0) return;
 
     const shippingRadios = document.getElementsByName('shipping');
@@ -3056,15 +3071,7 @@ const firebaseConfig = {
     if (wrapper && !wrapper.contains(e.target)) closeCustomVariantSelect();
   });
 
-  // === 進站結單公告 ===
-  document.addEventListener('DOMContentLoaded', function() {
-    const cutOff = new Date('2026-04-06T08:00:00');
-    if (new Date() >= cutOff) {
-      const overlay = document.getElementById('ended-notice-overlay');
-      overlay.style.display = 'flex';
-      setTimeout(() => overlay.classList.add('show'), 10);
-    }
-  });
+  // 進站公告已在 fetchProducts() 讀取 settings/global 後統一觸發
 
   function closeEndedNotice() {
     const overlay = document.getElementById('ended-notice-overlay');
