@@ -2361,6 +2361,7 @@
 
       // === 🔒 手機版背景鎖定大神器 ===
       let savedScrollPosition = 0;
+      let isOrderEnded = false;
 
       function freezeBackground() {
         savedScrollPosition = window.scrollY;
@@ -2499,8 +2500,12 @@
         const container = document.getElementById("product-list");
 
         try {
-          // 讀取分類清單
-          const catSnap = await getDoc(doc(db, 'settings', 'categories'));
+          // 讀取全域設定（結單狀態 + 分類）
+          const [globalSnap, catSnap] = await Promise.all([
+            getDoc(doc(db, 'settings', 'global')),
+            getDoc(doc(db, 'settings', 'categories')),
+          ]);
+          isOrderEnded = globalSnap.exists() ? (globalSnap.data().isOrderEnded === true) : false;
           const catList = catSnap.exists() ? (catSnap.data().list || []) : [];
           Object.keys(categoryMap).forEach(k => { if (k !== 'all') delete categoryMap[k]; });
           catList.forEach(name => { categoryMap[name] = name; });
@@ -2559,6 +2564,13 @@
 
           renderCategoryButtons();
           renderProducts(allProductsData);
+
+          // 若 Firebase 標記為結單，顯示進站公告
+          if (isOrderEnded) {
+            const overlay = document.getElementById("ended-notice-overlay");
+            overlay.style.display = "flex";
+            setTimeout(() => overlay.classList.add("show"), 10);
+          }
         } catch (error) {
           console.error(error);
           loading.style.display = "none";
@@ -2639,9 +2651,8 @@
             else if (product.tag === "SALE") badgeHtml = `<div class="badge sale">SALE</div>`;
           }
 
-          // 🌟 結單時間
-          const cutOffTime = new Date("2026-04-06T08:00:00");
-          const isEnded = new Date() >= cutOffTime;
+          // 🌟 結單狀態（從 Firebase 讀取）
+          const isEnded = isOrderEnded;
 
           let btnHtml = "";
           if (isEnded) {
@@ -2680,8 +2691,7 @@
 
       // 🌟 2. 打開快速購物視窗 (自動顯示變更價格)
       function openQuickShop(index) {
-        const cutOffTime = new Date("2026-04-06T08:00:00");
-        if (new Date() >= cutOffTime) {
+        if (isOrderEnded) {
           alert("本批次已結單，感謝您的熱情支持。");
           return;
         }
@@ -2987,8 +2997,7 @@
       }
 
       function checkoutViaLine() {
-        const cutOffTime = new Date("2026-04-06T08:00:00");
-        if (new Date() >= cutOffTime) {
+        if (isOrderEnded) {
           alert("本批次已結單，感謝您的熱情支持。");
           return;
         }
@@ -3162,16 +3171,6 @@
 
       loadCart();
       fetchProducts();
-
-      // === 進站結單公告 ===
-      document.addEventListener("DOMContentLoaded", function () {
-        const cutOff = new Date("2026-04-06T08:00:00");
-        if (new Date() >= cutOff) {
-          const overlay = document.getElementById("ended-notice-overlay");
-          overlay.style.display = "flex";
-          setTimeout(() => overlay.classList.add("show"), 10);
-        }
-      });
 
       function closeEndedNotice() {
         const overlay = document.getElementById("ended-notice-overlay");
