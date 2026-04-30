@@ -1296,8 +1296,8 @@
       }
 
       .custom-variant-display.open {
-        border-color: var(--price-color);
-        box-shadow: 0 2px 8px rgba(212, 163, 115, 0.15);
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
       }
 
       /* 箭頭圖示 */
@@ -1321,16 +1321,21 @@
       /* 下拉清單容器 */
       .custom-variant-options {
         display: none;
-        position: fixed;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
         background: #fff;
         border: 1px solid var(--accent);
-        border-radius: 8px;
-        z-index: 10100;
+        border-top: none;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+        z-index: 600;
         max-height: 260px;
         overflow-y: auto;
         overscroll-behavior: contain;
         -webkit-overflow-scrolling: touch;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
       }
 
       .custom-variant-options.open {
@@ -3171,27 +3176,6 @@
       let _currentVariantIndex = 0;
       let _currentVariants = [];
 
-      function _positionVariantDropdown() {
-        const display = document.getElementById('qs-variant-display');
-        const options = document.getElementById('qs-variant-options');
-        if (!display || !options) return;
-        const rect = display.getBoundingClientRect();
-        const gap = 4;
-        const spaceBelow = window.innerHeight - rect.bottom - gap - 10;
-        const spaceAbove = rect.top - gap - 10;
-        const maxH = Math.min(260, Math.max(spaceBelow, spaceAbove, 120));
-        options.style.maxHeight = maxH + 'px';
-        options.style.left  = rect.left + 'px';
-        options.style.width = rect.width + 'px';
-        if (spaceBelow >= 120 || spaceBelow >= spaceAbove) {
-          options.style.top    = (rect.bottom + gap) + 'px';
-          options.style.bottom = '';
-        } else {
-          options.style.top    = (rect.top - gap - maxH) + 'px';
-          options.style.bottom = '';
-        }
-      }
-
       function toggleCustomVariantSelect() {
         const display = document.getElementById('qs-variant-display');
         const options = document.getElementById('qs-variant-options');
@@ -3200,7 +3184,14 @@
           options.classList.remove('open');
           display.classList.remove('open');
         } else {
-          _positionVariantDropdown();
+          // 計算 trigger 下方到 modal 底部的剩餘空間，動態調整 max-height
+          const modalContent = document.querySelector('.quick-shop-content');
+          if (modalContent && display) {
+            const modalRect  = modalContent.getBoundingClientRect();
+            const triggerRect = display.getBoundingClientRect();
+            const spaceBelow = modalRect.bottom - triggerRect.bottom - 12;
+            options.style.maxHeight = Math.min(Math.max(spaceBelow, 120), 260) + 'px';
+          }
           options.classList.add('open');
           display.classList.add('open');
         }
@@ -3275,13 +3266,6 @@
         overlay.classList.remove("show");
         setTimeout(() => { overlay.style.display = "none"; }, 400);
       }
-
-      // modal 滾動或視窗 resize 時，關閉規格下拉選單
-      document.querySelector('.quick-shop-content').addEventListener('scroll', closeCustomVariantSelect);
-      window.addEventListener('resize', () => {
-        const options = document.getElementById('qs-variant-options');
-        if (options && options.classList.contains('open')) _positionVariantDropdown();
-      });
 
       // 因為 type="module" 的 script 是區域作用域，需將 HTML onclick 用到的函數掛到 window
       Object.assign(window, {
