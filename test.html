@@ -2604,7 +2604,7 @@
           // 3. 決定要把什麼價格印在畫面上
           if (isPriceRange) {
             // 有價差：顯示價格區間 (例如: NT$ 295 - NT$ 888)
-            priceHtml = `<span class="price" style="color: #d65a5a; font-weight: 500;">NT$ ${minPrice} - NT$ ${maxPrice}</span>`;
+            priceHtml = `<span class="price">NT$ ${minPrice} - NT$ ${maxPrice}</span>`;
           } else {
             // 沒價差：維持原本的顯示方式 (單一價格，或原價畫刪除線)
             if (product.vipPriceStr) {
