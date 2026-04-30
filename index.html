@@ -2344,9 +2344,24 @@
       </div>
     </div>
 
-<script>
+<script type="module">
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+      import { getFirestore, collection, getDocs, doc, getDoc, query, where, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyAWWzDwfnPcPYXP7-yi10iQPq_wriZNUJg",
+        authDomain: "minashop-c089a.firebaseapp.com",
+        projectId: "minashop-c089a",
+        storageBucket: "minashop-c089a.firebasestorage.app",
+        messagingSenderId: "201093013608",
+        appId: "1:201093013608:web:8b4e6b0f5506ca437fdbdd"
+      };
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
       // === 🔒 手機版背景鎖定大神器 ===
       let savedScrollPosition = 0;
+      let isOrderEnded = false;
 
       function freezeBackground() {
         savedScrollPosition = window.scrollY;
@@ -2364,33 +2379,6 @@
         window.scrollTo(0, savedScrollPosition);
       }
       // ===========================================
-
-      const GOOGLE_SHEET_CSV_URL =
-        "https://docs.google.com/spreadsheets/d/e/2PACX-1vS_Cy5OSihu86kbG6c2iGLRUFSSVNnYuG_yanPRNuIF65KtJ_K9r-kXuz1IdWAbxnwfmvAWvWDjlywe/pub?output=csv";
-
-      function parseCSVLine(str) {
-        const result = [];
-        let start = 0;
-        let inQuotes = false;
-        for (let i = 0; i < str.length; i++) {
-          if (str[i] === '"') {
-            inQuotes = !inQuotes;
-          } else if (str[i] === "," && !inQuotes) {
-            let field = str.substring(start, i).trim();
-            if (field.startsWith('"') && field.endsWith('"')) {
-              field = field.substring(1, field.length - 1).replace(/""/g, '"');
-            }
-            result.push(field);
-            start = i + 1;
-          }
-        }
-        let lastField = str.substring(start).trim();
-        if (lastField.startsWith('"') && lastField.endsWith('"')) {
-          lastField = lastField.substring(1, lastField.length - 1).replace(/""/g, '"');
-        }
-        result.push(lastField);
-        return result;
-      }
 
       let allProductsData = [];
       let cart = [];
@@ -2506,67 +2494,55 @@
         updateCartIcon();
       }
 
-      // 🌟 1. 全新的資料讀取 (支援自動拆解多價格規格)
+      // 🌟 1. 從 Firebase Firestore 讀取商品資料
       async function fetchProducts() {
         const loading = document.getElementById("loading");
         const container = document.getElementById("product-list");
 
         try {
-          const response = await fetch(GOOGLE_SHEET_CSV_URL + "&t=" + new Date().getTime());
-          const data = await response.text();
-          const rows = data.split("\n").map((row) => parseCSVLine(row));
-          rows.shift();
+          // 讀取全域設定（結單狀態 + 分類）
+          const [globalSnap, catSnap] = await Promise.all([
+            getDoc(doc(db, 'settings', 'global')),
+            getDoc(doc(db, 'settings', 'categories')),
+          ]);
+          isOrderEnded = globalSnap.exists() ? (globalSnap.data().isOrderEnded === true) : false;
+          const catList = catSnap.exists() ? (catSnap.data().list || []) : [];
+          Object.keys(categoryMap).forEach(k => { if (k !== 'all') delete categoryMap[k]; });
+          catList.forEach(name => { categoryMap[name] = name; });
+
+          // 讀取所有「上架」商品
+          const q = query(collection(db, 'products'), where('status', '==', '上架'));
+          const snapshot = await getDocs(q);
 
           loading.style.display = "none";
           allProductsData = [];
 
-          rows.forEach((row, index) => {
-            if (row.length < 4) return;
+          snapshot.forEach((docSnap) => {
+            const p = docSnap.data();
 
-            const rawSpec = row[1] ? row[1].trim() : "";
-            // E 欄 (row[4])：規格贈品欄，填「貼紙」系統自動顯示 🎁 貼紙
-            const variantGift = row[4] ? row[4].trim() : "";
+            // 將 Firebase 數字型價格轉換為字串，並標記缺貨規格
+            const variants = (p.variants || []).map(v => ({
+              name:  (v.stock === 0) ? `${v.name}(缺)` : (v.name || ""),
+              price: String(v.price || 0),
+              promo: (v.promo != null && v.promo !== "") ? String(v.promo) : "",
+              gift:  v.gift || ""
+            }));
 
-            // 🌟 多規格解析器：把「款式::500::400」拆解成懂價格的物件
-            let parsedVariants = [];
-            if (rawSpec) {
-              const parts = rawSpec.split("|").map(s => s.trim());
-              parts.forEach(p => {
-                if (p.includes("::")) {
-                  const chunks = p.split("::");
-                  parsedVariants.push({
-                    name:  chunks[0] ? chunks[0].trim() : "",
-                    price: (chunks[1] && chunks[1].trim()) ? chunks[1].trim() : (row[2] ? row[2].trim() : "0"),  // fallback C欄
-                    promo: (chunks[2] && chunks[2].trim()) ? chunks[2].trim() : (row[3] ? row[3].trim() : ""),  // fallback D欄
-                    gift:  (chunks[3] && chunks[3].trim()) ? chunks[3].trim() : variantGift                     // fallback E欄
-                  });
-                } else {
-                  // 相容以前沒有設定獨立價格的舊商品
-                  parsedVariants.push({
-                    name: p,
-                    price: row[2] ? row[2].trim() : "0",
-                    promo: row[3] ? row[3].trim() : "",
-                    gift: variantGift
-                  });
-                }
-              });
-            }
-
-            const extraImgs = [row[10], row[11], row[12], row[13], row[14]].map(url => (url ? url.trim() : "")).filter(url => url !== "");
-            const allImages = [row[9] ? row[9].trim() : "", ...extraImgs].filter(url => url !== "");
+            const images = (p.images || []).filter(url => url && url.trim() !== '');
+            const firstVariant = variants[0] || { price: "0", promo: "" };
 
             const product = {
-              id: index,
-              name: row[0] ? row[0].trim() : "Unnamed",
-              variants: parsedVariants, // 存入強大的新規格陣列
-              originalPriceStr: row[2] ? row[2].trim() : "0",
-              vipPriceStr: row[3] ? row[3].trim() : "",
-              imgUrl: row[9] ? row[9].trim() : "",
-              gallery: allImages,
-              tag: row[6] ? row[6].trim().toUpperCase() : "",
-              deadline: row[7] ? row[7].trim() : "",
-              giftDesc: row[8] ? row[8].trim().replace(/\s*<br\s*\/?>\s*/gi, "<br>") : "",
-              category: row[5] ? row[5].trim() : "其他",
+              id: allProductsData.length,
+              name: p.name || "Unnamed",
+              variants,
+              originalPriceStr: firstVariant.price,
+              vipPriceStr:      firstVariant.promo || "",
+              imgUrl:    images[0] || "",
+              gallery:   images,
+              tag:       (p.tag || "").toUpperCase(),
+              deadline:  p.deadline || "",
+              giftDesc:  (p.desc || "").replace(/\s*<br\s*\/?>\s*/gi, "<br>"),
+              category:  p.category || "其他",
             };
 
             allProductsData.push(product);
@@ -2588,10 +2564,17 @@
 
           renderCategoryButtons();
           renderProducts(allProductsData);
+
+          // 若 Firebase 標記為結單，顯示進站公告
+          if (isOrderEnded) {
+            const overlay = document.getElementById("ended-notice-overlay");
+            overlay.style.display = "flex";
+            setTimeout(() => overlay.classList.add("show"), 10);
+          }
         } catch (error) {
           console.error(error);
           loading.style.display = "none";
-          container.innerHTML = '<p style="text-align:center; padding:20px;">載入失敗。</p>';
+          container.innerHTML = '<p style="text-align:center; padding:20px;">載入失敗，請重新整理頁面。</p>';
         }
       }
 
@@ -2668,9 +2651,8 @@
             else if (product.tag === "SALE") badgeHtml = `<div class="badge sale">SALE</div>`;
           }
 
-          // 🌟 結單時間
-          const cutOffTime = new Date("2026-04-06T08:00:00");
-          const isEnded = new Date() >= cutOffTime;
+          // 🌟 結單狀態（從 Firebase 讀取）
+          const isEnded = isOrderEnded;
 
           let btnHtml = "";
           if (isEnded) {
@@ -2709,8 +2691,7 @@
 
       // 🌟 2. 打開快速購物視窗 (自動顯示變更價格)
       function openQuickShop(index) {
-        const cutOffTime = new Date("2026-04-06T08:00:00");
-        if (new Date() >= cutOffTime) {
+        if (isOrderEnded) {
           alert("本批次已結單，感謝您的熱情支持。");
           return;
         }
@@ -3016,8 +2997,7 @@
       }
 
       function checkoutViaLine() {
-        const cutOffTime = new Date("2026-04-06T08:00:00");
-        if (new Date() >= cutOffTime) {
+        if (isOrderEnded) {
           alert("本批次已結單，感謝您的熱情支持。");
           return;
         }
@@ -3192,21 +3172,32 @@
       loadCart();
       fetchProducts();
 
-      // === 進站結單公告 ===
-      document.addEventListener("DOMContentLoaded", function () {
-        const cutOff = new Date("2026-04-06T08:00:00");
-        if (new Date() >= cutOff) {
-          const overlay = document.getElementById("ended-notice-overlay");
-          overlay.style.display = "flex";
-          setTimeout(() => overlay.classList.add("show"), 10);
-        }
-      });
-
       function closeEndedNotice() {
         const overlay = document.getElementById("ended-notice-overlay");
         overlay.classList.remove("show");
         setTimeout(() => { overlay.style.display = "none"; }, 400);
       }
+
+      // 因為 type="module" 的 script 是區域作用域，需將 HTML onclick 用到的函數掛到 window
+      Object.assign(window, {
+        handleSmartSearch,
+        closeQuickShop,
+        forceCloseQuickShop,
+        toggleCustomVariantSelect,
+        closeCustomVariantSelect,
+        updateQsQty,
+        addToCartFromModal,
+        toggleCart,
+        closeCart,
+        checkoutViaLine,
+        closeZoom,
+        openQuickShop,
+        removeFromCart,
+        closeQrModal,
+        applyPromoCode,
+        removePromoCode,
+        closeEndedNotice,
+      });
     </script>
 
     <!-- 進站結單公告 Modal -->
