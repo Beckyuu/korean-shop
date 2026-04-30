@@ -619,39 +619,23 @@
       }
 
       /* === 收單時間提醒 (修正版：短標籤) === */
-      .deadline-badge {
-        /* 1. 讓它像便利貼一樣，字多少、框就多寬 */
-        display: inline-block;
-
-        background-color: #f4e3e3;
-        color: var(--badge-sale);
-
+      /* 截收時間 overlay — 圖片左上角 */
+      .deadline-overlay {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 3;
+        background: rgba(210, 80, 60, 0.88);
+        color: #fff;
         font-family: "Noto Sans TC", sans-serif;
-        font-size: 0.8rem;
+        font-size: 0.72rem;
         font-weight: 500;
-
-        /* 2. 內距改小一點，看起來比較精緻 */
-        padding: 2px 8px;
-
+        letter-spacing: 0.5px;
+        padding: 3px 8px;
         border-radius: 4px;
-        margin-bottom: 8px;
-        letter-spacing: 1px;
-
-        /* 3. 關鍵限制：不讓它超過 90% 寬，避免手機版撐爆 */
-        max-width: 90%;
-
-        /* 4. 如果字真的太長，變成 ... */
         white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      /* 這是新的：隱藏版收單時間 (用來佔位子) */
-      .deadline-badge.empty {
-        visibility: hidden;
-        /* 讓它看不見 */
-        background: transparent;
-        /* 背景變透明 */
+        backdrop-filter: blur(2px);
+        box-shadow: 0 2px 6px rgba(0,0,0,0.18);
       }
 
       /* === 價格 === */
@@ -1028,10 +1012,6 @@
         }
 
         /* 4. 其他文字與標籤間距微調 */
-        #product-list .deadline-badge {
-          margin-bottom: 2px;
-        }
-
         #product-list .desc-text {
           font-size: 0.75rem;
           margin-bottom: 2px;
@@ -2669,11 +2649,11 @@
           card.innerHTML = `
             <div class="img-wrapper" style="cursor: ${cursorStyle}; background: #fff;" ${clickEvent}>
               ${badgeHtml}
+              ${product.deadline ? `<div class="deadline-overlay">⏰ ${product.deadline}</div>` : ''}
               <img src="${product.imgUrl}" alt="${product.name}" loading="lazy" style="${imgOpacity}">
             </div>
             <div class="info">
               <h3 class="name" style="${isAllOutOfStock ? 'color: #999;' : ''}">${product.name}</h3>
-              <span class="deadline-badge ${product.deadline ? '' : 'empty'}">${product.deadline || "空格佔位"}</span>
               ${priceHtml}
               <div class="action-row" style="margin-top: 10px; justify-content: center;">
                   ${btnHtml}
