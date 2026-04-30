@@ -2207,6 +2207,7 @@
                   <input type="number" id="qs-qty" value="1" min="1" readonly />
                   <button onclick="updateQsQty(1)">+</button>
                 </div>
+                <div id="qs-stock-hint" style="font-size:0.72rem;color:#bfa092;text-align:center;margin-top:5px;letter-spacing:0.5px;"></div>
               </div>
             </div>
 
@@ -2318,7 +2319,7 @@
 
 <script type="module">
       import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-      import { getFirestore, collection, getDocs, doc, getDoc, query, where, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+      import { getFirestore, collection, getDocs, doc, getDoc, query, where, orderBy, runTransaction, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
       const firebaseConfig = {
         apiKey: "AIzaSyAWWzDwfnPcPYXP7-yi10iQPq_wriZNUJg",
@@ -2518,7 +2519,8 @@
               name:  (v.stock === 0) ? `${v.name}(缺)` : (v.name || ""),
               price: String(v.price || 0),
               promo: (v.promo != null && v.promo !== "") ? String(v.promo) : "",
-              gift:  v.gift || ""
+              gift:  v.gift || "",
+              stock: (v.stock !== undefined && v.stock !== null) ? v.stock : null,
             }));
 
             const images = (p.images || []).filter(url => url && url.trim() !== '');
@@ -2526,6 +2528,7 @@
 
             const product = {
               id: allProductsData.length,
+              firestoreId: docSnap.id,
               name: p.name || "Unnamed",
               variants,
               originalPriceStr: firstVariant.price,
@@ -2805,6 +2808,7 @@
         }
 
         document.getElementById("qs-qty").value = 1;
+        _updateStockHint();
 
         const modal = document.getElementById("quickShopModal");
         modal.style.display = "flex";
@@ -2826,10 +2830,20 @@
         setTimeout(() => { modal.style.display = "none"; }, 300);
       }
 
+      function _currentMaxQty() {
+        if (_currentVariants.length > 0) {
+          const v = _currentVariants[_currentVariantIndex];
+          if (v && v.stock !== null && v.stock !== undefined) return v.stock;
+        }
+        return Infinity;
+      }
+
       function updateQsQty(change) {
-        const input = document.getElementById("qs-qty");
-        let newVal = parseInt(input.value) + change;
+        const input  = document.getElementById("qs-qty");
+        const maxQty = _currentMaxQty();
+        let newVal   = parseInt(input.value) + change;
         if (newVal < 1) newVal = 1;
+        if (newVal > maxQty) newVal = maxQty;
         input.value = newVal;
       }
 
@@ -2869,12 +2883,15 @@
 
         let priceNum = parseInt(checkoutPriceStr.replace(/[^0-9]/g, ""));
 
+        const hasVariantSelector = wrapperEl.style.display !== "none" && _currentVariants.length > 0;
         const cartItem = {
           name: product.name,
           spec: selectedSpecName,
           price: priceNum,
           qty: qty,
           gift: selectedGift,
+          productId:    product.firestoreId || null,
+          variantIndex: hasVariantSelector ? _currentVariantIndex : 0,
         };
 
         cart.push(cartItem);
@@ -2989,7 +3006,46 @@
         renderCartItems();
       }
 
-      function checkoutViaLine() {
+      // 產生訂單編號 MMDD-XXXX
+      function _generateOrderId() {
+        const now = new Date();
+        const mm   = String(now.getMonth() + 1).padStart(2, '0');
+        const dd   = String(now.getDate()).padStart(2, '0');
+        const pool = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        const rand = Array.from({length: 4}, () => pool[Math.floor(Math.random() * pool.length)]).join('');
+        return `${mm}${dd}-${rand}`;
+      }
+
+      // 以 Firebase Transaction 扣庫存；有不足時拋出錯誤
+      async function _deductStock(cartItems) {
+        const groups = {};
+        for (const item of cartItems) {
+          if (!item.productId) continue;
+          if (!groups[item.productId]) groups[item.productId] = [];
+          groups[item.productId].push(item);
+        }
+        for (const [productId, items] of Object.entries(groups)) {
+          await runTransaction(db, async (transaction) => {
+            const productRef  = doc(db, 'products', productId);
+            const productSnap = await transaction.get(productRef);
+            if (!productSnap.exists()) return;
+            const variants = productSnap.data().variants || [];
+            const updated  = variants.map((v, i) => {
+              const ordered = items.filter(it => it.variantIndex === i);
+              if (!ordered.length) return v;
+              if (v.stock === null || v.stock === undefined) return v; // 無限量，不扣
+              const totalQty = ordered.reduce((s, it) => s + it.qty, 0);
+              if (v.stock < totalQty) {
+                throw new Error(`「${v.name || '規格' + (i+1)}」庫存不足（剩 ${v.stock} 件，欲購 ${totalQty} 件）`);
+              }
+              return { ...v, stock: v.stock - totalQty };
+            });
+            transaction.update(productRef, { variants: updated });
+          });
+        }
+      }
+
+      async function checkoutViaLine() {
         if (isOrderEnded) {
           alert("本批次已結單，感謝您的熱情支持。");
           return;
@@ -2999,71 +3055,93 @@
         const shippingRadios = document.getElementsByName("shipping");
         let selectedShipping = null;
         for (const radio of shippingRadios) {
-          if (radio.checked) {
-            selectedShipping = radio.value;
-            break;
-          }
+          if (radio.checked) { selectedShipping = radio.value; break; }
         }
         if (!selectedShipping) {
           alert("請選擇下單平台 (7-11 賣貨便 or iOPEN Mall)");
           return;
         }
 
-        const now = new Date();
-        const dateStr = `${now.getMonth() + 1}月${now.getDate()}日`;
-        let message = `您好，這是我的訂購清單 (${dateStr})：\n\n`;
+        const checkoutBtn = document.querySelector('.btn-checkout');
+        if (checkoutBtn) { checkoutBtn.disabled = true; checkoutBtn.textContent = '處理中，請稍候…'; }
 
-        let total = 0;
-        cart.forEach((item, index) => {
-          total += item.price * item.qty;
-          let cleanName = item.name.replace(/<br\s*\/?>/gi, " ");
-          let cleanSpec = item.spec ? item.spec.replace(/<br\s*\/?>/gi, " ") : "單一規格";
-          let num = (index + 1).toString().padStart(2, "0");
+        try {
+          // ① 產生訂單編號
+          const orderId = _generateOrderId();
 
-          message += `[${num}] ${cleanName}\n`;
-          message += `- 規格: ${cleanSpec}${item.gift ? ` (贈: ${item.gift})` : ''}\n`;
-          message += `- 數量: ${item.qty} ($${item.price})\n\n`;
-        });
+          // ② 扣庫存（Transaction，庫存不足直接中止）
+          await _deductStock(cart);
 
-        message += `-------------\n`;
+          // ③ 計算金額
+          let total = 0;
+          cart.forEach(item => { total += item.price * item.qty; });
+          let finalTotal = total - currentDiscount;
+          if (finalTotal < 0) finalTotal = 0;
 
-        let finalTotal = total - currentDiscount;
-        if (finalTotal < 0) finalTotal = 0;
+          // ④ 寫入 orders 集合
+          await addDoc(collection(db, 'orders'), {
+            orderId,
+            status:    '待確認',
+            cart:      cart.map(item => ({ ...item })),
+            total:     finalTotal,
+            discount:  currentDiscount,
+            promoCode: currentPromoCode || '',
+            shipping:  selectedShipping,
+            createdAt: serverTimestamp(),
+          });
 
-        if (currentDiscount > 0) {
-          message += `小計: NT$ ${total}\n`;
-          message += `折扣 [${currentPromoCode}]: -$${currentDiscount}\n`;
-          message += `總金額: NT$ ${finalTotal}\n\n`;
-        } else {
-          message += `總金額: NT$ ${total}\n\n`;
+          // ⑤ 組 LINE 訊息（訂單編號在第一行）
+          const now     = new Date();
+          const dateStr = `${now.getMonth() + 1}月${now.getDate()}日`;
+          let message   = `【訂單編號：${orderId}】\n您好，這是我的訂購清單 (${dateStr})：\n\n`;
+
+          cart.forEach((item, index) => {
+            const cleanName = item.name.replace(/<br\s*\/?>/gi, " ");
+            const cleanSpec = item.spec ? item.spec.replace(/<br\s*\/?>/gi, " ") : "單一規格";
+            const num       = (index + 1).toString().padStart(2, "0");
+            message += `[${num}] ${cleanName}\n`;
+            message += `- 規格: ${cleanSpec}${item.gift ? ` (贈: ${item.gift})` : ''}\n`;
+            message += `- 數量: ${item.qty} ($${item.price})\n\n`;
+          });
+
+          message += `-------------\n`;
+          if (currentDiscount > 0) {
+            message += `小計: NT$ ${total}\n折扣 [${currentPromoCode}]: -$${currentDiscount}\n總金額: NT$ ${finalTotal}\n\n`;
+          } else {
+            message += `總金額: NT$ ${total}\n\n`;
+          }
+          if (finalTotal >= 1500) {
+            const finalDeposit = Math.min(Math.round(finalTotal * 0.1 / 100) * 100, 500);
+            message += `(預付定金10%: NT$ ${finalDeposit})\n\n`;
+          }
+          message += `平台: ${selectedShipping}`;
+
+          // ⑥ 跳轉 LINE
+          const lineUrl  = `https://line.me/R/oaMessage/@139gqqwy/?${encodeURIComponent(message)}`;
+          const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+          if (isMobile) {
+            window.location.href = lineUrl;
+          } else {
+            const body       = document.getElementById("qrBody");
+            const qrImgUrl   = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(lineUrl)}`;
+            body.innerHTML   = `
+              <p style="margin-bottom:20px;color:#666;font-size:0.9rem;">
+                訂單已建立：<strong>${orderId}</strong><br>拿起手機掃描 QR Code<br>訂單將自動帶入對話框！
+              </p>
+              <img src="${qrImgUrl}" alt="Order QR Code"
+                   style="width:280px;height:280px;border:1px solid #eee;padding:10px;border-radius:8px;">`;
+            document.getElementById("qrModal").classList.add("show");
+          }
+
+        } catch (err) {
+          console.error('[checkout]', err);
+          alert('結帳失敗：' + err.message);
+          if (checkoutBtn) { checkoutBtn.disabled = false; checkoutBtn.textContent = '傳送至 LINE官方帳號'; }
+          return;
         }
 
-        if (finalTotal >= 1500) {
-          let rawDeposit = finalTotal * 0.1;
-          let finalDeposit = Math.min(Math.round(rawDeposit / 100) * 100, 500);
-          message += `(預付定金10%: NT$ ${finalDeposit})\n\n`;
-        }
-
-        message += `平台: ${selectedShipping}`;
-
-        const lineUrl = `https://line.me/R/oaMessage/@139gqqwy/?${encodeURIComponent(message)}`;
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-        if (isMobile) {
-          window.location.href = lineUrl;
-        } else {
-          const modal = document.getElementById("qrModal");
-          const title = document.getElementById("qrTitle");
-          const body = document.getElementById("qrBody");
-
-          const qrImgUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(lineUrl)}`;
-
-          body.innerHTML = `
-            <p style="margin-bottom:20px; color:#666; font-size:0.9rem;">拿起手機掃描 QR Code<br>訂單將自動帶入對話框！</p>
-            <img src="${qrImgUrl}" alt="Order QR Code" style="width:280px; height:280px; border:1px solid #eee; padding:10px; border-radius: 8px;">`;
-
-          modal.classList.add("show");
-        }
+        if (checkoutBtn) { checkoutBtn.disabled = false; checkoutBtn.textContent = '傳送至 LINE官方帳號'; }
       }
 
       function closeQrModal(event) {
@@ -3117,11 +3195,24 @@
         if (options) options.classList.remove('open');
       }
 
+      function _updateStockHint() {
+        const hint   = document.getElementById('qs-stock-hint');
+        const qtyEl  = document.getElementById('qs-qty');
+        const maxQty = _currentMaxQty();
+        if (!hint) return;
+        if (maxQty === Infinity) {
+          hint.textContent = '';
+        } else {
+          hint.textContent = `剩 ${maxQty} 件`;
+        }
+        // 若目前數量超過庫存，自動截回
+        if (qtyEl && parseInt(qtyEl.value) > maxQty) qtyEl.value = maxQty;
+      }
+
       function _selectVariantOption(vIndex) {
         _currentVariantIndex = vIndex;
         const vObj = _currentVariants[vIndex];
         const selectedTextEl = document.getElementById('qs-variant-selected-text');
-        const displayPrice = vObj.promo ? vObj.promo : vObj.price;
 
         const selD = _getVariantDisplay(vObj.name.includes('(缺)')
           ? { ...vObj, name: vObj.name.replace('(缺)', '').trim() }
@@ -3131,12 +3222,15 @@
           ? `<span>${selD.displayName} (Sold Out)</span>${selGiftHtml}`
           : `<span>${selD.displayName}</span>${selGiftHtml}`;
 
-        // 更新清單內的選中狀態
         document.querySelectorAll('#qs-variant-options .custom-variant-option').forEach((el, idx) => {
           el.classList.toggle('opt-selected', idx === vIndex);
         });
 
+        // 切換規格時數量歸 1，並更新庫存提示
+        const qtyEl = document.getElementById('qs-qty');
+        if (qtyEl) qtyEl.value = 1;
         updateModalPrice(vObj);
+        _updateStockHint();
         closeCustomVariantSelect();
       }
 
