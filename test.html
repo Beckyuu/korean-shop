@@ -2080,27 +2080,9 @@
       </div>
     </header>
 
-    <div class="memo-board">
+    <div class="memo-board" id="memo-board" style="display:none;">
       <span class="memo-title">Notice</span>
-      <ul class="memo-list">
-        <li>本頁商品皆為代購，下單後約 10-15 個工作天寄出。</li>
-        <li>部分熱門品項可能提前缺貨，建議儘早下單。</li>
-
-        <li>
-          選購完成至購物車內點選「 傳送至 LINE官方帳號 」，
-          方便確認訂單與匯款資訊。
-        </li>
-
-        <li>
-          <a
-            href="https://myship.7-11.com.tw/general/detail/GM2508314219264"
-            target="_blank"
-            style="text-decoration: underline; color: #bfa092"
-          >
-            現貨免等專區 (7-11 賣貨便直購) ➝
-          </a>
-        </li>
-      </ul>
+      <ul class="memo-list" id="memo-list"></ul>
     </div>
 
 <div class="search-wrapper">
@@ -2385,6 +2367,22 @@
       let currentPromoCode = "";
       let currentDiscount = 0;
 
+      // === 📋 Notice 公告欄動態渲染 ===
+      function renderNoticeboard(notices) {
+        const board = document.getElementById("memo-board");
+        const ul    = document.getElementById("memo-list");
+        if (!board || !ul) return;
+        if (!notices || notices.length === 0) { board.style.display = "none"; return; }
+        ul.innerHTML = notices.map(item => {
+          if (item.link) {
+            return `<li><a href="${item.link}" target="_blank"
+                       style="text-decoration:underline;color:#bfa092">${item.text}</a></li>`;
+          }
+          return `<li>${item.text}</li>`;
+        }).join("");
+        board.style.display = "";
+      }
+
       // === 🔍 聰明搜尋功能 ===
       let _searchTimer = null;
       function handleSmartSearch() {
@@ -2506,6 +2504,11 @@
             getDoc(doc(db, 'settings', 'categories')),
           ]);
           isOrderEnded = globalSnap.exists() ? (globalSnap.data().isOrderEnded === true) : false;
+
+          // 載入 Notice 公告欄
+          const notices = globalSnap.exists() ? (globalSnap.data().notices || []) : [];
+          renderNoticeboard(notices);
+
           const catList = catSnap.exists() ? (catSnap.data().list || []) : [];
           Object.keys(categoryMap).forEach(k => { if (k !== 'all') delete categoryMap[k]; });
           catList.forEach(name => { categoryMap[name] = name; });
