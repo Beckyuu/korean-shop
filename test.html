@@ -2207,7 +2207,6 @@
                   <input type="number" id="qs-qty" value="1" min="1" readonly />
                   <button onclick="updateQsQty(1)">+</button>
                 </div>
-                <div id="qs-stock-hint" style="font-size:0.72rem;color:#bfa092;text-align:center;margin-top:5px;letter-spacing:0.5px;"></div>
               </div>
             </div>
 
@@ -3196,15 +3195,8 @@
       }
 
       function _updateStockHint() {
-        const hint   = document.getElementById('qs-stock-hint');
         const qtyEl  = document.getElementById('qs-qty');
         const maxQty = _currentMaxQty();
-        if (!hint) return;
-        if (maxQty === Infinity) {
-          hint.textContent = '';
-        } else {
-          hint.textContent = `剩 ${maxQty} 件`;
-        }
         // 若目前數量超過庫存，自動截回
         if (qtyEl && parseInt(qtyEl.value) > maxQty) qtyEl.value = maxQty;
       }
