@@ -259,38 +259,28 @@
       .memo-list {
         list-style: none;
         padding: 0;
-        margin: 0;
+        margin: 0 auto;
+        display: table;
       }
 
-      /* 每一行的樣式 (修正換行版) */
+      /* 每一行的樣式 */
       .memo-list li {
         position: relative;
         margin-bottom: 8px;
-        /* 行距微調 */
-
-        /* 圓點與文字的距離 (保留你剛剛覺得不錯的距離) */
-        padding-left: 25px;
-
+        padding-left: 14px;
         font-family: "Noto Sans TC", sans-serif;
         font-size: 0.8rem;
         color: var(--text-sub);
         line-height: 1.6;
-        /* 行高設定 1.6，這樣兩行字之間才不會太擠 */
-
-        /* 修改這裡：原本是 nowrap (不換行)，改成 normal (允許換行) */
         white-space: normal;
       }
 
-      /* 圓點設定 (確保它對齊第一行) */
+      /* 圓點設定 */
       .memo-list li::before {
         content: "·";
         position: absolute;
-        left: 5px;
-
-        /* 修改這裡：原本是 top: 0，改成 top: 0px 搭配 line-height 對齊 */
-        /* 這樣圓點會對齊第一行文字，而不是跑去兩行中間 */
+        left: 1px;
         top: 0px;
-
         font-weight: bold;
         color: var(--accent);
       }
