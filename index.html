@@ -2,13 +2,10 @@
 <html lang="zh-TW">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="favicon.png?v=2">
+    <link rel="apple-touch-icon" href="favicon.png?v=2">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>│Mina．妝日子│</title>
-    <link
-      rel="icon"
-      href="https://ik.imagekit.io/mina09/OliveYoung/%E5%9C%96%E7%89%873.png"
-      type="image/png"
-    />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -1986,6 +1983,7 @@
         letter-spacing: 1px;
         line-height: 1.8;
         margin-bottom: 28px;
+        white-space: pre-line;
       }
 
       .ended-notice-divider {
@@ -2313,7 +2311,8 @@
 
       // === 🔒 手機版背景鎖定大神器 ===
       let savedScrollPosition = 0;
-      let isOrderEnded = false;
+      let isOrderEnded  = false;
+      let isNoticeShown = false;
 
       function freezeBackground() {
         savedScrollPosition = window.scrollY;
@@ -2473,7 +2472,8 @@
             getDoc(doc(db, 'settings', 'global')),
             getDoc(doc(db, 'settings', 'categories')),
           ]);
-          isOrderEnded = globalSnap.exists() ? (globalSnap.data().isOrderEnded === true) : false;
+          isOrderEnded  = globalSnap.exists() ? (globalSnap.data().isOrderEnded  === true) : false;
+          isNoticeShown = globalSnap.exists() ? (globalSnap.data().isNoticeShown === true) : false;
 
           // 載入 Notice 公告欄
           const notices = globalSnap.exists() ? (globalSnap.data().notices || []) : [];
@@ -2516,6 +2516,7 @@
               gallery:   images,
               tag:       (p.tag || "").toUpperCase(),
               deadline:  p.deadline || "",
+              type:      p.type || "預購",
               giftDesc:  (p.desc || "").replace(/\s*<br\s*\/?>\s*/gi, "<br>"),
               category:  p.category || "其他",
             };
@@ -2540,8 +2541,13 @@
           renderCategoryButtons();
           renderProducts(allProductsData);
 
-          // 若 Firebase 標記為結單，顯示進站公告
-          if (isOrderEnded) {
+          // 若管理員開啟結單公告，顯示進站公告
+          if (isNoticeShown) {
+            const gData = globalSnap.exists() ? globalSnap.data() : {};
+            const titleEl = document.getElementById('ended-notice-title');
+            const bodyEl  = document.getElementById('ended-notice-body');
+            if (titleEl) titleEl.textContent = gData.popupTitle || '本批次已結單，感謝您的熱情支持！';
+            if (bodyEl)  bodyEl.textContent  = gData.popupBody  || '目前正在全力處理訂單與備貨中\n有訂購的朋友請耐心等待通知';
             const overlay = document.getElementById("ended-notice-overlay");
             overlay.style.display = "flex";
             setTimeout(() => overlay.classList.add("show"), 10);
@@ -2626,8 +2632,8 @@
             else if (product.tag === "SALE") badgeHtml = `<div class="badge sale">SALE</div>`;
           }
 
-          // 🌟 結單狀態（從 Firebase 讀取）
-          const isEnded = isOrderEnded;
+          // 現貨商品不受結單影響
+          const isEnded = isOrderEnded && (product.type !== '現貨');
 
           let btnHtml = "";
           if (isEnded) {
@@ -2666,12 +2672,12 @@
 
       // 🌟 2. 打開快速購物視窗 (自動顯示變更價格)
       function openQuickShop(index) {
-        if (isOrderEnded) {
-          alert("本批次已結單，感謝您的熱情支持。");
+        const product = allProductsData[index];
+        if (isOrderEnded && product.type !== '現貨') {
+          alert("預購已結單，感謝您的熱情支持。");
           return;
         }
 
-        const product = allProductsData[index];
         currentQsIndex = index;
 
         // 相簿處理
@@ -2871,6 +2877,7 @@
           gift: selectedGift,
           productId:    product.firestoreId || null,
           variantIndex: hasVariantSelector ? _currentVariantIndex : 0,
+          type:         product.type || '預購',
         };
 
         cart.push(cartItem);
@@ -3026,8 +3033,11 @@
 
       async function checkoutViaLine() {
         if (isOrderEnded) {
-          alert("本批次已結單，感謝您的熱情支持。");
-          return;
+          const hasPreorder = cart.some(item => (item.type || '預購') === '預購');
+          if (hasPreorder) {
+            alert("購物車內含有預購商品，目前預購已結單，請移除後再結帳。");
+            return;
+          }
         }
         if (cart.length === 0) return;
 
@@ -3271,14 +3281,9 @@
     <div id="ended-notice-overlay" onclick="if(event.target===this) closeEndedNotice()">
       <div class="ended-notice-box">
         <div class="ended-notice-deco">│ Mina．妝日子 │</div>
-        <div class="ended-notice-title">
-          本批次已結單<br>感謝您的熱情支持！
-        </div>
+        <div class="ended-notice-title" id="ended-notice-title"></div>
         <div class="ended-notice-divider"></div>
-        <div class="ended-notice-sub">
-          目前正在全力處理訂單與備貨中<br>
-          有訂購的朋友請耐心等待通知
-        </div>
+        <div class="ended-notice-sub" id="ended-notice-body"></div>
         <button class="ended-notice-btn" onclick="closeEndedNotice()">繼續瀏覽</button>
       </div>
     </div>
