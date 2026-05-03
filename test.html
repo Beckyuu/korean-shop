@@ -1329,9 +1329,25 @@
         border-bottom-left-radius: 8px;
         border-bottom-right-radius: 8px;
         max-height: 45vh;
-        overflow-y: auto;
+        overflow-y: scroll;
         overscroll-behavior: contain;
         -webkit-overflow-scrolling: touch;
+      }
+
+      /* 滑桿樣式：金棕色細條，讓客人看得見可以往下滑 */
+      .custom-variant-options::-webkit-scrollbar {
+        width: 4px;
+      }
+
+      .custom-variant-options::-webkit-scrollbar-track {
+        background: #f5ede3;
+        border-radius: 2px;
+      }
+
+      .custom-variant-options::-webkit-scrollbar-thumb {
+        background: var(--accent);
+        border-radius: 2px;
+        min-height: 24px;
       }
 
       .custom-variant-options.open {
@@ -1519,6 +1535,29 @@
 
       /* === 📱 手機版專屬優化 (緊湊模式) === */
       @media (max-width: 768px) {
+        /* 0. X 按鈕固定在頂部：讓 modal 本身不捲動，改讓 body 捲動 */
+        .quick-shop-content {
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+        }
+
+        .quick-shop-close {
+          position: relative;
+          top: auto;
+          right: auto;
+          align-self: flex-end;
+          margin: 10px 10px 0 0;
+          flex-shrink: 0;
+        }
+
+        .quick-shop-body {
+          flex: 1;
+          min-height: 0;
+          overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+
         /* 1. 彈窗內距縮小 (讓空間變大) */
         .quick-shop-info-box {
           padding: 15px 20px !important;
