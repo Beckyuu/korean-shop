@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="favicon.png?v=2">
     <link rel="apple-touch-icon" href="favicon.png?v=2">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
     <title>│Mina．妝日子│</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -120,6 +120,7 @@
         color: var(--text-main);
         line-height: 1.7;
         padding-bottom: 0;
+        overflow-x: hidden;
       }
 
       /* === Header: 雜誌封面感 (更新版) === */
@@ -980,6 +981,19 @@
 
       /* === 手機版專屬設定 (商品列表整合版) === */
       @media (max-width: 768px) {
+        /* 0. 修正 header 溢出導致頁面縮放 */
+        h1 {
+          font-size: 2.2rem;
+        }
+
+        .service-info {
+          white-space: normal;
+          max-width: 92%;
+          margin-left: auto;
+          margin-right: auto;
+          line-height: 1.8;
+        }
+
         /* 1. 隱藏不必要的佔位元素，消除空隙 */
         .mobile-hidden,
         div[style*="visibility:hidden"],
@@ -1019,7 +1033,20 @@
           overflow: hidden;
         }
 
-        /* 4. 其他文字與標籤間距微調 */
+        /* 4. Badge 手機版：與名稱文字同大小，緊貼對齊 */
+        #product-list .name-row {
+          gap: 4px;
+          margin-bottom: 2px;
+        }
+
+        #product-list .badge {
+          font-size: 0.9rem;
+          padding: 1px 5px;
+          margin-top: 2px;
+          letter-spacing: 1px;
+        }
+
+        /* 5. 其他文字與標籤間距微調 */
         #product-list .desc-text {
           font-size: 0.75rem;
           margin-bottom: 2px;
