@@ -356,15 +356,7 @@
         transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
       }
 
-      /* === 商品名稱旁標籤 Badge === */
-      .name-row {
-        display: flex;
-        align-items: flex-start;
-        justify-content: center;
-        gap: 6px;
-        margin-bottom: 4px;
-      }
-
+      /* === 商品名稱旁標籤 Badge (inline) === */
       @keyframes badge-shine {
         0%   { left: -100%; }
         35%  { left: 150%; }
@@ -374,16 +366,16 @@
       .badge {
         display: inline-flex;
         align-items: center;
-        flex-shrink: 0;
-        padding: 2px 7px;
-        font-size: 0.68rem;
+        vertical-align: middle;
+        padding: 2px 6px;
+        font-size: 0.65rem;
         font-weight: 700;
         letter-spacing: 1.5px;
         border-radius: 3px;
         color: #fff;
         position: relative;
         overflow: hidden;
-        margin-top: 3px;
+        margin-right: 3px;
       }
 
       .badge::after {
@@ -1033,17 +1025,12 @@
           overflow: hidden;
         }
 
-        /* 4. Badge 手機版：與名稱文字同大小，緊貼對齊 */
-        #product-list .name-row {
-          gap: 4px;
-          margin-bottom: 2px;
-        }
-
+        /* 4. Badge 手機版：略小，不搶版面 */
         #product-list .badge {
-          font-size: 0.9rem;
+          font-size: 0.6rem;
           padding: 1px 5px;
-          margin-top: 2px;
           letter-spacing: 1px;
+          margin-right: 2px;
         }
 
         /* 5. 其他文字與標籤間距微調 */
@@ -2667,9 +2654,9 @@
 
           let badgeHtml = "";
           if (!isAllOutOfStock) {
-            if (product.tag === "NEW") badgeHtml = `<div class="badge new">NEW</div>`;
-            else if (product.tag === "HOT") badgeHtml = `<div class="badge hot">HOT</div>`;
-            else if (product.tag === "SALE") badgeHtml = `<div class="badge sale">SALE</div>`;
+            if (product.tag === "NEW") badgeHtml = `<span class="badge new">NEW</span>`;
+            else if (product.tag === "HOT") badgeHtml = `<span class="badge hot">HOT</span>`;
+            else if (product.tag === "SALE") badgeHtml = `<span class="badge sale">SALE</span>`;
           }
 
           // 現貨商品不受結單影響
@@ -2696,10 +2683,7 @@
               <img src="${product.imgUrl}" alt="${product.name}" loading="lazy" style="${imgOpacity}">
             </div>
             <div class="info">
-              <div class="name-row">
-                ${badgeHtml}
-                <h3 class="name" style="${isAllOutOfStock ? 'color: #999;' : ''}">${product.name}</h3>
-              </div>
+              <h3 class="name" style="${isAllOutOfStock ? 'color: #999;' : ''}">${badgeHtml}${product.name}</h3>
               ${priceHtml}
               <div class="action-row" style="margin-top: 10px; justify-content: center;">
                   ${btnHtml}
