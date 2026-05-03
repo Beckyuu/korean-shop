@@ -355,41 +355,56 @@
         transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
       }
 
-      /* === 優化後的標籤 Badge (韓系絲帶感) === */
+      /* === 商品名稱旁標籤 Badge === */
+      .name-row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 6px;
+        margin-bottom: 4px;
+      }
+
+      @keyframes badge-shine {
+        0%   { left: -100%; }
+        35%  { left: 150%; }
+        100% { left: 150%; }
+      }
+
       .badge {
-        position: absolute;
-        top: 0;
-        left: 15px;
-        /* 稍微往內縮一點 */
-        padding: 6px 10px 8px;
-        /* 下方留長一點 */
-        font-size: 0.75rem;
-        font-weight: 500;
-        letter-spacing: 1px;
-        z-index: 2;
+        display: inline-flex;
+        align-items: center;
+        flex-shrink: 0;
+        padding: 2px 7px;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        border-radius: 3px;
         color: #fff;
-
-        /* 做成下方有缺口的絲帶形狀 */
-        clip-path: polygon(0% 0%, 100% 0%, 100% 85%, 50% 100%, 0% 85%);
-
-        /* 加上微微的陰影，更有層次 */
-        filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
+        position: relative;
+        overflow: hidden;
+        margin-top: 3px;
       }
 
-      /* NEW: 質感霧金 (呼應你的主題色) */
-      .badge.new {
-        background-color: var(--accent);
+      .badge::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -100%;
+        width: 50%;
+        height: 200%;
+        background: linear-gradient(
+          90deg,
+          rgba(255,255,255,0) 0%,
+          rgba(255,255,255,0.72) 50%,
+          rgba(255,255,255,0) 100%
+        );
+        transform: skewX(-15deg);
+        animation: badge-shine 2.8s ease-in-out infinite;
       }
 
-      /* HOT: 溫柔磚紅 */
-      .badge.hot {
-        background-color: var(--price-color);
-      }
-
-      /* SALE: 顯眼的紅色 (備用) */
-      .badge.sale {
-        background-color: var(--badge-sale);
-      }
+      .badge.new  { background-color: var(--accent); }
+      .badge.hot  { background-color: var(--price-color); }
+      .badge.sale { background-color: var(--badge-sale); }
 
       /* === 2. 資訊區域 (負責對齊) === */
       .info {
@@ -417,8 +432,6 @@
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         text-align: center;
-
-        margin-bottom: 4px;
       }
 
       /* ✅ 貼上這段新的 (時尚副標題樣式) */
@@ -2652,12 +2665,14 @@
           card.className = "product-card";
           card.innerHTML = `
             <div class="img-wrapper" style="cursor: ${cursorStyle}; background: #fff;" ${clickEvent}>
-              ${badgeHtml}
               ${product.deadline ? `<div class="deadline-overlay">⏰ ${product.deadline}</div>` : ''}
               <img src="${product.imgUrl}" alt="${product.name}" loading="lazy" style="${imgOpacity}">
             </div>
             <div class="info">
-              <h3 class="name" style="${isAllOutOfStock ? 'color: #999;' : ''}">${product.name}</h3>
+              <div class="name-row">
+                ${badgeHtml}
+                <h3 class="name" style="${isAllOutOfStock ? 'color: #999;' : ''}">${product.name}</h3>
+              </div>
               ${priceHtml}
               <div class="action-row" style="margin-top: 10px; justify-content: center;">
                   ${btnHtml}
