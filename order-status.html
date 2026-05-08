@@ -4,70 +4,123 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>訂單查詢 | Mina</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --green:       #2a7c5f;
-      --green-dark:  #1b4d38;
-      --green-light: #d4ead9;
-      --green-mid:   #52b788;
-      --page-bg:     #f0f5f2;
-      --card-bg:     #ffffff;
-      --text:        #1a2e25;
-      --text-sub:    #5a7a6a;
-      --border:      #d0e4d8;
-      --danger:      #e05c5c;
-      --warning:     #d4a017;
-      --warning-bg:  #fef8e3;
-      --blue:        #1565c0;
-      --blue-bg:     #e3f2fd;
-      --purple:      #7b2d8b;
-      --purple-bg:   #f3e8ff;
+      --accent:       #d4a373;
+      --accent-dark:  #b8855a;
+      --accent-light: #faeadd;
+      --accent-mid:   #c9906b;
+      --paper:        #fdfbf7;
+      --card-bg:      #ffffff;
+      --text:         #2c2c2c;
+      --text-sub:     #888888;
+      --border:       #ecddd3;
+      --danger:       #c97c7c;
+      --warning:      #c8a24a;
+      --warning-bg:   #fef8ec;
+      --blue:         #5b7fa6;
+      --blue-bg:      #eaf1f9;
+      --purple:       #9a6fa8;
+      --purple-bg:    #f5eefa;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: "Noto Sans TC", sans-serif;
-      background: var(--page-bg);
+      background-color: #fdfbf7;
+      background-image:
+        radial-gradient(at 40% 20%, rgba(212,163,115,0.18) 0px, transparent 50%),
+        radial-gradient(at 80% 0%,  rgba(181,131,141,0.12) 0px, transparent 50%),
+        radial-gradient(at 0%  50%, rgba(229,152,155,0.10) 0px, transparent 50%);
+      background-attachment: fixed;
       color: var(--text);
       min-height: 100vh;
-      padding-bottom: 32px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 16px 60px;
+    }
+
+    /* ── A5 Paper ── */
+    .paper {
+      width: 100%;
+      max-width: 500px;
+      background: var(--paper);
+      border-radius: 4px;
+      box-shadow:
+        0 2px 6px rgba(180,140,100,0.10),
+        0 8px 32px rgba(180,140,100,0.08),
+        0 1px 2px rgba(0,0,0,0.04);
+      overflow: hidden;
     }
 
     /* ── Header ── */
     .header {
-      background: var(--green);
-      padding: 20px 20px 24px;
+      padding: 36px 28px 28px;
       text-align: center;
+      border-bottom: 1px solid var(--border);
     }
-    .header h1 {
-      color: #fff;
-      font-size: 1.1rem;
-      font-weight: 700;
+    .header-brand {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 2.4rem;
+      font-weight: 600;
+      font-style: italic;
+      color: var(--text);
+      letter-spacing: 1px;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+    .header-sub {
+      font-family: "Noto Sans TC", sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 5px;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .header-divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 auto 16px;
+      max-width: 200px;
+    }
+    .header-divider::before,
+    .header-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .header-divider span {
+      color: var(--accent);
+      font-size: 0.55rem;
       letter-spacing: 2px;
     }
-    .header p {
-      color: rgba(255,255,255,0.65);
-      font-size: 0.75rem;
-      margin-top: 4px;
-      letter-spacing: 1px;
+    .header-title {
+      font-family: "Noto Sans TC", sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 4px;
+      color: var(--text-sub);
+    }
+
+    /* ── Body Padding ── */
+    .paper-body {
+      padding: 24px 24px;
     }
 
     /* ── Search Box ── */
-    .search-wrap {
-      background: var(--card-bg);
-      margin: 0 16px;
-      margin-top: -12px;
-      border-radius: 12px;
-      padding: 20px 16px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-      border: 1px solid var(--border);
-    }
     .search-label {
-      font-size: 0.78rem;
+      font-size: 0.72rem;
       font-weight: 500;
       color: var(--text-sub);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
       margin-bottom: 8px;
       display: block;
     }
@@ -77,142 +130,179 @@
     }
     .search-input {
       flex: 1;
-      padding: 11px 14px;
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
-      font-size: 0.9rem;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      font-size: 0.88rem;
       font-family: inherit;
       color: var(--text);
+      background: var(--card-bg);
       outline: none;
       transition: border-color 0.15s;
       text-transform: uppercase;
       letter-spacing: 1px;
     }
-    .search-input::placeholder { color: #aac2b5; letter-spacing: 0; text-transform: none; }
-    .search-input:focus { border-color: var(--green-mid); }
+    .search-input::placeholder { color: #cbb8ac; letter-spacing: 0; text-transform: none; }
+    .search-input:focus { border-color: var(--accent); }
     .btn-search {
-      padding: 11px 20px;
-      background: var(--green);
+      padding: 10px 18px;
+      background: var(--accent);
       color: #fff;
       border: none;
-      border-radius: 8px;
-      font-size: 0.88rem;
+      border-radius: 3px;
+      font-size: 0.82rem;
       font-family: inherit;
       font-weight: 500;
+      letter-spacing: 1.5px;
       cursor: pointer;
       white-space: nowrap;
       transition: background 0.15s;
     }
-    .btn-search:hover { background: var(--green-dark); }
-    .btn-search:disabled { background: #a5c8b8; cursor: not-allowed; }
+    .btn-search:hover { background: var(--accent-dark); }
+    .btn-search:disabled { background: #d9c5b5; cursor: not-allowed; }
+
+    /* ── Hint ── */
+    .hint {
+      margin-top: 14px;
+      padding: 10px 12px;
+      background: var(--accent-light);
+      border-radius: 3px;
+      font-size: 0.72rem;
+      color: var(--text-sub);
+      line-height: 1.7;
+    }
 
     /* ── States ── */
     .state-msg {
-      margin: 32px 16px 0;
+      margin-top: 28px;
       text-align: center;
       color: var(--text-sub);
-      font-size: 0.85rem;
+      font-size: 0.82rem;
     }
-    .state-msg .icon { font-size: 2rem; margin-bottom: 8px; }
+    .state-msg .icon { font-size: 1.8rem; margin-bottom: 8px; }
 
     .error-msg {
-      margin: 16px 16px 0;
-      padding: 12px 14px;
-      background: #fde8e8;
-      border-radius: 8px;
+      margin-top: 14px;
+      padding: 10px 12px;
+      background: #fdeaea;
+      border-radius: 3px;
       color: var(--danger);
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       display: none;
+    }
+
+    /* ── Loading ── */
+    .spinner {
+      display: none;
+      margin: 28px auto 0;
+      width: 30px; height: 30px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Section divider ── */
+    .result-divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 24px 0 16px;
+    }
+    .result-divider::before,
+    .result-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .result-divider span {
+      font-size: 0.62rem;
+      letter-spacing: 3px;
+      color: var(--text-sub);
+      text-transform: uppercase;
     }
 
     /* ── Receipt Card ── */
-    .receipt-card {
-      margin: 16px 16px 0;
-      background: var(--card-bg);
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      overflow: hidden;
-      display: none;
-    }
+    .receipt-card { display: none; }
 
-    .rcpt-header {
-      background: var(--green);
-      padding: 16px 20px;
-      color: #fff;
-    }
-    .rcpt-header-row {
+    .rcpt-meta {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
+      margin-bottom: 14px;
     }
     .rcpt-order-id {
-      font-size: 0.78rem;
-      opacity: 0.75;
+      font-size: 0.68rem;
+      color: var(--text-sub);
       letter-spacing: 1px;
       margin-bottom: 2px;
     }
     .rcpt-customer {
-      font-size: 1rem;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.3rem;
       font-weight: 600;
+      color: var(--text);
       letter-spacing: 0.5px;
     }
     .rcpt-date {
-      font-size: 0.72rem;
-      opacity: 0.65;
-      margin-top: 4px;
+      font-size: 0.68rem;
+      color: var(--text-sub);
+      margin-top: 3px;
+      letter-spacing: 0.5px;
     }
 
     /* Overall status badge */
     .order-status-badge {
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 0.72rem;
-      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 2px;
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 1px;
       white-space: nowrap;
+      border: 1px solid currentColor;
     }
-    .status-waiting  { background: rgba(255,255,255,0.2); color: #fff; }
-    .status-buying   { background: rgba(255,255,255,0.2); color: #fff; }
-    .status-arrived  { background: rgba(255,255,255,0.2); color: #fff; }
-    .status-shipped  { background: rgba(255,255,255,0.85); color: var(--green-dark); }
-    .status-pending  { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.85); }
-    .status-cancel   { background: rgba(255,100,100,0.3); color: #fff; }
+    .status-waiting  { color: var(--warning);   background: var(--warning-bg); border-color: #e0c880; }
+    .status-buying   { color: var(--accent-dark); background: var(--accent-light); border-color: var(--accent); }
+    .status-arrived  { color: var(--blue);        background: var(--blue-bg);    border-color: #90b4d4; }
+    .status-shipped  { color: var(--purple);      background: var(--purple-bg);  border-color: #c09aca; }
+    .status-pending  { color: var(--text-sub);    background: #f2f0ed;           border-color: #ccc; }
+    .status-cancel   { color: var(--danger);      background: #fdeaea;           border-color: #e8b4b4; }
 
     /* ── Items ── */
-    .rcpt-items { padding: 4px 0; }
-
+    .rcpt-items {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
     .rcpt-item {
       display: flex;
       align-items: flex-start;
-      gap: 12px;
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
+      gap: 10px;
+      padding: 12px 0;
+      border-bottom: 1px dashed var(--border);
     }
     .rcpt-item:last-child { border-bottom: none; }
 
-    .rcpt-item-icon {
-      font-size: 1.2rem;
-      margin-top: 1px;
-      flex-shrink: 0;
-    }
     .rcpt-item-body { flex: 1; min-width: 0; }
     .rcpt-item-name {
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       font-weight: 500;
       color: var(--text);
       line-height: 1.4;
     }
     .rcpt-item-spec {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: var(--text-sub);
       margin-top: 2px;
     }
     .rcpt-item-gift {
-      font-size: 0.72rem;
-      color: #a06020;
-      background: #fdf0e8;
+      font-size: 0.68rem;
+      color: var(--accent-dark);
+      background: var(--accent-light);
       display: inline-block;
       padding: 1px 6px;
-      border-radius: 4px;
+      border-radius: 2px;
       margin-top: 3px;
     }
     .rcpt-item-right {
@@ -220,7 +310,7 @@
       flex-shrink: 0;
     }
     .rcpt-item-price {
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       color: var(--text-sub);
       white-space: nowrap;
     }
@@ -228,121 +318,124 @@
     /* Per-item status pill */
     .item-status {
       display: inline-block;
-      padding: 2px 8px;
-      border-radius: 20px;
-      font-size: 0.68rem;
-      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 2px;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
       margin-top: 5px;
       white-space: nowrap;
     }
-    .ist-waiting  { background: var(--warning-bg);  color: var(--warning); }
-    .ist-buying   { background: #fff8e6;            color: #a06800; }
-    .ist-arrived  { background: var(--blue-bg);     color: var(--blue); }
-    .ist-shipped  { background: var(--purple-bg);   color: var(--purple); }
-    .ist-cancel   { background: #fde8e8;            color: var(--danger); }
+    .ist-waiting { background: var(--warning-bg);  color: var(--warning); }
+    .ist-buying  { background: var(--accent-light); color: var(--accent-dark); }
+    .ist-arrived { background: var(--blue-bg);      color: var(--blue); }
+    .ist-shipped { background: var(--purple-bg);    color: var(--purple); }
+    .ist-cancel  { background: #fdeaea;             color: var(--danger); }
 
     /* ── Summary ── */
     .rcpt-summary {
-      padding: 14px 16px;
-      background: #f8fcf9;
-      border-top: 1px solid var(--border);
+      padding: 14px 0 0;
     }
     .rcpt-sum-row {
       display: flex;
       justify-content: space-between;
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       color: var(--text-sub);
       margin-bottom: 5px;
     }
     .rcpt-sum-row:last-child { margin-bottom: 0; }
     .rcpt-sum-row.total {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 600;
-      color: var(--green-dark);
-      border-top: 1px dashed var(--border);
-      padding-top: 9px;
-      margin-top: 9px;
+      color: var(--text);
+      border-top: 1px solid var(--border);
+      padding-top: 10px;
+      margin-top: 6px;
     }
     .rcpt-note {
       margin-top: 10px;
       padding: 8px 10px;
-      background: var(--green-light);
-      border-radius: 6px;
-      font-size: 0.75rem;
+      background: var(--accent-light);
+      border-radius: 3px;
+      font-size: 0.72rem;
       color: var(--text-sub);
     }
 
-    /* ── Hint ── */
-    .hint {
-      margin: 16px 16px 0;
-      padding: 12px 14px;
-      background: var(--green-light);
-      border-radius: 8px;
-      font-size: 0.75rem;
-      color: var(--text-sub);
-      line-height: 1.6;
+    /* ── Footer ── */
+    .paper-footer {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      font-size: 0.78rem;
+      color: #ccc;
+      letter-spacing: 1px;
     }
-
-    /* ── Loading ── */
-    .spinner {
-      display: none;
-      margin: 32px auto 0;
-      width: 36px; height: 36px;
-      border: 3px solid var(--border);
-      border-top-color: var(--green);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
 
-<div class="header">
-  <h1>訂單查詢</h1>
-  <p>MINA · ORDER STATUS</p>
-</div>
+<div class="paper">
 
-<div class="search-wrap">
-  <label class="search-label">請輸入您的訂單編號</label>
-  <div class="search-row">
-    <input type="text" class="search-input" id="order-input"
-      placeholder="ORD-XXXXXXXX"
-      autocomplete="off" autocorrect="off" spellcheck="false"
-      oninput="this.value=this.value.toUpperCase()"
-      onkeydown="if(event.key==='Enter')doSearch()">
-    <button class="btn-search" id="btn-search" onclick="doSearch()">查詢</button>
+  <!-- Header -->
+  <div class="header">
+    <div class="header-brand">Mina</div>
+    <div class="header-sub">妝日子</div>
+    <div class="header-divider"><span>✦</span></div>
+    <div class="header-title">訂單查詢</div>
   </div>
-</div>
 
-<div class="error-msg" id="error-msg"></div>
-<div class="spinner" id="spinner"></div>
+  <!-- Body -->
+  <div class="paper-body">
 
-<div id="hint" class="hint">
-  訂單編號格式範例：<strong>ORD-20240501-001</strong><br>
-  如有任何問題，歡迎直接傳訊息給我們 ☺
-</div>
-
-<div class="state-msg" id="empty-state" style="display:none">
-  <div class="icon">🔍</div>
-  <p>找不到此訂單編號<br><span style="font-size:0.75rem">請確認編號是否正確，或聯絡客服</span></p>
-</div>
-
-<!-- Receipt -->
-<div class="receipt-card" id="receipt-card">
-  <div class="rcpt-header">
-    <div class="rcpt-header-row">
-      <div>
-        <div class="rcpt-order-id" id="r-order-id"></div>
-        <div class="rcpt-customer" id="r-customer"></div>
-        <div class="rcpt-date" id="r-date"></div>
-      </div>
-      <span class="order-status-badge" id="r-order-status"></span>
+    <!-- Search -->
+    <label class="search-label">Order Number</label>
+    <div class="search-row">
+      <input type="text" class="search-input" id="order-input"
+        placeholder="ORD-XXXXXXXX"
+        autocomplete="off" autocorrect="off" spellcheck="false"
+        oninput="this.value=this.value.toUpperCase()"
+        onkeydown="if(event.key==='Enter')doSearch()">
+      <button class="btn-search" id="btn-search" onclick="doSearch()">查詢</button>
     </div>
-  </div>
-  <div class="rcpt-items" id="r-items"></div>
-  <div class="rcpt-summary" id="r-summary"></div>
-</div>
+
+    <div class="error-msg" id="error-msg"></div>
+    <div class="spinner" id="spinner"></div>
+
+    <div id="hint" class="hint">
+      訂單編號格式範例：<strong>ORD-20240501-001</strong><br>
+      如有任何問題，歡迎直接傳訊息給我們 ☺
+    </div>
+
+    <div class="state-msg" id="empty-state" style="display:none">
+      <div class="icon">🔍</div>
+      <p>找不到此訂單編號<br><span style="font-size:0.72rem">請確認編號是否正確，或聯絡客服</span></p>
+    </div>
+
+    <!-- Receipt -->
+    <div class="receipt-card" id="receipt-card">
+      <div class="result-divider"><span>Order Detail</span></div>
+
+      <div class="rcpt-meta">
+        <div>
+          <div class="rcpt-order-id" id="r-order-id"></div>
+          <div class="rcpt-customer" id="r-customer"></div>
+          <div class="rcpt-date" id="r-date"></div>
+        </div>
+        <span class="order-status-badge" id="r-order-status"></span>
+      </div>
+
+      <div class="rcpt-items" id="r-items"></div>
+      <div class="rcpt-summary" id="r-summary"></div>
+    </div>
+
+    <!-- Footer -->
+    <div class="paper-footer">Thank you for your order</div>
+
+  </div><!-- /paper-body -->
+</div><!-- /paper -->
 
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
@@ -362,7 +455,6 @@
   const app = initializeApp(firebaseConfig);
   const db  = getFirestore(app);
 
-  // ── Helpers ──
   function esc(s) {
     return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
@@ -375,7 +467,6 @@
     return `NT$${Number(n||0).toLocaleString()}`;
   }
 
-  // ── Item status per cartFulfillment ──
   function getItemStatus(cfItem, orderShipped) {
     if (orderShipped) return { cls: 'ist-shipped', label: '📦 已出貨' };
     if (!cfItem || (!cfItem.bought && !cfItem.arrived)) return { cls: 'ist-waiting', label: '⏳ 備貨中' };
@@ -384,7 +475,6 @@
     return { cls: 'ist-waiting', label: '⏳ 備貨中' };
   }
 
-  // ── Order overall status ──
   function getOrderBadge(o) {
     if (o.status === '已取消') return { cls: 'status-cancel', label: '已取消' };
     if (o.status === '待確認') return { cls: 'status-pending', label: '待確認' };
@@ -398,11 +488,10 @@
     return map[fs] || { cls: 'status-waiting', label: fs };
   }
 
-  // ── Render receipt ──
   function renderReceipt(o) {
     const cart = o.confirmedCart || o.cart || [];
     const cf   = o.cartFulfillment || cart.map(() => ({ bought: false, arrived: false }));
-    const isShipped = (o.fulfillmentStatus === '已出貨');
+    const isShipped   = (o.fulfillmentStatus === '已出貨');
     const isCancelled = (o.status === '已取消');
 
     const badge = getOrderBadge(o);
@@ -413,7 +502,6 @@
     statusEl.className = 'order-status-badge ' + badge.cls;
     statusEl.textContent = badge.label;
 
-    // Sort items alphabetically (same as admin)
     const sortedItems = cart
       .map((it, idx) => ({ it, cfItem: cf[idx] || {}, idx }))
       .sort((a, b) =>
@@ -443,7 +531,6 @@
       </div>`;
     }).join('');
 
-    // Summary
     const subtotal = cart.reduce((s, i) => s + (Number(i.price)||0) * (Number(i.qty)||1), 0);
     const deposit  = Number(o.confirmedDeposit ?? o.deposit ?? 0);
     const discount = Number(o.discount || 0);
@@ -456,7 +543,7 @@
     sumHtml += `<div class="rcpt-sum-row total"><span>總金額</span><span>${fmtMoney(total)}</span></div>`;
     if (deposit > 0) {
       const balance = Math.max(0, total - deposit);
-      sumHtml += `<div class="rcpt-sum-row" style="font-size:0.78rem;color:var(--text-sub)"><span>尾款</span><span>${fmtMoney(balance)}</span></div>`;
+      sumHtml += `<div class="rcpt-sum-row" style="font-size:0.72rem;color:var(--text-sub)"><span>尾款</span><span>${fmtMoney(balance)}</span></div>`;
     }
     if (o.note)
       sumHtml += `<div class="rcpt-note">📝 ${esc(o.note)}</div>`;
@@ -465,12 +552,10 @@
     document.getElementById('receipt-card').style.display = 'block';
   }
 
-  // ── Search ──
   window.doSearch = async function() {
     const raw = document.getElementById('order-input').value.trim().toUpperCase();
     if (!raw) return;
 
-    // reset
     document.getElementById('receipt-card').style.display = 'none';
     document.getElementById('empty-state').style.display  = 'none';
     document.getElementById('error-msg').style.display    = 'none';
