@@ -2290,7 +2290,7 @@
     <div id="cartModal" class="cart-modal" onclick="closeCart(event)" role="dialog" aria-modal="true" aria-label="購物車">
       <div class="cart-content">
         <div class="cart-header">
-          <h3 class="cart-title">購物清單</h3>
+          <h3 class="cart-title">購物清單　<span style="font-size:0.7rem;background:#d4a373;color:#fff;padding:2px 8px;border-radius:10px;letter-spacing:1px;vertical-align:middle;">社群</span></h3>
           <span class="cart-close-btn" onclick="toggleCart()">×</span>
         </div>
 
@@ -3204,7 +3204,7 @@
           // ⑤ 組 LINE 訊息（訂單編號在第一行）
           const now     = new Date();
           const dateStr = `${now.getMonth() + 1}月${now.getDate()}日`;
-          let message   = `【訂單編號：${orderId}】\n您好，這是我的訂購清單 (${dateStr})：\n\n`;
+          let message   = `【訂單編號：${orderId}】\n📍 社群下單\n您好，這是我的訂購清單 (${dateStr})：\n\n`;
 
           cart.forEach((item, index) => {
             const cleanName = item.name.replace(/<br\s*\/?>/gi, " ");
