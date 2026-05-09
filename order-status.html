@@ -44,14 +44,26 @@
       border-bottom: 1px solid #ede5db;
     }
     .brand-heading {
+      text-align: center;
+      margin-bottom: 2px;
+      line-height: 1.2;
+    }
+    .brand-mina {
       font-family: "Cormorant Garamond", serif;
       font-size: 2.2rem;
       font-weight: 600;
       font-style: italic;
       color: #2a2520;
       letter-spacing: 2px;
-      text-align: center;
-      margin-bottom: 2px;
+    }
+    .brand-zh {
+      font-family: "Noto Sans TC", sans-serif;
+      font-size: 1rem;
+      font-weight: 400;
+      font-style: normal;
+      color: #6a5848;
+      letter-spacing: 3px;
+      vertical-align: middle;
     }
     .brand-sub {
       text-align: center;
@@ -60,6 +72,17 @@
       color: #b8a898;
       text-transform: uppercase;
       margin-bottom: 20px;
+    }
+    .search-notice {
+      margin-top: 10px;
+      font-size: 0.62rem;
+      color: #c0b0a0;
+      letter-spacing: 0.5px;
+      line-height: 1.7;
+      text-align: center;
+    }
+    @media (max-width: 380px) {
+      .search-section { padding: 22px 16px 18px; }
     }
     .search-label {
       font-size: 0.68rem;
@@ -73,6 +96,7 @@
     .search-row { display: flex; gap: 8px; }
     .search-input {
       flex: 1;
+      min-width: 0;
       padding: 10px 13px;
       border: 1px solid #ddd3c8;
       border-radius: 3px;
@@ -99,6 +123,7 @@
       letter-spacing: 1.5px;
       cursor: pointer;
       white-space: nowrap;
+      flex-shrink: 0;
       transition: background 0.15s;
     }
     .btn-search:hover { background: #8a5a3e; }
@@ -359,18 +384,18 @@
 
   <!-- Search -->
   <div class="search-section">
-    <div class="brand-heading">Mina</div>
-    <div class="brand-sub">妝日子 · Order Status</div>
+    <div class="brand-heading"><em class="brand-mina">Mina</em><span class="brand-zh"> 妝日子</span></div>
+    <div class="brand-sub">Order Status</div>
     <label class="search-label">Order Number</label>
     <div class="search-row">
       <input type="text" class="search-input" id="order-input"
-        placeholder="ORD-XXXXXXXX"
+        placeholder="MMDD-XXXX"
         autocomplete="off" autocorrect="off" spellcheck="false">
       <button class="btn-search" id="btn-search">查詢</button>
     </div>
+    <p class="search-notice">僅開放近三個月內之訂單查詢，如有疑問請直接與我們聯繫。</p>
     <div class="error-msg" id="error-msg"></div>
     <div id="hint" class="hint">
-      訂單編號格式範例：<strong>ORD-20240501-001</strong><br>
       如有任何問題，歡迎直接傳訊息給我們 ☺
     </div>
   </div>
