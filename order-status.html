@@ -241,6 +241,10 @@
       background: #f4f0ec; border-color: #b8a898;
       color: #6a5848;
     }
+    .sbn-oos {
+      background: #fff3e0; border-color: #e0a030;
+      color: #7a4a00;
+    }
     .sbn-cancel {
       background: #fdeaea; border-color: #d08080;
       color: #8a3838;
@@ -511,6 +515,7 @@
     arrived:  { icon: '✅', label: '採購完成', desc: '商品已全數採購完畢，正陸續到貨中…',          cls: 'sbn-arrived' },
     ready:    { icon: '✈️', label: '商品已到齊', desc: '商品全數抵台！正在努力整理包裹～即將安排出貨…', cls: 'sbn-ready' },
     shipped:  { icon: '📦', label: '已出貨',   desc: '包裹已寄出，請留意到貨簡訊通知…',          cls: 'sbn-shipped' },
+    oos:      { icon: '⚠️', label: '商品缺貨', desc: '訂單中的商品目前缺貨，與您聯繫後續處理方式…', cls: 'sbn-oos' },
     pending:  { icon: '🕐', label: '待確認',   desc: '等待定金匯款⋯確認後將安排採購。',          cls: 'sbn-waiting' },
     cancel:   { icon: '✕',  label: '訂單已取消', desc: '此訂單已取消，如有疑問請聯絡我們',       cls: 'sbn-cancel' },
   };
@@ -525,21 +530,18 @@
     const cart = o.confirmedCart || o.cart || [];
     const cf   = o.cartFulfillment || [];
 
-    // 缺貨品項視為「已結案」，不列入剩餘採購判斷
-    const nonOos = cart.filter((_, i) => !cf[i] || !cf[i].oos);
+    // 缺貨品項視為「已結案」，不列入剩餘採購判斷（用 index 追蹤，避免重複商品誤判）
+    const nonOosIdx = cart.map((_, i) => i).filter(i => !cf[i] || !cf[i].oos);
+
+    // 全部品項都缺貨 → 顯示專屬缺貨狀態
+    if (cart.length > 0 && nonOosIdx.length === 0) return 'oos';
 
     // 全部非缺貨品項已到貨 → 商品已到齊
-    const allArrived = nonOos.length > 0 && nonOos.every((_, j) => {
-      const i = cart.indexOf(nonOos[j]);
-      return cf[i] && cf[i].arrived;
-    });
+    const allArrived = nonOosIdx.every(i => cf[i] && cf[i].arrived);
     if (allArrived) return 'ready';
 
     // 全部非缺貨品項已採購（含到貨）→ 採購完成
-    const allBought = nonOos.length > 0 && nonOos.every((_, j) => {
-      const i = cart.indexOf(nonOos[j]);
-      return cf[i] && (cf[i].bought || cf[i].arrived);
-    });
+    const allBought = nonOosIdx.every(i => cf[i] && (cf[i].bought || cf[i].arrived));
     if (allBought) return 'arrived';
 
     // 後台手動設定採購中，或任一商品已採購/到貨 → 採購中
