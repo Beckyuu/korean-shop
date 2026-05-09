@@ -420,6 +420,7 @@
   import {
     getFirestore, collection, query, where, getDocs, limit
   } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+  console.log('[OQ] 模組已載入');
 
   const firebaseConfig = {
     apiKey: "AIzaSyAWWzDwfnPcPYXP7-yi10iQPq_wriZNUJg",
@@ -602,3 +603,11 @@
   }
 
   const input = document.getElementById('order-input');
+  input.addEventListener('input', () => { input.value = input.value.toUpperCase(); });
+  input.addEventListener('keydown', (e) => { if (e.key === 'Enter') doSearch(); });
+  document.getElementById('btn-search').addEventListener('click', doSearch);
+  console.log('[OQ] 事件監聽已綁定');
+</script>
+
+</body>
+</html>
