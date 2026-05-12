@@ -63,20 +63,23 @@
       }
 
       :root {
-        /* === 色票系統：奶茶莫蘭迪 === */
-        --bg-color: #fdf8f3;
-        --text-main: #3a2e28;
-        --text-sub: #7a6a60;
-        --accent: #c8845a;
-        /* 暖橘棕 */
-        --accent-light: #f5e6d8;
-        /* 淡杏奶 */
-        --price-color: #a8624a;
-        /* 深磚棕 */
+        /* === 色票系統：韓系低飽和度 === */
+        --bg-color: #f9f8f6;
+        /* 米灰白背景 */
+        --text-main: #2c2c2c;
+        /* 深灰黑 (比純黑更柔和) */
+        --text-sub: #666666;
+        /* 次要文字 */
+        --accent: #d4a373;
+        /* 質感金棕色 (取代原本的粉紅，更成熟) */
+        --accent-light: #faeadd;
+        /* 淺杏色 (用於背景點綴) */
+        --price-color: #bfa092;
+        /* 莫蘭迪磚紅 */
         --white: #ffffff;
-        --color-sale: #c05040;
+        --color-sale: #d65a5a;
         --footer-bg: #1a1a1a;
-        --badge-sale: #c8845a;
+        --badge-sale: #c97c7c;
       }
 
       * {
@@ -86,27 +89,27 @@
       }
 
       body {
-        font-family: "Zen Maru Gothic", "Noto Sans TC", sans-serif;
+        font-family: "Cormorant Garamond", "Noto Sans TC", sans-serif;
 
         /* === 選項一：流動光暈 === */
         background-color: #fdfbf7;
         /* 溫暖的米白底 */
 
-        /* 背景光暈：奶茶莫蘭迪調 */
+        /* 這裡用了三個顏色的漸層光球，交疊出豐富感 */
         background-image:
           radial-gradient(
             at 40% 20%,
-            rgba(200, 132, 90, 0.12) 0px,
+            rgba(212, 163, 115, 0.15) 0px,
             transparent 50%
           ),
           radial-gradient(
             at 80% 0%,
-            rgba(168, 98, 74, 0.08) 0px,
+            rgba(181, 131, 141, 0.1) 0px,
             transparent 50%
           ),
           radial-gradient(
             at 0% 50%,
-            rgba(245, 230, 216, 0.3) 0px,
+            rgba(229, 152, 155, 0.1) 0px,
             transparent 50%
           );
 
@@ -129,24 +132,29 @@
       }
 
       h1 {
-        font-family: "Zen Maru Gothic", "Noto Sans TC", sans-serif;
-        font-weight: 700;
-        font-size: 3.2rem;
-        font-style: normal;
-        color: var(--accent);
+        /* 必須是 Cormorant Garamond 才會像你圖片那樣 */
+        font-family: "Cormorant Garamond", serif;
+
+        font-weight: 600;
+        font-size: 3.8rem;
+
+        /* 關鍵：要加上斜體，才會有手寫的高級感 */
+        font-style: italic;
+
+        color: var(--text-main);
         margin-bottom: 5px;
         line-height: 1.2;
-        letter-spacing: 2px;
       }
 
       /* 店名樣式 */
       .brand-name {
-        font-family: "Zen Maru Gothic", "Noto Sans TC", sans-serif;
+        font-family: "Noto Sans TC", sans-serif;
         font-size: 1.1rem;
-        letter-spacing: 5px;
-        color: var(--text-sub);
+        letter-spacing: 6px;
+        /* 字距拉開，高級感關鍵 */
+        color: var(--text-main);
         margin: 15px 0;
-        font-weight: 500;
+        font-weight: 400;
       }
 
       /* === 業務說明：精緻備註風格 (修正版) === */
@@ -332,14 +340,13 @@
         background: #fff;
         position: relative;
         overflow: hidden;
-        border-radius: 18px;
-        box-shadow: 0 5px 15px rgba(200, 132, 90, 0.08);
-        transition: box-shadow 0.3s ease, transform 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+        /* 極淡陰影 */
+        transition: box-shadow 0.3s ease;
       }
 
       .product-card:hover .img-wrapper {
-        box-shadow: 0 16px 32px rgba(200, 132, 90, 0.18);
-        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
       }
 
       .img-wrapper img {
@@ -360,11 +367,11 @@
         display: inline-flex;
         align-items: center;
         vertical-align: middle;
-        padding: 3px 10px;
+        padding: 2px 6px;
         font-size: 0.65rem;
         font-weight: 700;
         letter-spacing: 1.5px;
-        border-radius: 20px;
+        border-radius: 3px;
         color: #fff;
         position: relative;
         overflow: hidden;
@@ -491,7 +498,7 @@
 
         padding: 4px 15px;
         border-radius: 50px;
-        box-shadow: 0 2px 5px rgba(200, 132, 90, 0.25);
+        box-shadow: 0 2px 5px rgba(212, 163, 115, 0.2);
         white-space: nowrap;
       }
 
@@ -709,20 +716,6 @@
       button.btn-add:hover {
         background-color: #fff;
         color: var(--accent);
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(200, 132, 90, 0.35);
-      }
-
-      button.btn-add:active {
-        transform: scale(0.94);
-        box-shadow: none;
-      }
-
-      @keyframes btn-pop {
-        0%   { transform: scale(1); }
-        40%  { transform: scale(1.08); }
-        70%  { transform: scale(0.96); }
-        100% { transform: scale(1); }
       }
 
       /* === 最終極簡版 Footer (緊湊型) === */
@@ -1389,7 +1382,7 @@
       .qs-add-btn:hover {
         background: var(--price-color);
         transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(200, 132, 90, 0.3);
+        box-shadow: 0 5px 15px rgba(212, 163, 115, 0.3);
       }
 
       /* 手機版調整 */
@@ -1621,7 +1614,7 @@
       /* 當客人點擊準備輸入時的發光特效 */
       .search-container:focus-within {
         border-color: var(--accent);
-        box-shadow: 0 5px 15px rgba(200, 132, 90, 0.12);
+        box-shadow: 0 5px 15px rgba(212, 163, 115, 0.15);
         transform: translateY(-1px);
       }
 
@@ -2012,6 +2005,152 @@
           font-size: 1.1rem;
         }
       }
+
+      /* === 🎞️ 雜誌封面 Hero Banner === */
+      .hero-banner {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        margin-bottom: 10px;
+
+        background:
+          radial-gradient(ellipse at 20% 50%, rgba(212, 163, 115, 0.18) 0%, transparent 60%),
+          radial-gradient(ellipse at 80% 30%, rgba(181, 131, 141, 0.14) 0%, transparent 55%),
+          radial-gradient(ellipse at 55% 90%, rgba(229, 200, 180, 0.12) 0%, transparent 50%),
+          linear-gradient(160deg, #fdf6ee 0%, #faf3f0 50%, #f7f0ee 100%);
+
+        border-top: 1px solid rgba(212, 163, 115, 0.15);
+        border-bottom: 1px solid rgba(212, 163, 115, 0.15);
+      }
+
+      .hero-inner {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 60px 40px 55px;
+        text-align: center;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* 上方裝飾小字 */
+      .hero-eyebrow {
+        font-family: "Cormorant Garamond", serif;
+        font-style: italic;
+        font-size: 0.9rem;
+        letter-spacing: 4px;
+        color: var(--accent);
+        opacity: 0.85;
+        margin-bottom: 20px;
+        display: block;
+      }
+
+      /* 主 Slogan */
+      .hero-slogan {
+        font-family: "Cormorant Garamond", serif;
+        font-style: italic;
+        font-weight: 600;
+        font-size: 2.6rem;
+        line-height: 1.35;
+        color: var(--text-main);
+        letter-spacing: 1px;
+        margin-bottom: 22px;
+      }
+
+      /* 裝飾分隔線 */
+      .hero-divider {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+
+      .hero-divider::before,
+      .hero-divider::after {
+        content: "";
+        display: block;
+        width: 50px;
+        height: 1px;
+        background: linear-gradient(to right, transparent, var(--accent));
+        opacity: 0.5;
+      }
+
+      .hero-divider::after {
+        background: linear-gradient(to left, transparent, var(--accent));
+      }
+
+      .hero-divider-gem {
+        color: var(--accent);
+        font-size: 0.7rem;
+        opacity: 0.6;
+        letter-spacing: 6px;
+      }
+
+      /* 副標籤列 */
+      .hero-tags {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .hero-tag {
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 0.75rem;
+        letter-spacing: 2px;
+        color: var(--text-sub);
+        padding: 4px 14px;
+        border: 1px solid rgba(212, 163, 115, 0.35);
+        border-radius: 50px;
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(4px);
+        white-space: nowrap;
+      }
+
+      /* 左右裝飾星星 */
+      .hero-deco-left,
+      .hero-deco-right {
+        position: absolute;
+        font-size: 1.2rem;
+        color: var(--accent);
+        opacity: 0.25;
+        pointer-events: none;
+      }
+
+      .hero-deco-left {
+        top: 30px;
+        left: 5%;
+        animation: twinkle 4s 0.5s infinite;
+      }
+
+      .hero-deco-right {
+        bottom: 25px;
+        right: 6%;
+        animation: twinkle 4s 1.5s infinite;
+        font-size: 0.85rem;
+      }
+
+      /* 手機版縮小 */
+      @media (max-width: 768px) {
+        .hero-inner {
+          padding: 40px 24px 36px;
+        }
+
+        .hero-slogan {
+          font-size: 1.8rem;
+        }
+
+        .hero-eyebrow {
+          font-size: 0.8rem;
+          letter-spacing: 3px;
+        }
+
+        .hero-tag {
+          font-size: 0.7rem;
+          padding: 3px 10px;
+        }
+      }
     </style>
   </head>
 
@@ -2030,7 +2169,7 @@
           position: absolute;
           top: 60px;
           right: 15%;
-          color: #c8845a;
+          color: #d4a373;
           opacity: 0.6;
           animation: twinkle 3s infinite;
         "
@@ -2038,6 +2177,26 @@
         ✦
       </div>
     </header>
+
+    <!-- 🎞️ 雜誌封面 Hero Banner -->
+    <section class="hero-banner">
+      <div class="hero-deco-left">✦</div>
+      <div class="hero-deco-right">✦</div>
+      <div class="hero-inner">
+        <span class="hero-eyebrow">— curated by Mina —</span>
+        <div class="hero-slogan">
+          每一筆妝，都是給自己的禮物
+        </div>
+        <div class="hero-divider">
+          <span class="hero-divider-gem">✦ ✦ ✦</span>
+        </div>
+        <div class="hero-tags">
+          <span class="hero-tag">KR 美妝保養</span>
+          <span class="hero-tag">韓國各大官網代購</span>
+          <span class="hero-tag">私房選品團購</span>
+        </div>
+      </div>
+    </section>
 
     <div class="memo-board" id="memo-board" style="display:none;">
       <span class="memo-title">Notice</span>
@@ -2347,7 +2506,7 @@
         ul.innerHTML = notices.map(item => {
           if (item.link) {
             return `<li><a href="${item.link}" target="_blank"
-                       style="text-decoration:underline;color:#a8624a">${item.text}</a></li>`;
+                       style="text-decoration:underline;color:#bfa092">${item.text}</a></li>`;
           }
           return `<li>${item.text}</li>`;
         }).join("");
@@ -2780,8 +2939,8 @@
           addBtn.disabled = true;
         } else {
           addBtn.innerText = "加入購物車";
-          addBtn.style.background = "#c8845a";
-          addBtn.style.borderColor = "#c8845a";
+          addBtn.style.background = "#d4a373";
+          addBtn.style.borderColor = "#d4a373";
           addBtn.style.cursor = "pointer";
           addBtn.disabled = false;
         }
@@ -2884,7 +3043,7 @@
 
         setTimeout(() => {
           btn.innerText = originalText;
-          btn.style.background = "#c8845a";
+          btn.style.background = "#d4a373";
           forceCloseQuickShop();
         }, 800);
       }
@@ -2933,11 +3092,11 @@
                 <div style="display:grid; grid-template-columns: 1fr 90px; gap:10px; padding:15px 0; border-bottom:1px solid #f5f5f5; align-items:center;">
                     <div style="font-family: 'Noto Sans TC', sans-serif; overflow:hidden;">
                         <div style="font-size: 1rem; font-weight: 500; color: #2c2c2c; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.name}</div>
-                        <div style="font-size:0.85rem; color:#888;">${item.spec} <span style="font-size:0.8rem; color:#ccc; margin:0 5px;">x</span> ${item.qty}${item.gift ? `<span style="color:#c8845a; font-size:0.78rem; margin-left:6px;">🎁 ${item.gift}</span>` : ''}</div>
+                        <div style="font-size:0.85rem; color:#888;">${item.spec} <span style="font-size:0.8rem; color:#ccc; margin:0 5px;">x</span> ${item.qty}${item.gift ? `<span style="color:#d4a373; font-size:0.78rem; margin-left:6px;">🎁 ${item.gift}</span>` : ''}</div>
                     </div>
                     <div style="text-align:right; font-family: 'Noto Sans TC', sans-serif;">
                         <div style="font-weight:600; font-size:1rem; color:#2c2c2c;">NT$ ${item.price * item.qty}</div>
-                        <div style="color:#a8624a; cursor:pointer; font-size:0.8rem; margin-top:6px; text-decoration:underline;" onclick="removeFromCart(${idx})">移除</div>
+                        <div style="color:#bfa092; cursor:pointer; font-size:0.8rem; margin-top:6px; text-decoration:underline;" onclick="removeFromCart(${idx})">移除</div>
                     </div>
                 </div>`;
         });
@@ -2952,7 +3111,7 @@
           depositHtml = `
                 <div style="margin-top: 8px; text-align: right; font-family: 'Noto Sans TC', sans-serif;">
                     <span style="font-size: 0.85rem; color: #999; background: #f9f9f9; padding: 4px 8px; border-radius: 4px; margin-right: 8px;">需預付定金 (10%)</span>
-                    <span style="font-size: 1.1rem; color: #a8624a; font-weight: 500;">NT$ ${finalDeposit}</span>
+                    <span style="font-size: 1.1rem; color: #bfa092; font-weight: 500;">NT$ ${finalDeposit}</span>
                 </div>
             `;
         }
