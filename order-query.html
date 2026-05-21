@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>訂單查詢 | Mina</title>
+  <meta property="og:title" content="訂單查詢 | Mina 妝日子">
+  <meta property="og:description" content=" ">
+  <meta name="description" content=" ">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Noto+Sans+TC:wght@300;400;500&family=M+PLUS+Rounded+1c:wght@400;500&display=swap" rel="stylesheet">
@@ -462,6 +465,8 @@
   import {
     getFirestore, collection, query, where, getDocs, limit
   } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+  import { getAuth, signInAnonymously
+  } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
   const firebaseConfig = {
     apiKey: "AIzaSyAWWzDwfnPcPYXP7-yi10iQPq_wriZNUJg",
@@ -472,8 +477,10 @@
     appId: "1:201093013608:web:8b4e6b0f5506ca437fdbdd"
   };
 
-  const app = initializeApp(firebaseConfig);
-  const db  = getFirestore(app);
+  const app  = initializeApp(firebaseConfig);
+  const db   = getFirestore(app);
+  const auth = getAuth(app);
+  signInAnonymously(auth).catch(() => {});
   let allProducts = null;
 
   async function getProducts() {
